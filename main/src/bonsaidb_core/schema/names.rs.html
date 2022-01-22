@@ -246,83 +246,258 @@
 <span id="245">245</span>
 <span id="246">246</span>
 <span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
-    <span class="ident">convert</span>::{<span class="ident">TryFrom</span>, <span class="ident">TryInto</span>},
     <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Write</span>},
     <span class="ident">sync::Arc</span>,
 };
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
-<span class="doccomment">/// A valid schema name. Must be alphanumeric (`a-zA-Z9-0`) or a hyphen (`-`).</span>
-<span class="doccomment">/// Cloning this structure shares the underlying string data, regardless of</span>
-<span class="doccomment">/// whether it&#39;s a static string literal or an owned String.</span>
+<span class="doccomment">/// A schema name. Cloning is inexpensive.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>)]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">try_from</span> <span class="op">=</span> <span class="string">&quot;String&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">into</span> <span class="op">=</span> <span class="string">&quot;String&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Name</span>(<span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Name</span> {
+    <span class="ident">name</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">needs_escaping</span>: <span class="ident">bool</span>,
+}
 
-<span class="doccomment">/// An invalid name was used in a schema definition.</span>
+<span class="doccomment">/// A name was unable to e parsed.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>)]</span>
 <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid name: {0}&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InvalidNameError</span>(<span class="kw">pub</span> <span class="ident">String</span>);
 
 <span class="kw">impl</span> <span class="ident">Name</span> {
-    <span class="doccomment">/// Creates a new name after validating it.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Errors</span>
-    <span class="doccomment">/// Returns [`InvalidNameError`] if the value passed contains any characters</span>
-    <span class="doccomment">/// other than `a-zA-Z9-0` or a hyphen (`-`).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">TryInto</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">contents</span>: <span class="ident">T</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="ident">contents</span>.<span class="ident">try_into</span>()
+    <span class="doccomment">/// Creates a new name.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">contents</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">contents</span>.<span class="ident">into</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">validate_name</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">chars</span>().<span class="ident">all</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">is_ascii_alphanumeric</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">c</span> <span class="op">==</span> <span class="string">&#39;-&#39;</span>) {
-            <span class="prelude-val">Ok</span>(())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()))
+    <span class="doccomment">/// Parses a name that was previously encoded via [`Self::encoded()`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Errors</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns [`InvalidNameError`] if the name contains invalid escape</span>
+    <span class="doccomment">/// sequences.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_encoded</span>(<span class="ident">encoded</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">encoded</span>.<span class="ident">bytes</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">decoded</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">encoded</span>.<span class="ident">len</span>());
+        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="op">=</span> <span class="ident">bytes</span>.<span class="ident">next</span>() {
+            <span class="kw">if</span> <span class="ident">byte</span> <span class="op">==</span> <span class="string">b&#39;_&#39;</span> {
+                <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">high</span>), <span class="prelude-val">Some</span>(<span class="ident">low</span>)) <span class="op">=</span> (<span class="ident">bytes</span>.<span class="ident">next</span>(), <span class="ident">bytes</span>.<span class="ident">next</span>()) {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="op">=</span> <span class="ident">hex_chars_to_byte</span>(<span class="ident">high</span>, <span class="ident">low</span>) {
+                        <span class="ident">decoded</span>.<span class="ident">push</span>(<span class="ident">byte</span>);
+                        <span class="kw">continue</span>;
+                    }
+                }
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="ident">encoded</span>.<span class="ident">to_string</span>()));
+            }
+
+            <span class="ident">decoded</span>.<span class="ident">push</span>(<span class="ident">byte</span>);
+        }
+
+        <span class="ident">String::from_utf8</span>(<span class="ident">decoded</span>)
+            .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::from</span>)
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">InvalidNameError</span>(<span class="ident">encoded</span>.<span class="ident">to_string</span>()))
+    }
+
+    <span class="doccomment">/// Returns an encoded version of this name that contains only alphanumeric</span>
+    <span class="doccomment">/// ASCII, underscore, and hyphen.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encoded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
+        <span class="macro">format!</span>(<span class="string">&quot;{:#}&quot;</span>, <span class="self">self</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">needs_escaping</span> <span class="op">=</span> <span class="op">!</span><span class="ident">value</span>
+            .<span class="ident">bytes</span>()
+            .<span class="ident">all</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">is_ascii_alphanumeric</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">b</span> <span class="op">==</span> <span class="string">b&#39;-&#39;</span>);
+        <span class="self">Self</span> {
+            <span class="ident">name</span>: <span class="ident">Arc::new</span>(<span class="ident">value</span>),
+            <span class="ident">needs_escaping</span>,
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span>;
-
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::validate_name</span>(<span class="ident">value</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="ident">Arc::new</span>(<span class="ident">Cow::Borrowed</span>(<span class="ident">value</span>))))
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Cow::Borrowed</span>(<span class="ident">value</span>))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span>;
-
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::validate_name</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="ident">Arc::new</span>(<span class="ident">Cow::Owned</span>(<span class="ident">value</span>))))
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Cow::Owned</span>(<span class="ident">value</span>))
     }
 }
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::from_over_into</span>)]</span> <span class="comment">// the auto into impl doesn&#39;t work with serde(into)</span>
 <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
     <span class="kw">fn</span> <span class="ident">into</span>(<span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">to_string</span>()
+        <span class="self">self</span>.<span class="ident">name</span>.<span class="ident">to_string</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Name</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, <span class="ident">f</span>)
+        <span class="kw">if</span> <span class="ident">f</span>.<span class="ident">alternate</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">needs_escaping</span> {
+            <span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">name</span>.<span class="ident">bytes</span>() {
+                <span class="kw">if</span> <span class="ident">byte</span>.<span class="ident">is_ascii_alphanumeric</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">byte</span> <span class="op">==</span> <span class="string">b&#39;-&#39;</span> {
+                    <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="ident">byte</span> <span class="kw">as</span> <span class="ident">char</span>)<span class="question-mark">?</span>;
+                } <span class="kw">else</span> {
+                    <span class="comment">// Encode the byte as _FF</span>
+                    <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;_&#39;</span>)<span class="question-mark">?</span>;
+                    <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="ident">nibble_to_hex_char</span>(<span class="ident">byte</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span>))<span class="question-mark">?</span>;
+                    <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="ident">nibble_to_hex_char</span>(<span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0xF</span>))<span class="question-mark">?</span>;
+                }
+            }
+            <span class="prelude-val">Ok</span>(())
+        } <span class="kw">else</span> {
+            <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="ident">f</span>)
+        }
     }
+}
+
+<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">nibble_to_hex_char</span>(<span class="ident">nibble</span>: <span class="ident">u8</span>) -&gt; <span class="ident">char</span> {
+    <span class="kw">let</span> <span class="ident">ch</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">nibble</span> {
+        <span class="number">0</span>..<span class="op">=</span><span class="number">9</span> =&gt; <span class="string">b&#39;0&#39;</span> <span class="op">+</span> <span class="ident">nibble</span>,
+        <span class="kw">_</span> =&gt; <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> <span class="op">-</span> <span class="number">10</span>,
+    };
+    <span class="ident">ch</span> <span class="kw">as</span> <span class="ident">char</span>
+}
+
+<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">hex_chars_to_byte</span>(<span class="ident">high_nibble</span>: <span class="ident">u8</span>, <span class="ident">low_nibble</span>: <span class="ident">u8</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="kw">match</span> (
+        <span class="ident">hex_char_to_nibble</span>(<span class="ident">high_nibble</span>),
+        <span class="ident">hex_char_to_nibble</span>(<span class="ident">low_nibble</span>),
+    ) {
+        (<span class="prelude-val">Some</span>(<span class="ident">high_nibble</span>), <span class="prelude-val">Some</span>(<span class="ident">low_nibble</span>)) =&gt; <span class="prelude-val">Some</span>(<span class="ident">high_nibble</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span> <span class="op">|</span> <span class="ident">low_nibble</span>),
+        <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
+    }
+}
+
+<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">hex_char_to_nibble</span>(<span class="ident">nibble</span>: <span class="ident">u8</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">ch</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">nibble</span> {
+        <span class="string">b&#39;0&#39;</span>..<span class="op">=</span><span class="string">b&#39;9&#39;</span> =&gt; <span class="ident">nibble</span> <span class="op">-</span> <span class="string">b&#39;0&#39;</span>,
+        <span class="string">b&#39;a&#39;</span>..<span class="op">=</span><span class="string">b&#39;f&#39;</span> =&gt; <span class="ident">nibble</span> <span class="op">-</span> <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="number">10</span>,
+        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+    };
+    <span class="prelude-val">Some</span>(<span class="ident">ch</span>)
 }
 
 <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
     <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span>()
+        <span class="self">self</span>.<span class="ident">name</span>.<span class="ident">as_ref</span>()
     }
 }
 
@@ -334,19 +509,27 @@
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">transparent</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Authority</span>(<span class="ident">Name</span>);
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Authority</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span>;
-
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="ident">Name::new</span>(<span class="ident">value</span>)<span class="question-mark">?</span>))
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Authority</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Name::from</span>(<span class="ident">value</span>))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Authority</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span>;
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Authority</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Cow::Borrowed</span>(<span class="ident">value</span>))
+    }
+}
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="ident">Name::new</span>(<span class="ident">value</span>)<span class="question-mark">?</span>))
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Authority</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Cow::Owned</span>(<span class="ident">value</span>))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Authority</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">value</span>: <span class="ident">Name</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span>(<span class="ident">value</span>)
     }
 }
 
@@ -368,16 +551,36 @@
 
 <span class="kw">impl</span> <span class="ident">SchemaName</span> {
     <span class="doccomment">/// Creates a new schema name.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span>
-        <span class="ident">A</span>: <span class="ident">TryInto</span><span class="op">&lt;</span><span class="ident">Authority</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span><span class="op">&gt;</span>,
-        <span class="ident">N</span>: <span class="ident">TryInto</span><span class="op">&lt;</span><span class="ident">Name</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span><span class="op">&gt;</span>,
-    <span class="op">&gt;</span>(
-        <span class="ident">authority</span>: <span class="ident">A</span>,
-        <span class="ident">name</span>: <span class="ident">N</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">try_into</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">try_into</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> })
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">into</span>();
+        <span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> }
+    }
+
+    <span class="doccomment">/// Parses a schema name that was previously encoded via</span>
+    <span class="doccomment">/// [`Self::encoded()`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Errors</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns [`InvalidNameError`] if the name contains invalid escape</span>
+    <span class="doccomment">/// sequences or contains more than two periods.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_encoded</span>(<span class="ident">schema_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">schema_name</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>);
+        <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">authority</span>), <span class="prelude-val">Some</span>(<span class="ident">name</span>), <span class="prelude-val">None</span>) <span class="op">=</span> (<span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>()) {
+            <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">Name::parse_encoded</span>(<span class="ident">authority</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::parse_encoded</span>(<span class="ident">name</span>)<span class="question-mark">?</span>;
+
+            <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">authority</span>, <span class="ident">name</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="ident">schema_name</span>.<span class="ident">to_string</span>()))
+        }
+    }
+
+    <span class="doccomment">/// Encodes this schema name such that the authority and name can be</span>
+    <span class="doccomment">/// safely parsed using [`Self::parse_encoded`].</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encoded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
+        <span class="macro">format!</span>(<span class="string">&quot;{:#}&quot;</span>, <span class="self">self</span>)
     }
 }
 
@@ -386,23 +589,6 @@
         <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">authority</span>, <span class="ident">f</span>)<span class="question-mark">?</span>;
         <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;.&#39;</span>)<span class="question-mark">?</span>;
         <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="ident">f</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SchemaName</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span>;
-
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">schema_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">schema_name</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="kw">if</span> <span class="ident">parts</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">2</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">into_iter</span>();
-            <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
-
-            <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">authority</span>.<span class="ident">to_string</span>(), <span class="ident">name</span>.<span class="ident">to_string</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="ident">schema_name</span>.<span class="ident">to_string</span>()))
-        }
     }
 }
 
@@ -418,16 +604,36 @@
 
 <span class="kw">impl</span> <span class="ident">CollectionName</span> {
     <span class="doccomment">/// Creates a new collection name.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span>
-        <span class="ident">A</span>: <span class="ident">TryInto</span><span class="op">&lt;</span><span class="ident">Authority</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span><span class="op">&gt;</span>,
-        <span class="ident">N</span>: <span class="ident">TryInto</span><span class="op">&lt;</span><span class="ident">Name</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span><span class="op">&gt;</span>,
-    <span class="op">&gt;</span>(
-        <span class="ident">authority</span>: <span class="ident">A</span>,
-        <span class="ident">name</span>: <span class="ident">N</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">try_into</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">try_into</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> })
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">into</span>();
+        <span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> }
+    }
+
+    <span class="doccomment">/// Parses a colleciton name that was previously encoded via</span>
+    <span class="doccomment">/// [`Self::encoded()`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Errors</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns [`InvalidNameError`] if the name contains invalid escape</span>
+    <span class="doccomment">/// sequences or contains more than two periods.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_encoded</span>(<span class="ident">collection_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">collection_name</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>);
+        <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">authority</span>), <span class="prelude-val">Some</span>(<span class="ident">name</span>), <span class="prelude-val">None</span>) <span class="op">=</span> (<span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>()) {
+            <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">Name::parse_encoded</span>(<span class="ident">authority</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::parse_encoded</span>(<span class="ident">name</span>)<span class="question-mark">?</span>;
+
+            <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">authority</span>, <span class="ident">name</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="ident">collection_name</span>.<span class="ident">to_string</span>()))
+        }
+    }
+
+    <span class="doccomment">/// Encodes this collection name such that the authority and name can be</span>
+    <span class="doccomment">/// safely parsed using [`Self::parse_encoded`].</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encoded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
+        <span class="macro">format!</span>(<span class="string">&quot;{:#}&quot;</span>, <span class="self">self</span>)
     }
 }
 
@@ -436,23 +642,6 @@
         <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">authority</span>, <span class="ident">f</span>)<span class="question-mark">?</span>;
         <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;.&#39;</span>)<span class="question-mark">?</span>;
         <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="ident">f</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CollectionName</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">InvalidNameError</span>;
-
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">collection_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">collection_name</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="kw">if</span> <span class="ident">parts</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">2</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">into_iter</span>();
-            <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">parts</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
-
-            <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">authority</span>.<span class="ident">to_string</span>(), <span class="ident">name</span>.<span class="ident">to_string</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="ident">collection_name</span>.<span class="ident">to_string</span>()))
-        }
     }
 }
 
@@ -489,9 +678,34 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">name_validation_tests</span>() {
-    <span class="macro">assert!</span>(<span class="ident">Name::new</span>(<span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-&quot;</span>).<span class="ident">is_ok</span>());
-    <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">Name::new</span>(<span class="string">&quot;.&quot;</span>), <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="kw">_</span>))));
+<span class="kw">fn</span> <span class="ident">name_escaping_tests</span>() {
+    <span class="kw">const</span> <span class="ident">VALID_CHARS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-&quot;</span>;
+    <span class="kw">const</span> <span class="ident">INVALID_CHARS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;._hello\u{1F680}&quot;</span>;
+    <span class="kw">const</span> <span class="ident">ESCAPED_INVALID</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;_2e_5fhello_f0_9f_9a_80&quot;</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">Name::new</span>(<span class="ident">VALID_CHARS</span>).<span class="ident">to_string</span>(), <span class="ident">VALID_CHARS</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">Name::new</span>(<span class="ident">INVALID_CHARS</span>).<span class="ident">to_string</span>(), <span class="ident">INVALID_CHARS</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">Name::new</span>(<span class="ident">INVALID_CHARS</span>).<span class="ident">encoded</span>(), <span class="ident">ESCAPED_INVALID</span>);
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">Name::parse_encoded</span>(<span class="ident">ESCAPED_INVALID</span>).<span class="ident">unwrap</span>(),
+        <span class="ident">Name::new</span>(<span class="ident">INVALID_CHARS</span>)
+    );
+    <span class="ident">Name::parse_encoded</span>(<span class="string">&quot;_&quot;</span>).<span class="ident">unwrap_err</span>();
+    <span class="ident">Name::parse_encoded</span>(<span class="string">&quot;_0&quot;</span>).<span class="ident">unwrap_err</span>();
+    <span class="ident">Name::parse_encoded</span>(<span class="string">&quot;_z&quot;</span>).<span class="ident">unwrap_err</span>();
+    <span class="ident">Name::parse_encoded</span>(<span class="string">&quot;_0z&quot;</span>).<span class="ident">unwrap_err</span>();
+}
+
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">joined_names_tests</span>() {
+    <span class="kw">const</span> <span class="ident">INVALID_CHARS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;._hello\u{1F680}.._world\u{1F680}&quot;</span>;
+    <span class="kw">const</span> <span class="ident">ESCAPED_INVALID</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;_2e_5fhello_f0_9f_9a_80._2e_5fworld_f0_9f_9a_80&quot;</span>;
+    <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">CollectionName::parse_encoded</span>(<span class="ident">ESCAPED_INVALID</span>).<span class="ident">unwrap</span>();
+    <span class="macro">assert_eq!</span>(<span class="ident">collection</span>.<span class="ident">to_string</span>(), <span class="ident">INVALID_CHARS</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">collection</span>.<span class="ident">encoded</span>(), <span class="ident">ESCAPED_INVALID</span>);
+
+    <span class="kw">let</span> <span class="ident">schema_name</span> <span class="op">=</span> <span class="ident">SchemaName::parse_encoded</span>(<span class="ident">ESCAPED_INVALID</span>).<span class="ident">unwrap</span>();
+    <span class="macro">assert_eq!</span>(<span class="ident">schema_name</span>.<span class="ident">to_string</span>(), <span class="ident">INVALID_CHARS</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">schema_name</span>.<span class="ident">encoded</span>(), <span class="ident">ESCAPED_INVALID</span>);
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>

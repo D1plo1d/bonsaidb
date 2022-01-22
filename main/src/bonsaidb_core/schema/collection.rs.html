@@ -683,9 +683,6 @@
 <span id="682">682</span>
 <span id="683">683</span>
 <span id="684">684</span>
-<span id="685">685</span>
-<span id="686">686</span>
-<span id="687">687</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -694,7 +691,6 @@
 <span class="kw">use</span> <span class="ident">transmog</span>::{<span class="ident">Format</span>, <span class="ident">OwnedDeserializer</span>};
 <span class="kw">use</span> <span class="ident">transmog_pot::Pot</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::names::InvalidNameError</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">connection::Connection</span>,
     <span class="ident">document</span>::{<span class="ident">Document</span>, <span class="ident">Header</span>, <span class="ident">KeyId</span>},
@@ -706,7 +702,7 @@
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Collection</span>: <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="doccomment">/// The `Id` of this collection.</span>
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionName</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span>;
 
     <span class="doccomment">/// Defines all `View`s in this collection in `schema`.</span>
     <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
@@ -1013,11 +1009,9 @@
             <span class="kw">if</span> <span class="ident">is_first_loop</span> {
                 <span class="ident">is_first_loop</span> <span class="op">=</span> <span class="bool-val">false</span>;
             } <span class="kw">else</span> {
-                <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">C::get</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">connection</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                    <span class="ident">C::collection_name</span>().<span class="ident">map_or_else</span>(<span class="ident">Error::from</span>, <span class="op">|</span><span class="ident">collection</span><span class="op">|</span> {
-                        <span class="ident">Error::DocumentNotFound</span>(<span class="ident">collection</span>, <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>)
-                    })
-                })<span class="question-mark">?</span>;
+                <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">C::get</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">connection</span>)
+                    .<span class="kw">await</span><span class="question-mark">?</span>
+                    .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Error::DocumentNotFound</span>(<span class="ident">C::collection_name</span>(), <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>))<span class="question-mark">?</span>;
             }
             <span class="ident">modifier</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>);
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">update</span>(<span class="ident">connection</span>).<span class="kw">await</span> {

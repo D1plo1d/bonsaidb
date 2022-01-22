@@ -270,7 +270,7 @@
             <span class="ident">map</span>::{<span class="self">self</span>, <span class="ident">MappedValue</span>},
             <span class="ident">Key</span>, <span class="ident">Serialized</span>, <span class="ident">SerializedView</span>, <span class="ident">ViewSchema</span>,
         },
-        <span class="ident">CollectionName</span>, <span class="ident">InvalidNameError</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">View</span>, <span class="ident">ViewName</span>,
+        <span class="ident">CollectionName</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">View</span>, <span class="ident">ViewName</span>,
     },
     <span class="ident">Error</span>,
 };
@@ -293,7 +293,7 @@
     <span class="doccomment">/// Returns an initialized version from `S`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_schema</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Schema</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">schematic</span> <span class="op">=</span> <span class="self">Self</span> {
-            <span class="ident">name</span>: <span class="ident">S::schema_name</span>()<span class="question-mark">?</span>,
+            <span class="ident">name</span>: <span class="ident">S::schema_name</span>(),
             <span class="ident">contained_collections</span>: <span class="ident">HashSet::new</span>(),
             <span class="ident">collections_by_type_id</span>: <span class="ident">HashMap::new</span>(),
             <span class="ident">collection_encryption_keys</span>: <span class="ident">HashMap::new</span>(),
@@ -308,7 +308,7 @@
 
     <span class="doccomment">/// Adds the collection `C` and its views.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">define_collection</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Collection</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">C::collection_name</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">C::collection_name</span>();
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">contained_collections</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>) {
             <span class="prelude-val">Err</span>(<span class="ident">Error::CollectionAlreadyDefined</span>)
         } <span class="kw">else</span> {
@@ -340,8 +340,8 @@
         <span class="ident">schema</span>: <span class="ident">S</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">instance</span> <span class="op">=</span> <span class="ident">ViewInstance</span> { <span class="ident">view</span>, <span class="ident">schema</span> };
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">view_name</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">collection</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">view_name</span>();
+        <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">collection</span>();
         <span class="kw">let</span> <span class="ident">unique</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">unique</span>();
         <span class="self">self</span>.<span class="ident">views</span>.<span class="ident">insert</span>(<span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(), <span class="ident">Box::new</span>(<span class="ident">instance</span>));
         <span class="comment">// TODO check for name collision</span>
@@ -449,7 +449,7 @@
     <span class="ident">S</span>: <span class="ident">ViewSchema</span><span class="op">&lt;</span><span class="ident">View</span> <span class="op">=</span> <span class="ident">V</span><span class="op">&gt;</span>,
     <span class="op">&lt;</span><span class="ident">V</span> <span class="kw">as</span> <span class="ident">View</span><span class="op">&gt;</span><span class="ident">::Key</span>: <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">collection</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionName</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">collection</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CollectionName</span> {
         <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">V</span> <span class="kw">as</span> <span class="ident">View</span><span class="op">&gt;</span><span class="ident">::Collection</span> <span class="kw">as</span> <span class="ident">Collection</span><span class="op">&gt;</span><span class="ident">::collection_name</span>()
     }
 
@@ -461,7 +461,7 @@
         <span class="self">self</span>.<span class="ident">schema</span>.<span class="ident">version</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">view_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ViewName</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">view_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ViewName</span> {
         <span class="self">self</span>.<span class="ident">view</span>.<span class="ident">view_name</span>()
     }
 
@@ -501,12 +501,12 @@
     <span class="macro">assert_eq!</span>(<span class="ident">schema</span>.<span class="ident">collections_by_type_id</span>.<span class="ident">len</span>(), <span class="number">1</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">schema</span>.<span class="ident">collections_by_type_id</span>[<span class="kw-2">&amp;</span><span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>()],
-        <span class="ident">Basic::collection_name</span>()<span class="question-mark">?</span>
+        <span class="ident">Basic::collection_name</span>()
     );
     <span class="macro">assert_eq!</span>(<span class="ident">schema</span>.<span class="ident">views</span>.<span class="ident">len</span>(), <span class="number">4</span>);
     <span class="macro">assert_eq!</span>(
-        <span class="ident">schema</span>.<span class="ident">views</span>[<span class="kw-2">&amp;</span><span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">BasicCount</span><span class="op">&gt;</span>()].<span class="ident">view_name</span>()<span class="question-mark">?</span>,
-        <span class="ident">View::view_name</span>(<span class="kw-2">&amp;</span><span class="ident">BasicCount</span>)<span class="question-mark">?</span>
+        <span class="ident">schema</span>.<span class="ident">views</span>[<span class="kw-2">&amp;</span><span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">BasicCount</span><span class="op">&gt;</span>()].<span class="ident">view_name</span>(),
+        <span class="ident">View::view_name</span>(<span class="kw-2">&amp;</span><span class="ident">BasicCount</span>)
     );
 
     <span class="prelude-val">Ok</span>(())
