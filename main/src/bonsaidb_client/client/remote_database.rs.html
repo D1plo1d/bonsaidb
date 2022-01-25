@@ -451,7 +451,7 @@
     },
     <span class="ident">transaction</span>::{<span class="ident">Executed</span>, <span class="ident">OperationResult</span>, <span class="ident">Transaction</span>},
 };
-<span class="kw">use</span> <span class="ident">derive_where::DeriveWhere</span>;
+<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Client</span>;
 
@@ -461,7 +461,7 @@
 <span class="kw">mod</span> <span class="ident">keyvalue</span>;
 
 <span class="doccomment">/// A database on a remote server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">DeriveWhere</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RemoteDatabase</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">CustomApi</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
     <span class="ident">client</span>: <span class="ident">Client</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>,

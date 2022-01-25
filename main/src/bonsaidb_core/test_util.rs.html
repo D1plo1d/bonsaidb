@@ -2150,6 +2150,21 @@
 <span id="2149">2149</span>
 <span id="2150">2150</span>
 <span id="2151">2151</span>
+<span id="2152">2152</span>
+<span id="2153">2153</span>
+<span id="2154">2154</span>
+<span id="2155">2155</span>
+<span id="2156">2156</span>
+<span id="2157">2157</span>
+<span id="2158">2158</span>
+<span id="2159">2159</span>
+<span id="2160">2160</span>
+<span id="2161">2161</span>
+<span id="2162">2162</span>
+<span id="2163">2163</span>
+<span id="2164">2164</span>
+<span id="2165">2165</span>
+<span id="2166">2166</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -4026,6 +4041,21 @@
                 <span class="ident">kv</span>.<span class="ident">get_key</span>(<span class="string">&quot;non-numeric&quot;</span>).<span class="ident">into</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>(),
                 <span class="ident">String::from</span>(<span class="string">&quot;test&quot;</span>)
             );
+
+            <span class="comment">// Test that NaN cannot be stored</span>
+            <span class="ident">kv</span>.<span class="ident">set_numeric_key</span>(<span class="string">&quot;f64&quot;</span>, <span class="number">0_f64</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="macro">assert!</span>(<span class="macro">matches!</span>(
+                <span class="ident">kv</span>.<span class="ident">set_numeric_key</span>(<span class="string">&quot;f64&quot;</span>, <span class="ident">f64::NAN</span>).<span class="kw">await</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::NotANumber</span>)
+            ));
+            <span class="comment">// Verify the value was unchanged.</span>
+            <span class="macro-nonterminal">$</span><span class="macro">crate::assert_f64_eq!</span>(<span class="macro-nonterminal">kv</span>.<span class="ident">get_key</span>(<span class="string">&quot;f64&quot;</span>).<span class="ident">into_f64</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>(), <span class="number">0.</span>);
+            <span class="comment">// Try to increment by nan</span>
+            <span class="macro">assert!</span>(<span class="macro">matches!</span>(
+                <span class="ident">kv</span>.<span class="ident">increment_key_by</span>(<span class="string">&quot;f64&quot;</span>, <span class="ident">f64::NAN</span>).<span class="kw">await</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::NotANumber</span>)
+            ));
+            <span class="macro-nonterminal">$</span><span class="macro">crate::assert_f64_eq!</span>(<span class="macro-nonterminal">kv</span>.<span class="ident">get_key</span>(<span class="string">&quot;f64&quot;</span>).<span class="ident">into_f64</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>(), <span class="number">0.</span>);
 
             <span class="ident">harness</span>.<span class="ident">shutdown</span>().<span class="kw">await</span><span class="question-mark">?</span>;
 

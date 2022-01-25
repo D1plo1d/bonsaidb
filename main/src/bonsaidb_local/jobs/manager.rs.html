@@ -81,7 +81,7 @@
 
 <span class="kw">use</span> <span class="ident">async_lock::RwLock</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_utils</span>::{<span class="ident">fast_async_read</span>, <span class="ident">fast_async_write</span>};
-<span class="kw">use</span> <span class="ident">derive_where::DeriveWhere</span>;
+<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::jobs</span>::{
     <span class="ident">task</span>::{<span class="ident">Handle</span>, <span class="ident">Id</span>},
@@ -96,7 +96,7 @@
 <span class="kw">mod</span> <span class="ident">tests</span>;
 
 <span class="doccomment">/// A background jobs manager.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">DeriveWhere</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Manager</span><span class="op">&lt;</span><span class="ident">Key</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
     <span class="comment">// #[derive_where(default)]</span>

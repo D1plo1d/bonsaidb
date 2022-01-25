@@ -2164,7 +2164,7 @@
     <span class="ident">Database</span>, <span class="ident">Storage</span>,
 };
 <span class="kw">use</span> <span class="ident">bonsaidb_utils</span>::{<span class="ident">fast_async_lock</span>, <span class="ident">fast_async_read</span>, <span class="ident">fast_async_write</span>};
-<span class="kw">use</span> <span class="ident">derive_where::DeriveWhere</span>;
+<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 <span class="kw">use</span> <span class="ident">fabruic</span>::{<span class="self">self</span>, <span class="ident">CertificateChain</span>, <span class="ident">Endpoint</span>, <span class="ident">KeyPair</span>, <span class="ident">PrivateKey</span>};
 <span class="kw">use</span> <span class="ident">flume::Sender</span>;
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Future</span>, <span class="ident">StreamExt</span>};
@@ -2206,7 +2206,7 @@
 <span class="kw">static</span> <span class="ident">CONNECTED_CLIENT_ID_COUNTER</span>: <span class="ident">AtomicU32</span> <span class="op">=</span> <span class="ident">AtomicU32::new</span>(<span class="number">0</span>);
 
 <span class="doccomment">/// A `BonsaiDb` server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">DeriveWhere</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
     <span class="ident">data</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,

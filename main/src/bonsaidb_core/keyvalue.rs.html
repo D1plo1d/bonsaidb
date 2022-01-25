@@ -548,11 +548,52 @@
 <span id="547">547</span>
 <span id="548">548</span>
 <span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">mod</span> <span class="ident">timestamp</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::timestamp::Timestamp</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
 
 <span class="kw">mod</span> <span class="ident">implementation</span> {
     <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -582,11 +623,22 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// When compared to Collections, the Key-Value store does not offer</span>
     <span class="doccomment">/// ACID-compliant transactions. Instead, the Key-Value store is made more</span>
-    <span class="doccomment">/// efficient by periodically flushing the store to disk rather than during each</span>
-    <span class="doccomment">/// operation. As such, the Key-Value store is intended to be used as a</span>
+    <span class="doccomment">/// efficient by periodically flushing the store to disk rather than during</span>
+    <span class="doccomment">/// each operation. As such, the Key-Value store is intended to be used as a</span>
     <span class="doccomment">/// lightweight caching layer. However, because each of the operations it</span>
-    <span class="doccomment">/// supports are executed atomically, the Key-Value store can also be utilized</span>
-    <span class="doccomment">/// for synchronized locking.</span>
+    <span class="doccomment">/// supports are executed atomically, the Key-Value store can also be</span>
+    <span class="doccomment">/// utilized for synchronized locking.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ## Floating Point Operations</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// When using [`KeyValue::set_numeric_key()`] or any numeric operations, if</span>
+    <span class="doccomment">/// a [Not a Number (NaN) value][nan] is encountered, [`Error::NotANumber`]</span>
+    <span class="doccomment">/// will be returned without allowing the operation to succeed.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Positive and negative infinity values are allowed, as they do not break</span>
+    <span class="doccomment">/// comparison operations.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [nan]: https://en.wikipedia.org/wiki/NaN</span>
     <span class="attribute">#[<span class="ident">async_trait</span>]</span>
     <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">KeyValue</span>: <span class="ident">Sized</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
         <span class="doccomment">/// Executes a single [`KeyOperation`].</span>
@@ -831,12 +883,20 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Value</span> {
+    <span class="doccomment">/// Validates this value to ensure it is safe to store.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">validate</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">numeric</span>) =&gt; <span class="ident">numeric</span>.<span class="ident">validate</span>().<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::Numeric</span>),
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="ident">vec</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="ident">vec</span>)),
+        }
+    }
+
     <span class="doccomment">/// Deserializes the bytes contained inside of this value. Returns an error</span>
     <span class="doccomment">/// if this value doesn&#39;t contain bytes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">V</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Value::Bytes</span>(<span class="ident">bytes</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">pot::from_slice</span>(<span class="ident">bytes</span>)<span class="question-mark">?</span>),
-            <span class="ident">Value::Numeric</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::Error::Database</span>(<span class="ident">String::from</span>(
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="ident">bytes</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">pot::from_slice</span>(<span class="ident">bytes</span>)<span class="question-mark">?</span>),
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(
                 <span class="string">&quot;key contains numeric value, not serialized data&quot;</span>,
             ))),
         }
@@ -846,8 +906,8 @@
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_i64_lossy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Value::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
-            <span class="ident">Value::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">as_i64_lossy</span>(<span class="ident">saturating</span>)),
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">as_i64_lossy</span>(<span class="ident">saturating</span>)),
         }
     }
 
@@ -855,8 +915,8 @@
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_u64_lossy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Value::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
-            <span class="ident">Value::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">as_u64_lossy</span>(<span class="ident">saturating</span>)),
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">as_u64_lossy</span>(<span class="ident">saturating</span>)),
         }
     }
 
@@ -864,8 +924,8 @@
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">as_f64_lossy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Value::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
-            <span class="ident">Value::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">as_f64_lossy</span>()),
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">as_f64_lossy</span>()),
         }
     }
 
@@ -873,8 +933,8 @@
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_i64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Value::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
-            <span class="ident">Value::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_i64</span>(),
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_i64</span>(),
         }
     }
 
@@ -882,8 +942,8 @@
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_u64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Value::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
-            <span class="ident">Value::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_u64</span>(),
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_u64</span>(),
         }
     }
 
@@ -891,8 +951,8 @@
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">as_f64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Value::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
-            <span class="ident">Value::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_f64</span>(),
+            <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+            <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_f64</span>(),
         }
     }
 }
@@ -909,14 +969,31 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Numeric</span> {
-    <span class="doccomment">/// Returns this numeric as an `i64`. If this conversion cannot be done without losing precision or overflowing, None will be returned.</span>
+    <span class="doccomment">/// Ensures this value contains a valid value.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Errors</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Error::NotANumber`] is returned if this contains a NaN floating point</span>
+    <span class="doccomment">/// value.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">validate</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::Float</span>(<span class="ident">float</span>) <span class="op">=</span> <span class="self">self</span> {
+            <span class="kw">if</span> <span class="ident">float</span>.<span class="ident">is_nan</span>() {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::NotANumber</span>);
+            }
+        }
+
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>)
+    }
+
+    <span class="doccomment">/// Returns this numeric as an `i64`. If this conversion cannot be done</span>
+    <span class="doccomment">/// without losing precision or overflowing, None will be returned.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cast_possible_truncation</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_i64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Numeric::Integer</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span>),
-            <span class="ident">Numeric::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; (<span class="kw-2">*</span><span class="ident">value</span>).<span class="ident">try_into</span>().<span class="ident">ok</span>(),
-            <span class="ident">Numeric::Float</span>(<span class="ident">value</span>) =&gt; {
+            <span class="ident"><span class="self">Self</span>::Integer</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span>),
+            <span class="ident"><span class="self">Self</span>::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; (<span class="kw-2">*</span><span class="ident">value</span>).<span class="ident">try_into</span>().<span class="ident">ok</span>(),
+            <span class="ident"><span class="self">Self</span>::Float</span>(<span class="ident">value</span>) =&gt; {
                 <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">fract</span>().<span class="ident">abs</span>() <span class="op">&gt;</span> <span class="number">0.</span> {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
@@ -926,20 +1003,22 @@
         }
     }
 
-    <span class="doccomment">/// Returns this numeric as an `i64`, allowing for precision to be lost if the type was not an `i64` originally. If saturating is true, the conversion will not allow overflows.</span>
+    <span class="doccomment">/// Returns this numeric as an `i64`, allowing for precision to be lost if</span>
+    <span class="doccomment">/// the type was not an `i64` originally. If saturating is true, the</span>
+    <span class="doccomment">/// conversion will not allow overflows.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cast_possible_wrap</span>, <span class="ident">clippy::cast_possible_truncation</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_i64_lossy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="ident">i64</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Numeric::Integer</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span>,
-            <span class="ident">Numeric::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; {
+            <span class="ident"><span class="self">Self</span>::Integer</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span>,
+            <span class="ident"><span class="self">Self</span>::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; {
                 <span class="kw">if</span> <span class="ident">saturating</span> {
                     (<span class="kw-2">*</span><span class="ident">value</span>).<span class="ident">try_into</span>().<span class="ident">unwrap_or</span>(<span class="ident">i64::MAX</span>)
                 } <span class="kw">else</span> {
                     <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">i64</span>
                 }
             }
-            <span class="ident">Numeric::Float</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">i64</span>,
+            <span class="ident"><span class="self">Self</span>::Float</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">i64</span>,
         }
     }
 
@@ -949,9 +1028,9 @@
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cast_sign_loss</span>, <span class="ident">clippy::cast_possible_truncation</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_u64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Numeric::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span>),
-            <span class="ident">Numeric::Integer</span>(<span class="ident">value</span>) =&gt; (<span class="kw-2">*</span><span class="ident">value</span>).<span class="ident">try_into</span>().<span class="ident">ok</span>(),
-            <span class="ident">Numeric::Float</span>(<span class="ident">value</span>) =&gt; {
+            <span class="ident"><span class="self">Self</span>::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span>),
+            <span class="ident"><span class="self">Self</span>::Integer</span>(<span class="ident">value</span>) =&gt; (<span class="kw-2">*</span><span class="ident">value</span>).<span class="ident">try_into</span>().<span class="ident">ok</span>(),
+            <span class="ident"><span class="self">Self</span>::Float</span>(<span class="ident">value</span>) =&gt; {
                 <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">fract</span>() <span class="op">&lt;</span> <span class="ident">f64::EPSILON</span> <span class="op">&amp;&amp;</span> <span class="ident">value</span>.<span class="ident">is_sign_positive</span>() {
                     <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">u64</span>)
                 } <span class="kw">else</span> {
@@ -968,15 +1047,15 @@
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cast_sign_loss</span>, <span class="ident">clippy::cast_possible_truncation</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_u64_lossy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="ident">u64</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Numeric::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span>,
-            <span class="ident">Numeric::Integer</span>(<span class="ident">value</span>) =&gt; {
+            <span class="ident"><span class="self">Self</span>::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span>,
+            <span class="ident"><span class="self">Self</span>::Integer</span>(<span class="ident">value</span>) =&gt; {
                 <span class="kw">if</span> <span class="ident">saturating</span> {
                     (<span class="kw-2">*</span><span class="ident">value</span>).<span class="ident">try_into</span>().<span class="ident">unwrap_or</span>(<span class="number">0</span>)
                 } <span class="kw">else</span> {
                     <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">u64</span>
                 }
             }
-            <span class="ident">Numeric::Float</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">u64</span>,
+            <span class="ident"><span class="self">Self</span>::Float</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">u64</span>,
         }
     }
 
@@ -986,14 +1065,14 @@
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cast_precision_loss</span>)]</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">as_f64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Numeric::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; {
+            <span class="ident"><span class="self">Self</span>::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; {
                 <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">value</span> <span class="op">&gt;</span> <span class="number">2_u64</span>.<span class="ident">pow</span>(<span class="ident">f64::MANTISSA_DIGITS</span>) {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
                     <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">f64</span>)
                 }
             }
-            <span class="ident">Numeric::Integer</span>(<span class="ident">value</span>) =&gt; {
+            <span class="ident"><span class="self">Self</span>::Integer</span>(<span class="ident">value</span>) =&gt; {
                 <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">value</span> <span class="op">&gt;</span> <span class="number">2_i64</span>.<span class="ident">pow</span>(<span class="ident">f64::MANTISSA_DIGITS</span>)
                     <span class="op">|</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">value</span> <span class="op">&lt;</span> <span class="op">-</span>(<span class="number">2_i64</span>.<span class="ident">pow</span>(<span class="ident">f64::MANTISSA_DIGITS</span>))
                 {
@@ -1002,18 +1081,19 @@
                     <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">f64</span>)
                 }
             }
-            <span class="ident">Numeric::Float</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span>),
+            <span class="ident"><span class="self">Self</span>::Float</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">*</span><span class="ident">value</span>),
         }
     }
 
-    <span class="doccomment">/// Returns this numeric as an `f64`, allowing for precision to be lost if the type was not an `f64` originally.</span>
+    <span class="doccomment">/// Returns this numeric as an `f64`, allowing for precision to be lost if</span>
+    <span class="doccomment">/// the type was not an `f64` originally.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cast_precision_loss</span>)]</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">as_f64_lossy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Numeric::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">f64</span>,
-            <span class="ident">Numeric::Integer</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">f64</span>,
-            <span class="ident">Numeric::Float</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span>,
+            <span class="ident"><span class="self">Self</span>::UnsignedInteger</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">f64</span>,
+            <span class="ident"><span class="self">Self</span>::Integer</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span> <span class="kw">as</span> <span class="ident">f64</span>,
+            <span class="ident"><span class="self">Self</span>::Float</span>(<span class="ident">value</span>) =&gt; <span class="kw-2">*</span><span class="ident">value</span>,
         }
     }
 }
