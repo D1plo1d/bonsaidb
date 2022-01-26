@@ -169,10 +169,6 @@
 <span id="168">168</span>
 <span id="169">169</span>
 <span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -244,11 +240,7 @@
 
 <span class="doccomment">/// A trait that can dispatch requests for a [`CustomApi`].</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">CustomApiDispatcher</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span>:
-    <span class="ident">Dispatcher</span><span class="op">&lt;</span>
-        <span class="lifetime">&#39;static</span>,
-        <span class="op">&lt;</span><span class="ident">B::CustomApi</span> <span class="kw">as</span> <span class="ident">CustomApi</span><span class="op">&gt;</span><span class="ident">::Request</span>,
-        <span class="prelude-ty">Result</span> <span class="op">=</span> <span class="ident">BackendApiResult</span><span class="op">&lt;</span><span class="ident">B::CustomApi</span><span class="op">&gt;</span>,
-    <span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Debug</span>
+    <span class="ident">Dispatcher</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">B::CustomApi</span> <span class="kw">as</span> <span class="ident">CustomApi</span><span class="op">&gt;</span><span class="ident">::Request</span>, <span class="prelude-ty">Result</span> <span class="op">=</span> <span class="ident">BackendApiResult</span><span class="op">&lt;</span><span class="ident">B::CustomApi</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Debug</span>
 {
     <span class="doccomment">/// Returns a dispatcher to handle custom api requests. The `server` and</span>
     <span class="doccomment">/// `client` parameters are provided to allow the dispatcher to have access</span>
@@ -278,7 +270,7 @@
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&lt;</span><span class="ident">CustomApi</span> <span class="op">=</span> ()<span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">actionable::Dispatcher</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, ()<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">NoDispatcher</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&lt;</span><span class="ident">CustomApi</span> <span class="op">=</span> ()<span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">actionable::Dispatcher</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">NoDispatcher</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="prelude-ty">Result</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">BackendError</span><span class="op">&gt;</span>;
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">dispatch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_permissions</span>: <span class="kw-2">&amp;</span><span class="ident">actionable::Permissions</span>, <span class="ident">_request</span>: ()) -&gt; <span class="ident"><span class="self">Self</span>::Result</span> {
