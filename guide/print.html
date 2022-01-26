@@ -198,7 +198,7 @@ pub struct BlogPost {
 impl ViewSchema for BlogPostsByCategory {
     type View = Self;
 
-    fn map(&amp;self, document: &amp;Document) -&gt; ViewMapResult&lt;Self::View&gt; {
+    fn map(&amp;self, document: &amp;BorrowedDocument&lt;'_&gt;) -&gt; ViewMapResult&lt;Self::View&gt; {
         let post = document.contents::&lt;BlogPost&gt;()?;
         Ok(document.emit_key_and_value(post.category, 1))
     }
@@ -300,14 +300,14 @@ impl EnumKey for Category {}
 <h3 id="implementing-the-key-trait"><a class="header" href="#implementing-the-key-trait">Implementing the <code>Key</code> trait</a></h3>
 <p>The <a href="https://dev.bonsaidb.io/main/bonsaidb/core/schema/trait.Key.html"><code>Key</code></a> trait declares two functions: <a href="https://dev.bonsaidb.io/main/bonsaidb/core/schema/trait.Key.html#tymethod.as_big_endian_bytes"><code>as_big_endian_bytes()</code></a> and <a href="https://dev.bonsaidb.io/main/bonsaidb/core/schema/trait.Key.html#tymethod.from_big_endian_bytes"><code>from_big_endian_bytes</code></a>. The intention is to convert the type to bytes using a network byte order for numerical types, and for non-numerical types, the bytes need to be stored in binary-sortable order.</p>
 <p>Here is how BonsaiDb implements Key for <code>EnumKey</code>:</p>
-<pre><code class="language-rust noplayground no_run">impl&lt;T&gt; Key for T
+<pre><code class="language-rust noplayground no_run">impl&lt;'a, T&gt; Key&lt;'a&gt; for T
 where
     T: EnumKey,
 {
     type Error = std::io::Error;
     const LENGTH: Option&lt;usize&gt; = None;
 
-    fn as_big_endian_bytes(&amp;self) -&gt; Result&lt;Cow&lt;'_, [u8]&gt;, Self::Error&gt; {
+    fn as_big_endian_bytes(&amp;'a self) -&gt; Result&lt;Cow&lt;'a, [u8]&gt;, Self::Error&gt; {
         let integer = self
             .to_u64()
             .map(Unsigned::from)
@@ -315,7 +315,7 @@ where
         Ok(Cow::Owned(integer.to_variable_vec()?))
     }
 
-    fn from_big_endian_bytes(bytes: &amp;[u8]) -&gt; Result&lt;Self, Self::Error&gt; {
+    fn from_big_endian_bytes(bytes: &amp;'a [u8]) -&gt; Result&lt;Self, Self::Error&gt; {
         let primitive = u64::decode_variable(bytes)?;
         Self::from_u64(primitive)
             .ok_or_else(|| std::io::Error::new(ErrorKind::InvalidData, UnknownEnumVariant))
