@@ -573,18 +573,56 @@
 <span id="572">572</span>
 <span id="573">573</span>
 <span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>, <span class="ident">convert::Infallible</span>, <span class="ident">io::ErrorKind</span>, <span class="ident">num::TryFromIntError</span>, <span class="ident">string::FromUtf8Error</span>,
 };
 
+<span class="kw">use</span> <span class="ident">arc_bytes</span>::{
+    <span class="ident">serde</span>::{<span class="ident">Bytes</span>, <span class="ident">CowBytes</span>},
+    <span class="ident">ArcBytes</span>,
+};
 <span class="kw">use</span> <span class="ident">num_traits</span>::{<span class="ident">FromPrimitive</span>, <span class="ident">ToPrimitive</span>};
 <span class="kw">use</span> <span class="ident">ordered_varint</span>::{<span class="ident">Signed</span>, <span class="ident">Unsigned</span>, <span class="ident">Variable</span>};
-<span class="kw">use</span> <span class="ident">serde_bytes::ByteBuf</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::AnyError</span>;
 
 <span class="doccomment">/// A trait that enables a type to convert itself to a big-endian/network byte order.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Key</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="doccomment">/// The error type that can be produced by either serialization or</span>
     <span class="doccomment">/// deserialization.</span>
     <span class="kw">type</span> <span class="ident">Error</span>: <span class="ident">AnyError</span>;
@@ -593,18 +631,18 @@
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Convert `self` into a `Cow&lt;[u8]&gt;` containing bytes ordered in big-endian/network byte order.</span>
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;k</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Convert a slice of bytes into `Self` by interpretting `bytes` in big-endian/network byte order.</span>
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;k</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span>;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Infallible</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;k</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">clone</span>())
     }
 
@@ -613,67 +651,95 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Infallible</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Cow::Borrowed</span>(<span class="self">self</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>.<span class="ident">to_vec</span>())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">ByteBuf</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Infallible</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Cow::Borrowed</span>(<span class="self">self</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">bytes</span>))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">String</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CowBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Infallible</span>;
+
+    <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">clone</span>())
+    }
+
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">bytes</span>))
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Bytes</span> {
+    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Infallible</span>;
+
+    <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">Cow::Borrowed</span>(<span class="self">self</span>))
+    }
+
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">bytes</span>))
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">String</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">FromUtf8Error</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Cow::Borrowed</span>(<span class="self">self</span>.<span class="ident">as_bytes</span>()))
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="ident"><span class="self">Self</span>::from_utf8</span>(<span class="ident">bytes</span>.<span class="ident">to_vec</span>())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Key</span> <span class="kw">for</span> () {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> () {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Infallible</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="number">0</span>);
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Cow::default</span>())
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="kw">_</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(())
     }
 }
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_key_for_tuple</span> {
     ($((<span class="macro-nonterminal">$</span><span class="macro-nonterminal">index</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">varname</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>:<span class="ident">ident</span>)),<span class="op">+</span>) =&gt; {
-        <span class="kw">impl</span><span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>),<span class="op">+</span><span class="op">&gt;</span> <span class="ident">Key</span> <span class="kw">for</span> ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>),<span class="op">+</span>)
+        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>),<span class="op">+</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>),<span class="op">+</span>)
         <span class="kw">where</span>
-            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>: <span class="ident">Key</span>),<span class="op">+</span>
+            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),<span class="op">+</span>
         {
             <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">CompositeKeyError</span>;
 
@@ -682,7 +748,7 @@
                 <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
             };
 
-            <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 
                 $(<span class="ident">encode_composite_key_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">index</span>, <span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>)<span class="question-mark">?</span>;)<span class="op">+</span>
@@ -690,7 +756,7 @@
                 <span class="prelude-val">Ok</span>(<span class="ident">Cow::Owned</span>(<span class="ident">bytes</span>))
             }
 
-            <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
                 $(<span class="kw">let</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">varname</span>, <span class="ident">bytes</span>) <span class="op">=</span> <span class="ident">decode_composite_key_field</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span><span class="op">&gt;</span>(<span class="ident">bytes</span>)<span class="question-mark">?</span>;)<span class="op">+</span>
 
                 <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">is_empty</span>() {
@@ -743,8 +809,8 @@
     (<span class="number">7</span>, <span class="ident">t8</span>, <span class="ident">T8</span>)
 );
 
-<span class="kw">fn</span> <span class="ident">encode_composite_key_field</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Key</span><span class="op">&gt;</span>(
-    <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>,
+<span class="kw">fn</span> <span class="ident">encode_composite_key_field</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>,
     <span class="ident">bytes</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
 ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">t2</span> <span class="op">=</span> <span class="ident">T::as_big_endian_bytes</span>(<span class="ident">value</span>).<span class="ident">map_err</span>(<span class="ident">CompositeKeyError::new</span>)<span class="question-mark">?</span>;
@@ -757,7 +823,9 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">decode_composite_key_field</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Key</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]), <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">decode_composite_key_field</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="kw-2">mut</span> <span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>],
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]), <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">length</span>) <span class="op">=</span> <span class="ident">T::LENGTH</span> {
         <span class="ident">length</span>
     } <span class="kw">else</span> {
@@ -773,11 +841,13 @@
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::too_many_lines</span>, <span class="ident">clippy::cognitive_complexity</span>)]</span> <span class="comment">// couldn&#39;t figure out how to macro-ize it</span>
 <span class="kw">fn</span> <span class="ident">composite_key_tests</span>() {
-    <span class="kw">fn</span> <span class="ident">roundtrip</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Key</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">std::fmt::Debug</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">cases</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="ident">cases</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">tuple</span><span class="op">|</span> <span class="ident">tuple</span>.<span class="ident">as_big_endian_bytes</span>().<span class="ident">unwrap</span>().<span class="ident">to_vec</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+    <span class="kw">fn</span> <span class="ident">roundtrip</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">std::fmt::Debug</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">cases</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoded</span> <span class="op">=</span> {
+            <span class="ident">cases</span>
+                .<span class="ident">iter</span>()
+                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">tuple</span><span class="op">|</span> <span class="ident">tuple</span>.<span class="ident">as_big_endian_bytes</span>().<span class="ident">unwrap</span>().<span class="ident">to_vec</span>())
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>()
+        };
         <span class="ident">cases</span>.<span class="ident">sort</span>();
         <span class="ident">encoded</span>.<span class="ident">sort</span>();
         <span class="kw">let</span> <span class="ident">decoded</span> <span class="op">=</span> <span class="ident">encoded</span>
@@ -910,52 +980,52 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">Signed</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Signed</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">std::io::Error</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">to_variable_vec</span>().<span class="ident">map</span>(<span class="ident">Cow::Owned</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="ident"><span class="self">Self</span>::decode_variable</span>(<span class="ident">bytes</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">Unsigned</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Unsigned</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">std::io::Error</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">to_variable_vec</span>().<span class="ident">map</span>(<span class="ident">Cow::Owned</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="ident"><span class="self">Self</span>::decode_variable</span>(<span class="ident">bytes</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;uuid&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">uuid::Uuid</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">uuid::Uuid</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">std::array::TryFromSliceError</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="number">16</span>);
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;k</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Cow::Borrowed</span>(<span class="self">self</span>.<span class="ident">as_bytes</span>()))
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;k</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bytes</span>(<span class="ident">bytes</span>.<span class="ident">try_into</span>()<span class="question-mark">?</span>))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Key</span>,
+    <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">T::Error</span>;
 
@@ -967,7 +1037,7 @@
     <span class="comment">// TODO consider removing this panic limitation by adding a single byte to</span>
     <span class="comment">// each key (at the end preferrably) so that we can distinguish between None</span>
     <span class="comment">// and a 0-byte type</span>
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">contents</span>) <span class="op">=</span> <span class="self">self</span> {
             <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">contents</span>.<span class="ident">as_big_endian_bytes</span>()<span class="question-mark">?</span>;
             <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">contents</span>.<span class="ident">is_empty</span>());
@@ -977,7 +1047,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">is_empty</span>() {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         } <span class="kw">else</span> {
@@ -1012,14 +1082,14 @@
 }
 
 <span class="comment">// ANCHOR: impl_key_for_enumkey</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="ident">T</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">EnumKey</span>,
 {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">std::io::Error</span>;
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">integer</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">to_u64</span>()
             .<span class="ident">map</span>(<span class="ident">Unsigned::from</span>)
@@ -1027,7 +1097,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">Cow::Owned</span>(<span class="ident">integer</span>.<span class="ident">to_variable_vec</span>()<span class="question-mark">?</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">primitive</span> <span class="op">=</span> <span class="ident">u64::decode_variable</span>(<span class="ident">bytes</span>)<span class="question-mark">?</span>;
         <span class="ident"><span class="self">Self</span>::from_u64</span>(<span class="ident">primitive</span>)
             .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">std::io::Error::new</span>(<span class="ident">ErrorKind::InvalidData</span>, <span class="ident">UnknownEnumVariant</span>))
@@ -1037,15 +1107,15 @@
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_key_for_primitive</span> {
     (<span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ident</span>) =&gt; {
-        <span class="kw">impl</span> <span class="ident">Key</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="kw">type</span> {
+        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="kw">type</span> {
             <span class="kw">type</span> <span class="macro-nonterminal">Error</span> <span class="op">=</span> <span class="ident">IncorrectByteLength</span>;
             <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">std::mem::size_of</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">type</span><span class="op">&gt;</span>());
 
-            <span class="kw">fn</span> <span class="macro-nonterminal">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="macro-nonterminal">as_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">Cow::from</span>(<span class="self">self</span>.<span class="ident">to_be_bytes</span>().<span class="ident">to_vec</span>()))
             }
 
-            <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">from_big_endian_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="kw">type</span><span class="macro-nonterminal">::from_be_bytes</span>(<span class="ident">bytes</span>.<span class="ident">try_into</span>()<span class="question-mark">?</span>))
             }
         }

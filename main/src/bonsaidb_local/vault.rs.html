@@ -762,6 +762,7 @@
 <span id="761">761</span>
 <span id="762">762</span>
 <span id="763">763</span>
+<span id="764">764</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Encryption and secret management.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! `BonsaiDb`&#39;s vault is the core of encryption and secret management. To offer</span>
@@ -822,6 +823,7 @@
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
+    <span class="ident">arc_bytes::serde::Bytes</span>,
     <span class="ident">document::KeyId</span>,
     <span class="ident">permissions</span>::{
         <span class="ident">bonsai</span>::{<span class="ident">encryption_key_resource_name</span>, <span class="ident">EncryptionKeyAction</span>},
@@ -1023,7 +1025,7 @@
 
             <span class="kw">let</span> <span class="ident">encrypted_master_keys_payload</span> <span class="op">=</span> <span class="ident">bincode::serialize</span>(<span class="kw-2">&amp;</span><span class="ident">HpkePayload</span> {
                 <span class="ident">encryption</span>: <span class="ident">PublicKeyEncryption::X25519HkdfSha256ChaCha20</span>,
-                <span class="ident">payload</span>: <span class="ident">serialized_master_keys</span>,
+                <span class="ident">payload</span>: <span class="ident">Bytes::from</span>(<span class="ident">serialized_master_keys</span>),
                 <span class="ident">encapsulated_key</span>,
                 <span class="ident">tag</span>,
             })<span class="question-mark">?</span>;
@@ -1079,8 +1081,9 @@
                             <span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys</span>.<span class="ident">encapsulated_key</span>,
                             <span class="string">b&quot;&quot;</span>,
                         )<span class="question-mark">?</span>;
+
                     <span class="ident">decryption_context</span>.<span class="ident">open</span>(
-                        <span class="kw-2">&amp;mut</span> <span class="ident">encrypted_master_keys</span>.<span class="ident">payload</span>,
+                        <span class="kw-2">&amp;mut</span> <span class="ident">encrypted_master_keys</span>.<span class="ident">payload</span>.<span class="number">0</span>,
                         <span class="string">b&quot;&quot;</span>,
                         <span class="kw-2">&amp;</span><span class="ident">AeadTag</span>::<span class="op">&lt;</span><span class="ident">ChaCha20Poly1305</span><span class="op">&gt;</span><span class="ident">::from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys</span>.<span class="ident">tag</span>)<span class="question-mark">?</span>,
                     )<span class="question-mark">?</span>;
@@ -1419,8 +1422,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">struct</span> <span class="ident">HpkePayload</span> {
     <span class="ident">encryption</span>: <span class="ident">PublicKeyEncryption</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-    <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="ident">payload</span>: <span class="ident">Bytes</span>,
     <span class="ident">tag</span>: [<span class="ident">u8</span>; <span class="number">16</span>],
     <span class="ident">encapsulated_key</span>: <span class="ident">EncappedKey</span><span class="op">&lt;</span><span class="ident">X25519</span><span class="op">&gt;</span>,
 }

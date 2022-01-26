@@ -243,16 +243,22 @@
 <span id="242">242</span>
 <span id="243">243</span>
 <span id="244">244</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">document</span>::{<span class="ident">Document</span>, <span class="ident">Header</span>},
+    <span class="ident">document</span>::{<span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">schema::view</span>::{<span class="self">self</span>, <span class="ident">Key</span>, <span class="ident">SerializedView</span>, <span class="ident">View</span>},
 };
 
 <span class="doccomment">/// A document&#39;s entry in a View&#39;s mappings.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
     <span class="doccomment">/// The id of the document that emitted this entry.</span>
     <span class="kw">pub</span> <span class="ident">source</span>: <span class="ident">Header</span>,
 
@@ -263,39 +269,40 @@
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">V</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Serializes this map.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">serialized</span><span class="op">&lt;</span><span class="ident">View</span>: <span class="ident">SerializedView</span><span class="op">&lt;</span><span class="ident">Value</span> <span class="op">=</span> <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Serialized</span>, <span class="ident">view::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Serialized</span> {
             <span class="ident">source</span>: <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">clone</span>(),
-            <span class="ident">key</span>: <span class="self">self</span>
-                .<span class="ident">key</span>
-                .<span class="ident">as_big_endian_bytes</span>()
-                .<span class="ident">map_err</span>(<span class="ident">view::Error::key_serialization</span>)<span class="question-mark">?</span>
-                .<span class="ident">to_vec</span>(),
-            <span class="ident">value</span>: <span class="ident">View::serialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>)<span class="question-mark">?</span>,
+            <span class="ident">key</span>: <span class="ident">Bytes::from</span>(
+                <span class="self">self</span>.<span class="ident">key</span>
+                    .<span class="ident">as_big_endian_bytes</span>()
+                    .<span class="ident">map_err</span>(<span class="ident">view::Error::key_serialization</span>)<span class="question-mark">?</span>
+                    .<span class="ident">to_vec</span>(),
+            ),
+            <span class="ident">value</span>: <span class="ident">Bytes::from</span>(<span class="ident">View::serialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>)<span class="question-mark">?</span>),
         })
     }
 }
 
 <span class="doccomment">/// A collection of [`Map`]s.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
     <span class="doccomment">/// Zero or one mappings.</span>
     <span class="ident">Simple</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="doccomment">/// More than one mapping.</span>
     <span class="ident">List</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::none</span>()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Returns an empty collection of mappings.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">none</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::Simple</span>(<span class="prelude-val">None</span>)
@@ -322,7 +329,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Extend</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Extend</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">T</span>) {
         <span class="kw">let</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">into_iter</span>();
         <span class="kw">for</span> <span class="ident">map</span> <span class="kw">in</span> <span class="ident">iter</span> {
@@ -331,7 +338,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">FromIterator</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">FromIterator</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from_iter</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">iter</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mappings</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::none</span>();
         <span class="ident">mappings</span>.<span class="ident">extend</span>(<span class="ident">iter</span>);
@@ -339,7 +346,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">FromIterator</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">FromIterator</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from_iter</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">iter</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">into_iter</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">collected</span>) <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
@@ -353,7 +360,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>;
 
     <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">MappingsIter</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>;
@@ -367,14 +374,14 @@
 }
 
 <span class="doccomment">/// An iterator over [`Mappings`].</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MappingsIter</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MappingsIter</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
     <span class="doccomment">/// An iterator over a [`Mappings::Simple`] value.</span>
     <span class="ident">Inline</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="doccomment">/// An iterator over a [`Mappings::List`] value.</span>
     <span class="ident">Vec</span>(<span class="ident">std::vec::IntoIter</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">MappingsIter</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">MappingsIter</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
@@ -387,9 +394,9 @@
 
 <span class="doccomment">/// A document&#39;s entry in a View&#39;s mappings.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
     <span class="doccomment">/// The id of the document that emitted this entry.</span>
-    <span class="kw">pub</span> <span class="ident">document</span>: <span class="ident">Document</span>,
+    <span class="kw">pub</span> <span class="ident">document</span>: <span class="ident">OwnedDocument</span>,
 
     <span class="doccomment">/// The key used to index the View.</span>
     <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">K</span>,
@@ -398,7 +405,7 @@
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">V</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Creates a new Map entry for the document with id `source`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">source</span>: <span class="ident">Header</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">source</span>, <span class="ident">key</span>, <span class="ident">value</span> }
@@ -412,12 +419,10 @@
     <span class="kw">pub</span> <span class="ident">source</span>: <span class="ident">Header</span>,
 
     <span class="doccomment">/// The key used to index the View.Operation</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">Bytes</span>,
 
     <span class="doccomment">/// An associated value stored in the view.Operation</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">Bytes</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Serialized</span> {
@@ -425,12 +430,12 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialized</span><span class="op">&lt;</span><span class="ident">View</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">View::Key</span>, <span class="ident">View::Value</span><span class="op">&gt;</span>, <span class="ident">view::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">Map</span> {
-            <span class="ident">source</span>: <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">clone</span>(),
-            <span class="ident">key</span>: <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&gt;</span><span class="ident">::from_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key</span>)
+        <span class="prelude-val">Ok</span>(<span class="ident">Map::new</span>(
+            <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">clone</span>(),
+            <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&gt;</span><span class="ident">::from_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key</span>)
                 .<span class="ident">map_err</span>(<span class="ident">view::Error::key_serialization</span>)<span class="question-mark">?</span>,
-            <span class="ident">value</span>: <span class="ident">View::deserialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>)<span class="question-mark">?</span>,
-        })
+            <span class="ident">View::deserialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>)<span class="question-mark">?</span>,
+        ))
     }
 }
 
@@ -440,7 +445,7 @@
     <span class="doccomment">/// The serialized mapped value.</span>
     <span class="kw">pub</span> <span class="ident">mapping</span>: <span class="ident">MappedSerializedValue</span>,
     <span class="doccomment">/// The source document.</span>
-    <span class="kw">pub</span> <span class="ident">source</span>: <span class="ident">Document</span>,
+    <span class="kw">pub</span> <span class="ident">source</span>: <span class="ident">OwnedDocument</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">MappedSerialized</span> {
@@ -449,7 +454,7 @@
         <span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">View::Key</span>, <span class="ident">View::Value</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">Key::from_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mapping</span>.<span class="ident">key</span>).<span class="ident">map_err</span>(
-            <span class="op">|</span><span class="ident">err</span>: <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">|</span> {
+            <span class="op">|</span><span class="ident">err</span>: <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">|</span> {
                 <span class="ident"><span class="kw">crate</span>::Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>())
             },
         )<span class="question-mark">?</span>;
@@ -465,12 +470,19 @@
 
 <span class="doccomment">/// A key value pair</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedValue</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">Key</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedValue</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="doccomment">/// The key responsible for generating the value</span>
     <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">K</span>,
 
     <span class="doccomment">/// The value generated by the `View`</span>
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">V</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">MappedValue</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Returns a new instance with the key/value pair.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">key</span>, <span class="ident">value</span> }
+    }
 }
 
 <span class="doccomment">/// A mapped value in a [`View`].</span>
@@ -480,12 +492,10 @@
 <span class="doccomment">/// A serialized [`MappedValue`].</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedSerializedValue</span> {
-    <span class="doccomment">/// The serialized key.Operation</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The serialized value.Operation</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The serialized key.</span>
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">Bytes</span>,
+    <span class="doccomment">/// The serialized value.</span>
+    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">Bytes</span>,
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="bonsaidb_core" data-search-index-js="../../../../search-index.js" data-search-js="../../../../search.js"></div>

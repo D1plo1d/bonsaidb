@@ -252,7 +252,13 @@
 <span id="251">251</span>
 <span id="252">252</span>
 <span id="253">253</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">document::Header</span>,
@@ -300,12 +306,12 @@
     <span class="doccomment">/// Inserts a new document with `contents` into `collection`.  If `id` is</span>
     <span class="doccomment">/// `None` a unique id will be generated. If an id is provided and a</span>
     <span class="doccomment">/// document already exists with that id, a conflict error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">contents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Operation::insert</span>(<span class="ident">collection</span>, <span class="ident">id</span>, <span class="ident">contents</span>))
     }
 
     <span class="doccomment">/// Updates a document in `collection`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">contents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Operation::update</span>(<span class="ident">collection</span>, <span class="ident">header</span>, <span class="ident">contents</span>))
     }
 
@@ -330,10 +336,13 @@
     <span class="doccomment">/// Inserts a new document with `contents` into `collection`.  If `id` is</span>
     <span class="doccomment">/// `None` a unique id will be generated. If an id is provided and a</span>
     <span class="doccomment">/// document already exists with that id, a conflict error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">contents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">collection</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Insert</span> { <span class="ident">id</span>, <span class="ident">contents</span> },
+            <span class="ident">command</span>: <span class="ident">Command::Insert</span> {
+                <span class="ident">id</span>,
+                <span class="ident">contents</span>: <span class="ident">contents</span>.<span class="ident">into</span>(),
+            },
         }
     }
 
@@ -350,10 +359,13 @@
     }
 
     <span class="doccomment">/// Updates a document in `collection`.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">update</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">contents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">collection</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Update</span> { <span class="ident">header</span>, <span class="ident">contents</span> },
+            <span class="ident">command</span>: <span class="ident">Command::Update</span> {
+                <span class="ident">header</span>,
+                <span class="ident">contents</span>: <span class="ident">contents</span>.<span class="ident">into</span>(),
+            },
         }
     }
 
@@ -386,8 +398,7 @@
         <span class="doccomment">/// that id, a conflict error will be returned.</span>
         <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
         <span class="doccomment">/// The initial contents of the document.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-        <span class="ident">contents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+        <span class="ident">contents</span>: <span class="ident">Bytes</span>,
     },
 
     <span class="doccomment">/// Update an existing `Document` identified by `id`. `revision` must match</span>
@@ -399,8 +410,7 @@
         <span class="ident">header</span>: <span class="ident">Header</span>,
 
         <span class="doccomment">/// The new contents to store within the `Document`.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-        <span class="ident">contents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+        <span class="ident">contents</span>: <span class="ident">Bytes</span>,
     },
 
     <span class="doccomment">/// Delete an existing `Document` identified by `id`. `revision` must match</span>

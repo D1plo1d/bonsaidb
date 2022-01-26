@@ -414,10 +414,8 @@
 <span id="413">413</span>
 <span id="414">414</span>
 <span id="415">415</span>
-<span id="416">416</span>
-<span id="417">417</span>
-<span id="418">418</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable::Permissions</span>;
+<span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">custodian_password</span>::{
     <span class="ident">LoginFinalization</span>, <span class="ident">LoginRequest</span>, <span class="ident">LoginResponse</span>, <span class="ident">RegistrationFinalization</span>, <span class="ident">RegistrationRequest</span>,
     <span class="ident">RegistrationResponse</span>,
@@ -425,15 +423,14 @@
 <span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 <span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="kw">use</span> <span class="ident">serde_bytes::ByteBuf</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">Database</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>},
-    <span class="ident">document::Document</span>,
+    <span class="ident">document::OwnedDocument</span>,
     <span class="ident">keyvalue</span>::{<span class="ident">KeyOperation</span>, <span class="ident">Output</span>},
     <span class="ident">schema</span>::{
         <span class="self">self</span>,
-        <span class="ident">view::map</span>::{<span class="self">self</span>, <span class="ident">MappedSerializedValue</span>},
+        <span class="ident">view::map</span>::{<span class="self">self</span>},
         <span class="ident">CollectionName</span>, <span class="ident">NamedReference</span>, <span class="ident">ViewName</span>,
     },
     <span class="ident">transaction</span>::{<span class="ident">Executed</span>, <span class="ident">OperationResult</span>, <span class="ident">Transaction</span>},
@@ -611,7 +608,7 @@
         <span class="doccomment">/// The name of the view.</span>
         <span class="ident">view</span>: <span class="ident">ViewName</span>,
         <span class="doccomment">/// The filter for the view.</span>
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">ByteBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="doccomment">/// The order for the query into the view.</span>
         <span class="ident">order</span>: <span class="ident">Sort</span>,
         <span class="doccomment">/// The maximum number of results to return.</span>
@@ -629,7 +626,7 @@
         <span class="doccomment">/// The name of the view.</span>
         <span class="ident">view</span>: <span class="ident">ViewName</span>,
         <span class="doccomment">/// The filter for the view.</span>
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">ByteBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="doccomment">/// The access policy for the query.</span>
         <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
         <span class="doccomment">/// Whether to return a single value or values grouped by unique key. If</span>
@@ -643,7 +640,7 @@
         <span class="doccomment">/// The name of the view.</span>
         <span class="ident">view</span>: <span class="ident">ViewName</span>,
         <span class="doccomment">/// The filter for the view.</span>
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">ByteBuf</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="doccomment">/// The access policy for the query.</span>
         <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
     },
@@ -673,8 +670,7 @@
         <span class="doccomment">/// The topics to publish to.</span>
         <span class="ident">topic</span>: <span class="ident">String</span>,
         <span class="doccomment">/// The payload to publish.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-        <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+        <span class="ident">payload</span>: <span class="ident">Bytes</span>,
     },
     <span class="doccomment">/// Publishes `payload` to all subscribers of all `topics`.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;custom&quot;</span>))]</span>
@@ -682,8 +678,7 @@
         <span class="doccomment">/// The topics to publish to.</span>
         <span class="ident">topics</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="doccomment">/// The payload to publish.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-        <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+        <span class="ident">payload</span>: <span class="ident">Bytes</span>,
     },
     <span class="doccomment">/// Subscribes `subscriber_id` to messages for `topic`.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;simple&quot;</span>))]</span>
@@ -787,7 +782,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DatabaseResponse</span> {
     <span class="doccomment">/// One or more documents.</span>
-    <span class="ident">Documents</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Document</span><span class="op">&gt;</span>),
+    <span class="ident">Documents</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>),
     <span class="doccomment">/// A number of documents were deleted.</span>
     <span class="ident">DocumentsDeleted</span>(<span class="ident">u64</span>),
     <span class="doccomment">/// Results of [`DatabaseRequest::ApplyTransaction`].</span>
@@ -797,9 +792,9 @@
     <span class="doccomment">/// Results of [`DatabaseRequest::Query`] when `with_docs` is true.</span>
     <span class="ident">ViewMappingsWithDocs</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">map::MappedSerialized</span><span class="op">&gt;</span>),
     <span class="doccomment">/// Result of [`DatabaseRequest::Reduce`] when `grouped` is false.</span>
-    <span class="ident">ViewReduction</span>(<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
+    <span class="ident">ViewReduction</span>(<span class="ident">Bytes</span>),
     <span class="doccomment">/// Result of [`DatabaseRequest::Reduce`] when `grouped` is true.</span>
-    <span class="ident">ViewGroupedReduction</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedSerializedValue</span><span class="op">&gt;</span>),
+    <span class="ident">ViewGroupedReduction</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">map::MappedSerializedValue</span><span class="op">&gt;</span>),
     <span class="doccomment">/// Results of [`DatabaseRequest::ListExecutedTransactions`].</span>
     <span class="ident">ExecutedTransactions</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Executed</span><span class="op">&gt;</span>),
     <span class="doccomment">/// Result of [`DatabaseRequest::LastTransactionId`].</span>
@@ -816,8 +811,7 @@
         <span class="doccomment">/// The topic the payload was received on.</span>
         <span class="ident">topic</span>: <span class="ident">String</span>,
         <span class="doccomment">/// The message payload.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span>
-        <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+        <span class="ident">payload</span>: <span class="ident">Bytes</span>,
     },
     <span class="doccomment">/// Output from a [`KeyOperation`] being executed.</span>
     <span class="ident">KvOutput</span>(<span class="ident">Output</span>),

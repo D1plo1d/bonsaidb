@@ -588,7 +588,10 @@
 <span id="587">587</span>
 <span id="588">588</span>
 <span id="589">589</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span id="590">590</span>
+<span id="591">591</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">mod</span> <span class="ident">timestamp</span>;
 
@@ -596,6 +599,7 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
 
 <span class="kw">mod</span> <span class="ident">implementation</span> {
+    <span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
     <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
     <span class="kw">use</span> <span class="ident">futures::future::BoxFuture</span>;
     <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
@@ -790,8 +794,8 @@
     {
         <span class="kw">fn</span> <span class="ident">prepare</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Value</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="kw">match</span> <span class="self">self</span> {
-                <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="ident">bytes</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Value::Bytes</span>(<span class="ident">bytes</span>.<span class="ident">to_vec</span>())),
-                <span class="ident"><span class="self">Self</span>::Serializeable</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Value::Bytes</span>(<span class="ident">pot::to_vec</span>(<span class="ident">value</span>)<span class="question-mark">?</span>)),
+                <span class="ident"><span class="self">Self</span>::Bytes</span>(<span class="ident">bytes</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Value::Bytes</span>(<span class="ident">Bytes::from</span>(<span class="ident">bytes</span>))),
+                <span class="ident"><span class="self">Self</span>::Serializeable</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Value::Bytes</span>(<span class="ident">Bytes::from</span>(<span class="ident">pot::to_vec</span>(<span class="ident">value</span>)<span class="question-mark">?</span>))),
                 <span class="ident"><span class="self">Self</span>::Numeric</span>(<span class="ident">numeric</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Value::Numeric</span>(<span class="ident">numeric</span>)),
             }
         }
@@ -877,7 +881,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Value</span> {
     <span class="doccomment">/// A value stored as a byte array.</span>
-    <span class="ident">Bytes</span>(<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;serde_bytes&quot;</span>)]</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
+    <span class="ident">Bytes</span>(<span class="ident">Bytes</span>),
     <span class="doccomment">/// A numeric value.</span>
     <span class="ident">Numeric</span>(<span class="ident">Numeric</span>),
 }
