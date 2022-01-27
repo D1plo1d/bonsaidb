@@ -591,20 +591,16 @@ impl DoSomethingCustomHandler for ExampleDispatcher {
 <p>This example uses <code>authenticated_permissions</code> to grant access to <code>ExampleAction::DoSomethingSimple</code> and <code>ExampleAction::DoSomethingCustom</code> to all users who have logged in:</p>
 <pre><code class="language-rust noplayground no_run">    let server = CustomServer::&lt;ExampleBackend&gt;::open(
         ServerConfiguration::new(&quot;server-data.bonsaidb&quot;)
-            .default_permissions(Permissions::from(vec![Statement {
-                resources: vec![ResourceName::any()],
-                actions: ActionNameList::List(vec![
-                    BonsaiAction::Server(ServerAction::Connect).name(),
-                    BonsaiAction::Server(ServerAction::LoginWithPassword).name(),
-                ]),
-            }]))
-            .authenticated_permissions(Permissions::from(vec![Statement {
-                resources: vec![ResourceName::any()],
-                actions: ActionNameList::List(vec![
-                    ExampleActions::DoSomethingSimple.name(),
-                    ExampleActions::DoSomethingCustom.name(),
-                ]),
-            }])),
+            .default_permissions(Permissions::from(
+                Statement::for_any()
+                    .allowing(&amp;BonsaiAction::Server(ServerAction::Connect))
+                    .allowing(&amp;BonsaiAction::Server(ServerAction::LoginWithPassword)),
+            ))
+            .authenticated_permissions(Permissions::from(
+                Statement::for_any()
+                    .allowing(&amp;ExampleActions::DoSomethingSimple)
+                    .allowing(&amp;ExampleActions::DoSomethingCustom),
+            )),
     )
     .await?;
 </code></pre>
