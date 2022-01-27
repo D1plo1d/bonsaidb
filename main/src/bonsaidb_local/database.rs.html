@@ -1473,6 +1473,7 @@
 <span id="1472">1472</span>
 <span id="1473">1473</span>
 <span id="1474">1474</span>
+<span id="1475">1475</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
@@ -2007,7 +2008,8 @@
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">err</span> {
                 <span class="ident">AbortError::Other</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
                 <span class="ident">AbortError::Nebari</span>(<span class="ident">err</span>) =&gt; <span class="ident">bonsaidb_core::Error::from</span>(<span class="ident"><span class="kw">crate</span>::Error::from</span>(<span class="ident">err</span>)),
-            })<span class="question-mark">?</span>;
+            })
+            .<span class="ident">unwrap</span>();
 
             <span class="prelude-val">Ok</span>(<span class="ident">found_docs</span>)
         })
