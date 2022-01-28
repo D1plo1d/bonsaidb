@@ -15,7 +15,7 @@
         <div>
             <p class="heading">Lines</p>
             <p class="title has-text-danger">
-                <abbr title="188 / 256">73.44 %</abbr></p>
+                <abbr title="186 / 254">73.23 %</abbr></p>
         </div>
     </div>
 
@@ -112,7 +112,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">        actionable::{Action, ActionNameList, Permissions, ResourceName},</pre>
+                <pre class="has-background-white py-0 px-2">        actionable::Permissions,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -681,7 +681,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                21
+                24
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">        let server = initialize_basic_server(directory.as_ref()).await.unwrap();</pre>
@@ -967,7 +967,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                59
+                56
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">        server.listen_on(6000).await.unwrap();</pre>
@@ -1942,7 +1942,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                261
+                262
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">    bonsaidb_core::define_kv_test_suite!(WebsocketTestHarness);</pre>
@@ -2124,7 +2124,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                32
+                33
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">            let certificate = initialize_shared_server().await;</pre>
@@ -4207,7 +4207,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            .default_permissions(Permissions::from(vec![Statement {</pre>
+                <pre class="has-background-success-light py-0 px-2">            .default_permissions(Permissions::from(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4220,7 +4220,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                resources: vec![ResourceName::any()],</pre>
+                <pre class="has-background-success-light py-0 px-2">                Statement::for_any()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4233,7 +4233,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                actions: ActionNameList::List(vec![</pre>
+                <pre class="has-background-success-light py-0 px-2">                    .allowing(&amp;BonsaiAction::Server(ServerAction::Connect))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4246,7 +4246,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                    BonsaiAction::Server(ServerAction::Connect).name(),</pre>
+                <pre class="has-background-success-light py-0 px-2">                    .allowing(&amp;BonsaiAction::Server(ServerAction::LoginWithPassword)),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4259,7 +4259,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                    BonsaiAction::Server(ServerAction::LoginWithPassword).name(),</pre>
+                <pre class="has-background-success-light py-0 px-2">            ))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4272,39 +4272,13 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                ]),</pre>
+                <pre class="has-background-success-light py-0 px-2">            .authenticated_permissions(DefaultPermissions::AllowAll),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="327">
                 <a href="#327">327</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            }]))</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="328">
-                <a href="#328">328</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            .authenticated_permissions(DefaultPermissions::AllowAll),</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="329">
-                <a href="#329">329</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4316,8 +4290,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="330">
-                <a href="#330">330</a>
+                id="328">
+                <a href="#328">328</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4329,12 +4303,12 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="331">
-                <a href="#331">331</a>
+                id="329">
+                <a href="#329">329</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                7
+                8
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">    server.install_self_signed_certificate(false).await?;</pre>
@@ -4342,8 +4316,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="332">
-                <a href="#332">332</a>
+                id="330">
+                <a href="#330">330</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4355,8 +4329,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="333">
-                <a href="#333">333</a>
+                id="331">
+                <a href="#331">331</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4368,8 +4342,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="334">
-                <a href="#334">334</a>
+                id="332">
+                <a href="#332">332</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4381,8 +4355,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="335">
-                <a href="#335">335</a>
+                id="333">
+                <a href="#333">333</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4394,8 +4368,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="336">
-                <a href="#336">336</a>
+                id="334">
+                <a href="#334">334</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4407,8 +4381,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="337">
-                <a href="#337">337</a>
+                id="335">
+                <a href="#335">335</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4420,8 +4394,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="338">
-                <a href="#338">338</a>
+                id="336">
+                <a href="#336">336</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4433,8 +4407,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="339">
-                <a href="#339">339</a>
+                id="337">
+                <a href="#337">337</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4446,8 +4420,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="340">
-                <a href="#340">340</a>
+                id="338">
+                <a href="#338">338</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4459,8 +4433,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="341">
-                <a href="#341">341</a>
+                id="339">
+                <a href="#339">339</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
@@ -4472,8 +4446,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="342">
-                <a href="#342">342</a>
+                id="340">
+                <a href="#340">340</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4485,8 +4459,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="343">
-                <a href="#343">343</a>
+                id="341">
+                <a href="#341">341</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4498,8 +4472,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="344">
-                <a href="#344">344</a>
+                id="342">
+                <a href="#342">342</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4511,8 +4485,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="345">
-                <a href="#345">345</a>
+                id="343">
+                <a href="#343">343</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -4520,6 +4494,32 @@
             </div>
             <div class="column has-background-white p-0">
                 <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="344">
+                <a href="#344">344</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    let url = Url::parse(&quot;bonsaidb:&#x2F;&#x2F;localhost:6002&quot;)?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="345">
+                <a href="#345">345</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    let client = Client::build(url)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4532,7 +4532,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    let url = Url::parse(&quot;bonsaidb:&#x2F;&#x2F;localhost:6002&quot;)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">        .with_certificate(certificate)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4545,7 +4545,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    let client = Client::build(url)</pre>
+                <pre class="has-background-success-light py-0 px-2">        .finish()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4558,7 +4558,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .with_certificate(certificate)</pre>
+                <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4568,10 +4568,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                2
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .finish()</pre>
+                <pre class="has-background-success-light py-0 px-2">    match client.create_user(&quot;otheruser&quot;).await {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4584,39 +4584,13 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
+                <pre class="has-background-success-light py-0 px-2">        Err(bonsaidb_core::Error::PermissionDenied(_)) =&gt; {}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="351">
                 <a href="#351">351</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    match client.create_user(&quot;otheruser&quot;).await {</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="352">
-                <a href="#352">352</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        Err(bonsaidb_core::Error::PermissionDenied(_)) =&gt; {}</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="353">
-                <a href="#353">353</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
@@ -4628,8 +4602,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="354">
-                <a href="#354">354</a>
+                id="352">
+                <a href="#352">352</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -4641,8 +4615,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="355">
-                <a href="#355">355</a>
+                id="353">
+                <a href="#353">353</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4654,8 +4628,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="356">
-                <a href="#356">356</a>
+                id="354">
+                <a href="#354">354</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4667,8 +4641,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="357">
-                <a href="#357">357</a>
+                id="355">
+                <a href="#355">355</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -4676,6 +4650,32 @@
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="356">
+                <a href="#356">356</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    client</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="357">
+                <a href="#357">357</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        .create_user(&quot;otheruser&quot;)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4688,7 +4688,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    client</pre>
+                <pre class="has-background-success-light py-0 px-2">        .await</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4701,7 +4701,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .create_user(&quot;otheruser&quot;)</pre>
+                <pre class="has-background-success-light py-0 px-2">        .expect(&quot;should be able to create user after logging in&quot;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4714,7 +4714,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .await</pre>
+                <pre class="has-background-success-light py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4727,7 +4727,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .expect(&quot;should be able to create user after logging in&quot;);</pre>
+                <pre class="has-background-success-light py-0 px-2">    Ok(())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -4740,38 +4740,12 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2"></pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="363">
-                <a href="#363">363</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    Ok(())</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="364">
-                <a href="#364">364</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">}</pre>
             </div>
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2022-01-27 00:06</p>
+                <p class="heading">Date: 2022-01-28 14:24</p>
             </div>
         </footer>
     </body>

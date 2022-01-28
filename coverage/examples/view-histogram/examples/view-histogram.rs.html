@@ -15,7 +15,7 @@
         <div>
             <p class="heading">Lines</p>
             <p class="title has-text-success">
-                <abbr title="106 / 110">96.36 %</abbr></p>
+                <abbr title="104 / 108">96.3 %</abbr></p>
         </div>
     </div>
 
@@ -837,10 +837,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                3
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    let total_histogram = db</pre>
+                <pre class="has-background-success-light py-0 px-2">    let total_histogram = db.view::&lt;AsHistogram&gt;().reduce().await?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -850,10 +850,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                3
+                1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .reduce::&lt;AsHistogram&gt;(None, AccessPolicy::UpdateBefore)</pre>
+                <pre class="has-background-success-light py-0 px-2">    println!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -863,10 +863,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                3
+                1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
+                <pre class="has-background-success-light py-0 px-2">        &quot;99th Percentile overall: {} ({} samples)&quot;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -879,7 +879,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    println!(</pre>
+                <pre class="has-background-success-light py-0 px-2">        total_histogram.value_at_quantile(0.99),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -892,7 +892,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        &quot;99th Percentile overall: {} ({} samples)&quot;,</pre>
+                <pre class="has-background-success-light py-0 px-2">        total_histogram.len()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -905,39 +905,13 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        total_histogram.value_at_quantile(0.99),</pre>
+                <pre class="has-background-success-light py-0 px-2">    );</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="68">
                 <a href="#68">68</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        total_histogram.len()</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="69">
-                <a href="#69">69</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    );</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="70">
-                <a href="#70">70</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -949,8 +923,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="71">
-                <a href="#71">71</a>
+                id="69">
+                <a href="#69">69</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -958,6 +932,32 @@
             </div>
             <div class="column has-background-white p-0">
                 <pre class="has-background-white py-0 px-2">    &#x2F;&#x2F; Or we can request just a specific range:</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="70">
+                <a href="#70">70</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    let range_histogram = db</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="71">
+                <a href="#71">71</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        .view::&lt;AsHistogram&gt;()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -970,7 +970,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    let range_histogram = db</pre>
+                <pre class="has-background-success-light py-0 px-2">        .with_key_range(10..20)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -983,7 +983,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .view::&lt;AsHistogram&gt;()</pre>
+                <pre class="has-background-success-light py-0 px-2">        .reduce()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -996,7 +996,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .with_key_range(10..20)</pre>
+                <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1009,7 +1009,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .reduce()</pre>
+                <pre class="has-background-success-light py-0 px-2">    println!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1022,7 +1022,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
+                <pre class="has-background-success-light py-0 px-2">        &quot;99th Percentile from 10..20: {} ({} samples)&quot;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1035,7 +1035,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    println!(</pre>
+                <pre class="has-background-success-light py-0 px-2">        range_histogram.value_at_quantile(0.99),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1048,7 +1048,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        &quot;99th Percentile from 10..20: {} ({} samples)&quot;,</pre>
+                <pre class="has-background-success-light py-0 px-2">        range_histogram.len()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1061,7 +1061,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        range_histogram.value_at_quantile(0.99),</pre>
+                <pre class="has-background-success-light py-0 px-2">    );</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1074,7 +1074,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        range_histogram.len()</pre>
+                <pre class="has-background-success-light py-0 px-2">    let range_histogram = db</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1087,7 +1087,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    );</pre>
+                <pre class="has-background-success-light py-0 px-2">        .view::&lt;AsHistogram&gt;()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1100,7 +1100,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    let range_histogram = db</pre>
+                <pre class="has-background-success-light py-0 px-2">        .with_key_range(80..100)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1113,7 +1113,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .view::&lt;AsHistogram&gt;()</pre>
+                <pre class="has-background-success-light py-0 px-2">        .reduce()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1126,7 +1126,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .with_key_range(80..100)</pre>
+                <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1139,7 +1139,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .reduce()</pre>
+                <pre class="has-background-success-light py-0 px-2">    println!(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1152,7 +1152,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .await?;</pre>
+                <pre class="has-background-success-light py-0 px-2">        &quot;99th Percentile from 80..100: {} ({} samples)&quot;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1165,7 +1165,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    println!(</pre>
+                <pre class="has-background-success-light py-0 px-2">        range_histogram.value_at_quantile(0.99),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1178,7 +1178,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        &quot;99th Percentile from 80..100: {} ({} samples)&quot;,</pre>
+                <pre class="has-background-success-light py-0 px-2">        range_histogram.len()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1191,7 +1191,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        range_histogram.value_at_quantile(0.99),</pre>
+                <pre class="has-background-success-light py-0 px-2">    );</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1204,7 +1204,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        range_histogram.len()</pre>
+                <pre class="has-background-success-light py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1217,7 +1217,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    );</pre>
+                <pre class="has-background-success-light py-0 px-2">    Ok(())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1230,7 +1230,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2"></pre>
+                <pre class="has-background-success-light py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1239,11 +1239,11 @@
                 <a href="#93">93</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    Ok(())</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1252,11 +1252,11 @@
                 <a href="#94">94</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">}</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; A set of samples that were taken at a specific time.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1265,11 +1265,11 @@
                 <a href="#95">95</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                495
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[derive(Debug, Serialize, Deserialize)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1282,7 +1282,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; A set of samples that were taken at a specific time.</pre>
+                <pre class="has-background-white py-0 px-2">pub struct Samples {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1291,11 +1291,11 @@
                 <a href="#97">97</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                495
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[derive(Debug, Serialize, Deserialize)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">    &#x2F;&#x2F;&#x2F; The timestamp of the samples.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1308,7 +1308,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub struct Samples {</pre>
+                <pre class="has-background-white py-0 px-2">    pub timestamp: u64,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1321,7 +1321,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    &#x2F;&#x2F;&#x2F; The timestamp of the samples.</pre>
+                <pre class="has-background-white py-0 px-2">    &#x2F;&#x2F;&#x2F; The raw samples.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1334,7 +1334,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    pub timestamp: u64,</pre>
+                <pre class="has-background-white py-0 px-2">    pub entries: Vec&lt;u64&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1347,7 +1347,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    &#x2F;&#x2F;&#x2F; The raw samples.</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1360,7 +1360,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    pub entries: Vec&lt;u64&gt;,</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1373,7 +1373,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl Collection for Samples {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1382,11 +1382,11 @@
                 <a href="#104">104</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                334
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    fn collection_name() -&gt; CollectionName {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1395,11 +1395,11 @@
                 <a href="#105">105</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                334
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Collection for Samples {</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        CollectionName::new(&quot;histogram-example&quot;, &quot;samples&quot;)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1412,7 +1412,7 @@
                 334
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    fn collection_name() -&gt; CollectionName {</pre>
+                <pre class="has-background-success-light py-0 px-2">    }</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1421,11 +1421,11 @@
                 <a href="#107">107</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                334
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        CollectionName::new(&quot;histogram-example&quot;, &quot;samples&quot;)</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1435,10 +1435,10 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                334
+                2
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    }</pre>
+                <pre class="has-background-success-light py-0 px-2">    fn define_views(schema: &amp;mut Schematic) -&gt; Result&lt;(), bonsaidb::core::Error&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1447,11 +1447,11 @@
                 <a href="#109">109</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                2
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        schema.define_view(AsHistogram)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1464,7 +1464,7 @@
                 2
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    fn define_views(schema: &amp;mut Schematic) -&gt; Result&lt;(), bonsaidb::core::Error&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">    }</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1473,11 +1473,11 @@
                 <a href="#111">111</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        schema.define_view(AsHistogram)</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1486,11 +1486,11 @@
                 <a href="#112">112</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    }</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1503,7 +1503,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl DefaultSerialization for Samples {}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1529,7 +1529,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl DefaultSerialization for Samples {}</pre>
+                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; A view for [`Samples`] which produces a histogram.</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1538,11 +1538,11 @@
                 <a href="#116">116</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                2
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[derive(Debug, Clone)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1555,7 +1555,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">&#x2F;&#x2F;&#x2F; A view for [`Samples`] which produces a histogram.</pre>
+                <pre class="has-background-white py-0 px-2">pub struct AsHistogram;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1564,11 +1564,11 @@
                 <a href="#118">118</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                2
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[derive(Debug, Clone)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1581,7 +1581,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub struct AsHistogram;</pre>
+                <pre class="has-background-white py-0 px-2">impl View for AsHistogram {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1594,7 +1594,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">    type Collection = Samples;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1607,7 +1607,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl View for AsHistogram {</pre>
+                <pre class="has-background-white py-0 px-2">    type Key = u64;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1620,7 +1620,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    type Collection = Samples;</pre>
+                <pre class="has-background-white py-0 px-2">    type Value = SyncHistogram&lt;u64&gt;;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1633,7 +1633,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    type Key = u64;</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1642,11 +1642,11 @@
                 <a href="#124">124</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                215
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    type Value = SyncHistogram&lt;u64&gt;;</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    fn name(&amp;self) -&gt; Name {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1655,11 +1655,11 @@
                 <a href="#125">125</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                215
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        Name::new(&quot;as-histogram&quot;)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1672,7 +1672,7 @@
                 215
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    fn name(&amp;self) -&gt; Name {</pre>
+                <pre class="has-background-success-light py-0 px-2">    }</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1681,11 +1681,11 @@
                 <a href="#127">127</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                215
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        Name::new(&quot;as-histogram&quot;)</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1694,11 +1694,11 @@
                 <a href="#128">128</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                215
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    }</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1711,7 +1711,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl CollectionViewSchema for AsHistogram {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1724,7 +1724,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">    type View = Self;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1737,7 +1737,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl CollectionViewSchema for AsHistogram {</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1746,11 +1746,11 @@
                 <a href="#132">132</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                99
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    type View = Self;</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    fn map(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1759,11 +1759,11 @@
                 <a href="#133">133</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                99
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        &amp;self,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1776,7 +1776,7 @@
                 99
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    fn map(</pre>
+                <pre class="has-background-success-light py-0 px-2">        document: CollectionDocument&lt;&lt;Self::View as View&gt;::Collection&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1789,7 +1789,7 @@
                 99
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        &amp;self,</pre>
+                <pre class="has-background-success-light py-0 px-2">    ) -&gt; bonsaidb::core::schema::ViewMapResult&lt;Self::View&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1802,39 +1802,13 @@
                 99
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        document: CollectionDocument&lt;&lt;Self::View as View&gt;::Collection&gt;,</pre>
+                <pre class="has-background-success-light py-0 px-2">        let mut histogram = Histogram::new(4).unwrap();</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="137">
                 <a href="#137">137</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                99
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    ) -&gt; bonsaidb::core::schema::ViewMapResult&lt;Self::View&gt; {</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="138">
-                <a href="#138">138</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                99
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        let mut histogram = Histogram::new(4).unwrap();</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="139">
-                <a href="#139">139</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -1846,8 +1820,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="140">
-                <a href="#140">140</a>
+                id="138">
+                <a href="#138">138</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -1859,8 +1833,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="141">
-                <a href="#141">141</a>
+                id="139">
+                <a href="#139">139</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -1872,8 +1846,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="142">
-                <a href="#142">142</a>
+                id="140">
+                <a href="#140">140</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -1885,8 +1859,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="143">
-                <a href="#143">143</a>
+                id="141">
+                <a href="#141">141</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -1898,8 +1872,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="144">
-                <a href="#144">144</a>
+                id="142">
+                <a href="#142">142</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -1911,8 +1885,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="145">
-                <a href="#145">145</a>
+                id="143">
+                <a href="#143">143</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -1920,6 +1894,32 @@
             </div>
             <div class="column has-background-white p-0">
                 <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="144">
+                <a href="#144">144</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                102
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    fn reduce(</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="145">
+                <a href="#145">145</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                102
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        &amp;self,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1932,7 +1932,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    fn reduce(</pre>
+                <pre class="has-background-success-light py-0 px-2">        mappings: &amp;[ViewMappedValue&lt;Self::View&gt;],</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1945,7 +1945,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        &amp;self,</pre>
+                <pre class="has-background-success-light py-0 px-2">        _rereduce: bool,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1958,7 +1958,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        mappings: &amp;[ViewMappedValue&lt;Self::View&gt;],</pre>
+                <pre class="has-background-success-light py-0 px-2">    ) -&gt; ReduceResult&lt;Self::View&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1971,7 +1971,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        _rereduce: bool,</pre>
+                <pre class="has-background-success-light py-0 px-2">        let mut mappings = mappings.iter();</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1984,7 +1984,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    ) -&gt; ReduceResult&lt;Self::View&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">        let mut combined = SyncHistogram::from(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1997,7 +1997,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        let mut mappings = mappings.iter();</pre>
+                <pre class="has-background-success-light py-0 px-2">            mappings</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2010,7 +2010,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        let mut combined = SyncHistogram::from(</pre>
+                <pre class="has-background-success-light py-0 px-2">                .next()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2023,7 +2023,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            mappings</pre>
+                <pre class="has-background-success-light py-0 px-2">                .map(|h| h.value.deref().clone())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2036,7 +2036,7 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                .next()</pre>
+                <pre class="has-background-success-light py-0 px-2">                .unwrap_or_else(|| Histogram::new(4).unwrap()),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2049,39 +2049,13 @@
                 102
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                .map(|h| h.value.deref().clone())</pre>
+                <pre class="has-background-success-light py-0 px-2">        );</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="156">
                 <a href="#156">156</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                102
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">                .unwrap_or_else(|| Histogram::new(4).unwrap()),</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="157">
-                <a href="#157">157</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                102
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        );</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="158">
-                <a href="#158">158</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2093,8 +2067,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="159">
-                <a href="#159">159</a>
+                id="157">
+                <a href="#157">157</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2106,8 +2080,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="160">
-                <a href="#160">160</a>
+                id="158">
+                <a href="#158">158</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2119,8 +2093,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="161">
-                <a href="#161">161</a>
+                id="159">
+                <a href="#159">159</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2132,8 +2106,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="162">
-                <a href="#162">162</a>
+                id="160">
+                <a href="#160">160</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
@@ -2141,6 +2115,32 @@
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">    }</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="161">
+                <a href="#161">161</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="162">
+                <a href="#162">162</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
+            </div>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2153,7 +2153,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl SerializedView for AsHistogram {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2166,7 +2166,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">    type Format = Self;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2179,7 +2179,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl SerializedView for AsHistogram {</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2188,11 +2188,11 @@
                 <a href="#166">166</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                432
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    type Format = Self;</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    fn format() -&gt; Self::Format {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2201,11 +2201,11 @@
                 <a href="#167">167</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                432
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        Self</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2218,7 +2218,7 @@
                 432
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    fn format() -&gt; Self::Format {</pre>
+                <pre class="has-background-success-light py-0 px-2">    }</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2227,11 +2227,11 @@
                 <a href="#169">169</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                432
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        Self</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2240,11 +2240,11 @@
                 <a href="#170">170</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                432
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    }</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2257,7 +2257,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl Format&lt;&#x27;static, SyncHistogram&lt;u64&gt;&gt; for AsHistogram {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2270,7 +2270,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">    type Error = HistogramError;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2283,7 +2283,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl Format&lt;&#x27;static, SyncHistogram&lt;u64&gt;&gt; for AsHistogram {</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2296,7 +2296,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    type Error = HistogramError;</pre>
+                <pre class="has-background-white py-0 px-2">    fn serialize_into&lt;W: std::io::Write&gt;(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2309,7 +2309,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">        &amp;self,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2322,7 +2322,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    fn serialize_into&lt;W: std::io::Write&gt;(</pre>
+                <pre class="has-background-white py-0 px-2">        value: &amp;SyncHistogram&lt;u64&gt;,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2335,7 +2335,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">        &amp;self,</pre>
+                <pre class="has-background-white py-0 px-2">        mut writer: W,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2348,7 +2348,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">        value: &amp;SyncHistogram&lt;u64&gt;,</pre>
+                <pre class="has-background-white py-0 px-2">    ) -&gt; Result&lt;(), Self::Error&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2357,11 +2357,11 @@
                 <a href="#179">179</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                201
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">        mut writer: W,</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        V2Serializer::new()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2370,11 +2370,11 @@
                 <a href="#180">180</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                201
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    ) -&gt; Result&lt;(), Self::Error&gt; {</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">            .serialize(value, &amp;mut writer)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2387,7 +2387,7 @@
                 201
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        V2Serializer::new()</pre>
+                <pre class="has-background-success-light py-0 px-2">            .map_err(HistogramError::Serialization)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2400,7 +2400,7 @@
                 201
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            .serialize(value, &amp;mut writer)</pre>
+                <pre class="has-background-success-light py-0 px-2">        Ok(())</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2413,7 +2413,7 @@
                 201
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            .map_err(HistogramError::Serialization)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">    }</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2422,11 +2422,11 @@
                 <a href="#184">184</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                201
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        Ok(())</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2435,11 +2435,11 @@
                 <a href="#185">185</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                201
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    }</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2452,7 +2452,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl OwnedDeserializer&lt;SyncHistogram&lt;u64&gt;&gt; for AsHistogram {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2461,11 +2461,11 @@
                 <a href="#187">187</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                231
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">    fn deserialize_from&lt;R: std::io::Read&gt;(</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2474,11 +2474,11 @@
                 <a href="#188">188</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
-                
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                231
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl OwnedDeserializer&lt;SyncHistogram&lt;u64&gt;&gt; for AsHistogram {</pre>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">        &amp;self,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2491,7 +2491,7 @@
                 231
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    fn deserialize_from&lt;R: std::io::Read&gt;(</pre>
+                <pre class="has-background-success-light py-0 px-2">        mut reader: R,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2504,7 +2504,7 @@
                 231
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        &amp;self,</pre>
+                <pre class="has-background-success-light py-0 px-2">    ) -&gt; Result&lt;SyncHistogram&lt;u64&gt;, Self::Error&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2517,7 +2517,7 @@
                 231
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        mut reader: R,</pre>
+                <pre class="has-background-success-light py-0 px-2">        hdrhistogram::serialization::Deserializer::new()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2530,7 +2530,7 @@
                 231
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    ) -&gt; Result&lt;SyncHistogram&lt;u64&gt;, Self::Error&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">            .deserialize(&amp;mut reader)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2543,7 +2543,7 @@
                 231
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        hdrhistogram::serialization::Deserializer::new()</pre>
+                <pre class="has-background-success-light py-0 px-2">            .map(SyncHistogram::from)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2556,7 +2556,7 @@
                 231
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            .deserialize(&amp;mut reader)</pre>
+                <pre class="has-background-success-light py-0 px-2">            .map_err(HistogramError::Deserialization)</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2569,7 +2569,7 @@
                 231
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            .map(SyncHistogram::from)</pre>
+                <pre class="has-background-success-light py-0 px-2">    }</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2578,11 +2578,11 @@
                 <a href="#196">196</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                231
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">            .map_err(HistogramError::Deserialization)</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2591,11 +2591,11 @@
                 <a href="#197">197</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                231
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                
             </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    }</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2604,11 +2604,11 @@
                 <a href="#198">198</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">#[derive(thiserror::Error, Debug)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2621,7 +2621,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+                <pre class="has-background-white py-0 px-2">pub enum HistogramError {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2630,11 +2630,11 @@
                 <a href="#200">200</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
                 
             </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">#[derive(thiserror::Error, Debug)]</pre>
+            <div class="column has-background-white p-0">
+                <pre class="has-background-white py-0 px-2">    #[error(&quot;serialization error: {0}&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2647,7 +2647,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">pub enum HistogramError {</pre>
+                <pre class="has-background-white py-0 px-2">    Serialization(#[from] hdrhistogram::serialization::V2SerializeError),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2660,7 +2660,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    #[error(&quot;serialization error: {0}&quot;)]</pre>
+                <pre class="has-background-white py-0 px-2">    #[error(&quot;deserialization error: {0}&quot;)]</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2673,7 +2673,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    Serialization(#[from] hdrhistogram::serialization::V2SerializeError),</pre>
+                <pre class="has-background-white py-0 px-2">    Deserialization(#[from] hdrhistogram::serialization::DeserializeError),</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2686,7 +2686,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    #[error(&quot;deserialization error: {0}&quot;)]</pre>
+                <pre class="has-background-white py-0 px-2">}</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2699,7 +2699,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">    Deserialization(#[from] hdrhistogram::serialization::DeserializeError),</pre>
+                <pre class="has-background-white py-0 px-2"></pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2712,7 +2712,7 @@
                 
             </div>
             <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">}</pre>
+                <pre class="has-background-white py-0 px-2">impl From&lt;std::io::Error&gt; for HistogramError {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2721,11 +2721,11 @@
                 <a href="#207">207</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2"></pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">    fn from(err: std::io::Error) -&gt; Self {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2734,11 +2734,11 @@
                 <a href="#208">208</a>
             </div>
             <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
+                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
                 
             </div>
-            <div class="column has-background-white p-0">
-                <pre class="has-background-white py-0 px-2">impl From&lt;std::io::Error&gt; for HistogramError {</pre>
+            <div class="column has-background-danger-light p-0">
+                <pre class="has-background-danger-light py-0 px-2">        Self::Deserialization(hdrhistogram::serialization::DeserializeError::from(err))</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2751,39 +2751,13 @@
                 
             </div>
             <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">    fn from(err: std::io::Error) -&gt; Self {</pre>
+                <pre class="has-background-danger-light py-0 px-2">    }</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
                 id="210">
                 <a href="#210">210</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
-                
-            </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">        Self::Deserialization(hdrhistogram::serialization::DeserializeError::from(err))</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="211">
-                <a href="#211">211</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-danger-light has-background-danger">
-                
-            </div>
-            <div class="column has-background-danger-light p-0">
-                <pre class="has-background-danger-light py-0 px-2">    }</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="212">
-                <a href="#212">212</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -2795,8 +2769,8 @@
         </div><div class="columns p-0 m-0">
             <div
                 class="column is-1 is-narrow p-0 has-text-centered"
-                id="213">
-                <a href="#213">213</a>
+                id="211">
+                <a href="#211">211</a>
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-white has-background-white">
@@ -2804,6 +2778,32 @@
             </div>
             <div class="column has-background-white p-0">
                 <pre class="has-background-white py-0 px-2"></pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="212">
+                <a href="#212">212</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
+            </div>
+        </div><div class="columns p-0 m-0">
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered"
+                id="213">
+                <a href="#213">213</a>
+            </div>
+            <div
+                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
+                1
+            </div>
+            <div class="column has-background-success-light p-0">
+                <pre class="has-background-success-light py-0 px-2">fn runs() {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2816,7 +2816,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">#[test]</pre>
+                <pre class="has-background-success-light py-0 px-2">    main().unwrap()</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -2829,38 +2829,12 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">fn runs() {</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="216">
-                <a href="#216">216</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    main().unwrap()</pre>
-            </div>
-        </div><div class="columns p-0 m-0">
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered"
-                id="217">
-                <a href="#217">217</a>
-            </div>
-            <div
-                class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                1
-            </div>
-            <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">}</pre>
             </div>
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2022-01-27 00:06</p>
+                <p class="heading">Date: 2022-01-28 14:24</p>
             </div>
         </footer>
     </body>
