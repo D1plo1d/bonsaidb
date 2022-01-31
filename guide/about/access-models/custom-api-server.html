@@ -319,7 +319,9 @@ impl DoSomethingCustomHandler for ExampleDispatcher {
             .default_permissions(Permissions::from(
                 Statement::for_any()
                     .allowing(&amp;BonsaiAction::Server(ServerAction::Connect))
-                    .allowing(&amp;BonsaiAction::Server(ServerAction::LoginWithPassword)),
+                    .allowing(&amp;BonsaiAction::Server(ServerAction::Authenticate(
+                        AuthenticationMethod::PasswordHash,
+                    ))),
             ))
             .authenticated_permissions(Permissions::from(
                 Statement::for_any()
