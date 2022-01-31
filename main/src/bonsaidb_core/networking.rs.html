@@ -374,58 +374,13 @@
 <span id="373">373</span>
 <span id="374">374</span>
 <span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
-<span id="392">392</span>
-<span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
-<span id="398">398</span>
-<span id="399">399</span>
-<span id="400">400</span>
-<span id="401">401</span>
-<span id="402">402</span>
-<span id="403">403</span>
-<span id="404">404</span>
-<span id="405">405</span>
-<span id="406">406</span>
-<span id="407">407</span>
-<span id="408">408</span>
-<span id="409">409</span>
-<span id="410">410</span>
-<span id="411">411</span>
-<span id="412">412</span>
-<span id="413">413</span>
-<span id="414">414</span>
-<span id="415">415</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable::Permissions</span>;
-<span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
-<span class="kw">use</span> <span class="ident">custodian_password</span>::{
-    <span class="ident">LoginFinalization</span>, <span class="ident">LoginRequest</span>, <span class="ident">LoginResponse</span>, <span class="ident">RegistrationFinalization</span>, <span class="ident">RegistrationRequest</span>,
-    <span class="ident">RegistrationResponse</span>,
-};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 <span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">Database</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>},
+    <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">Authenticated</span>, <span class="ident">Database</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>},
     <span class="ident">document::OwnedDocument</span>,
     <span class="ident">keyvalue</span>::{<span class="ident">KeyOperation</span>, <span class="ident">Output</span>},
     <span class="ident">schema</span>::{
@@ -479,23 +434,6 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">derive</span>(<span class="ident">actionable::Actionable</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ServerRequest</span> {
-    <span class="doccomment">/// Authenticates the current session as `username` using a password.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;simple&quot;</span>))]</span>
-    <span class="ident">LoginWithPassword</span> {
-        <span class="doccomment">/// The username of the user to authenticate as.</span>
-        <span class="ident">username</span>: <span class="ident">String</span>,
-
-        <span class="doccomment">/// The password login request.</span>
-        <span class="ident">login_request</span>: <span class="ident">LoginRequest</span>,
-    },
-
-    <span class="doccomment">/// Completes logging in via `LoginWithPassword`.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;none&quot;</span>))]</span>
-    <span class="ident">FinishPasswordLogin</span> {
-        <span class="doccomment">/// The payload required to complete logging in.</span>
-        <span class="ident">login_finalization</span>: <span class="ident">LoginFinalization</span>,
-    },
-
     <span class="doccomment">/// Creates a database.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;simple&quot;</span>))]</span>
     <span class="ident">CreateDatabase</span> {
@@ -522,25 +460,23 @@
         <span class="doccomment">/// The unique username of the user to create.</span>
         <span class="ident">username</span>: <span class="ident">String</span>,
     },
-
-    <span class="doccomment">/// Sets a user&#39;s password.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;custom&quot;</span>))]</span>
-    <span class="ident">SetPassword</span> {
-        <span class="doccomment">/// The username or id of the user to set the password for.</span>
+    <span class="doccomment">/// Set&#39;s a user&#39;s password.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;simple&quot;</span>))]</span>
+    <span class="ident">SetUserPassword</span> {
+        <span class="doccomment">/// The username or id of the user.</span>
         <span class="ident">user</span>: <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>,
-
-        <span class="doccomment">/// A registration request for a password.</span>
-        <span class="ident">password_request</span>: <span class="ident">RegistrationRequest</span>,
+        <span class="doccomment">/// The user&#39;s new password.</span>
+        <span class="ident">password</span>: <span class="ident"><span class="kw">crate</span>::connection::SensitiveString</span>,
     },
-
-    <span class="doccomment">/// Finishes setting the password for a user.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;none&quot;</span>))]</span>
-    <span class="ident">FinishSetPassword</span> {
-        <span class="doccomment">/// The username or id of the user to set the password for.</span>
+    <span class="doccomment">/// Authenticate as a user.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;custom&quot;</span>))]</span>
+    <span class="ident">Authenticate</span> {
+        <span class="doccomment">/// The username or id of the user.</span>
         <span class="ident">user</span>: <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>,
-
-        <span class="doccomment">/// The finalization payload for the password change.</span>
-        <span class="ident">password_finalization</span>: <span class="ident">RegistrationFinalization</span>,
+        <span class="doccomment">/// The method of authentication.</span>
+        <span class="ident">authentication</span>: <span class="ident"><span class="kw">crate</span>::connection::Authentication</span>,
     },
 
     <span class="doccomment">/// Alter&#39;s a user&#39;s membership in a permission group.</span>
@@ -758,24 +694,8 @@
         <span class="doccomment">/// The id of the user created.</span>
         <span class="ident">id</span>: <span class="ident">u64</span>,
     },
-    <span class="doccomment">/// Asks the client to complete the password change. This process ensures</span>
-    <span class="doccomment">/// the server receives no information that can be used to derive</span>
-    <span class="doccomment">/// information about the password.</span>
-    <span class="ident">FinishSetPassword</span> {
-        <span class="doccomment">/// The password registration response. Must be finalized using</span>
-        <span class="doccomment">/// `custodian-password`.</span>
-        <span class="ident">password_reponse</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">RegistrationResponse</span><span class="op">&gt;</span>,
-    },
-    <span class="doccomment">/// A response to a password login attempt.</span>
-    <span class="ident">PasswordLoginResponse</span> {
-        <span class="doccomment">/// The server&#39;s response to the provided [`LoginRequest`].</span>
-        <span class="ident">response</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">LoginResponse</span><span class="op">&gt;</span>,
-    },
     <span class="doccomment">/// Successfully authenticated.</span>
-    <span class="ident">LoggedIn</span> {
-        <span class="doccomment">/// The effective permissions for the authenticated user.</span>
-        <span class="ident">permissions</span>: <span class="ident">Permissions</span>,
-    },
+    <span class="ident">Authenticated</span>(<span class="ident">Authenticated</span>),
 }
 
 <span class="doccomment">/// A response to a [`DatabaseRequest`].</span>

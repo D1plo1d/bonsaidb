@@ -374,16 +374,12 @@
 <span id="373">373</span>
 <span id="374">374</span>
 <span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bonsaidb_client</span>::{<span class="ident">Client</span>, <span class="ident">RemoteDatabase</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">bonsaidb_core::connection</span>::{<span class="ident">Authenticated</span>, <span class="ident">Authentication</span>};
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">async_trait::async_trait</span>,
     <span class="ident">connection</span>::{<span class="self">self</span>, <span class="ident">AccessPolicy</span>, <span class="ident">Connection</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>, <span class="ident">StorageConnection</span>},
-    <span class="ident">custodian_password</span>::{<span class="ident">RegistrationFinalization</span>, <span class="ident">RegistrationRequest</span>, <span class="ident">RegistrationResponse</span>},
     <span class="ident">document::OwnedDocument</span>,
     <span class="ident">schema</span>::{
         <span class="ident">Collection</span>, <span class="ident">Map</span>, <span class="ident">MappedDocument</span>, <span class="ident">MappedValue</span>, <span class="ident">NamedReference</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>,
@@ -466,33 +462,27 @@
         }
     }
 
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_request</span>: <span class="ident">RegistrationRequest</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RegistrationResponse</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident">password</span>: <span class="ident">bonsaidb_core::connection::SensitiveString</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">set_user_password</span>(<span class="ident">user</span>, <span class="ident">password_request</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">set_user_password</span>(<span class="ident">user</span>, <span class="ident">password_request</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">set_user_password</span>(<span class="ident">user</span>, <span class="ident">password</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">set_user_password</span>(<span class="ident">user</span>, <span class="ident">password</span>).<span class="kw">await</span>,
         }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">finish_set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">authenticate</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_finalization</span>: <span class="ident">RegistrationFinalization</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident">authentication</span>: <span class="ident">Authentication</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
-                <span class="ident">server</span>
-                    .<span class="ident">finish_set_user_password</span>(<span class="ident">user</span>, <span class="ident">password_finalization</span>)
-                    .<span class="kw">await</span>
-            }
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; {
-                <span class="ident">client</span>
-                    .<span class="ident">finish_set_user_password</span>(<span class="ident">user</span>, <span class="ident">password_finalization</span>)
-                    .<span class="kw">await</span>
-            }
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">authenticate</span>(<span class="ident">user</span>, <span class="ident">authentication</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">authenticate</span>(<span class="ident">user</span>, <span class="ident">authentication</span>).<span class="kw">await</span>,
         }
     }
 

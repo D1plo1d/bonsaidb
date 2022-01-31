@@ -983,6 +983,9 @@
 <span id="982">982</span>
 <span id="983">983</span>
 <span id="984">984</span>
+<span id="985">985</span>
+<span id="986">986</span>
+<span id="987">987</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">marker::PhantomData</span>,
     <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
@@ -990,18 +993,16 @@
 
 <span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">custodian_password</span>::{
-    <span class="ident">ClientConfig</span>, <span class="ident">ClientFile</span>, <span class="ident">ClientRegistration</span>, <span class="ident">ExportKey</span>, <span class="ident">RegistrationFinalization</span>,
-    <span class="ident">RegistrationRequest</span>, <span class="ident">RegistrationResponse</span>,
-};
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">future::BoxFuture</span>, <span class="ident">Future</span>, <span class="ident">FutureExt</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">zeroize::Zeroize</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::NamedReference</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">document</span>::{<span class="ident">Document</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">permissions::Permissions</span>,
     <span class="ident">schema</span>::{
         <span class="self">self</span>, <span class="ident">view</span>, <span class="ident">Key</span>, <span class="ident">Map</span>, <span class="ident">MappedDocument</span>, <span class="ident">MappedValue</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">SerializedCollection</span>,
     },
@@ -1854,43 +1855,21 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_user</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">username</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
 
-    <span class="doccomment">/// Sets a user&#39;s password using `custodian-password` to register a password using `OPAQUE-PAKE`.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
+    <span class="doccomment">/// Sets a user&#39;s password.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_request</span>: <span class="ident">RegistrationRequest</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RegistrationResponse</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// Finishes setting a user&#39;s password by finishing the `OPAQUE-PAKE`</span>
-    <span class="doccomment">/// registration.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">finish_set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_finalization</span>: <span class="ident">RegistrationFinalization</span>,
+        <span class="ident">password</span>: <span class="ident">SensitiveString</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
 
-    <span class="doccomment">/// Sets a user&#39;s password with the provided string. The password provided</span>
-    <span class="doccomment">/// will never leave the machine that is calling this function. Internally</span>
-    <span class="doccomment">/// uses `set_user_password` and `finish_set_user_password` in conjunction</span>
-    <span class="doccomment">/// with `custodian-password`.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password_str</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Authenticates as a user with a authentication method.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>))]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">authenticate</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PasswordResult</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">user</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> (<span class="ident">registration</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientRegistration::register</span>(
-            <span class="ident">ClientConfig::new</span>(<span class="ident"><span class="kw">crate</span>::password_config</span>(), <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
-            <span class="ident">password</span>,
-        )<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_user_password</span>(<span class="ident">user</span>.<span class="ident">clone</span>(), <span class="ident">request</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> (<span class="ident">file</span>, <span class="ident">finalization</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="ident">registration</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">finish_set_user_password</span>(<span class="ident">user</span>, <span class="ident">finalization</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">PasswordResult</span> { <span class="ident">file</span>, <span class="ident">export_key</span> })
-    }
+        <span class="ident">authentication</span>: <span class="ident">Authentication</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Authenticated</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Adds a user to a permission group.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
@@ -1945,20 +1924,6 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
 }
 
-<span class="doccomment">/// The result of logging in with a password or setting a password.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PasswordResult</span> {
-    <span class="doccomment">/// A file that can be stored locally that can be used to further validate</span>
-    <span class="doccomment">/// future login attempts. This does not need to be stored, but can be used</span>
-    <span class="doccomment">/// to detect if the `BonsaiDb` key has been changed without our knowledge.</span>
-    <span class="kw">pub</span> <span class="ident">file</span>: <span class="ident">ClientFile</span>,
-    <span class="doccomment">/// A keypair derived from the OPAQUE-KE session. This key is</span>
-    <span class="doccomment">/// deterministically derived from the key exchange with the server such</span>
-    <span class="doccomment">/// that upon logging in with your password, this key will always be the</span>
-    <span class="doccomment">/// same until you change your password.</span>
-    <span class="kw">pub</span> <span class="ident">export_key</span>: <span class="ident">ExportKey</span>,
-}
-
 <span class="doccomment">/// A database stored in `BonsaiDb`.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Database</span> {
@@ -1966,6 +1931,47 @@
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
     <span class="doccomment">/// The schema defining the database.</span>
     <span class="kw">pub</span> <span class="ident">schema</span>: <span class="ident">SchemaName</span>,
+}
+
+<span class="doccomment">/// A plain-text password. This struct automatically overwrites the password</span>
+<span class="doccomment">/// with zeroes when dropped.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Zeroize</span>)]</span>
+<span class="attribute">#[<span class="ident">zeroize</span>(<span class="ident">drop</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">transparent</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SensitiveString</span>(<span class="kw">pub</span> <span class="ident">String</span>);
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="ident">std::fmt::Debug</span> <span class="kw">for</span> <span class="ident">SensitiveString</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
+        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;SensitiveString(...)&quot;</span>)
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">SensitiveString</span> {
+    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">String</span>;
+
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
+    }
+}
+
+<span class="doccomment">/// User authentication methods.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Authentication</span> {
+    <span class="doccomment">/// Authenticate using a password.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="ident">Password</span>(<span class="ident"><span class="kw">crate</span>::connection::SensitiveString</span>),
+}
+
+<span class="doccomment">/// Information about the authenticated session.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Authenticated</span> {
+    <span class="doccomment">/// The user id logged in as.</span>
+    <span class="kw">pub</span> <span class="ident">user_id</span>: <span class="ident">u64</span>,
+    <span class="doccomment">/// The effective permissions granted.</span>
+    <span class="kw">pub</span> <span class="ident">permissions</span>: <span class="ident">Permissions</span>,
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>

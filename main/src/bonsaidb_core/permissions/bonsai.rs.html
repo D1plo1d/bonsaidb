@@ -253,6 +253,13 @@
 <span id="252">252</span>
 <span id="253">253</span>
 <span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>, <span class="ident">ResourceName</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
@@ -377,12 +384,19 @@
     <span class="doccomment">/// Permits [`StorageConnection::set_user_password`](crate::connection::StorageConnection::set_user_password).</span>
     <span class="ident">SetPassword</span>,
     <span class="doccomment">/// Permits the ability to log in with a password.</span>
-    <span class="ident">LoginWithPassword</span>,
+    <span class="ident">Authenticate</span>(<span class="ident">AuthenticationMethod</span>),
     <span class="doccomment">/// Permits [`StorageConnection::add_permission_group_to_user`](crate::connection::StorageConnection::add_permission_group_to_user) and [`StorageConnection::remove_permission_group_from_user`](crate::connection::StorageConnection::remove_permission_group_from_user).</span>
     <span class="ident">ModifyUserPermissionGroups</span>,
     <span class="doccomment">/// Permits .</span>
     <span class="doccomment">/// Permits [`StorageConnection::add_role_to_user`](crate::connection::StorageConnection::add_role_to_user) and [`StorageConnection::remove_role_from_user`](crate::connection::StorageConnection::remove_role_from_user).</span>
     <span class="ident">ModifyUserRoles</span>,
+}
+
+<span class="doccomment">/// Methods for user authentication.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AuthenticationMethod</span> {
+    <span class="doccomment">/// Authenticate the user using password hashing (Argon2).</span>
+    <span class="ident">PasswordHash</span>,
 }
 
 <span class="doccomment">/// Actions that operate on a specific database.</span>

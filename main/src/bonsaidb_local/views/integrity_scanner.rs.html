@@ -200,8 +200,6 @@
 <span id="199">199</span>
 <span id="200">200</span>
 <span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">collections::HashSet</span>, <span class="ident">convert::Infallible</span>, <span class="ident">hash::Hash</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -328,8 +326,7 @@
         .<span class="kw">await</span><span class="question-mark">?</span><span class="question-mark">?</span>;
 
         <span class="kw">if</span> <span class="ident">needs_update</span> {
-            <span class="kw">let</span> <span class="ident">job</span> <span class="op">=</span> <span class="self">self</span>
-                .<span class="ident">database</span>
+            <span class="self">self</span>.<span class="ident">database</span>
                 .<span class="ident">data</span>
                 .<span class="ident">storage</span>
                 .<span class="ident">tasks</span>()
@@ -343,7 +340,6 @@
                     },
                 })
                 .<span class="kw">await</span>;
-            <span class="ident">job</span>.<span class="ident">receive</span>().<span class="kw">await</span><span class="question-mark">?</span><span class="question-mark">?</span>;
         }
 
         <span class="self">self</span>.<span class="ident">database</span>

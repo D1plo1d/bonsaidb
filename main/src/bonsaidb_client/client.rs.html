@@ -732,74 +732,6 @@
 <span id="731">731</span>
 <span id="732">732</span>
 <span id="733">733</span>
-<span id="734">734</span>
-<span id="735">735</span>
-<span id="736">736</span>
-<span id="737">737</span>
-<span id="738">738</span>
-<span id="739">739</span>
-<span id="740">740</span>
-<span id="741">741</span>
-<span id="742">742</span>
-<span id="743">743</span>
-<span id="744">744</span>
-<span id="745">745</span>
-<span id="746">746</span>
-<span id="747">747</span>
-<span id="748">748</span>
-<span id="749">749</span>
-<span id="750">750</span>
-<span id="751">751</span>
-<span id="752">752</span>
-<span id="753">753</span>
-<span id="754">754</span>
-<span id="755">755</span>
-<span id="756">756</span>
-<span id="757">757</span>
-<span id="758">758</span>
-<span id="759">759</span>
-<span id="760">760</span>
-<span id="761">761</span>
-<span id="762">762</span>
-<span id="763">763</span>
-<span id="764">764</span>
-<span id="765">765</span>
-<span id="766">766</span>
-<span id="767">767</span>
-<span id="768">768</span>
-<span id="769">769</span>
-<span id="770">770</span>
-<span id="771">771</span>
-<span id="772">772</span>
-<span id="773">773</span>
-<span id="774">774</span>
-<span id="775">775</span>
-<span id="776">776</span>
-<span id="777">777</span>
-<span id="778">778</span>
-<span id="779">779</span>
-<span id="780">780</span>
-<span id="781">781</span>
-<span id="782">782</span>
-<span id="783">783</span>
-<span id="784">784</span>
-<span id="785">785</span>
-<span id="786">786</span>
-<span id="787">787</span>
-<span id="788">788</span>
-<span id="789">789</span>
-<span id="790">790</span>
-<span id="791">791</span>
-<span id="792">792</span>
-<span id="793">793</span>
-<span id="794">794</span>
-<span id="795">795</span>
-<span id="796">796</span>
-<span id="797">797</span>
-<span id="798">798</span>
-<span id="799">799</span>
-<span id="800">800</span>
-<span id="801">801</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::sync::atomic::AtomicBool</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -816,16 +748,14 @@
 
 <span class="kw">use</span> <span class="ident">async_lock::Mutex</span>;
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">bonsaidb_core::connection</span>::{<span class="ident">Authenticated</span>, <span class="ident">Authentication</span>};
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">connection</span>::{<span class="ident">Database</span>, <span class="ident">PasswordResult</span>, <span class="ident">StorageConnection</span>},
-    <span class="ident">custodian_password</span>::{
-        <span class="ident">ClientConfig</span>, <span class="ident">ClientFile</span>, <span class="ident">ClientLogin</span>, <span class="ident">LoginFinalization</span>, <span class="ident">LoginRequest</span>, <span class="ident">LoginResponse</span>,
-    },
+    <span class="ident">connection</span>::{<span class="ident">Database</span>, <span class="ident">StorageConnection</span>},
     <span class="ident">custom_api</span>::{<span class="ident">CustomApi</span>, <span class="ident">CustomApiResult</span>},
     <span class="ident">networking</span>::{
         <span class="self">self</span>, <span class="ident">Payload</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">ServerRequest</span>, <span class="ident">ServerResponse</span>, <span class="ident">CURRENT_PROTOCOL_VERSION</span>,
     },
-    <span class="ident">password_config</span>,
     <span class="ident">permissions::Permissions</span>,
     <span class="ident">schema</span>::{<span class="ident">NamedReference</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>},
 };
@@ -1098,72 +1028,6 @@
         <span class="prelude-val">Ok</span>(<span class="ident">client</span>)
     }
 
-    <span class="doccomment">/// Logs in as a user with a password, using `custodian-password` to login using `OPAQUE-PAKE`.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">login_with_password</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">username</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">login_request</span>: <span class="ident">LoginRequest</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">LoginResponse</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::LoginWithPassword</span> {
-                <span class="ident">username</span>: <span class="ident">username</span>.<span class="ident">to_string</span>(),
-                <span class="ident">login_request</span>,
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::PasswordLoginResponse</span> { <span class="ident">response</span> }) =&gt; <span class="prelude-val">Ok</span>(<span class="kw-2">*</span><span class="ident">response</span>),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
-    }
-
-    <span class="doccomment">/// Finishes setting a user&#39;s password by finishing the `OPAQUE-PAKE`</span>
-    <span class="doccomment">/// login.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">finish_login_with_password</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">login_finalization</span>: <span class="ident">LoginFinalization</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::FinishPasswordLogin</span> {
-                <span class="ident">login_finalization</span>,
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::LoggedIn</span> { <span class="ident">permissions</span> }) =&gt; {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">effective_permissions</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">effective_permissions</span>);
-                <span class="kw-2">*</span><span class="ident">effective_permissions</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">permissions</span>);
-                <span class="prelude-val">Ok</span>(())
-            }
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
-    }
-
-    <span class="doccomment">/// Authenticates as a user with a provided password. The password provided</span>
-    <span class="doccomment">/// will never leave the machine that is calling this function. Internally</span>
-    <span class="doccomment">/// uses `login_with_password` and `finish_login_with_password` in</span>
-    <span class="doccomment">/// conjunction with `custodian-password`.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">login_with_password_str</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">username</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">password</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">previous_file</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ClientFile</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PasswordResult</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">login</span>, <span class="ident">request</span>) <span class="op">=</span> <span class="ident">ClientLogin::login</span>(
-            <span class="ident">ClientConfig::new</span>(<span class="ident">password_config</span>(), <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
-            <span class="ident">previous_file</span>,
-            <span class="ident">password</span>,
-        )<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">login_with_password</span>(<span class="ident">username</span>, <span class="ident">request</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> (<span class="ident">file</span>, <span class="ident">login_finalization</span>, <span class="ident">export_key</span>) <span class="op">=</span> <span class="ident">login</span>.<span class="ident">finish</span>(<span class="ident">response</span>)<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">finish_login_with_password</span>(<span class="ident">login_finalization</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">PasswordResult</span> { <span class="ident">file</span>, <span class="ident">export_key</span> })
-    }
-
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">request</span>: <span class="ident">Request</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">CustomApi</span><span class="op">&gt;</span><span class="ident">::Request</span><span class="op">&gt;</span>,
@@ -1332,21 +1196,20 @@
         }
     }
 
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_request</span>: <span class="ident">bonsaidb_core::custodian_password::RegistrationRequest</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bonsaidb_core::custodian_password::RegistrationResponse</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident">password</span>: <span class="ident">bonsaidb_core::connection::SensitiveString</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::SetPassword</span> {
+            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::SetUserPassword</span> {
                 <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">into</span>().<span class="ident">into_owned</span>(),
-                <span class="ident">password_request</span>,
+                <span class="ident">password</span>,
             }))
             .<span class="kw">await</span><span class="question-mark">?</span>
         {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::FinishSetPassword</span> { <span class="ident">password_reponse</span> }) =&gt; {
-                <span class="prelude-val">Ok</span>(<span class="kw-2">*</span><span class="ident">password_reponse</span>)
-            }
+            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
             <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
             <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
                 <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
@@ -1354,19 +1217,20 @@
         }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">finish_set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">authenticate</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_finalization</span>: <span class="ident">bonsaidb_core::custodian_password::RegistrationFinalization</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident">authentication</span>: <span class="ident">Authentication</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::FinishSetPassword</span> {
+            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::Authenticate</span> {
                 <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">into</span>().<span class="ident">into_owned</span>(),
-                <span class="ident">password_finalization</span>,
+                <span class="ident">authentication</span>,
             }))
             .<span class="kw">await</span><span class="question-mark">?</span>
         {
-            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
+            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::Authenticated</span>(<span class="ident">response</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">response</span>),
             <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
             <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
                 <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),

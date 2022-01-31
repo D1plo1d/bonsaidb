@@ -132,8 +132,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">admin</span>::{<span class="ident">group</span>, <span class="ident">role</span>},
-    <span class="ident">connection::Connection</span>,
-    <span class="ident">custodian_password</span>::{<span class="ident">ServerFile</span>, <span class="ident">ServerRegistration</span>},
+    <span class="ident">connection</span>::{<span class="ident">Connection</span>, <span class="ident">SensitiveString</span>},
     <span class="ident">define_basic_unique_mapped_view</span>,
     <span class="ident">document</span>::{<span class="ident">Document</span>, <span class="ident">KeyId</span>},
     <span class="ident">permissions::Permissions</span>,
@@ -154,12 +153,13 @@
     <span class="doccomment">/// The IDs of the roles this user has been assigned.</span>
     <span class="kw">pub</span> <span class="ident">roles</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
 
-    <span class="doccomment">/// An `OPAQUE PAKE` payload.</span>
-    <span class="kw">pub</span> <span class="ident">password_hash</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerFile</span><span class="op">&gt;</span>,
-
-    <span class="doccomment">/// A temporary password state. Each call to SetPassword will overwrite the</span>
-    <span class="doccomment">/// previous state.</span>
-    <span class="kw">pub</span> <span class="ident">pending_password_change_state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerRegistration</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The user&#39;s stored password hash.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This field is not feature gated to prevent losing stored passwords if</span>
+    <span class="doccomment">/// the `password-hashing` feature is disabled and then re-enabled and user</span>
+    <span class="doccomment">/// records are updated in the meantime.</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">argon_hash</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SensitiveString</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">User</span> {

@@ -781,26 +781,6 @@
 <span id="780">780</span>
 <span id="781">781</span>
 <span id="782">782</span>
-<span id="783">783</span>
-<span id="784">784</span>
-<span id="785">785</span>
-<span id="786">786</span>
-<span id="787">787</span>
-<span id="788">788</span>
-<span id="789">789</span>
-<span id="790">790</span>
-<span id="791">791</span>
-<span id="792">792</span>
-<span id="793">793</span>
-<span id="794">794</span>
-<span id="795">795</span>
-<span id="796">796</span>
-<span id="797">797</span>
-<span id="798">798</span>
-<span id="799">799</span>
-<span id="800">800</span>
-<span id="801">801</span>
-<span id="802">802</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::HashMap</span>,
     <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Display</span>},
@@ -812,8 +792,8 @@
 <span class="kw">use</span> <span class="ident">async_lock</span>::{<span class="ident">Mutex</span>, <span class="ident">RwLock</span>};
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_core::circulate::Relay</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;internal-apis&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::custodian_password</span>::{<span class="ident">LoginResponse</span>, <span class="ident">ServerLogin</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">bonsaidb_core::connection</span>::{<span class="ident">Authenticated</span>, <span class="ident">Authentication</span>};
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">admin</span>::{
         <span class="self">self</span>,
@@ -826,8 +806,7 @@
 };
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">admin</span>::{<span class="ident">password_config::PasswordConfig</span>, <span class="ident">user::User</span>, <span class="ident">PermissionGroup</span>, <span class="ident">Role</span>},
-    <span class="ident">custodian_password</span>::{<span class="ident">RegistrationFinalization</span>, <span class="ident">RegistrationRequest</span>, <span class="ident">ServerRegistration</span>},
+    <span class="ident">admin</span>::{<span class="ident">user::User</span>, <span class="ident">PermissionGroup</span>, <span class="ident">Role</span>},
     <span class="ident">schema</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">NamedCollection</span>, <span class="ident">NamedReference</span>},
 };
 <span class="kw">use</span> <span class="ident">bonsaidb_utils</span>::{<span class="ident">fast_async_lock</span>, <span class="ident">fast_async_read</span>, <span class="ident">fast_async_write</span>};
@@ -856,6 +835,9 @@
     <span class="ident">Database</span>, <span class="ident">Error</span>,
 };
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+<span class="kw">mod</span> <span class="ident">argon</span>;
+
 <span class="kw">mod</span> <span class="ident">backup</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">backup::BackupLocation</span>;
 
@@ -875,6 +857,8 @@
     <span class="ident">schemas</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SchemaName</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DatabaseOpener</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">available_databases</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">SchemaName</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">open_roots</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Context</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="ident">argon</span>: <span class="ident">argon::Hasher</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">vault</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Vault</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
@@ -919,6 +903,8 @@
 
         <span class="kw">let</span> <span class="ident">check_view_integrity_on_database_open</span> <span class="op">=</span> <span class="ident">configuration</span>.<span class="ident">views</span>.<span class="ident">check_integrity_on_open</span>;
         <span class="kw">let</span> <span class="ident">key_value_persistence</span> <span class="op">=</span> <span class="ident">configuration</span>.<span class="ident">key_value_persistence</span>;
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+        <span class="kw">let</span> <span class="ident">argon</span> <span class="op">=</span> <span class="ident">argon::Hasher::new</span>(<span class="ident">configuration</span>.<span class="ident">argon</span>);
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
         <span class="kw">let</span> <span class="ident">default_encryption_key</span> <span class="op">=</span> <span class="ident">configuration</span>.<span class="ident">default_encryption_key</span>;
         <span class="kw">let</span> <span class="ident">storage</span> <span class="op">=</span> <span class="ident">tokio::task::spawn_blocking</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
@@ -926,6 +912,8 @@
                 <span class="ident">data</span>: <span class="ident">Arc::new</span>(<span class="ident">Data</span> {
                     <span class="ident">id</span>,
                     <span class="ident">tasks</span>,
+                    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+                    <span class="ident">argon</span>,
                     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
                     <span class="ident">vault</span>,
                     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
@@ -1187,28 +1175,6 @@
         <span class="self">self</span>.<span class="ident">database_without_schema</span>(<span class="ident">name</span>).<span class="kw">await</span>
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;internal-apis&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="doccomment">/// Authenticates a user.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">internal_login_with_password</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">username</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">login_request</span>: <span class="ident">bonsaidb_core::custodian_password::LoginRequest</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">ServerLogin</span>, <span class="ident">LoginResponse</span>), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">admin</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">admin</span>().<span class="kw">await</span>;
-        <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">PasswordConfig::load</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-
-        <span class="kw">let</span> (<span class="ident">user_id</span>, <span class="ident">existing_password_hash</span>) <span class="op">=</span>
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">user</span>) <span class="op">=</span> <span class="ident">User::load</span>(<span class="ident">username</span>, <span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span><span class="question-mark">?</span> {
-                (<span class="prelude-val">Some</span>(<span class="ident">user</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">password_hash</span>)
-            } <span class="kw">else</span> {
-                (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>)
-            };
-
-        <span class="kw">let</span> (<span class="ident">login</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerLogin::login</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>, <span class="ident">existing_password_hash</span>, <span class="ident">login_request</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>((<span class="ident">user_id</span>, <span class="ident">login</span>, <span class="ident">response</span>))
-    }
-
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">update_user_with_named_id</span><span class="op">&lt;</span>
         <span class="lifetime">&#39;user</span>,
@@ -1414,56 +1380,50 @@
         <span class="prelude-val">Ok</span>(<span class="ident">result</span>.<span class="ident">id</span>)
     }
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">user</span>, <span class="ident">password_request</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">user</span>, <span class="ident">password</span>)))]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_request</span>: <span class="ident">RegistrationRequest</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bonsaidb_core::custodian_password::RegistrationResponse</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident">password</span>: <span class="ident">bonsaidb_core::connection::SensitiveString</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">admin</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">admin</span>().<span class="kw">await</span>;
-
-        <span class="kw">match</span> <span class="ident">User::load</span>(<span class="ident">user</span>, <span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span><span class="question-mark">?</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">doc</span>) =&gt; {
-                <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">PasswordConfig::load</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-                <span class="kw">let</span> (<span class="ident">register</span>, <span class="ident">response</span>) <span class="op">=</span> <span class="ident">ServerRegistration::register</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>, <span class="ident">password_request</span>)<span class="question-mark">?</span>;
-
-                <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">pending_password_change_state</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">register</span>);
-                <span class="ident">doc</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-
-                <span class="prelude-val">Ok</span>(<span class="ident">response</span>)
-            }
-            <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::UserNotFound</span>),
-        }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::load</span>(<span class="ident">user</span>, <span class="kw-2">&amp;</span><span class="ident">admin</span>)
+            .<span class="kw">await</span><span class="question-mark">?</span>
+            .<span class="ident">ok_or</span>(<span class="ident">bonsaidb_core::Error::UserNotFound</span>)<span class="question-mark">?</span>;
+        <span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">argon_hash</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">argon</span>.<span class="ident">hash</span>(<span class="ident">user</span>.<span class="ident">id</span>, <span class="ident">password</span>).<span class="kw">await</span><span class="question-mark">?</span>);
+        <span class="ident">user</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span>
     }
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(
-        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>,
-        <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">user</span>, <span class="ident">password_finalization</span>))
-    )]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">finish_set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">user</span>)))]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">authenticate</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password_finalization</span>: <span class="ident">RegistrationFinalization</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">user</span>.<span class="ident">into</span>();
+        <span class="ident">authentication</span>: <span class="ident">Authentication</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">admin</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">admin</span>().<span class="kw">await</span>;
-        <span class="kw">match</span> <span class="ident">User::load</span>(<span class="ident">user</span>, <span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span><span class="question-mark">?</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">doc</span>) =&gt; {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">registration</span>) <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">pending_password_change_state</span>.<span class="ident">take</span>() {
-                    <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">registration</span>.<span class="ident">finish</span>(<span class="ident">password_finalization</span>)<span class="question-mark">?</span>;
-                    <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">password_hash</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>);
-                    <span class="ident">doc</span>.<span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::load</span>(<span class="ident">user</span>, <span class="kw-2">&amp;</span><span class="ident">admin</span>)
+            .<span class="kw">await</span><span class="question-mark">?</span>
+            .<span class="ident">ok_or</span>(<span class="ident">bonsaidb_core::Error::InvalidCredentials</span>)<span class="question-mark">?</span>;
+        <span class="kw">match</span> <span class="ident">authentication</span> {
+            <span class="ident">Authentication::Password</span>(<span class="ident">password</span>) =&gt; {
+                <span class="kw">let</span> <span class="ident">saved_hash</span> <span class="op">=</span> <span class="ident">user</span>
+                    .<span class="ident">contents</span>
+                    .<span class="ident">argon_hash</span>
+                    .<span class="ident">clone</span>()
+                    .<span class="ident">ok_or</span>(<span class="ident">bonsaidb_core::Error::InvalidCredentials</span>)<span class="question-mark">?</span>;
 
-                    <span class="prelude-val">Ok</span>(())
-                } <span class="kw">else</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Password</span>(<span class="ident">String::from</span>(
-                        <span class="string">&quot;no existing state found&quot;</span>,
-                    )))
-                }
+                <span class="self">self</span>.<span class="ident">data</span>
+                    .<span class="ident">argon</span>
+                    .<span class="ident">verify</span>(<span class="ident">user</span>.<span class="ident">id</span>, <span class="ident">password</span>, <span class="ident">saved_hash</span>)
+                    .<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">permissions</span> <span class="op">=</span> <span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">effective_permissions</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="prelude-val">Ok</span>(<span class="ident">Authenticated</span> {
+                    <span class="ident">user_id</span>: <span class="ident">user</span>.<span class="ident">id</span>,
+                    <span class="ident">permissions</span>,
+                })
             }
-            <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::UserNotFound</span>),
         }
     }
 

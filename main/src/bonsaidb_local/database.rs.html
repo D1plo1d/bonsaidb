@@ -2941,7 +2941,7 @@
         <span class="kw">let</span> <span class="ident">key_value_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">key_value_state</span>.<span class="ident">clone</span>();
         <span class="self">self</span>.<span class="ident">runtime</span>.<span class="ident">spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">key_value_state</span>);
-            <span class="ident">state</span>.<span class="ident">shutdown</span>(<span class="kw-2">&amp;</span><span class="ident">key_value_state</span>);
+            <span class="ident">state</span>.<span class="ident">shutdown</span>(<span class="kw-2">&amp;</span><span class="ident">key_value_state</span>).<span class="kw">await</span>
         });
     }
 }
