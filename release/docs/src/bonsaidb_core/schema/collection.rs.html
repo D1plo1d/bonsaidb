@@ -615,6 +615,61 @@
 <span id="614">614</span>
 <span id="615">615</span>
 <span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">task::Poll</span>};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -797,6 +852,61 @@
 }
 
 <span class="doccomment">/// A collection with a unique name column.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Finding a document by unique name</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+<span class="doccomment">/// if let Some(doc) = MyCollection::load(&quot;unique name&quot;, &amp;db).await? {</span>
+<span class="doccomment">///     println!(</span>
+<span class="doccomment">///         &quot;Retrieved revision {} with deserialized contents: {:?}&quot;,</span>
+<span class="doccomment">///         doc.header.revision, doc.contents</span>
+<span class="doccomment">///     );</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// # Ok(())</span>
+<span class="doccomment">/// # })</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Load accepts either a string or a u64. This enables building methods that</span>
+<span class="doccomment">/// accept either the unique ID or the unique name:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+<span class="doccomment">/// if let Some(doc) = MyCollection::load(42, &amp;db).await? {</span>
+<span class="doccomment">///     println!(</span>
+<span class="doccomment">///         &quot;Retrieved revision {} with deserialized contents: {:?}&quot;,</span>
+<span class="doccomment">///         doc.header.revision, doc.contents</span>
+<span class="doccomment">///     );</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// # Ok(())</span>
+<span class="doccomment">/// # })</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Executing an insert or update</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+<span class="doccomment">/// let upserted = MyCollection::entry(&quot;unique name&quot;, &amp;db)</span>
+<span class="doccomment">///     .update_with(|existing: &amp;mut MyCollection| {</span>
+<span class="doccomment">///         existing.rank += 1;</span>
+<span class="doccomment">///     })</span>
+<span class="doccomment">///     .or_insert_with(MyCollection::default)</span>
+<span class="doccomment">///     .await?</span>
+<span class="doccomment">///     .unwrap();</span>
+<span class="doccomment">/// println!(&quot;Rank: {:?}&quot;, upserted.contents.rank);</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Ok(())</span>
+<span class="doccomment">/// # })</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">NamedCollection</span>: <span class="ident">Collection</span> <span class="op">+</span> <span class="ident">Unpin</span> {
     <span class="doccomment">/// The name view defined for the collection.</span>

@@ -17,9 +17,9 @@ duration, as it will ensure that the in-memory cache cannot exceed a certain
 size. This number is counted for each database indepenently.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">persistence</span> <span class="op">=</span> <span class="ident">KeyValuePersistence::lazy</span>([
-  <span class="ident">PersistenceThreshold::after_changes</span>(<span class="number">1</span>).<span class="ident">and_duration</span>(<span class="ident">Duration::from_secs</span>(<span class="number">120</span>)),
-  <span class="ident">PersistenceThreshold::after_changes</span>(<span class="number">10</span>).<span class="ident">and_duration</span>(<span class="ident">Duration::from_secs</span>(<span class="number">10</span>)),
-  <span class="ident">PersistenceThreshold::after_changes</span>(<span class="number">100</span>),
+    <span class="ident">PersistenceThreshold::after_changes</span>(<span class="number">1</span>).<span class="ident">and_duration</span>(<span class="ident">Duration::from_secs</span>(<span class="number">120</span>)),
+    <span class="ident">PersistenceThreshold::after_changes</span>(<span class="number">10</span>).<span class="ident">and_duration</span>(<span class="ident">Duration::from_secs</span>(<span class="number">10</span>)),
+    <span class="ident">PersistenceThreshold::after_changes</span>(<span class="number">100</span>),
 ]);
 
 <span class="comment">// After 1 change and 60 seconds, no changes would be committed:</span>
