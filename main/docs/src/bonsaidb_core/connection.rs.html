@@ -1690,6 +1690,10 @@
 <span id="1689">1689</span>
 <span id="1690">1690</span>
 <span id="1691">1691</span>
+<span id="1692">1692</span>
+<span id="1693">1693</span>
+<span id="1694">1694</span>
+<span id="1695">1695</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">marker::PhantomData</span>,
     <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
@@ -3275,8 +3279,8 @@
             <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Document</span>, <span class="ident">OwnedDocument</span>},
             <span class="ident">schema</span>::{
                 <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">CollectionViewSchema</span>, <span class="ident">DefaultSerialization</span>,
-                <span class="ident">DefaultViewSerialization</span>, <span class="ident">Name</span>, <span class="ident">ReduceResult</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>,
-                <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>, <span class="ident">ViewMappedValue</span>,
+                <span class="ident">DefaultViewSerialization</span>, <span class="ident">Name</span>, <span class="ident">NamedCollection</span>, <span class="ident">ReduceResult</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>,
+                <span class="ident">Schematic</span>, <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>, <span class="ident">ViewMappedValue</span>,
             },
             <span class="ident">Error</span>,
         };
@@ -3325,6 +3329,10 @@
                 <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">MyCollectionByName</span>)<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(())
             }
+        }
+
+        <span class="kw">impl</span> <span class="ident">NamedCollection</span> <span class="kw">for</span> <span class="ident">MyCollection</span> {
+            <span class="kw">type</span> <span class="ident">ByNameView</span> <span class="op">=</span> <span class="ident">MyCollectionByName</span>;
         }
 
         <span class="kw">impl</span> <span class="ident">DefaultSerialization</span> <span class="kw">for</span> <span class="ident">MyCollection</span> {}
