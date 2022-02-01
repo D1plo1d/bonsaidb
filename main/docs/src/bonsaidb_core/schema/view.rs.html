@@ -366,10 +366,10 @@
 <span class="kw">use</span> <span class="ident">transmog_pot::Pot</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">document::BorrowedDocument</span>,
+    <span class="ident">document</span>::{<span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>},
     <span class="ident">schema</span>::{
         <span class="ident">view::map</span>::{<span class="ident">Mappings</span>, <span class="ident">ViewMappedValue</span>},
-        <span class="ident">Collection</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionName</span>, <span class="ident">Name</span>, <span class="ident">SerializedCollection</span>, <span class="ident">ViewName</span>,
+        <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">Name</span>, <span class="ident">SerializedCollection</span>, <span class="ident">ViewName</span>,
     },
     <span class="ident">AnyError</span>,
 };
@@ -710,7 +710,7 @@
 
             <span class="kw">fn</span> <span class="ident">map</span>(
                 <span class="kw-2">&amp;</span><span class="self">self</span>,
-                <span class="ident">document</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::schema::CollectionDocument</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">collection</span><span class="op">&gt;</span>,
+                <span class="ident">document</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::document::CollectionDocument</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">collection</span><span class="op">&gt;</span>,
             ) -&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::schema::ViewMapResult</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::View</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mapping</span>(<span class="ident">document</span>))
             }
