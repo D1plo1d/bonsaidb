@@ -258,7 +258,6 @@
 <span id="257">257</span>
 <span id="258">258</span>
 <span id="259">259</span>
-<span id="260">260</span>
 </pre><pre class="rust"><code><span class="doccomment">//! [`VaultKeyStorage`] using S3-compatible storage.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This is the recommended method for securing your `BonsaiDb` database. There</span>
@@ -280,11 +279,11 @@
 <span class="doccomment">//! #</span>
 <span class="doccomment">//! let directory = TestDirectory::new(&quot;bonsaidb-keystorage-s3-basic&quot;);</span>
 <span class="doccomment">//! let configuration = StorageConfiguration::new(&amp;directory)</span>
-<span class="doccomment">//!     .vault_key_storage(S3VaultKeyStorage::new(&quot;bucket_name&quot;).endpoint(</span>
-<span class="doccomment">//!         Endpoint::immutable(</span>
+<span class="doccomment">//!     .vault_key_storage(</span>
+<span class="doccomment">//!         S3VaultKeyStorage::new(&quot;bucket_name&quot;).endpoint(Endpoint::immutable(</span>
 <span class="doccomment">//!             Uri::try_from(&quot;https://s3.us-west-001.backblazeb2.com&quot;).unwrap(),</span>
-<span class="doccomment">//!         ),</span>
-<span class="doccomment">//!     ))</span>
+<span class="doccomment">//!         )),</span>
+<span class="doccomment">//!     )</span>
 <span class="doccomment">//!     .default_encryption_key(KeyId::Master);</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
@@ -300,7 +299,6 @@
     <span class="ident">future_incompatible</span>,
     <span class="ident">rust_2018_idioms</span>,
 )]</span>
-<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">doc</span>, <span class="ident">deny</span>(<span class="ident">rustdoc::all</span>))]</span>
 <span class="attribute">#![<span class="ident">allow</span>(
     <span class="ident">clippy::missing_errors_doc</span>, <span class="comment">// TODO clippy::missing_errors_doc</span>
     <span class="ident">clippy::missing_panics_doc</span>, <span class="comment">// TODO clippy::missing_panics_doc</span>
