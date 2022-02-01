@@ -1681,19 +1681,6 @@
 <span id="1680">1680</span>
 <span id="1681">1681</span>
 <span id="1682">1682</span>
-<span id="1683">1683</span>
-<span id="1684">1684</span>
-<span id="1685">1685</span>
-<span id="1686">1686</span>
-<span id="1687">1687</span>
-<span id="1688">1688</span>
-<span id="1689">1689</span>
-<span id="1690">1690</span>
-<span id="1691">1691</span>
-<span id="1692">1692</span>
-<span id="1693">1693</span>
-<span id="1694">1694</span>
-<span id="1695">1695</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">marker::PhantomData</span>,
     <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
@@ -1744,7 +1731,6 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default)]</span>
 <span class="doccomment">/// pub struct MyCollection {</span>
-<span class="doccomment">///     pub name: String,</span>
 <span class="doccomment">///     pub rank: u32,</span>
 <span class="doccomment">///     pub score: f32,</span>
 <span class="doccomment">/// }</span>
@@ -1981,7 +1967,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Querying Views</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// In these examples, two views have been defined:</span>
+<span class="doccomment">/// The examples use this view definition:</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// # mod collection {</span>
@@ -2035,18 +2021,6 @@
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// impl DefaultViewSerialization for ScoresByRank {}</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// define_basic_unique_mapped_view!(</span>
-<span class="doccomment">///     MyCollectionByName,</span>
-<span class="doccomment">///     MyCollection,</span>
-<span class="doccomment">///     1,</span>
-<span class="doccomment">///     &quot;by-name&quot;,</span>
-<span class="doccomment">///     String,</span>
-<span class="doccomment">///     (),</span>
-<span class="doccomment">///     |document: CollectionDocument&lt;MyCollection&gt;| {</span>
-<span class="doccomment">///         document.header.emit_key(document.contents.name.clone())</span>
-<span class="doccomment">///     },</span>
-<span class="doccomment">/// );</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ### Retrieving all view entries</span>
