@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Builder","Builder for creating a `Config`."],["Config","Service config."]]});

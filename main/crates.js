@@ -1,1 +1,0 @@
-window.ALL_CRATES = ["bonsaidb","bonsaidb_client","bonsaidb_core","bonsaidb_keystorage_s3","bonsaidb_local","bonsaidb_macros","bonsaidb_server","bonsaidb_utils","xtask"];

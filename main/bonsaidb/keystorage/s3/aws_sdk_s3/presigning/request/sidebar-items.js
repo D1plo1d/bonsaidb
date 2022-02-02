@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["PresignedRequest","Represents a presigned request. This only includes the HTTP request method, URI, and headers."]]});

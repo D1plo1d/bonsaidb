@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["BorrowedDeserializer","A deserializer that borrows data when possible."],["Format","A serialization format."],["OwnedDeserializer","A deserializer that does not attempt to borrow data when deserializing."]]});

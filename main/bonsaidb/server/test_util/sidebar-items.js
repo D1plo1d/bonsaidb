@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["BASIC_SERVER_NAME",""]],"fn":[["initialize_basic_server",""]]});
