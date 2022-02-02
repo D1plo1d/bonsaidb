@@ -371,7 +371,7 @@
         <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">aws_config::from_env</span>().<span class="ident">load</span>().<span class="kw">await</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">endpoint</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">endpoint</span>.<span class="ident">clone</span>() {
             <span class="ident">Client::with_config</span>(
-                <span class="ident">aws_smithy_client::Client::https</span>(),
+                <span class="ident">aws_smithy_client::Client::dyn_https</span>(),
                 <span class="ident">aws_sdk_s3::Config::builder</span>()
                     .<span class="ident">endpoint_resolver</span>(<span class="ident">endpoint</span>)
                     .<span class="ident">region</span>(<span class="ident">region_provider</span>.<span class="ident">region</span>().<span class="kw">await</span>)
