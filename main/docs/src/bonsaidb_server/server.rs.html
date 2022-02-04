@@ -2101,7 +2101,6 @@
     <span class="ident">circulate</span>::{<span class="ident">Message</span>, <span class="ident">Relay</span>, <span class="ident">Subscriber</span>},
     <span class="ident">connection</span>::{<span class="self">self</span>, <span class="ident">AccessPolicy</span>, <span class="ident">Connection</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>, <span class="ident">StorageConnection</span>},
     <span class="ident">custom_api</span>::{<span class="ident">CustomApi</span>, <span class="ident">CustomApiResult</span>},
-    <span class="ident">document::Document</span>,
     <span class="ident">keyvalue</span>::{<span class="ident">KeyOperation</span>, <span class="ident">KeyValue</span>},
     <span class="ident">networking</span>::{
         <span class="self">self</span>, <span class="ident">CreateDatabaseHandler</span>, <span class="ident">DatabaseRequest</span>, <span class="ident">DatabaseRequestDispatcher</span>, <span class="ident">DatabaseResponse</span>,
@@ -2392,11 +2391,12 @@
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">tls_certificate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TlsCertificate</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hosted</span>().<span class="kw">await</span>;
-        <span class="kw">let</span> <span class="ident">certificate</span> <span class="op">=</span> <span class="ident">db</span>
+        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">certificate</span>) <span class="op">=</span> <span class="ident">db</span>
             .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">TlsCertificatesByDomain</span><span class="op">&gt;</span>()
             .<span class="ident">with_key</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>.<span class="ident">clone</span>())
-            .<span class="ident">query_with_docs</span>()
+            .<span class="ident">query_with_collection_docs</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
+            .<span class="ident">documents</span>
             .<span class="ident">into_iter</span>()
             .<span class="ident">next</span>()
             .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
@@ -2405,7 +2405,7 @@
                     <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>
                 )))
             })<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">certificate</span>.<span class="ident">document</span>.<span class="ident">contents</span>::<span class="op">&lt;</span><span class="ident">TlsCertificate</span><span class="op">&gt;</span>()<span class="question-mark">?</span>)
+        <span class="prelude-val">Ok</span>(<span class="ident">certificate</span>.<span class="ident">contents</span>)
     }
 
     <span class="doccomment">/// Returns the current certificate chain.</span>

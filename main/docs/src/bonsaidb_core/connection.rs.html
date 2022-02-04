@@ -1681,7 +1681,11 @@
 <span id="1680">1680</span>
 <span id="1681">1681</span>
 <span id="1682">1682</span>
+<span id="1683">1683</span>
+<span id="1684">1684</span>
+<span id="1685">1685</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">collections::BTreeMap</span>,
     <span class="ident">marker::PhantomData</span>,
     <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
 };
@@ -1696,12 +1700,12 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::NamedReference</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">document</span>::{<span class="ident">Document</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Document</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">permissions::Permissions</span>,
     <span class="ident">schema</span>::{
         <span class="self">self</span>,
-        <span class="ident">view</span>::{<span class="self">self</span>, <span class="ident">map::MappedCollectionDocument</span>},
-        <span class="ident">Key</span>, <span class="ident">Map</span>, <span class="ident">MappedDocument</span>, <span class="ident">MappedValue</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">SerializedCollection</span>,
+        <span class="ident">view</span>::{<span class="self">self</span>, <span class="ident">map::MappedDocuments</span>},
+        <span class="ident">Key</span>, <span class="ident">Map</span>, <span class="ident">MappedValue</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">SerializedCollection</span>,
     },
     <span class="ident">transaction</span>::{<span class="self">self</span>, <span class="ident">OperationResult</span>, <span class="ident">Transaction</span>},
     <span class="ident">Error</span>,
@@ -2087,7 +2091,7 @@
 <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
 <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
 <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in db</span>
+<span class="doccomment">/// for mapping in &amp;db</span>
 <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
 <span class="doccomment">///     .with_key_range(42..=44)</span>
 <span class="doccomment">///     .query_with_docs()</span>
@@ -2109,7 +2113,7 @@
 <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
 <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
 <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in db</span>
+<span class="doccomment">/// for mapping in &amp;db</span>
 <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
 <span class="doccomment">///     .with_key_range(42..=44)</span>
 <span class="doccomment">///     .query_with_collection_docs()</span>
@@ -2229,7 +2233,7 @@
             .<span class="ident">apply_transaction</span>(<span class="ident">Transaction::update</span>(
                 <span class="ident">C::collection_name</span>(),
                 <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">Deref</span><span class="op">&gt;</span><span class="ident">::deref</span>(<span class="ident">doc</span>).<span class="ident">clone</span>(),
-                <span class="ident">doc</span>.<span class="ident">as_ref</span>().<span class="ident">to_vec</span>(),
+                <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::as_ref</span>(<span class="ident">doc</span>).<span class="ident">to_vec</span>(),
             ))
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">OperationResult::DocumentUpdated</span> { <span class="ident">header</span>, .. }) <span class="op">=</span> <span class="ident">results</span>.<span class="ident">into_iter</span>().<span class="ident">next</span>() {
@@ -2263,14 +2267,14 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Removes a `Document` from the database.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span>, <span class="ident">H</span>: <span class="ident">Deref</span><span class="op">&lt;</span><span class="ident">Target</span> <span class="op">=</span> <span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span>, <span class="ident">H</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">H</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">results</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">apply_transaction</span>(<span class="ident">Transaction::delete</span>(
                 <span class="ident">C::collection_name</span>(),
-                <span class="ident">doc</span>.<span class="ident">deref</span>().<span class="ident">clone</span>(),
+                <span class="ident">doc</span>.<span class="ident">as_ref</span>().<span class="ident">clone</span>(),
             ))
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">OperationResult::DocumentDeleted</span> { .. } <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">results</span>[<span class="number">0</span>] {
@@ -2311,7 +2315,7 @@
         <span class="ident">order</span>: <span class="ident">Sort</span>,
         <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
         <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>;
 
@@ -2323,7 +2327,7 @@
         <span class="ident">order</span>: <span class="ident">Sort</span>,
         <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
         <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedCollectionDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">V::Collection</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">V</span>: <span class="ident">schema::SerializedView</span>,
         <span class="ident">V::Collection</span>: <span class="ident">SerializedCollection</span>,
@@ -2333,11 +2337,14 @@
         <span class="kw">let</span> <span class="ident">mapped_docs</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">query_with_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">collection_mapped_docs</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">mapped_docs</span>.<span class="ident">len</span>());
-        <span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">mapped_docs</span> {
-            <span class="ident">collection_mapped_docs</span>.<span class="ident">push</span>(<span class="ident">doc</span>.<span class="ident">try_into</span>()<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">collection_docs</span> <span class="op">=</span> <span class="ident">BTreeMap::new</span>();
+        <span class="kw">for</span> (<span class="ident">id</span>, <span class="ident">doc</span>) <span class="kw">in</span> <span class="ident">mapped_docs</span>.<span class="ident">documents</span> {
+            <span class="ident">collection_docs</span>.<span class="ident">insert</span>(<span class="ident">id</span>, <span class="ident">CollectionDocument</span>::<span class="op">&lt;</span><span class="ident">V::Collection</span><span class="op">&gt;</span><span class="ident">::try_from</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>);
         }
-        <span class="prelude-val">Ok</span>(<span class="ident">collection_mapped_docs</span>)
+        <span class="prelude-val">Ok</span>(<span class="ident">MappedDocuments</span> {
+            <span class="ident">mappings</span>: <span class="ident">mapped_docs</span>.<span class="ident">mappings</span>,
+            <span class="ident">documents</span>: <span class="ident">collection_docs</span>,
+        })
     }
 
     <span class="doccomment">/// Reduces the view entries matching [`View`].</span>
@@ -2525,10 +2532,7 @@
     }
 
     <span class="doccomment">/// Removes a `Document` from the database.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Deref</span><span class="op">&lt;</span><span class="ident">Target</span> <span class="op">=</span> <span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">H</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">H</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">delete</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="ident">H</span><span class="op">&gt;</span>(<span class="ident">doc</span>).<span class="kw">await</span>
     }
 }
@@ -2731,14 +2735,16 @@
     }
 
     <span class="doccomment">/// Executes the query and retrieves the results with the associated [`Document`s](crate::document::OwnedDocument).</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_docs</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_docs</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">query_with_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">sort</span>, <span class="self">self</span>.<span class="ident">limit</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
             .<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Executes the query and retrieves the results with the associated [`CollectionDocument`s](crate::document::CollectionDocument).</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_collection_docs</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedCollectionDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_collection_docs</span>(
+        <span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">V::Collection</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">V::Collection</span>: <span class="ident">SerializedCollection</span>,
         <span class="op">&lt;</span><span class="ident">V::Collection</span> <span class="kw">as</span> <span class="ident">SerializedCollection</span><span class="op">&gt;</span><span class="ident">::Contents</span>: <span class="ident">std::fmt::Debug</span>,

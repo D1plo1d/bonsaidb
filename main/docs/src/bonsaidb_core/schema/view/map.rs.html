@@ -306,23 +306,42 @@
 <span id="305">305</span>
 <span id="306">306</span>
 <span id="307">307</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>};
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeMap</span>, <span class="ident">fmt::Debug</span>};
 
 <span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
-    <span class="ident">schema</span>::{
-        <span class="ident">view</span>::{<span class="self">self</span>, <span class="ident">Key</span>, <span class="ident">SerializedView</span>, <span class="ident">View</span>},
-        <span class="ident">SerializedCollection</span>,
-    },
+    <span class="ident">document</span>::{<span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">schema::view</span>::{<span class="self">self</span>, <span class="ident">Key</span>, <span class="ident">SerializedView</span>, <span class="ident">View</span>},
 };
 
 <span class="doccomment">/// A document&#39;s entry in a View&#39;s mappings.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> (), <span class="ident">V</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
-    <span class="doccomment">/// The id of the document that emitted this entry.</span>
+    <span class="doccomment">/// The header of the document that emitted this entry.</span>
     <span class="kw">pub</span> <span class="ident">source</span>: <span class="ident">Header</span>,
 
     <span class="doccomment">/// The key used to index the View.</span>
@@ -347,6 +366,13 @@
             ),
             <span class="ident">value</span>: <span class="ident">Bytes::from</span>(<span class="ident">View::serialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>)<span class="question-mark">?</span>),
         })
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Creates a new Map entry for the document with id `source`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">source</span>: <span class="ident">Header</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">source</span>, <span class="ident">key</span>, <span class="ident">value</span> }
     }
 }
 
@@ -455,78 +481,88 @@
     }
 }
 
-<span class="doccomment">/// A document&#39;s entry in a View&#39;s mappings.</span>
+<span class="doccomment">/// A collection of mappings and the associated documents.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The id of the document that emitted this entry.</span>
-    <span class="kw">pub</span> <span class="ident">document</span>: <span class="ident">OwnedDocument</span>,
-
-    <span class="doccomment">/// The key used to index the View.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">V::Key</span>,
-
-    <span class="doccomment">/// An associated value stored in the view.</span>
-    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">V::Value</span>,
-
-    <span class="ident">_view</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// The collection of mappings.</span>
+    <span class="kw">pub</span> <span class="ident">mappings</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// All associated documents by ID.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Documents can appear in a mapping query multiple times. As a result, they are stored separately to avoid duplication.</span>
+    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">D</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">V</span>: <span class="ident">View</span>,
-{
-    <span class="doccomment">/// Returns a new instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">document</span>: <span class="ident">OwnedDocument</span>, <span class="ident">key</span>: <span class="ident">V::Key</span>, <span class="ident">value</span>: <span class="ident">V::Value</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">document</span>,
-            <span class="ident">key</span>,
-            <span class="ident">value</span>,
-            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> <span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// The number of mappings contained in this collection.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
+        <span class="self">self</span>.<span class="ident">mappings</span>.<span class="ident">len</span>()
+    }
+
+    <span class="doccomment">/// Returns true if there are no mappings in this collection.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// Returns the mapped document at`index`, or `None` if `index &gt;=</span>
+    <span class="doccomment">/// self.len()`.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">D</span>, <span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">index</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">len</span>() {
+            <span class="kw">let</span> <span class="ident">mapping</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mappings</span>[<span class="ident">index</span>];
+            <span class="kw">let</span> <span class="ident">document</span> <span class="op">=</span> <span class="self">self</span>
+                .<span class="ident">documents</span>
+                .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">mapping</span>.<span class="ident">source</span>.<span class="ident">id</span>)
+                .<span class="ident">expect</span>(<span class="string">&quot;missing mapped document&quot;</span>);
+            <span class="prelude-val">Some</span>(<span class="ident">MappedDocument</span> {
+                <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">mapping</span>.<span class="ident">key</span>,
+                <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">mapping</span>.<span class="ident">value</span>,
+                <span class="ident">document</span>,
+            })
+        } <span class="kw">else</span> {
+            <span class="prelude-val">None</span>
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Map</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Creates a new Map entry for the document with id `source`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">source</span>: <span class="ident">Header</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">source</span>, <span class="ident">key</span>, <span class="ident">value</span> }
+<span class="doccomment">/// An iterator of mapped documents.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedDocumentsIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> {
+    <span class="ident">docs</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">V</span><span class="op">&gt;</span>,
+    <span class="ident">index</span>: <span class="ident">usize</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span>;
+
+    <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">MappedDocumentsIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">V</span><span class="op">&gt;</span>;
+
+    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::IntoIter</span> {
+        <span class="ident">MappedDocumentsIter</span> {
+            <span class="ident">docs</span>: <span class="self">self</span>,
+            <span class="ident">index</span>: <span class="number">0</span>,
+        }
     }
 }
 
-<span class="doccomment">/// A document&#39;s entry in a View&#39;s mappings.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedCollectionDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">V</span>: <span class="ident">View</span>,
-    <span class="ident">V::Collection</span>: <span class="ident">SerializedCollection</span>,
-    <span class="op">&lt;</span><span class="ident">V::Collection</span> <span class="kw">as</span> <span class="ident">SerializedCollection</span><span class="op">&gt;</span><span class="ident">::Contents</span>: <span class="ident">Debug</span>,
-{
-    <span class="doccomment">/// The id of the document that emitted this entry.</span>
-    <span class="kw">pub</span> <span class="ident">document</span>: <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">V::Collection</span><span class="op">&gt;</span>,
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">MappedDocumentsIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span>;
 
-    <span class="doccomment">/// The key used to index the View.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">V::Key</span>,
-
-    <span class="doccomment">/// An associated value stored in the view.</span>
-    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">V::Value</span>,
-
-    <span class="ident">_view</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>,
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">docs</span>.<span class="ident">get</span>(<span class="self">self</span>.<span class="ident">index</span>);
+        <span class="self">self</span>.<span class="ident">index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">index</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+        <span class="ident">doc</span>
+    }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">MappedCollectionDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">V::Collection</span>: <span class="ident">SerializedCollection</span>,
-    <span class="op">&lt;</span><span class="ident">V::Collection</span> <span class="kw">as</span> <span class="ident">SerializedCollection</span><span class="op">&gt;</span><span class="ident">::Contents</span>: <span class="ident">Debug</span>,
-{
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
-
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">map</span>: <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">document</span>: <span class="ident">CollectionDocument</span>::<span class="op">&lt;</span><span class="ident">V::Collection</span><span class="op">&gt;</span><span class="ident">::try_from</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>.<span class="ident">document</span>)<span class="question-mark">?</span>,
-            <span class="ident">key</span>: <span class="ident">map</span>.<span class="ident">key</span>,
-            <span class="ident">value</span>: <span class="ident">map</span>.<span class="ident">value</span>,
-            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
-        })
-    }
+<span class="doccomment">/// A mapped document returned from a view query.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// The key that this document mapped to.</span>
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>,
+    <span class="doccomment">/// The associated value of this key.</span>
+    <span class="kw">pub</span> <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">V</span>,
+    <span class="doccomment">/// The source document of this mapping.</span>
+    <span class="kw">pub</span> <span class="ident">document</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">D</span>,
 }
 
 <span class="doccomment">/// Represents a document&#39;s entry in a View&#39;s mappings, serialized and ready to store.</span>
@@ -558,28 +594,36 @@
 
 <span class="doccomment">/// A serialized [`MappedDocument`](MappedDocument).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedSerialized</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MappedSerializedDocuments</span> {
     <span class="doccomment">/// The serialized mapped value.</span>
-    <span class="kw">pub</span> <span class="ident">mapping</span>: <span class="ident">MappedSerializedValue</span>,
+    <span class="kw">pub</span> <span class="ident">mappings</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Serialized</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The source document.</span>
-    <span class="kw">pub</span> <span class="ident">source</span>: <span class="ident">OwnedDocument</span>,
+    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">OwnedDocument</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">MappedSerialized</span> {
+<span class="kw">impl</span> <span class="ident">MappedSerializedDocuments</span> {
     <span class="doccomment">/// Deserialize into a [`MappedDocument`](MappedDocument).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialized</span><span class="op">&lt;</span><span class="ident">View</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocument</span><span class="op">&lt;</span><span class="ident">View</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">Key::from_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mapping</span>.<span class="ident">key</span>).<span class="ident">map_err</span>(
-            <span class="op">|</span><span class="ident">err</span>: <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">|</span> {
-                <span class="ident"><span class="kw">crate</span>::Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>())
-            },
-        )<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">View::deserialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">mapping</span>.<span class="ident">value</span>)<span class="question-mark">?</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialized</span><span class="op">&lt;</span><span class="ident">View</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(
+        <span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span>, <span class="ident">View</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">mappings</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">mappings</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">map</span>(<span class="ident">Serialized::deserialized</span>::<span class="op">&lt;</span><span class="ident">View</span><span class="op">&gt;</span>)
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+        <span class="comment">// let documents = self.documents.into_iter().map(|id, document| {</span>
 
-        <span class="prelude-val">Ok</span>(<span class="ident">MappedDocument</span> {
-            <span class="ident">document</span>: <span class="self">self</span>.<span class="ident">source</span>,
-            <span class="ident">key</span>,
-            <span class="ident">value</span>,
-            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
+        <span class="comment">// });</span>
+        <span class="comment">// let key = Key::from_big_endian_bytes(&amp;self.mapping.key).map_err(</span>
+        <span class="comment">//     |err: &lt;View::Key as Key&lt;&#39;_&gt;&gt;::Error| {</span>
+        <span class="comment">//         crate::Error::Database(view::Error::key_serialization(err).to_string())</span>
+        <span class="comment">//     },</span>
+        <span class="comment">// )?;</span>
+        <span class="comment">// let value = View::deserialize(&amp;self.mapping.value)?;</span>
+
+        <span class="prelude-val">Ok</span>(<span class="ident">MappedDocuments</span> {
+            <span class="ident">mappings</span>,
+            <span class="ident">documents</span>: <span class="self">self</span>.<span class="ident">documents</span>,
         })
     }
 }
