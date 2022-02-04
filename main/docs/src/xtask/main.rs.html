@@ -208,17 +208,38 @@
 <span id="207">207</span>
 <span id="208">208</span>
 <span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">env</span>::{<span class="ident">current_dir</span>, <span class="ident">set_current_dir</span>, <span class="ident">temp_dir</span>},
     <span class="ident">io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>},
     <span class="ident">str::FromStr</span>,
 };
 
-<span class="kw">use</span> <span class="ident">khonsu_tools::universal</span>::{
-    <span class="ident">anyhow</span>, <span class="ident">audit</span>,
-    <span class="ident">clap</span>::{<span class="self">self</span>, <span class="ident">Parser</span>},
-    <span class="ident">devx_cmd</span>::{<span class="ident">run</span>, <span class="ident">Cmd</span>},
-    <span class="ident">DefaultConfig</span>,
+<span class="kw">use</span> <span class="ident">khonsu_tools</span>::{
+    <span class="ident">publish</span>,
+    <span class="ident">universal</span>::{
+        <span class="ident">anyhow</span>, <span class="ident">audit</span>,
+        <span class="ident">clap</span>::{<span class="self">self</span>, <span class="ident">Parser</span>},
+        <span class="ident">devx_cmd</span>::{<span class="ident">run</span>, <span class="ident">Cmd</span>},
+        <span class="ident">DefaultConfig</span>,
+    },
 };
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
@@ -249,7 +270,7 @@
 <span class="kw">enum</span> <span class="ident">Config</span> {}
 
 <span class="kw">impl</span> <span class="ident">khonsu_tools::Config</span> <span class="kw">for</span> <span class="ident">Config</span> {
-    <span class="kw">type</span> <span class="ident">Publish</span> <span class="op">=</span> <span class="ident">DefaultConfig</span>;
+    <span class="kw">type</span> <span class="ident">Publish</span> <span class="op">=</span> <span class="self">Self</span>;
     <span class="kw">type</span> <span class="ident">Universal</span> <span class="op">=</span> <span class="self">Self</span>;
 }
 
@@ -269,6 +290,21 @@
             <span class="ident">String::from</span>(<span class="string">&quot;--exclude=axum&quot;</span>),
             <span class="ident">String::from</span>(<span class="string">&quot;--exclude=acme&quot;</span>),
             <span class="ident">String::from</span>(<span class="string">&quot;--exclude=view-histogram&quot;</span>),
+        ]
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">publish::Config</span> <span class="kw">for</span> <span class="ident">Config</span> {
+    <span class="kw">fn</span> <span class="ident">paths</span>() -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="macro">vec!</span>[
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-macros&quot;</span>),
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-core&quot;</span>),
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-utils&quot;</span>),
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-local&quot;</span>),
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-server&quot;</span>),
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-client&quot;</span>),
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-keystorage-s3&quot;</span>),
+            <span class="ident">String::from</span>(<span class="string">&quot;crates/bonsaidb-bonsaidb&quot;</span>),
         ]
     }
 }
