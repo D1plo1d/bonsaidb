@@ -1741,7 +1741,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// impl Collection for MyCollection {</span>
 <span class="doccomment">///     fn collection_name() -&gt; CollectionName {</span>
-<span class="doccomment">///         CollectionName::new(&quot;MyAuthority&quot;, &quot;MyCollection&quot;)</span>
+<span class="doccomment">///         CollectionName::private(&quot;MyCollection&quot;)</span>
 <span class="doccomment">///     }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///     fn define_views(schema: &amp;mut Schematic) -&gt; Result&lt;(), Error&gt; {</span>
@@ -2650,7 +2650,7 @@
     }
 }
 
-<span class="doccomment">/// Parameters to query a `schema::View`.</span>
+<span class="doccomment">/// Parameters to query a [`schema::View`].</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span> {
     <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>,
 
@@ -3271,7 +3271,7 @@
 
         <span class="kw">impl</span> <span class="ident">Schema</span> <span class="kw">for</span> <span class="ident">MySchema</span> {
             <span class="kw">fn</span> <span class="ident">schema_name</span>() -&gt; <span class="ident">SchemaName</span> {
-                <span class="ident">SchemaName::new</span>(<span class="string">&quot;MyAuthority&quot;</span>, <span class="string">&quot;MySchema&quot;</span>)
+                <span class="ident">SchemaName::private</span>(<span class="string">&quot;MySchema&quot;</span>)
             }
 
             <span class="kw">fn</span> <span class="ident">define_collections</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
@@ -3302,7 +3302,7 @@
 
         <span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">MyCollection</span> {
             <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-                <span class="ident">CollectionName::new</span>(<span class="string">&quot;MyAuthority&quot;</span>, <span class="string">&quot;MyCollection&quot;</span>)
+                <span class="ident">CollectionName::private</span>(<span class="string">&quot;MyCollection&quot;</span>)
             }
 
             <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
