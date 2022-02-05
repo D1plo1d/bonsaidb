@@ -97,7 +97,7 @@ of deserializing data.</p>
     <span class="macro">println!</span>(<span class="string">&quot;Deserialized contents: {:?}&quot;</span>, <span class="ident">deserialized</span>);
 }</code></pre></div>
 <h5 id="retreiving-all-documents" class="section-header"><a href="#retreiving-all-documents">Retreiving all documents</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">MyCollection</span><span class="op">&gt;</span>().<span class="ident">list</span>(..).<span class="kw">await</span><span class="question-mark">?</span> {
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">MyCollection</span><span class="op">&gt;</span>().<span class="ident">all</span>().<span class="kw">await</span><span class="question-mark">?</span> {
     <span class="macro">println!</span>(<span class="string">&quot;Retrieved #{} with bytes {:?}&quot;</span>, <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">doc</span>.<span class="ident">contents</span>);
     <span class="kw">let</span> <span class="ident">deserialized</span> <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">contents</span>::<span class="op">&lt;</span><span class="ident">MyCollection</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
     <span class="macro">println!</span>(<span class="string">&quot;Deserialized contents: {:?}&quot;</span>, <span class="ident">deserialized</span>);
@@ -105,7 +105,7 @@ of deserializing data.</p>
 <h5 id="listing-a-limited-amount-of-documents-in-reverse-order" class="section-header"><a href="#listing-a-limited-amount-of-documents-in-reverse-order">Listing a limited amount of documents in reverse order</a></h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">db</span>
     .<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">MyCollection</span><span class="op">&gt;</span>()
-    .<span class="ident">list</span>(..)
+    .<span class="ident">list</span>(<span class="number">42</span>..)
     .<span class="ident">descending</span>()
     .<span class="ident">limit</span>(<span class="number">20</span>)
     .<span class="kw">await</span><span class="question-mark">?</span>
@@ -141,14 +141,14 @@ of deserializing data.</p>
     );
 }</code></pre></div>
 <h5 id="retreiving-all-documents-1" class="section-header"><a href="#retreiving-all-documents-1">Retreiving all documents</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">MyCollection::list</span>(.., <span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span> {
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">MyCollection::all</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span> {
     <span class="macro">println!</span>(
         <span class="string">&quot;Retrieved #{} with deserialized contents: {:?}&quot;</span>,
         <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">doc</span>.<span class="ident">contents</span>
     );
 }</code></pre></div>
 <h5 id="listing-a-limited-amount-of-documents-in-reverse-order-1" class="section-header"><a href="#listing-a-limited-amount-of-documents-in-reverse-order-1">Listing a limited amount of documents in reverse order</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">MyCollection::list</span>(.., <span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="ident">descending</span>().<span class="ident">limit</span>(<span class="number">20</span>).<span class="kw">await</span><span class="question-mark">?</span> {
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">for</span> <span class="ident">doc</span> <span class="kw">in</span> <span class="ident">MyCollection::list</span>(<span class="number">42</span>.., <span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="ident">descending</span>().<span class="ident">limit</span>(<span class="number">20</span>).<span class="kw">await</span><span class="question-mark">?</span> {
     <span class="macro">println!</span>(
         <span class="string">&quot;Retrieved #{} with deserialized contents: {:?}&quot;</span>,
         <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">doc</span>.<span class="ident">contents</span>
