@@ -1706,6 +1706,35 @@
 <span id="1705">1705</span>
 <span id="1706">1706</span>
 <span id="1707">1707</span>
+<span id="1708">1708</span>
+<span id="1709">1709</span>
+<span id="1710">1710</span>
+<span id="1711">1711</span>
+<span id="1712">1712</span>
+<span id="1713">1713</span>
+<span id="1714">1714</span>
+<span id="1715">1715</span>
+<span id="1716">1716</span>
+<span id="1717">1717</span>
+<span id="1718">1718</span>
+<span id="1719">1719</span>
+<span id="1720">1720</span>
+<span id="1721">1721</span>
+<span id="1722">1722</span>
+<span id="1723">1723</span>
+<span id="1724">1724</span>
+<span id="1725">1725</span>
+<span id="1726">1726</span>
+<span id="1727">1727</span>
+<span id="1728">1728</span>
+<span id="1729">1729</span>
+<span id="1730">1730</span>
+<span id="1731">1731</span>
+<span id="1732">1732</span>
+<span id="1733">1733</span>
+<span id="1734">1734</span>
+<span id="1735">1735</span>
+<span id="1736">1736</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::BTreeMap</span>,
     <span class="ident">marker::PhantomData</span>,
@@ -2055,6 +2084,35 @@
 }
 
 <span class="doccomment">/// Interacts with a collection over a `Connection`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// These examples in this type use this basic collection definition:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use bonsaidb_core::{</span>
+<span class="doccomment">///     schema::{Collection, CollectionName, DefaultSerialization, Schematic},</span>
+<span class="doccomment">///     Error,</span>
+<span class="doccomment">/// };</span>
+<span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default)]</span>
+<span class="doccomment">/// pub struct MyCollection {</span>
+<span class="doccomment">///     pub rank: u32,</span>
+<span class="doccomment">///     pub score: f32,</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// impl Collection for MyCollection {</span>
+<span class="doccomment">///     fn collection_name() -&gt; CollectionName {</span>
+<span class="doccomment">///         CollectionName::private(&quot;MyCollection&quot;)</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     fn define_views(schema: &amp;mut Schematic) -&gt; Result&lt;(), Error&gt; {</span>
+<span class="doccomment">///         // ...</span>
+<span class="doccomment">///         Ok(())</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// impl DefaultSerialization for MyCollection {}</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Collection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> {
     <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>,
     <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span>, <span class="comment">/* allows for extension traits to be written for collections of specific types */</span>
