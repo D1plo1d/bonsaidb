@@ -13,22 +13,11 @@ See the <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/READM
 <p>The <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-local/examples/view-examples.rs"><code>view-examples</code> example</a> shows how to define a simple schema containing a single collection (<code>Shape</code>), a view to query the <code>Shape</code>s by their <code>number_of_sides</code> (<code>ShapesByNumberOfSides</code>), and demonstrates multiple ways to query that view.</p>
 <p>First, here’s how the schema is defined:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;shapes&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">ShapesByNumberOfSides</span>]</span>)]
 <span class="kw">struct</span> <span class="ident">Shape</span> {
     <span class="kw">pub</span> <span class="ident">sides</span>: <span class="ident">u32</span>,
 }
-
-<span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">Shape</span> {
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-        <span class="ident">CollectionName::private</span>(<span class="string">&quot;shapes&quot;</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">ShapesByNumberOfSides</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">DefaultSerialization</span> <span class="kw">for</span> <span class="ident">Shape</span> {}
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">struct</span> <span class="ident">ShapesByNumberOfSides</span>;
