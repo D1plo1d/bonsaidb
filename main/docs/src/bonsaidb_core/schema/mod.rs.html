@@ -70,6 +70,8 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">view</span>;
 <span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_macros</span>::{<span class="ident">Collection</span>, <span class="ident">View</span>};
+
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
     <span class="ident">collection</span>::{
         <span class="ident">Collection</span>, <span class="ident">DefaultSerialization</span>, <span class="ident">Entry</span>, <span class="ident">InsertError</span>, <span class="ident">List</span>, <span class="ident">NamedCollection</span>,
@@ -84,8 +86,6 @@
     },
 };
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_macros</span>::{<span class="ident">Collection</span>, <span class="ident">View</span>};
 
 <span class="doccomment">/// Defines a group of collections that are stored into a single database.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Schema</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {

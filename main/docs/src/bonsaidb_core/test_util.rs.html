@@ -2123,40 +2123,6 @@
 <span id="2122">2122</span>
 <span id="2123">2123</span>
 <span id="2124">2124</span>
-<span id="2125">2125</span>
-<span id="2126">2126</span>
-<span id="2127">2127</span>
-<span id="2128">2128</span>
-<span id="2129">2129</span>
-<span id="2130">2130</span>
-<span id="2131">2131</span>
-<span id="2132">2132</span>
-<span id="2133">2133</span>
-<span id="2134">2134</span>
-<span id="2135">2135</span>
-<span id="2136">2136</span>
-<span id="2137">2137</span>
-<span id="2138">2138</span>
-<span id="2139">2139</span>
-<span id="2140">2140</span>
-<span id="2141">2141</span>
-<span id="2142">2142</span>
-<span id="2143">2143</span>
-<span id="2144">2144</span>
-<span id="2145">2145</span>
-<span id="2146">2146</span>
-<span id="2147">2147</span>
-<span id="2148">2148</span>
-<span id="2149">2149</span>
-<span id="2150">2150</span>
-<span id="2151">2151</span>
-<span id="2152">2152</span>
-<span id="2153">2153</span>
-<span id="2154">2154</span>
-<span id="2155">2155</span>
-<span id="2156">2156</span>
-<span id="2157">2157</span>
-<span id="2158">2158</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -2189,7 +2155,10 @@
     <span class="ident">Error</span>, <span class="ident">ENCRYPTION_ENABLED</span>,
 };
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Collection</span>)]</span>
+<span class="comment">// This collection purposely uses names with characters that need</span>
+<span class="comment">// escaping, since it&#39;s used in backup/restore.</span>
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;_basic&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs_&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">BasicCount</span>, <span class="ident">BasicByParentId</span>, <span class="ident">BasicByTag</span>, <span class="ident">BasicByCategory</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Basic</span> {
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">category</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -2223,23 +2192,6 @@
         <span class="self">self</span>
     }
 }
-
-<span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">Basic</span> {
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-        <span class="comment">// This collection purposely uses names with characters that need</span>
-        <span class="comment">// escaping, since it&#39;s used in backup/restore.</span>
-        <span class="ident">CollectionName::new</span>(<span class="string">&quot;khonsulabs_&quot;</span>, <span class="string">&quot;_basic&quot;</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">BasicCount</span>)<span class="question-mark">?</span>;
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">BasicByParentId</span>)<span class="question-mark">?</span>;
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">BasicByTag</span>)<span class="question-mark">?</span>;
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">BasicByCategory</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">DefaultSerialization</span> <span class="kw">for</span> <span class="ident">Basic</span> {}
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BasicCount</span>;
@@ -2567,7 +2519,8 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;unique&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">UniqueValue</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Unique</span> {
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">String</span>,
 }
@@ -2579,18 +2532,6 @@
         }
     }
 }
-
-<span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">Unique</span> {
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-        <span class="ident">CollectionName::new</span>(<span class="string">&quot;khonsulabs&quot;</span>, <span class="string">&quot;unique&quot;</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">UniqueValue</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">DefaultSerialization</span> <span class="kw">for</span> <span class="ident">Unique</span> {}
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UniqueValue</span>;
@@ -2695,18 +2636,9 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;unassociated&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UnassociatedCollection</span>;
-
-<span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">UnassociatedCollection</span> {
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-        <span class="ident">CollectionName::new</span>(<span class="string">&quot;khonsulabs&quot;</span>, <span class="string">&quot;unassociated&quot;</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">_schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(())
-    }
-}
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HarnessTest</span> {
