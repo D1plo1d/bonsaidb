@@ -177,7 +177,8 @@
 <p>A <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.View.html">View</a> is a <a href="https://en.wikipedia.org/wiki/MapReduce">map/reduce</a>-powered method of quickly accessing information inside of a <a href="about/concepts/./collection.html">Collection</a>. A View can only belong to one Collection.</p>
 <p>Views define two important associated types: a Key type and a Value type. You can think of these as the equivalent entries in a map/dictionary-like collection that supports more than one entry for each Key. The Key is used to filter the View's results, and the Value is used by your application or the <code>reduce()</code> function.</p>
 <p>Views are a powerful, yet abstract concept. Let's look at a concrete example: blog posts with categories.</p>
-<pre><code class="language-rust no_run noplayground">#[derive(Serialize, Deserialize, Debug)]
+<pre><code class="language-rust no_run noplayground">#[derive(Serialize, Deserialize, Debug, Collection)]
+#[collection(name = &quot;blog-post&quot;, views = [BlogPostsByCategory])]
 pub struct BlogPost {
     pub title: String,
     pub body: String,
