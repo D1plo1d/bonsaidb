@@ -1682,35 +1682,6 @@
 <span id="1681">1681</span>
 <span id="1682">1682</span>
 <span id="1683">1683</span>
-<span id="1684">1684</span>
-<span id="1685">1685</span>
-<span id="1686">1686</span>
-<span id="1687">1687</span>
-<span id="1688">1688</span>
-<span id="1689">1689</span>
-<span id="1690">1690</span>
-<span id="1691">1691</span>
-<span id="1692">1692</span>
-<span id="1693">1693</span>
-<span id="1694">1694</span>
-<span id="1695">1695</span>
-<span id="1696">1696</span>
-<span id="1697">1697</span>
-<span id="1698">1698</span>
-<span id="1699">1699</span>
-<span id="1700">1700</span>
-<span id="1701">1701</span>
-<span id="1702">1702</span>
-<span id="1703">1703</span>
-<span id="1704">1704</span>
-<span id="1705">1705</span>
-<span id="1706">1706</span>
-<span id="1707">1707</span>
-<span id="1708">1708</span>
-<span id="1709">1709</span>
-<span id="1710">1710</span>
-<span id="1711">1711</span>
-<span id="1712">1712</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::BTreeMap</span>,
     <span class="ident">marker::PhantomData</span>,
@@ -2063,7 +2034,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// These examples in this type use this basic collection definition:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,ignore</span>
+<span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// use bonsaidb_core::{</span>
 <span class="doccomment">///     schema::{Collection, CollectionName, DefaultSerialization, Schematic},</span>
 <span class="doccomment">///     Error,</span>
@@ -2072,6 +2043,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default, Collection)]</span>
 <span class="doccomment">/// #[collection(name = &quot;MyCollection&quot;)]</span>
+<span class="doccomment">/// # #[collection(core = bonsaidb_core)]</span>
 <span class="doccomment">/// pub struct MyCollection {</span>
 <span class="doccomment">///     pub rank: u32,</span>
 <span class="doccomment">///     pub score: f32,</span>
@@ -2479,18 +2451,10 @@
 <span class="doccomment">///     },</span>
 <span class="doccomment">/// };</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug)]</span>
+<span class="doccomment">/// #[derive(Debug, Clone, View)]</span>
+<span class="doccomment">/// #[view(collection = MyCollection, key = u32, value = f32, name = &quot;scores-by-rank&quot;)]</span>
+<span class="doccomment">/// # #[view(core = bonsaidb_core)]</span>
 <span class="doccomment">/// pub struct ScoresByRank;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl View for ScoresByRank {</span>
-<span class="doccomment">///     type Collection = MyCollection;</span>
-<span class="doccomment">///     type Key = u32;</span>
-<span class="doccomment">///     type Value = f32;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     fn name(&amp;self) -&gt; Name {</span>
-<span class="doccomment">///         Name::new(&quot;scores-by-rank&quot;)</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// impl CollectionViewSchema for ScoresByRank {</span>
 <span class="doccomment">///     type View = Self;</span>
@@ -2515,8 +2479,6 @@
 <span class="doccomment">///         }</span>
 <span class="doccomment">///     }</span>
 <span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl DefaultViewSerialization for ScoresByRank {}</span>
 <span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span> {
     <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>,
@@ -3332,18 +3294,9 @@
         };
         <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MySchema</span>;
-
-        <span class="kw">impl</span> <span class="ident">Schema</span> <span class="kw">for</span> <span class="ident">MySchema</span> {
-            <span class="kw">fn</span> <span class="ident">schema_name</span>() -&gt; <span class="ident">SchemaName</span> {
-                <span class="ident">SchemaName::private</span>(<span class="string">&quot;MySchema&quot;</span>)
-            }
-
-            <span class="kw">fn</span> <span class="ident">define_collections</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-                <span class="prelude-val">Ok</span>(())
-            }
-        }
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Schema</span>)]</span>
+        <span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;MySchema&quot;</span>, <span class="ident">collections</span> <span class="op">=</span> [<span class="ident">MyCollection</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>)]
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">MySchema</span>;
 
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Collection</span>)]</span>
         <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;MyCollection&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">MyCollectionByName</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>)]
@@ -3371,18 +3324,9 @@
             <span class="kw">type</span> <span class="ident">ByNameView</span> <span class="op">=</span> <span class="ident">MyCollectionByName</span>;
         }
 
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScoresByRank</span>;
-
-        <span class="kw">impl</span> <span class="ident">View</span> <span class="kw">for</span> <span class="ident">ScoresByRank</span> {
-            <span class="kw">type</span> <span class="ident">Collection</span> <span class="op">=</span> <span class="ident">MyCollection</span>;
-            <span class="kw">type</span> <span class="ident">Key</span> <span class="op">=</span> <span class="ident">u32</span>;
-            <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">f32</span>;
-
-            <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Name</span> {
-                <span class="ident">Name::new</span>(<span class="string">&quot;scores-by-rank&quot;</span>)
-            }
-        }
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">View</span>)]</span>
+        <span class="attribute">#[<span class="ident">view</span>(<span class="ident">collection</span> <span class="op">=</span> <span class="ident">MyCollection</span>, <span class="ident">key</span> <span class="op">=</span> <span class="ident">u32</span>, <span class="ident">value</span> <span class="op">=</span> <span class="ident">f32</span>, <span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;scores-by-rank&quot;</span>, <span class="ident">core</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">ScoresByRank</span>;
 
         <span class="kw">impl</span> <span class="ident">CollectionViewSchema</span> <span class="kw">for</span> <span class="ident">ScoresByRank</span> {
             <span class="kw">type</span> <span class="ident">View</span> <span class="op">=</span> <span class="self">Self</span>;
@@ -3407,8 +3351,6 @@
                 }
             }
         }
-
-        <span class="kw">impl</span> <span class="ident">DefaultViewSerialization</span> <span class="kw">for</span> <span class="ident">ScoresByRank</span> {}
 
         <span class="macro">define_basic_unique_mapped_view!</span>(
             <span class="ident">MyCollectionByName</span>,

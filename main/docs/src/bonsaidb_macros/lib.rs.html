@@ -598,13 +598,13 @@
     <span class="ident">invalid_field</span> <span class="op">=</span> <span class="string">r#&quot;Only `name = &quot;name&quot;&quot;`, `authority = &quot;authority&quot;`, `collections = [SomeCollection, AnotherCollection]` and `core = bonsaidb::core` are supported attributes&quot;#</span>
 )]</span>
 <span class="kw">struct</span> <span class="ident">SchemaAttribute</span> {
-    <span class="attribute">#[<span class="ident">attribute</span>(
-        <span class="ident">missing</span> <span class="op">=</span> <span class="string">r#&quot;You need to specify the schema name via `#[schema(name = &quot;name&quot;)]`&quot;#</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">missing</span> <span class="op">=</span> <span class="string">r#&quot;You need to specify the schema name via `#[schema(name = &quot;name&quot;)]`&quot;#</span>)]</span>
     <span class="ident">name</span>: <span class="ident">String</span>,
     <span class="ident">authority</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">default</span>)]</span>
-    <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">r#&quot;Specify the `collections` like so: `collections = [SomeCollection, AnotherCollection]`&quot;#</span>)]</span>
+    <span class="attribute">#[<span class="ident">attribute</span>(
+        <span class="ident">expected</span> <span class="op">=</span> <span class="string">r#&quot;Specify the `collections` like so: `collections = [SomeCollection, AnotherCollection]`&quot;#</span>
+    )]</span>
     <span class="ident">collections</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">r#&quot;Specify the the path to `core` like so: `core = bosaidb::core`&quot;#</span>)]</span>
     <span class="ident">core</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>,
