@@ -183,15 +183,9 @@ pub struct BlogPost {
 <p>All examples on this page are available in their full form in the repository at <a href="https://github.com/khonsulabs/bonsaidb/tree/main/book/book-examples/tests">book/book-examples/tests</a>.</p>
 </blockquote>
 <p>While <code>category</code> should be an enum, let's first explore using <code>String</code> and upgrade to an enum at the end (it requires one additional step). Let's implement a View that will allow users to find blog posts by their category as well as count the number of posts in each category.</p>
-<pre><code class="language-rust noplayground no_run">impl View for BlogPostsByCategory {
-    type Collection = BlogPost;
-    type Key = Option&lt;String&gt;;
-    type Value = u32;
-
-    fn name(&amp;self) -&gt; Name {
-        Name::new(&quot;by-category&quot;)
-    }
-}
+<pre><code class="language-rust noplayground no_run">#[derive(Debug, Clone, View)]
+#[view(collection = BlogPost, key = Option&lt;String&gt;, value = u32, name = &quot;by-category&quot;)]
+pub struct BlogPostsByCategory;
 
 impl ViewSchema for BlogPostsByCategory {
     type View = Self;
