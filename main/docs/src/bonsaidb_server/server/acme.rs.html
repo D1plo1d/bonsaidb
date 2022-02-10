@@ -132,26 +132,6 @@
 <span id="131">131</span>
 <span id="132">132</span>
 <span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">sync::Arc</span>, <span class="ident">time::Duration</span>};
 
 <span class="kw">use</span> <span class="ident">async_acme::cache::AcmeCache</span>;
@@ -161,39 +141,19 @@
     <span class="ident">connection::Connection</span>,
     <span class="ident">define_basic_unique_mapped_view</span>,
     <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">KeyId</span>},
-    <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">DefaultSerialization</span>, <span class="ident">Schematic</span>, <span class="ident">SerializedCollection</span>},
-    <span class="ident">ENCRYPTION_ENABLED</span>,
+    <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">SerializedCollection</span>},
 };
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Backend</span>, <span class="ident">CustomServer</span>, <span class="ident">Error</span>};
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;acme-accounts&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">AcmeAccountByContacts</span>]</span>)]
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyId::Master</span>), <span class="ident">encryption_optional</span>, <span class="ident">core</span> <span class="op">=</span> <span class="ident">bonsaidb_core</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AcmeAccount</span> {
     <span class="kw">pub</span> <span class="ident">contacts</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">data</span>: <span class="ident">Bytes</span>,
 }
-
-<span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">AcmeAccount</span> {
-    <span class="kw">fn</span> <span class="ident">encryption_key</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyId</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">ENCRYPTION_ENABLED</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">KeyId::Master</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
-    }
-
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-        <span class="ident">CollectionName::new</span>(<span class="string">&quot;khonsulabs&quot;</span>, <span class="string">&quot;acme-accounts&quot;</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">AcmeAccountByContacts</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">DefaultSerialization</span> <span class="kw">for</span> <span class="ident">AcmeAccount</span> {}
 
 <span class="macro">define_basic_unique_mapped_view!</span>(
     <span class="ident">AcmeAccountByContacts</span>,

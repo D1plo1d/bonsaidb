@@ -1994,26 +1994,6 @@
 <span id="1993">1993</span>
 <span id="1994">1994</span>
 <span id="1995">1995</span>
-<span id="1996">1996</span>
-<span id="1997">1997</span>
-<span id="1998">1998</span>
-<span id="1999">1999</span>
-<span id="2000">2000</span>
-<span id="2001">2001</span>
-<span id="2002">2002</span>
-<span id="2003">2003</span>
-<span id="2004">2004</span>
-<span id="2005">2005</span>
-<span id="2006">2006</span>
-<span id="2007">2007</span>
-<span id="2008">2008</span>
-<span id="2009">2009</span>
-<span id="2010">2010</span>
-<span id="2011">2011</span>
-<span id="2012">2012</span>
-<span id="2013">2013</span>
-<span id="2014">2014</span>
-<span id="2015">2015</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -2040,10 +2020,10 @@
             <span class="ident">map</span>::{<span class="ident">Mappings</span>, <span class="ident">ViewMappedValue</span>},
             <span class="ident">ReduceResult</span>, <span class="ident">ViewSchema</span>,
         },
-        <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">DefaultSerialization</span>, <span class="ident">MappedValue</span>, <span class="ident">NamedCollection</span>, <span class="ident">Schema</span>,
-        <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>, <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>,
+        <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">MappedValue</span>, <span class="ident">NamedCollection</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>,
+        <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>,
     },
-    <span class="ident">Error</span>, <span class="ident">ENCRYPTION_ENABLED</span>,
+    <span class="ident">Error</span>,
 };
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Collection</span>)]</span>
@@ -2192,7 +2172,9 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;encrypted-basic&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">EncryptedBasicCount</span>, <span class="ident">EncryptedBasicByParentId</span>, <span class="ident">EncryptedBasicByCategory</span>]</span>)]
+<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyId::Master</span>), <span class="ident">encryption_optional</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EncryptedBasic</span> {
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">category</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -2219,28 +2201,6 @@
         <span class="self">self</span>
     }
 }
-
-<span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">EncryptedBasic</span> {
-    <span class="kw">fn</span> <span class="ident">encryption_key</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyId</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">ENCRYPTION_ENABLED</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">KeyId::Master</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
-    }
-
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-        <span class="ident">CollectionName::new</span>(<span class="string">&quot;khonsulabs&quot;</span>, <span class="string">&quot;encrypted-basic&quot;</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">EncryptedBasicCount</span>)<span class="question-mark">?</span>;
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">EncryptedBasicByParentId</span>)<span class="question-mark">?</span>;
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">EncryptedBasicByCategory</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">DefaultSerialization</span> <span class="kw">for</span> <span class="ident">EncryptedBasic</span> {}
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">View</span>)]</span>
 <span class="attribute">#[<span class="ident">view</span>(<span class="ident">collection</span> <span class="op">=</span> <span class="ident">EncryptedBasic</span>, <span class="ident">key</span> <span class="op">=</span> (), <span class="ident">value</span> <span class="op">=</span> <span class="ident">usize</span>, <span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;count&quot;</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]</span>
