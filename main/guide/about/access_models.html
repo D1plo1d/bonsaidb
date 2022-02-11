@@ -173,9 +173,9 @@
   server &lt;--&gt; local
   server-code &lt;--&gt; server
 </pre>
-<p>A working example of this model can be found at <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-server/examples/basic-server.rs"><code>examples/basic-server/examples/basic-server.rs</code></a>. When writing client/server applications that utilize <code>BonsaiDb</code>, you can have the <code>BonsaiDb</code> server running withing your server application. This means that your server still has the ability not use networking to interact with <code>BonsaiDb</code>. Regardless of if you run any other server code, your <code>BonsaiDb</code> server will be accessible through a <code>Client</code> over the network.</p>
+<p>A working example of this model can be found at <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-server/examples/basic-server.rs"><code>examples/basic-server/examples/basic-server.rs</code></a>. When writing client/server applications that utilize BonsaiDb, you can have the BonsaiDb server running withing your server application. This means that your server still has the ability not use networking to interact with BonsaiDb. Regardless of if you run any other server code, your BonsaiDb server will be accessible through a <code>Client</code> over the network.</p>
 <h2 id="api-platform-model-quic-or-websockets"><a class="header" href="#api-platform-model-quic-or-websockets">API Platform model (QUIC or WebSockets)</a></h2>
-<p>If you're finding yourself developing an API for your application, and all of the consumers of this API are already connected to <code>BonsaiDb</code>, you may want to take advantage of the custom api functionality of the server:</p>
+<p>If you're finding yourself developing an API for your application, and all of the consumers of this API are already connected to BonsaiDb, you may want to take advantage of the custom api functionality of the server:</p>
 <pre class="mermaid">graph LR
   client-code{{Rust Client Code}}
   server-code{{Rust Server Code}}
@@ -190,7 +190,7 @@
   server-code &lt;--&gt; backend
   backend &lt;--&gt; server
 </pre>
-<p>The <code>BonsaiDb</code> <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/server/struct.CustomServer.html"><code>CustomServer</code></a> type accepts one generic parameter that implements the <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/server/trait.Backend.html"><code>Backend</code></a> trait. This trait is used to customize the server in many ways, but one of the associated types is a <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/custom_api/trait.CustomApi.html"><code>CustomApi</code></a> implementor.</p>
+<p>The BonsaiDb <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/server/struct.CustomServer.html"><code>CustomServer</code></a> type accepts one generic parameter that implements the <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/server/trait.Backend.html"><code>Backend</code></a> trait. This trait is used to customize the server in many ways, but one of the associated types is a <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/custom_api/trait.CustomApi.html"><code>CustomApi</code></a> implementor.</p>
 <p>See <a href="./access-models/custom-api-server.html">this page</a> for an overview of how to set up a custom api server.</p>
 <h2 id="coming-later-cluster-model"><a class="header" href="#coming-later-cluster-model">Coming Later: Cluster model</a></h2>
 <p>When you're at the stage of scaling beyond a single server, you will be able to upgrade your server to a cluster using the hypothetical <code>bonsaidb-cluster</code> crate. The clustering model is still being designed, but the goal is something similar to:</p>
