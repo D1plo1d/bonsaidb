@@ -373,6 +373,20 @@
 <span id="372">372</span>
 <span id="373">373</span>
 <span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::HashMap</span>,
     <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
@@ -402,6 +416,11 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StorageConfiguration</span> {
     <span class="doccomment">/// The path to the database. Defaults to `db.bonsaidb` if not specified.</span>
     <span class="kw">pub</span> <span class="ident">path</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Prevents storing data on the disk. This is intended for testing purposes</span>
+    <span class="doccomment">/// primarily. Keep in mind that the underlying storage format is</span>
+    <span class="doccomment">/// append-only.</span>
+    <span class="kw">pub</span> <span class="ident">memory_only</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// The unique id of the server. If not specified, the server will randomly</span>
     <span class="doccomment">/// generate a unique id on startup. If the server generated an id and this</span>
@@ -451,6 +470,7 @@
         <span class="ident">system</span>.<span class="ident">refresh_specifics</span>(<span class="ident">system_specs</span>);
         <span class="self">Self</span> {
             <span class="ident">path</span>: <span class="prelude-val">None</span>,
+            <span class="ident">memory_only</span>: <span class="bool-val">false</span>,
             <span class="ident">unique_id</span>: <span class="prelude-val">None</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
             <span class="ident">vault_key_storage</span>: <span class="prelude-val">None</span>,
@@ -666,6 +686,9 @@
         <span class="ident"><span class="self">Self</span>::default</span>().<span class="ident">path</span>(<span class="ident">path</span>)
     }
 
+    <span class="doccomment">/// Sets [`StorageConfiguration::path`](StorageConfiguration#structfield.memory_only) to true and returns self.</span>
+    <span class="kw">fn</span> <span class="ident">memory_only</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
+
     <span class="doccomment">/// Registers the schema and returns self.</span>
     <span class="kw">fn</span> <span class="ident">with_schema</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
@@ -695,6 +718,11 @@
     <span class="kw">fn</span> <span class="ident">with_schema</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">register_schema</span>::<span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">memory_only</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">memory_only</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="self">self</span>
     }
 
     <span class="kw">fn</span> <span class="ident">path</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="self">Self</span> {

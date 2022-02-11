@@ -7,7 +7,7 @@
 individual that created the item in question. This value is used for
 namespacing. Changing this after values are in use is not supported without
 manual migrations at this time.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.CollectionName.html" title="bonsaidb::core::schema::CollectionName struct">CollectionName</a></div><div class="item-right docblock-short"><p>The name of a <a href="trait.Collection.html"><code>Collection</code></a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.CollectionName.html" title="bonsaidb::core::schema::CollectionName struct">CollectionName</a></div><div class="item-right docblock-short"><p>The namespaced name of a <a href="trait.Collection.html"><code>Collection</code></a>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Entry.html" title="bonsaidb::core::schema::Entry struct">Entry</a></div><div class="item-right docblock-short"><p>A future that resolves to an entry in a <a href="trait.NamedCollection.html" title="NamedCollection"><code>NamedCollection</code></a>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.InsertError.html" title="bonsaidb::core::schema::InsertError struct">InsertError</a></div><div class="item-right docblock-short"><p>An error from inserting a <a href="../document/struct.CollectionDocument.html" title="CollectionDocument"><code>CollectionDocument</code></a>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.InvalidNameError.html" title="bonsaidb::core::schema::InvalidNameError struct">InvalidNameError</a></div><div class="item-right docblock-short"><p>A name was unable to e parsed.</p>
@@ -40,5 +40,14 @@ function receives a <a href="../document/struct.CollectionDocument.html" title="
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ReduceResult.html" title="bonsaidb::core::schema::ReduceResult type">ReduceResult</a></div><div class="item-right docblock-short"><p>A type alias for the result of <code>ViewSchema::reduce()</code>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ViewMapResult.html" title="bonsaidb::core::schema::ViewMapResult type">ViewMapResult</a></div><div class="item-right docblock-short"><p>A type alias for the result of <code>ViewSchema::map()</code>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ViewMappedValue.html" title="bonsaidb::core::schema::ViewMappedValue type">ViewMappedValue</a></div><div class="item-right docblock-short"><p>A mapped value in a <a href="trait.View.html" title="View"><code>View</code></a>.</p>
+</div></div></div><h2 id="derives" class="small-section-header"><a href="#derives">Derive Macros</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.Collection.html" title="bonsaidb::core::schema::Collection derive">Collection</a></div><div class="item-right docblock-short"><p>Derives the <code>bonsaidb::core::schema::Collection</code> trait.
+<code>#[collection(authority = &quot;Authority&quot;, name = &quot;Name&quot;, views = [a, b, c])]</code></p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.Schema.html" title="bonsaidb::core::schema::Schema derive">Schema</a></div><div class="item-right docblock-short"><p>Derives the <code>bonsaidb::core::schema::Schema</code> trait.
+<code>#[schema(name = &quot;Name&quot;, authority = &quot;Authority&quot;, collections = [A, B, C]), core = bonsaidb::core]</code>
+<code>authority</code>, <code>collections</code> and <code>core</code> are optional</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.View.html" title="bonsaidb::core::schema::View derive">View</a></div><div class="item-right docblock-short"><p>Derives the <code>bonsaidb::core::schema::View</code> trait.
+<code>#[view(collection=CollectionType, key=KeyType, value=ValueType, name = &quot;by-name&quot;)]</code>
+<code>name</code> and <code>value</code> are optional</p>
 </div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
 </body></html>

@@ -1679,11 +1679,6 @@
 <span id="1678">1678</span>
 <span id="1679">1679</span>
 <span id="1680">1680</span>
-<span id="1681">1681</span>
-<span id="1682">1682</span>
-<span id="1683">1683</span>
-<span id="1684">1684</span>
-<span id="1685">1685</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::BTreeMap</span>,
     <span class="ident">marker::PhantomData</span>,
@@ -1713,483 +1708,6 @@
 
 <span class="doccomment">/// Defines all interactions with a [`schema::Schema`], regardless of whether it</span>
 <span class="doccomment">/// is local or remote.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Interacting with [`Collection`s](schema::Collection)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// At its core, each document is just a unique ID and an array of bytes. The</span>
-<span class="doccomment">/// low-level interface works with [`OwnedDocument`], which leaves you in charge</span>
-<span class="doccomment">/// of deserializing data.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For most standard use cases, you will be happy to leverage</span>
-<span class="doccomment">/// [Serde](https://serde.rs/) / [Transmog](https://github.com/khonsulabs/transmog) and</span>
-<span class="doccomment">/// [`CollectionDocument&lt;T&gt;`][cd]/[`SerializedCollection`].</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// These examples all use this basic collection type definition:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use bonsaidb_core::{</span>
-<span class="doccomment">///     schema::{Collection, CollectionName, DefaultSerialization, Schematic},</span>
-<span class="doccomment">///     Error,</span>
-<span class="doccomment">/// };</span>
-<span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default)]</span>
-<span class="doccomment">/// pub struct MyCollection {</span>
-<span class="doccomment">///     pub rank: u32,</span>
-<span class="doccomment">///     pub score: f32,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl Collection for MyCollection {</span>
-<span class="doccomment">///     fn collection_name() -&gt; CollectionName {</span>
-<span class="doccomment">///         CollectionName::new(&quot;MyAuthority&quot;, &quot;MyCollection&quot;)</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     fn define_views(schema: &amp;mut Schematic) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">///         // ...</span>
-<span class="doccomment">///         Ok(())</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl DefaultSerialization for MyCollection {}</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Using `Connection` with `OwnedDocument`</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Inserting a document with an automatically assigned ID</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// let inserted_header = db.collection::&lt;MyCollection&gt;().push_bytes(vec![]).await?;</span>
-<span class="doccomment">/// println!(</span>
-<span class="doccomment">///     &quot;Inserted id {} with revision {}&quot;,</span>
-<span class="doccomment">///     inserted_header.id, inserted_header.revision</span>
-<span class="doccomment">/// );</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Inserting a document with a specific ID</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// let inserted_header = db</span>
-<span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
-<span class="doccomment">///     .insert_bytes(42, vec![])</span>
-<span class="doccomment">///     .await?;</span>
-<span class="doccomment">/// println!(</span>
-<span class="doccomment">///     &quot;Inserted id {} with revision {}&quot;,</span>
-<span class="doccomment">///     inserted_header.id, inserted_header.revision</span>
-<span class="doccomment">/// );</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Retrieving a document by ID</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// if let Some(doc) = db.collection::&lt;MyCollection&gt;().get(42).await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Retrieved bytes {:?} with revision {}&quot;,</span>
-<span class="doccomment">///         doc.contents, doc.header.revision</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
-<span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Retreiving multiple documents by IDs</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for doc in db</span>
-<span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
-<span class="doccomment">///     .get_multiple(&amp;[42, 43])</span>
-<span class="doccomment">///     .await?</span>
-<span class="doccomment">/// {</span>
-<span class="doccomment">///     println!(&quot;Retrieved #{} with bytes {:?}&quot;, doc.header.id, doc.contents);</span>
-<span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
-<span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Retreiving all documents</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for doc in db.collection::&lt;MyCollection&gt;().list(..).await? {</span>
-<span class="doccomment">///     println!(&quot;Retrieved #{} with bytes {:?}&quot;, doc.header.id, doc.contents);</span>
-<span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
-<span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Listing a limited amount of documents in reverse order</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for doc in db</span>
-<span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
-<span class="doccomment">///     .list(..)</span>
-<span class="doccomment">///     .descending()</span>
-<span class="doccomment">///     .limit(20)</span>
-<span class="doccomment">///     .await?</span>
-<span class="doccomment">/// {</span>
-<span class="doccomment">///     println!(&quot;Retrieved #{} with bytes {:?}&quot;, doc.header.id, doc.contents);</span>
-<span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
-<span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Using `Connection` with `CollectionDocument&lt;T&gt;`</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Inserting a document with an automatically assigned ID</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// let document = MyCollection::default().push_into(&amp;db).await?;</span>
-<span class="doccomment">/// println!(</span>
-<span class="doccomment">///     &quot;Inserted {:?} with id {} with revision {}&quot;,</span>
-<span class="doccomment">///     document.contents, document.header.id, document.header.revision</span>
-<span class="doccomment">/// );</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Inserting a document with a specific ID</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// let document = MyCollection::default().insert_into(42, &amp;db).await?;</span>
-<span class="doccomment">/// println!(</span>
-<span class="doccomment">///     &quot;Inserted {:?} with id {} with revision {}&quot;,</span>
-<span class="doccomment">///     document.contents, document.header.id, document.header.revision</span>
-<span class="doccomment">/// );</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Retrieving a document by ID</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// if let Some(doc) = MyCollection::get(42, &amp;db).await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Retrieved revision {} with deserialized contents: {:?}&quot;,</span>
-<span class="doccomment">///         doc.header.revision, doc.contents</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Retreiving multiple documents by IDs</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for doc in MyCollection::get_multiple(&amp;[42, 43], &amp;db).await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Retrieved #{} with deserialized contents: {:?}&quot;,</span>
-<span class="doccomment">///         doc.header.id, doc.contents</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Retreiving all documents</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for doc in MyCollection::list(.., &amp;db).await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Retrieved #{} with deserialized contents: {:?}&quot;,</span>
-<span class="doccomment">///         doc.header.id, doc.contents</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #### Listing a limited amount of documents in reverse order</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for doc in MyCollection::list(.., &amp;db).descending().limit(20).await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Retrieved #{} with deserialized contents: {:?}&quot;,</span>
-<span class="doccomment">///         doc.header.id, doc.contents</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Querying Views</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The examples use this view definition:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # mod collection {</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// # use collection::MyCollection;</span>
-<span class="doccomment">/// use bonsaidb_core::{</span>
-<span class="doccomment">///     define_basic_unique_mapped_view,</span>
-<span class="doccomment">///     document::CollectionDocument,</span>
-<span class="doccomment">///     schema::{</span>
-<span class="doccomment">///         CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View,</span>
-<span class="doccomment">///         ViewMapResult, ViewMappedValue,</span>
-<span class="doccomment">///     },</span>
-<span class="doccomment">/// };</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug)]</span>
-<span class="doccomment">/// pub struct ScoresByRank;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl View for ScoresByRank {</span>
-<span class="doccomment">///     type Collection = MyCollection;</span>
-<span class="doccomment">///     type Key = u32;</span>
-<span class="doccomment">///     type Value = f32;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     fn name(&amp;self) -&gt; Name {</span>
-<span class="doccomment">///         Name::new(&quot;scores-by-rank&quot;)</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl CollectionViewSchema for ScoresByRank {</span>
-<span class="doccomment">///     type View = Self;</span>
-<span class="doccomment">///     fn map(</span>
-<span class="doccomment">///         &amp;self,</span>
-<span class="doccomment">///         document: CollectionDocument&lt;&lt;Self::View as View&gt;::Collection&gt;,</span>
-<span class="doccomment">///     ) -&gt; ViewMapResult&lt;Self::View&gt; {</span>
-<span class="doccomment">///         Ok(document</span>
-<span class="doccomment">///             .header</span>
-<span class="doccomment">///             .emit_key_and_value(document.contents.rank, document.contents.score))</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     fn reduce(</span>
-<span class="doccomment">///         &amp;self,</span>
-<span class="doccomment">///         mappings: &amp;[ViewMappedValue&lt;Self::View&gt;],</span>
-<span class="doccomment">///         rereduce: bool,</span>
-<span class="doccomment">///     ) -&gt; ReduceResult&lt;Self::View&gt; {</span>
-<span class="doccomment">///         if mappings.is_empty() {</span>
-<span class="doccomment">///             Ok(0.)</span>
-<span class="doccomment">///         } else {</span>
-<span class="doccomment">///             Ok(mappings.iter().map(|map| map.value).sum::&lt;f32&gt;() / mappings.len() as f32)</span>
-<span class="doccomment">///         }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl DefaultViewSerialization for ScoresByRank {}</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Retrieving all view entries</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().query().await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}&quot;,</span>
-<span class="doccomment">///         mapping.source.id, mapping.key, mapping.value</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Retrieving all mappings with the same key</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().with_key(42).query().await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}&quot;,</span>
-<span class="doccomment">///         mapping.source.id, mapping.key, mapping.value</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Retrieving all mappings with a range of keys</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in db</span>
-<span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
-<span class="doccomment">///     .with_key_range(42..=44)</span>
-<span class="doccomment">///     .query()</span>
-<span class="doccomment">///     .await?</span>
-<span class="doccomment">/// {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}&quot;,</span>
-<span class="doccomment">///         mapping.source.id, mapping.key, mapping.value</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Retrieving the associated documents with a view query</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// With [`OwnedDocument`]:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in &amp;db</span>
-<span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
-<span class="doccomment">///     .with_key_range(42..=44)</span>
-<span class="doccomment">///     .query_with_docs()</span>
-<span class="doccomment">///     .await?</span>
-<span class="doccomment">/// {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}. Document bytes: {:?}&quot;,</span>
-<span class="doccomment">///         mapping.document.header.id, mapping.key, mapping.value, mapping.document.contents</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// With [`CollectionDocument&lt;T&gt;`][cd]:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in &amp;db</span>
-<span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
-<span class="doccomment">///     .with_key_range(42..=44)</span>
-<span class="doccomment">///     .query_with_collection_docs()</span>
-<span class="doccomment">///     .await?</span>
-<span class="doccomment">/// {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}. Deserialized Contents: {:?}&quot;,</span>
-<span class="doccomment">///         mapping.document.header.id, mapping.key, mapping.value, mapping.document.contents</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Customizing view query parameters</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// for mapping in db</span>
-<span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
-<span class="doccomment">///     .with_key_range(42..=44)</span>
-<span class="doccomment">///     .descending()</span>
-<span class="doccomment">///     .limit(10)</span>
-<span class="doccomment">///     .query()</span>
-<span class="doccomment">///     .await?</span>
-<span class="doccomment">/// {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}&quot;,</span>
-<span class="doccomment">///         mapping.source.id, mapping.key, mapping.value</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Reducing a view to its value type</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// All of the ways of filtering a view can be used in conjunction with [`reduce()`](View::reduce()).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// // score is an f32 in this example</span>
-<span class="doccomment">/// let score = db.view::&lt;ScoresByRank&gt;().reduce().await?;</span>
-<span class="doccomment">/// println!(&quot;Average score: {:3}&quot;, score);</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ### Reducing a view to its value type, grouping by key</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// All of the ways of filtering a view can be used in conjunction with [`reduce()`](View::reduce()).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-<span class="doccomment">/// // score is an f32 in this example</span>
-<span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().reduce_grouped().await? {</span>
-<span class="doccomment">///     println!(</span>
-<span class="doccomment">///         &quot;Rank {} has an average score of {:3}&quot;,</span>
-<span class="doccomment">///         mapping.key, mapping.value</span>
-<span class="doccomment">///     );</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # })</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [cd]: crate::document::CollectionDocument</span>
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Connection</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="doccomment">/// Accesses a collection for the connected [`schema::Schema`].</span>
@@ -2204,6 +1722,14 @@
     <span class="doccomment">/// for the [`Collection`] `C`. If `id` is `None` a unique id will be</span>
     <span class="doccomment">/// generated. If an id is provided and a document already exists with that</span>
     <span class="doccomment">/// id, a conflict error will be returned.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider using</span>
+    <span class="doccomment">/// one of:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [`SerializedCollection::push_into()`]</span>
+    <span class="doccomment">/// - [`SerializedCollection::insert_into()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().insert()`](Collection::insert)</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().push()`](Collection::push)</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">insert</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span>, <span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
@@ -2225,6 +1751,12 @@
     <span class="doccomment">/// Updates an existing document in the connected [`schema::Schema`] for the</span>
     <span class="doccomment">/// [`Collection`] `C`. Upon success, `doc.revision` will be updated with</span>
     <span class="doccomment">/// the new revision.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider using</span>
+    <span class="doccomment">/// one of:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [`CollectionDocument::update()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().update()`](Collection::update)</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">update</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>: <span class="ident">schema::Collection</span>, <span class="ident">D</span>: <span class="ident">Document</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">doc</span>: <span class="kw-2">&amp;mut</span> <span class="ident">D</span>,
@@ -2247,10 +1779,22 @@
     }
 
     <span class="doccomment">/// Retrieves a stored document from [`Collection`] `C` identified by `id`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider using</span>
+    <span class="doccomment">/// one of:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [`SerializedCollection::get()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().get()`](Collection::get)</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Retrieves all documents matching `ids`. Documents that are not found</span>
     <span class="doccomment">/// are not returned, but no error will be generated.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider using</span>
+    <span class="doccomment">/// one of:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [`SerializedCollection::get_multiple()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().get_multiple()`](Collection::get_multiple)</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">u64</span>],
@@ -2259,6 +1803,14 @@
     <span class="doccomment">/// Retrieves all documents within the range of `ids`. Documents that are</span>
     <span class="doccomment">/// not found are not returned, but no error will be generated. To retrieve</span>
     <span class="doccomment">/// all documents, pass in `..` for `ids`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider using</span>
+    <span class="doccomment">/// one of:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [`SerializedCollection::all()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().all()`](Collection::all)</span>
+    <span class="doccomment">/// - [`SerializedCollection::list()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().list()`](Collection::list)</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span>, <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">ids</span>: <span class="ident">R</span>,
@@ -2267,6 +1819,12 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Removes a `Document` from the database.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider using</span>
+    <span class="doccomment">/// one of:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [`CollectionDocument::delete()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().delete()`](Collection::delete)</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span>, <span class="ident">H</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">H</span>,
@@ -2296,6 +1854,11 @@
     }
 
     <span class="doccomment">/// Queries for view entries matching [`View`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider querying</span>
+    <span class="doccomment">/// the view using [`self.view::&lt;View&gt;().query()`](View::query) instead.</span>
+    <span class="doccomment">/// The parameters for the query can be customized on the builder returned</span>
+    <span class="doccomment">/// from [`Self::view()`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -2308,6 +1871,11 @@
         <span class="self">Self</span>: <span class="ident">Sized</span>;
 
     <span class="doccomment">/// Queries for view entries matching [`View`] with their source documents.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider querying</span>
+    <span class="doccomment">/// the view using [`self.view::&lt;View&gt;().query_with_docs()`](View::query_with_docs) instead.</span>
+    <span class="doccomment">/// The parameters for the query can be customized on the builder returned</span>
+    <span class="doccomment">/// from [`Self::view()`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_docs</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -2320,6 +1888,11 @@
         <span class="self">Self</span>: <span class="ident">Sized</span>;
 
     <span class="doccomment">/// Queries for view entries matching [`View`] with their source documents, deserialized.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider querying</span>
+    <span class="doccomment">/// the view using [`self.view::&lt;View&gt;().query_with_collection_docs()`](View::query_with_collection_docs) instead.</span>
+    <span class="doccomment">/// The parameters for the query can be customized on the builder returned</span>
+    <span class="doccomment">/// from [`Self::view()`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_collection_docs</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -2348,6 +1921,11 @@
     }
 
     <span class="doccomment">/// Reduces the view entries matching [`View`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider reducing</span>
+    <span class="doccomment">/// the view using [`self.view::&lt;View&gt;().reduce()`](View::reduce) instead.</span>
+    <span class="doccomment">/// The parameters for the query can be customized on the builder returned</span>
+    <span class="doccomment">/// from [`Self::view()`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -2359,6 +1937,12 @@
 
     <span class="doccomment">/// Reduces the view entries matching [`View`], reducing the values by each</span>
     <span class="doccomment">/// unique key.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider reducing</span>
+    <span class="doccomment">/// the view using</span>
+    <span class="doccomment">/// [`self.view::&lt;View&gt;().reduce_grouped()`](View::reduce_grouped) instead.</span>
+    <span class="doccomment">/// The parameters for the query can be customized on the builder returned</span>
+    <span class="doccomment">/// from [`Self::view()`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce_grouped</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -2369,6 +1953,11 @@
         <span class="self">Self</span>: <span class="ident">Sized</span>;
 
     <span class="doccomment">/// Deletes all of the documents associated with this view.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider querying</span>
+    <span class="doccomment">/// the view using [`self.view::&lt;View&gt;().delete_docs()`](View::delete_docs()) instead.</span>
+    <span class="doccomment">/// The parameters for the query can be customized on the builder returned</span>
+    <span class="doccomment">/// from [`Self::view()`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_docs</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -2439,6 +2028,21 @@
 }
 
 <span class="doccomment">/// Interacts with a collection over a `Connection`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// These examples in this type use this basic collection definition:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use bonsaidb_core::{schema::Collection, Error};</span>
+<span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default, Collection)]</span>
+<span class="doccomment">/// #[collection(name = &quot;MyCollection&quot;)]</span>
+<span class="doccomment">/// # #[collection(core = bonsaidb_core)]</span>
+<span class="doccomment">/// pub struct MyCollection {</span>
+<span class="doccomment">///     pub rank: u32,</span>
+<span class="doccomment">///     pub score: f32,</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Collection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> {
     <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>,
     <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span>, <span class="comment">/* allows for extension traits to be written for collections of specific types */</span>
@@ -2459,7 +2063,7 @@
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span>,
 {
     <span class="doccomment">/// Creates a new instance using `connection`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">connection</span>,
             <span class="ident">_phantom</span>: <span class="ident">PhantomData::default</span>(),
@@ -2467,6 +2071,23 @@
     }
 
     <span class="doccomment">/// Adds a new `Document&lt;Cl&gt;` with the contents `item`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// let inserted_header = db</span>
+    <span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
+    <span class="doccomment">///     .push(&amp;MyCollection::default())</span>
+    <span class="doccomment">///     .await?;</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Inserted id {} with revision {}&quot;,</span>
+    <span class="doccomment">///     inserted_header.id, inserted_header.revision</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">push</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">item</span>: <span class="kw-2">&amp;</span><span class="op">&lt;</span><span class="ident">Cl</span> <span class="kw">as</span> <span class="ident">SerializedCollection</span><span class="op">&gt;</span><span class="ident">::Contents</span>,
@@ -2475,10 +2096,24 @@
         <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
     {
         <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">Cl::serialize</span>(<span class="ident">item</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">push_bytes</span>(<span class="ident">contents</span>).<span class="kw">await</span><span class="question-mark">?</span>)
+        <span class="self">self</span>.<span class="ident">push_bytes</span>(<span class="ident">contents</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Adds a new `Document&lt;Cl&gt;` with the `contents`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// let inserted_header = db.collection::&lt;MyCollection&gt;().push_bytes(vec![]).await?;</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Inserted id {} with revision {}&quot;,</span>
+    <span class="doccomment">///     inserted_header.id, inserted_header.revision</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">push_bytes</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">contents</span>: <span class="ident">B</span>,
@@ -2486,10 +2121,27 @@
     <span class="kw">where</span>
         <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
     {
-        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-val">None</span>, <span class="ident">contents</span>).<span class="kw">await</span><span class="question-mark">?</span>)
+        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-val">None</span>, <span class="ident">contents</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Adds a new `Document&lt;Cl&gt;` with the given `id` and contents `item`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// let inserted_header = db</span>
+    <span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
+    <span class="doccomment">///     .insert(42, &amp;MyCollection::default())</span>
+    <span class="doccomment">///     .await?;</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Inserted id {} with revision {}&quot;,</span>
+    <span class="doccomment">///     inserted_header.id, inserted_header.revision</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">insert</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">u64</span>,
@@ -2499,10 +2151,27 @@
         <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
     {
         <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">Cl::serialize</span>(<span class="ident">item</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>).<span class="kw">await</span><span class="question-mark">?</span>)
+        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Adds a new `Document&lt;Cl&gt;` with the the given `id` and `contents`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// let inserted_header = db</span>
+    <span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
+    <span class="doccomment">///     .insert_bytes(42, vec![])</span>
+    <span class="doccomment">///     .await?;</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Inserted id {} with revision {}&quot;,</span>
+    <span class="doccomment">///     inserted_header.id, inserted_header.revision</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">insert_bytes</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">u64</span>,
@@ -2511,27 +2180,135 @@
     <span class="kw">where</span>
         <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
     {
-        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>).<span class="kw">await</span><span class="question-mark">?</span>)
+        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>).<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Updates an existing document. Upon success, `doc.revision` will be</span>
+    <span class="doccomment">/// updated with the new revision.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// if let Some(mut document) = db.collection::&lt;MyCollection&gt;().get(42).await? {</span>
+    <span class="doccomment">///     // modify the document</span>
+    <span class="doccomment">///     db.collection::&lt;MyCollection&gt;().update(&amp;mut document);</span>
+    <span class="doccomment">///     println!(&quot;Updated revision: {:?}&quot;, document.header.revision);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">update</span><span class="op">&lt;</span><span class="lifetime">&#39;d</span>, <span class="ident">D</span>: <span class="ident">Document</span><span class="op">&lt;</span><span class="lifetime">&#39;d</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">doc</span>: <span class="kw-2">&amp;mut</span> <span class="ident">D</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">doc</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Retrieves a `Document&lt;Cl&gt;` with `id` from the connection.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// if let Some(doc) = db.collection::&lt;MyCollection&gt;().get(42).await? {</span>
+    <span class="doccomment">///     println!(</span>
+    <span class="doccomment">///         &quot;Retrieved bytes {:?} with revision {}&quot;,</span>
+    <span class="doccomment">///         doc.contents, doc.header.revision</span>
+    <span class="doccomment">///     );</span>
+    <span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
+    <span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span>(<span class="ident">id</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Retrieves all documents matching `ids`. Documents that are not found</span>
     <span class="doccomment">/// are not returned, but no error will be generated.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// for doc in db</span>
+    <span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
+    <span class="doccomment">///     .get_multiple(&amp;[42, 43])</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     println!(&quot;Retrieved #{} with bytes {:?}&quot;, doc.header.id, doc.contents);</span>
+    <span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
+    <span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">u64</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">get_multiple</span>::<span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span>(<span class="ident">ids</span>).<span class="kw">await</span>
     }
 
-    <span class="doccomment">/// Retrieves all documents matching `ids`. Documents that are not found</span>
-    <span class="doccomment">/// are not returned, but no error will be generated.</span>
+    <span class="doccomment">/// Retrieves all documents matching the range of `ids`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// for doc in db</span>
+    <span class="doccomment">///     .collection::&lt;MyCollection&gt;()</span>
+    <span class="doccomment">///     .list(42..)</span>
+    <span class="doccomment">///     .descending()</span>
+    <span class="doccomment">///     .limit(20)</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     println!(&quot;Retrieved #{} with bytes {:?}&quot;, doc.header.id, doc.contents);</span>
+    <span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
+    <span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">ids</span>: <span class="ident">R</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> {
         <span class="ident">List::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">ids</span>.<span class="ident">into</span>())
     }
 
+    <span class="doccomment">/// Retrieves all documents.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// for doc in db.collection::&lt;MyCollection&gt;().all().await? {</span>
+    <span class="doccomment">///     println!(&quot;Retrieved #{} with bytes {:?}&quot;, doc.header.id, doc.contents);</span>
+    <span class="doccomment">///     let deserialized = doc.contents::&lt;MyCollection&gt;()?;</span>
+    <span class="doccomment">///     println!(&quot;Deserialized contents: {:?}&quot;, deserialized);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> {
+        <span class="ident">List::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">Range::from</span>(..))
+    }
+
     <span class="doccomment">/// Removes a `Document` from the database.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// if let Some(doc) = db.collection::&lt;MyCollection&gt;().get(42).await? {</span>
+    <span class="doccomment">///     db.collection::&lt;MyCollection&gt;().delete(&amp;doc).await?;</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">H</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">delete</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="ident">H</span><span class="op">&gt;</span>(<span class="ident">doc</span>).<span class="kw">await</span>
     }
@@ -2650,7 +2427,53 @@
     }
 }
 
-<span class="doccomment">/// Parameters to query a `schema::View`.</span>
+<span class="doccomment">/// Parameters to query a [`schema::View`].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The examples for this type use this view definition:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// # mod collection {</span>
+<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// # use collection::MyCollection;</span>
+<span class="doccomment">/// use bonsaidb_core::{</span>
+<span class="doccomment">///     define_basic_unique_mapped_view,</span>
+<span class="doccomment">///     document::CollectionDocument,</span>
+<span class="doccomment">///     schema::{</span>
+<span class="doccomment">///         CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View,</span>
+<span class="doccomment">///         ViewMapResult, ViewMappedValue,</span>
+<span class="doccomment">///     },</span>
+<span class="doccomment">/// };</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// #[derive(Debug, Clone, View)]</span>
+<span class="doccomment">/// #[view(collection = MyCollection, key = u32, value = f32, name = &quot;scores-by-rank&quot;)]</span>
+<span class="doccomment">/// # #[view(core = bonsaidb_core)]</span>
+<span class="doccomment">/// pub struct ScoresByRank;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// impl CollectionViewSchema for ScoresByRank {</span>
+<span class="doccomment">///     type View = Self;</span>
+<span class="doccomment">///     fn map(</span>
+<span class="doccomment">///         &amp;self,</span>
+<span class="doccomment">///         document: CollectionDocument&lt;&lt;Self::View as View&gt;::Collection&gt;,</span>
+<span class="doccomment">///     ) -&gt; ViewMapResult&lt;Self::View&gt; {</span>
+<span class="doccomment">///         Ok(document</span>
+<span class="doccomment">///             .header</span>
+<span class="doccomment">///             .emit_key_and_value(document.contents.rank, document.contents.score))</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     fn reduce(</span>
+<span class="doccomment">///         &amp;self,</span>
+<span class="doccomment">///         mappings: &amp;[ViewMappedValue&lt;Self::View&gt;],</span>
+<span class="doccomment">///         rereduce: bool,</span>
+<span class="doccomment">///     ) -&gt; ReduceResult&lt;Self::View&gt; {</span>
+<span class="doccomment">///         if mappings.is_empty() {</span>
+<span class="doccomment">///             Ok(0.)</span>
+<span class="doccomment">///         } else {</span>
+<span class="doccomment">///             Ok(mappings.iter().map(|map| map.value).sum::&lt;f32&gt;() / mappings.len() as f32)</span>
+<span class="doccomment">///         }</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span> {
     <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>,
 
@@ -2683,6 +2506,20 @@
     }
 
     <span class="doccomment">/// Filters for entries in the view with `key`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().with_key(42).query().await? {</span>
+    <span class="doccomment">///     assert_eq!(mapping.key, 42);</span>
+    <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">V::Key</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Matches</span>(<span class="ident">key</span>));
@@ -2690,6 +2527,24 @@
     }
 
     <span class="doccomment">/// Filters for entries in the view with `keys`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db</span>
+    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">///     .with_keys([42, 43])</span>
+    <span class="doccomment">///     .query()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_keys</span><span class="op">&lt;</span><span class="ident">IntoIter</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">keys</span>: <span class="ident">IntoIter</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Multiple</span>(<span class="ident">keys</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()));
@@ -2697,6 +2552,25 @@
     }
 
     <span class="doccomment">/// Filters for entries in the view with the range `keys`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db</span>
+    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">///     .with_key_range(42..)</span>
+    <span class="doccomment">///     .query()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     assert!(mapping.key &gt;= 42);</span>
+    <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_range</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">range</span>: <span class="ident">R</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">range</span>.<span class="ident">into</span>()));
@@ -2704,30 +2578,100 @@
     }
 
     <span class="doccomment">/// Sets the access policy for queries.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db</span>
+    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">///     .with_access_policy(AccessPolicy::UpdateAfter)</span>
+    <span class="doccomment">///     .query()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_access_policy</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">policy</span>: <span class="ident">AccessPolicy</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">access_policy</span> <span class="op">=</span> <span class="ident">policy</span>;
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Queries the view in ascending order.</span>
+    <span class="doccomment">/// Queries the view in ascending order. This is the default sorting</span>
+    <span class="doccomment">/// behavior.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().ascending().query().await? {</span>
+    <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Ascending</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Queries the view in descending order.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().descending().query().await? {</span>
+    <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Descending</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Sets the maximum number of results to return.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// let mappings = db.view::&lt;ScoresByRank&gt;().limit(10).query().await?;</span>
+    <span class="doccomment">/// assert!(mappings.len() &lt;= 10);</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">maximum_results</span>);
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Executes the query and retrieves the results.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().query().await? {</span>
+    <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">query</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">sort</span>, <span class="self">self</span>.<span class="ident">limit</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
@@ -2735,6 +2679,26 @@
     }
 
     <span class="doccomment">/// Executes the query and retrieves the results with the associated [`Document`s](crate::document::OwnedDocument).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// for mapping in &amp;db</span>
+    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">///     .with_key_range(42..=44)</span>
+    <span class="doccomment">///     .query_with_docs()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     println!(</span>
+    <span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}. Document bytes: {:?}&quot;,</span>
+    <span class="doccomment">///         mapping.document.header.id, mapping.key, mapping.value, mapping.document.contents</span>
+    <span class="doccomment">///     );</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_docs</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">query_with_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">sort</span>, <span class="self">self</span>.<span class="ident">limit</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
@@ -2742,6 +2706,26 @@
     }
 
     <span class="doccomment">/// Executes the query and retrieves the results with the associated [`CollectionDocument`s](crate::document::CollectionDocument).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// for mapping in &amp;db</span>
+    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">///     .with_key_range(42..=44)</span>
+    <span class="doccomment">///     .query_with_collection_docs()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     println!(</span>
+    <span class="doccomment">///         &quot;Mapping from #{} with rank: {} and score: {}. Deserialized Contents: {:?}&quot;,</span>
+    <span class="doccomment">///         mapping.document.header.id, mapping.key, mapping.value, mapping.document.contents</span>
+    <span class="doccomment">///     );</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_collection_docs</span>(
         <span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">V::Collection</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
@@ -2755,13 +2739,41 @@
     }
 
     <span class="doccomment">/// Executes a reduce over the results of the query</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// let score = db.view::&lt;ScoresByRank&gt;().reduce().await?;</span>
+    <span class="doccomment">/// println!(&quot;Average score: {:3}&quot;, score);</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">V::Value</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">reduce</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
             .<span class="kw">await</span>
     }
 
-    <span class="doccomment">/// Executes a reduce over the results of the query</span>
+    <span class="doccomment">/// Executes a reduce over the results of the query, grouping by key.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().reduce_grouped().await? {</span>
+    <span class="doccomment">///     println!(</span>
+    <span class="doccomment">///         &quot;Rank {} has an average score of {:3}&quot;,</span>
+    <span class="doccomment">///         mapping.key, mapping.value</span>
+    <span class="doccomment">///     );</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce_grouped</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedValue</span><span class="op">&lt;</span><span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">reduce_grouped</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
@@ -2769,6 +2781,16 @@
     }
 
     <span class="doccomment">/// Deletes all of the associated documents that match this view query.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// db.view::&lt;ScoresByRank&gt;().delete_docs().await?;</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_docs</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">delete_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
@@ -3254,7 +3276,7 @@
 <span class="macro">macro_rules!</span> <span class="ident">__doctest_prelude</span> {
     () =&gt; {
         <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-            <span class="ident">connection::Connection</span>,
+            <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">Connection</span>},
             <span class="ident">define_basic_unique_mapped_view</span>,
             <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Document</span>, <span class="ident">OwnedDocument</span>},
             <span class="ident">schema</span>::{
@@ -3266,21 +3288,13 @@
         };
         <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MySchema</span>;
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Schema</span>)]</span>
+        <span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;MySchema&quot;</span>, <span class="ident">collections</span> <span class="op">=</span> [<span class="ident">MyCollection</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>)]
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">MySchema</span>;
 
-        <span class="kw">impl</span> <span class="ident">Schema</span> <span class="kw">for</span> <span class="ident">MySchema</span> {
-            <span class="kw">fn</span> <span class="ident">schema_name</span>() -&gt; <span class="ident">SchemaName</span> {
-                <span class="ident">SchemaName::new</span>(<span class="string">&quot;MyAuthority&quot;</span>, <span class="string">&quot;MySchema&quot;</span>)
-            }
-
-            <span class="kw">fn</span> <span class="ident">define_collections</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-                <span class="prelude-val">Ok</span>(())
-            }
-        }
-
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MyCollection</span> {
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Collection</span>)]</span>
+        <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;MyCollection&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">MyCollectionByName</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>)]
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">MyCollection</span> {
             <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
             <span class="kw">pub</span> <span class="ident">rank</span>: <span class="ident">u32</span>,
             <span class="kw">pub</span> <span class="ident">score</span>: <span class="ident">f32</span>,
@@ -3300,35 +3314,13 @@
             }
         }
 
-        <span class="kw">impl</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">MyCollection</span> {
-            <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-                <span class="ident">CollectionName::new</span>(<span class="string">&quot;MyAuthority&quot;</span>, <span class="string">&quot;MyCollection&quot;</span>)
-            }
-
-            <span class="kw">fn</span> <span class="ident">define_views</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-                <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">MyCollectionByName</span>)<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>(())
-            }
-        }
-
         <span class="kw">impl</span> <span class="ident">NamedCollection</span> <span class="kw">for</span> <span class="ident">MyCollection</span> {
             <span class="kw">type</span> <span class="ident">ByNameView</span> <span class="op">=</span> <span class="ident">MyCollectionByName</span>;
         }
 
-        <span class="kw">impl</span> <span class="ident">DefaultSerialization</span> <span class="kw">for</span> <span class="ident">MyCollection</span> {}
-
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScoresByRank</span>;
-
-        <span class="kw">impl</span> <span class="ident">View</span> <span class="kw">for</span> <span class="ident">ScoresByRank</span> {
-            <span class="kw">type</span> <span class="ident">Collection</span> <span class="op">=</span> <span class="ident">MyCollection</span>;
-            <span class="kw">type</span> <span class="ident">Key</span> <span class="op">=</span> <span class="ident">u32</span>;
-            <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">f32</span>;
-
-            <span class="kw">fn</span> <span class="ident">name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Name</span> {
-                <span class="ident">Name::new</span>(<span class="string">&quot;scores-by-rank&quot;</span>)
-            }
-        }
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">View</span>)]</span>
+        <span class="attribute">#[<span class="ident">view</span>(<span class="ident">collection</span> <span class="op">=</span> <span class="ident">MyCollection</span>, <span class="ident">key</span> <span class="op">=</span> <span class="ident">u32</span>, <span class="ident">value</span> <span class="op">=</span> <span class="ident">f32</span>, <span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;scores-by-rank&quot;</span>, <span class="ident">core</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>)]</span>
+        <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">ScoresByRank</span>;
 
         <span class="kw">impl</span> <span class="ident">CollectionViewSchema</span> <span class="kw">for</span> <span class="ident">ScoresByRank</span> {
             <span class="kw">type</span> <span class="ident">View</span> <span class="op">=</span> <span class="self">Self</span>;
@@ -3353,8 +3345,6 @@
                 }
             }
         }
-
-        <span class="kw">impl</span> <span class="ident">DefaultViewSerialization</span> <span class="kw">for</span> <span class="ident">ScoresByRank</span> {}
 
         <span class="macro">define_basic_unique_mapped_view!</span>(
             <span class="ident">MyCollectionByName</span>,
