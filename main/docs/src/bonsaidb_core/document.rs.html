@@ -444,7 +444,7 @@
     <span class="kw">pub</span> <span class="ident">contents</span>: <span class="ident">Bytes</span>,
 }
 
-<span class="doccomment">/// Common interface of a document in `BonsaiDb`.</span>
+<span class="doccomment">/// Common interface of a document in BonsaiDb.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Document</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>:
     <span class="ident">Deref</span><span class="op">&lt;</span><span class="ident">Target</span> <span class="op">=</span> <span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">DerefMut</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Sized</span>
 {
@@ -471,7 +471,7 @@
     <span class="doccomment">/// Creates a new revision.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **WARNING: This normally should not be used** outside of implementing a</span>
-    <span class="doccomment">/// backend for `BonsaiDb`. To update a document, use `set_contents()` and</span>
+    <span class="doccomment">/// backend for BonsaiDb. To update a document, use `set_contents()` and</span>
     <span class="doccomment">/// send the document with the existing `Revision` information.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">create_new_revision</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Bytes</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;

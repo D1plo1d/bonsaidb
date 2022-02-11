@@ -198,7 +198,7 @@
 <span id="197">197</span>
 <span id="198">198</span>
 <span id="199">199</span>
-</pre><pre class="rust"><code><span class="doccomment">//! `BonsaiDb` command line tools.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! BonsaiDb command line tools.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::OsString</span>, <span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">path::PathBuf</span>};
 
@@ -218,7 +218,7 @@
     <span class="doccomment">/// Executes an admin command.</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
     <span class="ident">Admin</span>(<span class="ident">admin::Command</span>),
-    <span class="doccomment">/// Execute a `BonsaiDb` server command.</span>
+    <span class="doccomment">/// Execute a BonsaiDb server command.</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
     <span class="ident">Server</span>(<span class="ident">bonsaidb_server::cli::Command</span><span class="op">&lt;</span><span class="ident">Cli::Backend</span><span class="op">&gt;</span>),
     <span class="doccomment">/// An external command.</span>
@@ -307,7 +307,7 @@
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">CommandLine</span>: <span class="ident">Sized</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="doccomment">/// The Backend for this command line.</span>
     <span class="kw">type</span> <span class="ident">Backend</span>: <span class="ident">Backend</span>;
-    <span class="doccomment">/// The [`Subcommand`] which is embedded next to the built-in `BonsaiDb`</span>
+    <span class="doccomment">/// The [`Subcommand`] which is embedded next to the built-in BonsaiDb</span>
     <span class="doccomment">/// commands.</span>
     <span class="kw">type</span> <span class="ident">Subcommand</span>: <span class="ident">Subcommand</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span>;
 
