@@ -143,11 +143,11 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
-<p><code>BonsaiDb</code> aims to offer the majority of its functionality in <a href="./local.html">local operation</a>. The <a href="./server.html">networked server</a> adds some functionality on top of the local version, but its main function is to add the ability to use networking to talk to the database.</p>
-<p>Because of this model, it makes it easy to transition a local database to a networked database server. Start with whatever model fits your needs today, and when your neeeds change, <code>BonsaiDb</code> will adapt.</p>
+<p>BonsaiDb aims to offer the majority of its functionality in <a href="./local.html">local operation</a>. The <a href="./server.html">networked server</a> adds some functionality on top of the local version, but its main function is to add the ability to use networking to talk to the database.</p>
+<p>Because of this model, it makes it easy to transition a local database to a networked database server. Start with whatever model fits your needs today, and when your neeeds change, BonsaiDb will adapt.</p>
 <h2 id="when-to-use-the-local-integration"><a class="header" href="#when-to-use-the-local-integration">When to use the <a href="./local.html">Local Integration</a></a></h2>
 <ul>
-<li>You're going to databases from one process at a time. <code>BonsaiDb</code> is designed for concurrency and can scale with the capabilities of the hardware. However, the underlying storage layer that <code>BonsaiDb</code> is built upon, <a href="http://sled.rs">sled</a>, does not support multiple processes writing its data simultaneously. If you need to access the database from multiple processes, the <a href="./server.html">server integration</a> is what you should use. While it doesn't offer IPC communication today, a pull-request would be accepted to that added that functionality (along with the corresponding unit tests).</li>
+<li>You're going to databases from one process at a time. BonsaiDb is designed for concurrency and can scale with the capabilities of the hardware. However, the underlying storage layer that BonsaiDb is built upon, <a href="http://sled.rs">sled</a>, does not support multiple processes writing its data simultaneously. If you need to access the database from multiple processes, the <a href="./server.html">server integration</a> is what you should use. While it doesn't offer IPC communication today, a pull-request would be accepted to that added that functionality (along with the corresponding unit tests).</li>
 <li>You have no public API/PubSub/access needs or have implemented those with another stack.</li>
 </ul>
 <h2 id="when-to-use-the-server-integration"><a class="header" href="#when-to-use-the-server-integration">When to use the <a href="./server.html">Server Integration</a></a></h2>
