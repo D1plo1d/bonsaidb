@@ -243,6 +243,10 @@
 <span id="242">242</span>
 <span id="243">243</span>
 <span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Core functionality and types for BonsaiDb.</span>
 
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -396,11 +400,15 @@
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;the requested document id {1} from collection {0} was not found&quot;</span>)]</span>
     <span class="ident">DocumentNotFound</span>(<span class="ident">CollectionName</span>, <span class="ident">u64</span>),
 
-    <span class="doccomment">/// When updating a document, if a situation is detected where the contents have changed on the server since the `Revision` provided, a Conflict error will be returned.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a conflict was detected while updating document id {1} from collection {0}&quot;</span>)]</span>
-    <span class="ident">DocumentConflict</span>(<span class="ident">CollectionName</span>, <span class="ident">u64</span>),
+    <span class="doccomment">/// When updating a document, if a situation is detected where the contents</span>
+    <span class="doccomment">/// have changed on the server since the `Revision` provided, a Conflict</span>
+    <span class="doccomment">/// error will be returned.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a conflict was detected while updating document {1} from collection {0}&quot;</span>)]</span>
+    <span class="ident">DocumentConflict</span>(<span class="ident">CollectionName</span>, <span class="ident">Header</span>),
 
-    <span class="doccomment">/// When saving a document in a collection with unique views, a document emits a key that is already emitted by an existing ocument, this error is returned.</span>
+    <span class="doccomment">/// When saving a document in a collection with unique views, a document</span>
+    <span class="doccomment">/// emits a key that is already emitted by an existing ocument, this error</span>
+    <span class="doccomment">/// is returned.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a unique key violation occurred: document `{existing_document}` already has the same key as `{conflicting_document}` for {view}&quot;</span>)]</span>
     <span class="ident">UniqueKeyViolation</span> {
         <span class="doccomment">/// The name of the view that the unique key violation occurred.</span>

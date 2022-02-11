@@ -2750,9 +2750,9 @@
         .<span class="kw">await</span>
         .<span class="ident">expect_err</span>(<span class="string">&quot;conflict should have generated an error&quot;</span>)
     {
-        <span class="ident">Error::DocumentConflict</span>(<span class="ident">collection</span>, <span class="ident">id</span>) =&gt; {
+        <span class="ident">Error::DocumentConflict</span>(<span class="ident">collection</span>, <span class="ident">header</span>) =&gt; {
             <span class="macro">assert_eq!</span>(<span class="ident">collection</span>, <span class="ident">Basic::collection_name</span>());
-            <span class="macro">assert_eq!</span>(<span class="ident">id</span>, <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>);
         }
         <span class="ident">other</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">anyhow::Error::from</span>(<span class="ident">other</span>)),
     }
