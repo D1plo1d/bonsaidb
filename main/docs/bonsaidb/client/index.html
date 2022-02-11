@@ -5,81 +5,8 @@ WebSockets.</p>
 <p>QUIC is a new protocol built atop UDP. It is designed to operate more
 reliably than TCP, and features TLS built-in at the protocol level.
 WebSockets are an established protocol built atop TCP and HTTP.</p>
-<p><a href="struct.Client.html" title="Client"><code>Client</code></a> provides access to BonsaiDb by implementing the
-<a href="../core/connection/trait.StorageConnection.html" title="::bonsaidb_core::connection::StorageConnection"><code>StorageConnection</code></a> trait.</p>
-<h3 id="connecting-via-quic" class="section-header"><a href="#connecting-via-quic">Connecting via QUIC</a></h3>
-<p>The URL scheme to connect via QUIC is <code>bonsaidb</code>. If no port is specified,
-port 5645 is assumed.</p>
-<h4 id="with-a-valid-tls-certificate" class="section-header"><a href="#with-a-valid-tls-certificate">With a valid TLS certificate</a></h4>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;bonsaidb://my-server.com&quot;</span>)<span class="question-mark">?</span>)
-    .<span class="ident">finish</span>()
-    .<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
-<h4 id="with-a-self-signed-pinned-certificate" class="section-header"><a href="#with-a-self-signed-pinned-certificate">With a Self-Signed Pinned Certificate</a></h4>
-<p>When using <code>install_self_signed_certificate()</code>, clients will need the
-contents of the <code>pinned-certificate.der</code> file within the database. It can be
-specified when building the client:</p>
-
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">certificate</span> <span class="op">=</span>
-    <span class="ident">Certificate::from_der</span>(<span class="ident">std::fs::read</span>(<span class="string">&quot;mydb.bonsaidb/pinned-certificate.der&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
-<span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;bonsaidb://localhost&quot;</span>)<span class="question-mark">?</span>)
-    .<span class="ident">with_certificate</span>(<span class="ident">certificate</span>)
-    .<span class="ident">finish</span>()
-    .<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
-<h3 id="connecting-via-websockets" class="section-header"><a href="#connecting-via-websockets">Connecting via WebSockets</a></h3>
-<p>WebSockets are built atop the HTTP protocol. There are two URL schemes for
-WebSockets:</p>
-<ul>
-<li><code>ws</code>: Insecure WebSockets. Port 80 is assumed if no port is specified.</li>
-<li><code>wss</code>: Secure WebSockets. Port 443 is assumed if no port is specified.</li>
-</ul>
-<h4 id="without-tls" class="section-header"><a href="#without-tls">Without TLS</a></h4>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;ws://localhost&quot;</span>)<span class="question-mark">?</span>)
-    .<span class="ident">finish</span>()
-    .<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
-<h4 id="with-tls" class="section-header"><a href="#with-tls">With TLS</a></h4>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;wss://my-server.com&quot;</span>)<span class="question-mark">?</span>)
-    .<span class="ident">finish</span>()
-    .<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
-<h3 id="using-a-customapi" class="section-header"><a href="#using-a-customapi">Using a <code>CustomApi</code></a></h3>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="comment">// `bonsaidb_core` is re-exported to `bonsaidb::core` or `bonsaidb_local::core`.</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::custom_api</span>::{<span class="ident">CustomApi</span>, <span class="ident">Infallible</span>};
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Request</span> {
-    <span class="ident">Ping</span>,
-}
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Response</span> {
-    <span class="ident">Pong</span>,
-}
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MyApi</span> {}
-
-<span class="kw">impl</span> <span class="ident">CustomApi</span> <span class="kw">for</span> <span class="ident">MyApi</span> {
-    <span class="kw">type</span> <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>;
-    <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Response</span>;
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Infallible</span>;
-}
-
-<span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;bonsaidb://localhost&quot;</span>)<span class="question-mark">?</span>)
-    .<span class="ident">with_custom_api</span>::<span class="op">&lt;</span><span class="ident">MyApi</span><span class="op">&gt;</span>()
-    .<span class="ident">finish</span>()
-    .<span class="kw">await</span><span class="question-mark">?</span>;
-<span class="kw">let</span> <span class="ident">Response::Pong</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">send_api_request</span>(<span class="ident">Request::Ping</span>).<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
-<h4 id="receiving-out-of-band-messages-from-the-server" class="section-header"><a href="#receiving-out-of-band-messages-from-the-server">Receiving out-of-band messages from the server</a></h4>
-<p>If the server sends a message that isn’t in response to a request, the
-client will invoke it’s <a href="struct.Builder.html#method.with_custom_api_callback">custom api
-callback</a>:</p>
-
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;bonsaidb://localhost&quot;</span>)<span class="question-mark">?</span>)
-    .<span class="ident">with_custom_api_callback</span>::<span class="op">&lt;</span><span class="ident">MyApi</span>,<span class="kw">_</span><span class="op">&gt;</span>(<span class="op">|</span><span class="ident">result</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span>, <span class="ident">Infallible</span><span class="op">&gt;</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="ident">Response::Pong</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
-    })
-    .<span class="ident">finish</span>()
-    .<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
+<p><a href="struct.Client.html"><code>Client</code></a> provides access to BonsaiDb by implementing the
+<a href="../core/connection/trait.StorageConnection.html"><code>StorageConnection</code></a> trait.</p>
 <h3 id="wasm-support" class="section-header"><a href="#wasm-support">WASM Support</a></h3>
 <p>This crate supports compiling to WebAssembly. When using WebAssembly, the
 only protocol available is WebSockets.</p>
