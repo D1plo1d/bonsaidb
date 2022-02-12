@@ -96,7 +96,6 @@
 <span id="95">95</span>
 <span id="96">96</span>
 <span id="97">97</span>
-<span id="98">98</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">define_basic_mapped_view</span>, <span class="ident">define_basic_unique_mapped_view</span>,
     <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">KeyId</span>},
@@ -106,9 +105,8 @@
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::Visitor</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Schema</span>)]</span>
-<span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;hosted&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">core</span> <span class="op">=</span> <span class="ident">bonsaidb_core</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>, <span class="ident">schema</span>(<span class="ident">collections</span> <span class="op">=</span> [<span class="ident">TlsCertificate</span>, <span class="ident"><span class="kw">crate</span>::server::acme::AcmeAccount</span>]</span>))]
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>), <span class="ident">schema</span>(<span class="ident">collections</span> <span class="op">=</span> [<span class="ident">TlsCertificate</span>]</span>))]
+<span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;hosted&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">collections</span> <span class="op">=</span> [<span class="ident">TlsCertificate</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="ident">bonsaidb_core</span>)]
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>, <span class="ident">schema</span>(<span class="ident">collections</span> <span class="op">=</span> [<span class="ident"><span class="kw">crate</span>::server::acme::AcmeAccount</span>]</span>))]
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Hosted</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>

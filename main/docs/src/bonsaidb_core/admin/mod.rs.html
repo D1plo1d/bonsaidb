@@ -25,7 +25,6 @@
 <span id="24">24</span>
 <span id="25">25</span>
 <span id="26">26</span>
-<span id="27">27</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::Schema</span>;
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
@@ -46,9 +45,8 @@
 
 <span class="doccomment">/// The BonsaiDb administration schema.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Schema</span>)]</span>
-<span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;bonsaidb-admin&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>, <span class="ident">schema</span>(<span class="ident">collections</span> <span class="op">=</span> [<span class="ident">Database</span>, <span class="ident">PermissionGroup</span>, <span class="ident">Role</span>, <span class="ident">User</span>]</span>))]
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>), <span class="ident">schema</span>(<span class="ident">collections</span> <span class="op">=</span> [<span class="ident">Database</span>]</span>))]
+<span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;bonsaidb-admin&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">collections</span> <span class="op">=</span> [<span class="ident">Database</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>, <span class="ident">schema</span>(<span class="ident">collections</span> <span class="op">=</span> [<span class="ident">PermissionGroup</span>, <span class="ident">Role</span>, <span class="ident">User</span>]</span>))]
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Admin</span>;
 
 <span class="doccomment">/// The name of the admin database.</span>
