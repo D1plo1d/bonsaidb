@@ -1490,6 +1490,8 @@
 <span id="1489">1489</span>
 <span id="1490">1490</span>
 <span id="1491">1491</span>
+<span id="1492">1492</span>
+<span id="1493">1493</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
@@ -1537,6 +1539,7 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::vault::TreeVault</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">config</span>::{<span class="ident">Builder</span>, <span class="ident">KeyValuePersistence</span>, <span class="ident">StorageConfiguration</span>},
+    <span class="ident">database::keyvalue::BackgroundWorkerProcessTarget</span>,
     <span class="ident">error::Error</span>,
     <span class="ident">open_trees::OpenTrees</span>,
     <span class="ident">views</span>::{
@@ -2928,7 +2931,8 @@
 
 <span class="kw">impl</span> <span class="ident">Context</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">roots</span>: <span class="ident">Roots</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>, <span class="ident">key_value_persistence</span>: <span class="ident">KeyValuePersistence</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> (<span class="ident">background_sender</span>, <span class="ident">background_receiver</span>) <span class="op">=</span> <span class="ident">watch::channel</span>(<span class="prelude-val">None</span>);
+        <span class="kw">let</span> (<span class="ident">background_sender</span>, <span class="ident">background_receiver</span>) <span class="op">=</span>
+            <span class="ident">watch::channel</span>(<span class="ident">BackgroundWorkerProcessTarget::Never</span>);
         <span class="kw">let</span> <span class="ident">key_value_state</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">keyvalue::KeyValueState::new</span>(
             <span class="ident">key_value_persistence</span>,
             <span class="ident">roots</span>.<span class="ident">clone</span>(),
