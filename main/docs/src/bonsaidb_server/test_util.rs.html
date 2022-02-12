@@ -28,6 +28,9 @@
 <span id="27">27</span>
 <span id="28">28</span>
 <span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">missing_docs</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std::path::Path</span>;
@@ -39,14 +42,17 @@
 
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">BASIC_SERVER_NAME</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;basic-server&quot;</span>;
 
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>), <span class="ident">allow</span>(<span class="ident">unused_mut</span>))]</span>
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">initialize_basic_server</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Server</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">server</span> <span class="op">=</span> <span class="ident">Server::open</span>(
-        <span class="ident">ServerConfiguration::new</span>(<span class="ident">path</span>)
-            .<span class="ident">server_name</span>(<span class="ident">BASIC_SERVER_NAME</span>)
-            .<span class="ident">default_permissions</span>(<span class="ident">DefaultPermissions::AllowAll</span>)
-            .<span class="ident">with_schema</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>()<span class="question-mark">?</span>,
-    )
-    .<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">ServerConfiguration::new</span>(<span class="ident">path</span>)
+        .<span class="ident">server_name</span>(<span class="ident">BASIC_SERVER_NAME</span>)
+        .<span class="ident">default_permissions</span>(<span class="ident">DefaultPermissions::AllowAll</span>)
+        .<span class="ident">with_schema</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    {
+        <span class="ident">config</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">default_compression</span>(<span class="ident">bonsaidb_local::config::Compression::Lz4</span>);
+    }
+    <span class="kw">let</span> <span class="ident">server</span> <span class="op">=</span> <span class="ident">Server::open</span>(<span class="ident">config</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">server</span>.<span class="ident">primary_domain</span>(), <span class="ident">BASIC_SERVER_NAME</span>);
 
     <span class="ident">server</span>.<span class="ident">install_self_signed_certificate</span>(<span class="bool-val">false</span>).<span class="kw">await</span><span class="question-mark">?</span>;

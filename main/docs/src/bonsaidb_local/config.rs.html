@@ -387,9 +387,47 @@
 <span id="386">386</span>
 <span id="387">387</span>
 <span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::HashMap</span>,
     <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
+    <span class="ident">sync::Arc</span>,
     <span class="ident">time::Duration</span>,
 };
 
@@ -411,7 +449,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">argon</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// Configuration options for [`Storage`](crate::storage::Storage).</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StorageConfiguration</span> {
     <span class="doccomment">/// The path to the database. Defaults to `db.bonsaidb` if not specified.</span>
@@ -438,7 +476,7 @@
     <span class="doccomment">/// hardware as the encrypted content, anyone with access to the disk will</span>
     <span class="doccomment">/// be able to decrypt the stored data.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">vault_key_storage</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">vault_key_storage</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// The default encryption key for the database. If specified, all documents</span>
     <span class="doccomment">/// will be stored encrypted at-rest using the key specified. Having this</span>
@@ -456,11 +494,15 @@
     <span class="doccomment">/// Controls how the key-value store persists keys, on a per-database basis.</span>
     <span class="kw">pub</span> <span class="ident">key_value_persistence</span>: <span class="ident">KeyValuePersistence</span>,
 
+    <span class="doccomment">/// Sets the default compression algorithm.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">default_compression</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Compression</span><span class="op">&gt;</span>,
+
     <span class="doccomment">/// Password hashing configuration.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">argon</span>: <span class="ident">ArgonConfiguration</span>,
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">initial_schemas</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SchemaName</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DatabaseOpener</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">initial_schemas</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SchemaName</span>, <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DatabaseOpener</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">StorageConfiguration</span> {
@@ -476,6 +518,8 @@
             <span class="ident">vault_key_storage</span>: <span class="prelude-val">None</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
             <span class="ident">default_encryption_key</span>: <span class="prelude-val">None</span>,
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+            <span class="ident">default_compression</span>: <span class="prelude-val">None</span>,
             <span class="ident">workers</span>: <span class="ident">Tasks::default_for</span>(<span class="kw-2">&amp;</span><span class="ident">system</span>),
             <span class="ident">views</span>: <span class="ident">Views::default</span>(),
             <span class="ident">key_value_persistence</span>: <span class="ident">KeyValuePersistence::default</span>(),
@@ -490,13 +534,13 @@
     <span class="doccomment">/// Registers the schema provided.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_schema</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">initial_schemas</span>
-            .<span class="ident">insert</span>(<span class="ident">S::schema_name</span>(), <span class="ident">Box::new</span>(<span class="ident">StorageSchemaOpener</span>::<span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span><span class="ident">::new</span>()<span class="question-mark">?</span>));
+            .<span class="ident">insert</span>(<span class="ident">S::schema_name</span>(), <span class="ident">Arc::new</span>(<span class="ident">StorageSchemaOpener</span>::<span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span><span class="ident">::new</span>()<span class="question-mark">?</span>));
         <span class="prelude-val">Ok</span>(())
     }
 }
 
 <span class="doccomment">/// Configuration options for background tasks.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Tasks</span> {
     <span class="doccomment">/// Defines how many workers should be spawned to process tasks. This</span>
     <span class="doccomment">/// defaults to the 2x the number of cpu cores available to the system or 4, whichever is larger.</span>
@@ -709,6 +753,9 @@
     <span class="kw">fn</span> <span class="ident">tasks_worker_count</span>(<span class="self">self</span>, <span class="ident">worker_count</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Sets [`Views::check_integrity_on_open`] to `check` and returns self.</span>
     <span class="kw">fn</span> <span class="ident">check_view_integrity_on_open</span>(<span class="self">self</span>, <span class="ident">check</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span>;
+    <span class="doccomment">/// Sets [`StorageConfiguration::default_compression`](StorageConfiguration#structfield.default_compression) to `path` and returns self.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">default_compression</span>(<span class="self">self</span>, <span class="ident">compression</span>: <span class="ident">Compression</span>) -&gt; <span class="self">Self</span>;
 
     <span class="doccomment">/// Sets [`StorageConfiguration::key_value_persistence`](StorageConfiguration#structfield.key_value_persistence) to `persistence` and returns self.</span>
     <span class="kw">fn</span> <span class="ident">key_value_persistence</span>(<span class="self">self</span>, <span class="ident">persistence</span>: <span class="ident">KeyValuePersistence</span>) -&gt; <span class="self">Self</span>;
@@ -740,13 +787,19 @@
         <span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">key_storage</span>: <span class="ident">VaultKeyStorage</span>,
     ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">key_storage</span>));
+        <span class="self">self</span>.<span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Arc::new</span>(<span class="ident">key_storage</span>));
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
     <span class="kw">fn</span> <span class="ident">default_encryption_key</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">KeyId</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">default_encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">key</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">default_compression</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">compression</span>: <span class="ident">Compression</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">default_compression</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">compression</span>);
         <span class="self">self</span>
     }
 
@@ -773,6 +826,27 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">system</span> <span class="op">=</span> <span class="ident">System::new_with_specifics</span>(<span class="ident">system_specs</span>);
         <span class="ident">system</span>.<span class="ident">refresh_specifics</span>(<span class="ident">system_specs</span>);
         <span class="ident"><span class="self">Self</span>::default_for</span>(<span class="kw-2">&amp;</span><span class="ident">system</span>)
+    }
+}
+
+<span class="doccomment">/// All available compression algorithms.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Compression</span> {
+    <span class="doccomment">/// Compress data using the</span>
+    <span class="doccomment">/// [lz4](https://en.wikipedia.org/wiki/LZ4_(compression_algorithm))</span>
+    <span class="doccomment">/// algorithm. This is powered by</span>
+    <span class="doccomment">/// [lz4_flex](https://crates.io/crates/lz4_flex).</span>
+    <span class="ident">Lz4</span> <span class="op">=</span> <span class="number">1</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">Compression</span> {
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_u8</span>(<span class="ident">value</span>: <span class="ident">u8</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="ident">value</span> {
+            <span class="number">1</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident"><span class="self">Self</span>::Lz4</span>),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
+        }
     }
 }
 </code></pre></div>

@@ -170,6 +170,11 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">convert::Infallible</span>, <span class="ident">str::Utf8Error</span>, <span class="ident">string::FromUtf8Error</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
@@ -206,6 +211,11 @@
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a vault error occurred: {0}&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
     <span class="ident">Vault</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident"><span class="kw">crate</span>::vault::Error</span>),
+
+    <span class="doccomment">/// An error occurred decompressing a stored value.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a vault error occurred: {0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    <span class="ident">Compression</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">lz4_flex::block::DecompressError</span>),
 
     <span class="doccomment">/// A collection requested to be encrypted, but encryption is disabled.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;encryption is disabled, but a collection is requesting encryption&quot;</span>)]</span>
