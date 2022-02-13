@@ -233,7 +233,7 @@ impl ViewSchema for BlogPostsByCategory {
 
     fn map(&amp;self, document: &amp;BorrowedDocument&lt;'_&gt;) -&gt; ViewMapResult&lt;Self::View&gt; {
         let post = document.contents::&lt;BlogPost&gt;()?;
-        Ok(document.emit_key_and_value(post.category, 1))
+        Ok(document.header.emit_key_and_value(post.category, 1))
     }
 
     fn reduce(
