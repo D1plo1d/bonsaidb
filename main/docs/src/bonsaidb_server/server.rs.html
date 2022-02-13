@@ -2079,6 +2079,10 @@
 <span id="2078">2078</span>
 <span id="2079">2079</span>
 <span id="2080">2080</span>
+<span id="2081">2081</span>
+<span id="2082">2082</span>
+<span id="2083">2083</span>
+<span id="2084">2084</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::{<span class="ident">hash_map</span>, <span class="ident">HashMap</span>},
     <span class="ident">fmt::Debug</span>,
@@ -3707,6 +3711,10 @@
                 <span class="ident">Command::Update</span> { <span class="ident">header</span>, .. } =&gt; (
                     <span class="ident">document_resource_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">op</span>.<span class="ident">collection</span>, <span class="ident">header</span>.<span class="ident">id</span>),
                     <span class="ident">BonsaiAction::Database</span>(<span class="ident">DatabaseAction::Document</span>(<span class="ident">DocumentAction::Update</span>)),
+                ),
+                <span class="ident">Command::Overwrite</span> { <span class="ident">id</span>, .. } =&gt; (
+                    <span class="ident">document_resource_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">op</span>.<span class="ident">collection</span>, <span class="kw-2">*</span><span class="ident">id</span>),
+                    <span class="ident">BonsaiAction::Database</span>(<span class="ident">DatabaseAction::Document</span>(<span class="ident">DocumentAction::Overwrite</span>)),
                 ),
                 <span class="ident">Command::Delete</span> { <span class="ident">header</span> } =&gt; (
                     <span class="ident">document_resource_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="kw-2">&amp;</span><span class="ident">op</span>.<span class="ident">collection</span>, <span class="ident">header</span>.<span class="ident">id</span>),
