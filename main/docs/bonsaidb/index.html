@@ -40,7 +40,9 @@ See the <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/READM
     <span class="kw">type</span> <span class="ident">View</span> <span class="op">=</span> <span class="self">Self</span>;
 
     <span class="kw">fn</span> <span class="ident">map</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">document</span>: <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">Shape</span><span class="op">&gt;</span>) -&gt; <span class="ident">ViewMapResult</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::View</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">document</span>.<span class="ident">emit_key_and_value</span>(<span class="ident">document</span>.<span class="ident">contents</span>.<span class="ident">sides</span>, <span class="number">1</span>))
+        <span class="prelude-val">Ok</span>(<span class="ident">document</span>
+            .<span class="ident">header</span>
+            .<span class="ident">emit_key_and_value</span>(<span class="ident">document</span>.<span class="ident">contents</span>.<span class="ident">sides</span>, <span class="number">1</span>))
     }
 
     <span class="kw">fn</span> <span class="ident">reduce</span>(
@@ -87,6 +89,7 @@ bonsaidb = { version = &quot;*&quot;, default-features = false, features = &quot
 <code>bonsaidb-local</code>.</li>
 <li><code>local-cli</code>: Enables the <code>clap</code> structures for embedding database
 management commands into your own command-line interface.</li>
+<li><code>local-compression</code>: Enables support for compressed storage using lz4.</li>
 <li><code>local-encryption</code>: Enables at-rest encryption.</li>
 <li><code>local-instrument</code>: Enables instrumenting with <code>tracing</code>.</li>
 <li><code>local-multiuser</code>: Enables multi-user support.</li>
@@ -101,6 +104,7 @@ bonsaidb = { version = &quot;*&quot;, default-features = false, features = &quot
 <code>bonsaidb-server</code>.</li>
 <li><code>server-acme</code>: Enables automtic certificate acquisition through ACME/LetsEncrypt.</li>
 <li><code>server-cli</code>: Enables the <code>cli</code> module.</li>
+<li><code>server-compression</code>: Enables support for compressed storage using lz4.</li>
 <li><code>server-encryption</code>: Enables at-rest encryption.</li>
 <li><code>server-hyper</code>: Enables convenience functions for upgrading websockets using <code>hyper</code>.</li>
 <li><code>server-instrument</code>: Enables instrumenting with <code>tracing</code>.</li>

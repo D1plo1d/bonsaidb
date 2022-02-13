@@ -96,6 +96,8 @@
 <span id="95">95</span>
 <span id="96">96</span>
 <span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">define_basic_mapped_view</span>, <span class="ident">define_basic_unique_mapped_view</span>,
     <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">KeyId</span>},
@@ -129,7 +131,9 @@
     <span class="string">&quot;by-all-domains&quot;</span>,
     <span class="ident">String</span>,
     <span class="op">|</span><span class="ident">document</span>: <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">TlsCertificate</span><span class="op">&gt;</span><span class="op">|</span> {
-        <span class="ident">document</span>.<span class="ident">emit_key</span>(<span class="ident">document</span>.<span class="ident">contents</span>.<span class="ident">domains</span>.<span class="ident">join</span>(<span class="string">&quot;;&quot;</span>))
+        <span class="ident">document</span>
+            .<span class="ident">header</span>
+            .<span class="ident">emit_key</span>(<span class="ident">document</span>.<span class="ident">contents</span>.<span class="ident">domains</span>.<span class="ident">join</span>(<span class="string">&quot;;&quot;</span>))
     }
 );
 

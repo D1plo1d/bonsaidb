@@ -348,7 +348,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Serialized</span>, <span class="ident">view::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Serialized</span> {
-            <span class="ident">source</span>: <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">clone</span>(),
+            <span class="ident">source</span>: <span class="self">self</span>.<span class="ident">source</span>,
             <span class="ident">key</span>: <span class="ident">Bytes::from</span>(
                 <span class="self">self</span>.<span class="ident">key</span>
                     .<span class="ident">as_big_endian_bytes</span>()
@@ -575,7 +575,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">View::Key</span>, <span class="ident">View::Value</span><span class="op">&gt;</span>, <span class="ident">view::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Map::new</span>(
-            <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">clone</span>(),
+            <span class="self">self</span>.<span class="ident">source</span>,
             <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&gt;</span><span class="ident">::from_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key</span>)
                 .<span class="ident">map_err</span>(<span class="ident">view::Error::key_serialization</span>)<span class="question-mark">?</span>,
             <span class="ident">View::deserialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>)<span class="question-mark">?</span>,

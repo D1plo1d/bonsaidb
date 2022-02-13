@@ -1725,15 +1725,7 @@
 <span id="1724">1724</span>
 <span id="1725">1725</span>
 <span id="1726">1726</span>
-<span id="1727">1727</span>
-<span id="1728">1728</span>
-<span id="1729">1729</span>
-<span id="1730">1730</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">collections::BTreeMap</span>,
-    <span class="ident">marker::PhantomData</span>,
-    <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
-};
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeMap</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>};
 
 <span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -1790,7 +1782,7 @@
             .<span class="ident">apply_transaction</span>(<span class="ident">Transaction::insert</span>(<span class="ident">C::collection_name</span>(), <span class="ident">id</span>, <span class="ident">contents</span>))
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">OperationResult::DocumentUpdated</span> { <span class="ident">header</span>, .. } <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">results</span>[<span class="number">0</span>] {
-            <span class="prelude-val">Ok</span>(<span class="ident">header</span>.<span class="ident">clone</span>())
+            <span class="prelude-val">Ok</span>(<span class="kw-2">*</span><span class="ident">header</span>)
         } <span class="kw">else</span> {
             <span class="macro">unreachable!</span>(
                 <span class="string">&quot;apply_transaction on a single insert should yield a single DocumentUpdated entry&quot;</span>
@@ -1814,12 +1806,12 @@
         <span class="kw">let</span> <span class="ident">results</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">apply_transaction</span>(<span class="ident">Transaction::update</span>(
                 <span class="ident">C::collection_name</span>(),
-                <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">Deref</span><span class="op">&gt;</span><span class="ident">::deref</span>(<span class="ident">doc</span>).<span class="ident">clone</span>(),
+                <span class="kw-2">*</span><span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::as_ref</span>(<span class="ident">doc</span>),
                 <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::as_ref</span>(<span class="ident">doc</span>).<span class="ident">to_vec</span>(),
             ))
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">OperationResult::DocumentUpdated</span> { <span class="ident">header</span>, .. }) <span class="op">=</span> <span class="ident">results</span>.<span class="ident">into_iter</span>().<span class="ident">next</span>() {
-            <span class="kw-2">*</span><span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">DerefMut</span><span class="op">&gt;</span><span class="ident">::deref_mut</span>(<span class="ident">doc</span>) <span class="op">=</span> <span class="ident">header</span>;
+            <span class="kw-2">*</span><span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">AsMut</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::as_mut</span>(<span class="ident">doc</span>) <span class="op">=</span> <span class="ident">header</span>;
             <span class="prelude-val">Ok</span>(())
         } <span class="kw">else</span> {
             <span class="macro">unreachable!</span>(
@@ -1905,10 +1897,7 @@
         <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">H</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">results</span> <span class="op">=</span> <span class="self">self</span>
-            .<span class="ident">apply_transaction</span>(<span class="ident">Transaction::delete</span>(
-                <span class="ident">C::collection_name</span>(),
-                <span class="ident">doc</span>.<span class="ident">as_ref</span>().<span class="ident">clone</span>(),
-            ))
+            .<span class="ident">apply_transaction</span>(<span class="ident">Transaction::delete</span>(<span class="ident">C::collection_name</span>(), <span class="kw-2">*</span><span class="ident">doc</span>.<span class="ident">as_ref</span>()))
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">OperationResult::DocumentDeleted</span> { .. } <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">results</span>[<span class="number">0</span>] {
             <span class="prelude-val">Ok</span>(())
@@ -2302,7 +2291,10 @@
         <span class="ident">doc</span>: <span class="kw-2">&amp;mut</span> <span class="ident">D</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::as_ref</span>(<span class="ident">doc</span>).<span class="ident">to_vec</span>();
-        <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">doc</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">overwrite</span>::<span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span>(<span class="ident">doc</span>.<span class="ident">id</span>, <span class="ident">contents</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw-2">*</span><span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">AsMut</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::as_mut</span>(<span class="ident">doc</span>) <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">connection</span>
+            .<span class="ident">overwrite</span>::<span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span>(<span class="op">&lt;</span><span class="ident">D</span> <span class="kw">as</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::as_ref</span>(<span class="ident">doc</span>).<span class="ident">id</span>, <span class="ident">contents</span>)
+            .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
