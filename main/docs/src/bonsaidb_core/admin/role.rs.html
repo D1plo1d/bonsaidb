@@ -49,12 +49,12 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">define_basic_unique_mapped_view</span>,
-    <span class="ident">document::CollectionDocument</span>,
+    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Emit</span>},
     <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">NamedCollection</span>},
 };
 
 <span class="doccomment">/// An assignable role, which grants permissions based on the associated [`PermissionGroup`](crate::admin::PermissionGroup)s.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
 <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;role&quot;</span>, <span class="ident">authority</span><span class="op">=</span><span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">ByName</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Role</span> {
     <span class="doccomment">/// The name of the role. Must be unique.</span>

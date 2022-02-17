@@ -48,20 +48,18 @@
 <span id="47">47</span>
 <span id="48">48</span>
 <span id="49">49</span>
-<span id="50">50</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">define_basic_unique_mapped_view</span>,
-    <span class="ident">document::CollectionDocument</span>,
+    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Emit</span>},
     <span class="ident">permissions::Statement</span>,
     <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">NamedCollection</span>},
 };
 
 <span class="doccomment">/// A named group of permissions statements.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
 <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;permission-group&quot;</span>, <span class="ident">authority</span><span class="op">=</span><span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">ByName</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
-
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PermissionGroup</span> {
     <span class="doccomment">/// The name of the group. Must be unique.</span>
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,

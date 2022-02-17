@@ -100,7 +100,7 @@
 <span id="99">99</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">define_basic_mapped_view</span>, <span class="ident">define_basic_unique_mapped_view</span>,
-    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">KeyId</span>},
+    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Emit</span>, <span class="ident">KeyId</span>},
     <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">NamedCollection</span>, <span class="ident">Schema</span>},
 };
 <span class="kw">use</span> <span class="ident">fabruic</span>::{<span class="ident">CertificateChain</span>, <span class="ident">PrivateKey</span>};
@@ -111,7 +111,7 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>, <span class="ident">schema</span>(<span class="ident">collections</span> <span class="op">=</span> [<span class="ident"><span class="kw">crate</span>::server::acme::AcmeAccount</span>]</span>))]
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Hosted</span>;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Collection</span>)]</span>
 <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;tls-certificates&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">TlsCertificatesByDomain</span>, <span class="ident">TlsCertificateByAllDomains</span>]</span>)]
 <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyId::Master</span>), <span class="ident">encryption_optional</span>, <span class="ident">core</span> <span class="op">=</span> <span class="ident">bonsaidb_core</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TlsCertificate</span> {
@@ -158,7 +158,7 @@
     }
 );
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SerializablePrivateKey</span>(<span class="kw">pub</span> <span class="ident">PrivateKey</span>);
 
 <span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">SerializablePrivateKey</span> {

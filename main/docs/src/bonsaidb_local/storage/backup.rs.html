@@ -535,6 +535,10 @@
 <span id="534">534</span>
 <span id="535">535</span>
 <span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">io::ErrorKind</span>,
     <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
@@ -544,6 +548,7 @@
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">admin</span>,
     <span class="ident">connection</span>::{<span class="ident">Connection</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>, <span class="ident">StorageConnection</span>},
+    <span class="ident">document::DocumentId</span>,
     <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">SchemaName</span>},
     <span class="ident">transaction</span>::{<span class="ident">Operation</span>, <span class="ident">Transaction</span>},
     <span class="ident">AnyError</span>,
@@ -699,7 +704,12 @@
                 .<span class="ident">list_stored</span>(<span class="kw-2">&amp;</span><span class="ident">schema</span>, <span class="ident">database</span>.<span class="ident">name</span>(), <span class="kw-2">&amp;</span><span class="ident">collection_name</span>)
                 .<span class="kw">await</span><span class="question-mark">?</span>
                 .<span class="ident">into_iter</span>()
-                .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">id_string</span><span class="op">|</span> <span class="ident">id_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>().<span class="ident">ok</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> (<span class="ident">id</span>, <span class="ident">id_string</span>)))
+                .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">id_string</span><span class="op">|</span> {
+                    <span class="ident">id_string</span>
+                        .<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>()
+                        .<span class="ident">ok</span>()
+                        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> (<span class="ident">id</span>, <span class="ident">id_string</span>))
+                })
             {
                 <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">location</span>
                     .<span class="ident">load</span>(<span class="kw-2">&amp;</span><span class="ident">schema</span>, <span class="ident">database</span>.<span class="ident">name</span>(), <span class="kw-2">&amp;</span><span class="ident">collection_name</span>, <span class="kw-2">&amp;</span><span class="ident">id_string</span>)
@@ -1000,8 +1010,8 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
         <span class="ident">connection::Connection</span> <span class="kw">as</span> <span class="kw">_</span>,
-        <span class="ident">document::Document</span>,
         <span class="ident">keyvalue::KeyValue</span>,
+        <span class="ident">schema::SerializedCollection</span>,
         <span class="ident">test_util</span>::{<span class="ident">Basic</span>, <span class="ident">TestDirectory</span>},
     };
 
@@ -1052,12 +1062,10 @@
             .<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">restored_storage</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="string">&quot;basic&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">db</span>
-            .<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="ident">test_doc</span>.<span class="ident">id</span>)
+        <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="ident">test_doc</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">db</span>)
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">expect</span>(<span class="string">&quot;Backed up document.not found&quot;</span>);
-        <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;somevalue&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;somevalue&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">get_key</span>(<span class="string">&quot;key1&quot;</span>).<span class="ident">into_u64</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="prelude-val">Some</span>(<span class="number">1</span>));
         <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">get_key</span>(<span class="string">&quot;key2&quot;</span>).<span class="ident">into_u64</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="prelude-val">Some</span>(<span class="number">2</span>));
         <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">get_key</span>(<span class="string">&quot;key3&quot;</span>).<span class="ident">into_u64</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="prelude-val">Some</span>(<span class="number">3</span>));

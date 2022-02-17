@@ -325,7 +325,7 @@
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">document</span>::{<span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">schema::view</span>::{<span class="self">self</span>, <span class="ident">Key</span>, <span class="ident">SerializedView</span>, <span class="ident">View</span>},
 };
 
@@ -348,10 +348,10 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Serialized</span>, <span class="ident">view::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Serialized</span> {
-            <span class="ident">source</span>: <span class="self">self</span>.<span class="ident">source</span>,
+            <span class="ident">source</span>: <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">clone</span>(),
             <span class="ident">key</span>: <span class="ident">Bytes::from</span>(
                 <span class="self">self</span>.<span class="ident">key</span>
-                    .<span class="ident">as_big_endian_bytes</span>()
+                    .<span class="ident">as_ord_bytes</span>()
                     .<span class="ident">map_err</span>(<span class="ident">view::Error::key_serialization</span>)<span class="question-mark">?</span>
                     .<span class="ident">to_vec</span>(),
             ),
@@ -480,7 +480,7 @@
     <span class="doccomment">/// All associated documents by ID.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Documents can appear in a mapping query multiple times. As a result, they are stored separately to avoid duplication.</span>
-    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">D</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">DocumentId</span>, <span class="ident">D</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> <span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">V</span><span class="op">&gt;</span> {
@@ -575,8 +575,8 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">View::Key</span>, <span class="ident">View::Value</span><span class="op">&gt;</span>, <span class="ident">view::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Map::new</span>(
-            <span class="self">self</span>.<span class="ident">source</span>,
-            <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&gt;</span><span class="ident">::from_big_endian_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key</span>)
+            <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">clone</span>(),
+            <span class="op">&lt;</span><span class="ident">View::Key</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&gt;</span><span class="ident">::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key</span>)
                 .<span class="ident">map_err</span>(<span class="ident">view::Error::key_serialization</span>)<span class="question-mark">?</span>,
             <span class="ident">View::deserialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">value</span>)<span class="question-mark">?</span>,
         ))
@@ -589,7 +589,7 @@
     <span class="doccomment">/// The serialized mapped value.</span>
     <span class="kw">pub</span> <span class="ident">mappings</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Serialized</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The source document.</span>
-    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">OwnedDocument</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">DocumentId</span>, <span class="ident">OwnedDocument</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">MappedSerializedDocuments</span> {

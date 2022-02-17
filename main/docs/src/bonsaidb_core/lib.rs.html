@@ -247,6 +247,29 @@
 <span id="246">246</span>
 <span id="247">247</span>
 <span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Core functionality and types for BonsaiDb.</span>
 
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -287,6 +310,9 @@
 <span class="doccomment">/// Traits for tailoring a server.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">custom_api</span>;
 
+<span class="doccomment">/// Key trait and related types.</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">key</span>;
+
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;networking&quot;</span>)]</span>
 <span class="doccomment">/// Types for implementing the BonsaiDb network protocol.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">networking</span>;
@@ -307,7 +333,11 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">transmog</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">transmog_pot</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">document::Header</span>, <span class="ident">schema::InsertError</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">InvalidHexadecimal</span>},
+    <span class="ident">key::NextValueError</span>,
+    <span class="ident">schema::InsertError</span>,
+};
 
 <span class="doccomment">/// an enumeration of errors that this crate can produce</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
@@ -398,13 +428,19 @@
 
     <span class="doccomment">/// An attempt to update a document that doesn&#39;t exist.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;the requested document id {1} from collection {0} was not found&quot;</span>)]</span>
-    <span class="ident">DocumentNotFound</span>(<span class="ident">CollectionName</span>, <span class="ident">u64</span>),
+    <span class="ident">DocumentNotFound</span>(<span class="ident">CollectionName</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>),
+
+    <span class="doccomment">/// A value provided as a [`DocumentId`] exceeded [`DocumentId::MAX_LENGTH`].</span>
+    <span class="attribute">#[<span class="ident">error</span>(
+        <span class="string">&quot;an value was provided for a `DocumentId` that was larger than `DocumentId::MAX_LENGTH`&quot;</span>
+    )]</span>
+    <span class="ident">DocumentIdTooLong</span>,
 
     <span class="doccomment">/// When updating a document, if a situation is detected where the contents</span>
     <span class="doccomment">/// have changed on the server since the `Revision` provided, a Conflict</span>
     <span class="doccomment">/// error will be returned.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a conflict was detected while updating document {1} from collection {0}&quot;</span>)]</span>
-    <span class="ident">DocumentConflict</span>(<span class="ident">CollectionName</span>, <span class="ident">Header</span>),
+    <span class="ident">DocumentConflict</span>(<span class="ident">CollectionName</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>),
 
     <span class="doccomment">/// When saving a document in a collection with unique views, a document</span>
     <span class="doccomment">/// emits a key that is already emitted by an existing ocument, this error</span>
@@ -414,10 +450,14 @@
         <span class="doccomment">/// The name of the view that the unique key violation occurred.</span>
         <span class="ident">view</span>: <span class="ident">ViewName</span>,
         <span class="doccomment">/// The document that caused the violation.</span>
-        <span class="ident">conflicting_document</span>: <span class="ident">Header</span>,
+        <span class="ident">conflicting_document</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>,
         <span class="doccomment">/// The document that already uses the same key.</span>
-        <span class="ident">existing_document</span>: <span class="ident">Header</span>,
+        <span class="ident">existing_document</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>,
     },
+
+    <span class="doccomment">/// When pushing a document, an error occurred while generating the next unique id.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;an error occurred generating a new unique id for {0}: {1}&quot;</span>)]</span>
+    <span class="ident">DocumentPush</span>(<span class="ident">CollectionName</span>, <span class="ident">NextValueError</span>),
 
     <span class="doccomment">/// An invalid name was specified during schema creation.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;an invalid name was used in a schema: {0}&quot;</span>)]</span>
@@ -475,6 +515,12 @@
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">FromUtf8Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">FromUtf8Error</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::InvalidUnicode</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InvalidHexadecimal</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">InvalidHexadecimal</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::Serialization</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
     }
 }
 

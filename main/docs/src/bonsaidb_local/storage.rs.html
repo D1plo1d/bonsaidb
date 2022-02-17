@@ -1091,7 +1091,6 @@
 <span id="1090">1090</span>
 <span id="1091">1091</span>
 <span id="1092">1092</span>
-<span id="1093">1093</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::HashMap</span>,
     <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Display</span>},
@@ -1120,7 +1119,7 @@
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">admin</span>::{<span class="ident">user::User</span>, <span class="ident">PermissionGroup</span>, <span class="ident">Role</span>},
     <span class="ident">document::CollectionDocument</span>,
-    <span class="ident">schema</span>::{<span class="ident">NamedCollection</span>, <span class="ident">NamedReference</span>},
+    <span class="ident">schema</span>::{<span class="ident">Nameable</span>, <span class="ident">NamedCollection</span>},
 };
 <span class="kw">use</span> <span class="ident">bonsaidb_utils</span>::{<span class="ident">fast_async_lock</span>, <span class="ident">fast_async_read</span>, <span class="ident">fast_async_write</span>};
 <span class="kw">use</span> <span class="ident">futures::TryFutureExt</span>;
@@ -1608,9 +1607,9 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">update_user_with_named_id</span><span class="op">&lt;</span>
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;other</span>,
-        <span class="ident">Col</span>: <span class="ident">NamedCollection</span>,
-        <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">O</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;other</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">Col</span>: <span class="ident">NamedCollection</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span> <span class="op">=</span> <span class="ident">u64</span><span class="op">&gt;</span>,
+        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">O</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;other</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span>, <span class="ident">u64</span>) -&gt; <span class="ident">bool</span>,
     <span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -1618,11 +1617,10 @@
         <span class="ident">other</span>: <span class="ident">O</span>,
         <span class="ident">callback</span>: <span class="ident">F</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">user</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="ident">other</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">admin</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">admin</span>().<span class="kw">await</span>;
+        <span class="kw">let</span> <span class="ident">other</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">name</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">user</span>, <span class="ident">other</span>) <span class="op">=</span>
-            <span class="macro">futures::try_join!</span>(<span class="ident">User::load</span>(<span class="ident">user</span>, <span class="kw-2">&amp;</span><span class="ident">admin</span>), <span class="ident">other</span>.<span class="ident">id</span>::<span class="op">&lt;</span><span class="ident">Col</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>),)<span class="question-mark">?</span>;
+            <span class="macro">futures::try_join!</span>(<span class="ident">User::load</span>(<span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>, <span class="kw-2">&amp;</span><span class="ident">admin</span>), <span class="ident">other</span>.<span class="ident">id</span>::<span class="op">&lt;</span><span class="ident">Col</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">admin</span>),)<span class="question-mark">?</span>;
         <span class="kw">match</span> (<span class="ident">user</span>, <span class="ident">other</span>) {
             (<span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">user</span>), <span class="prelude-val">Some</span>(<span class="ident">other</span>)) =&gt; {
                 <span class="kw">if</span> <span class="ident">callback</span>(<span class="kw-2">&amp;mut</span> <span class="ident">user</span>, <span class="ident">other</span>) {
@@ -1811,7 +1809,7 @@
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">user</span>, <span class="ident">password</span>)))]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">password</span>: <span class="ident">bonsaidb_core::connection::SensitiveString</span>,
@@ -1826,7 +1824,7 @@
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>))]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">user</span>)))]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">authenticate</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">authenticate</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">authentication</span>: <span class="ident">Authentication</span>,
@@ -1861,8 +1859,8 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">add_permission_group_to_user</span><span class="op">&lt;</span>
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
     <span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
@@ -1888,8 +1886,8 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">remove_permission_group_from_user</span><span class="op">&lt;</span>
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
     <span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
@@ -1912,8 +1910,8 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">add_role_to_user</span><span class="op">&lt;</span>
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
     <span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
@@ -1935,8 +1933,8 @@
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">remove_role_from_user</span><span class="op">&lt;</span>
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
     <span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
