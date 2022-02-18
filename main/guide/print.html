@@ -232,8 +232,8 @@ impl ViewSchema for BlogPostsByCategory {
     type View = Self;
 
     fn map(&amp;self, document: &amp;BorrowedDocument&lt;'_&gt;) -&gt; ViewMapResult&lt;Self::View&gt; {
-        let post = document.contents::&lt;BlogPost&gt;()?;
-        Ok(document.header.emit_key_and_value(post.category, 1))
+        let post = BlogPost::document_contents(document)?;
+        document.header.emit_key_and_value(post.category, 1)
     }
 
     fn reduce(
@@ -262,7 +262,7 @@ server executable only.</p>
         .query_with_docs()
         .await?;
     for mapping in &amp;rust_posts {
-        let post = mapping.document.contents::&lt;BlogPost&gt;()?;
+        let post = BlogPost::document_contents(mapping.document)?;
         println!(
             &quot;Retrieved post #{} \&quot;{}\&quot;&quot;,
             mapping.document.header.id, post.title
@@ -353,29 +353,9 @@ impl EnumKey for Category {}
 </code></pre>
 <p>BonsaiDb will convert the enum to a u64 and use that value as the Key. A u64 was chosen to ensure fairly wide compatibility even with some extreme usages of bitmasks. If you wish to customize this behavior, you can implement <code>Key</code> directly.</p>
 <h3 id="implementing-the-key-trait"><a class="header" href="#implementing-the-key-trait">Implementing the <code>Key</code> trait</a></h3>
-<p>The <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.Key.html"><code>Key</code></a> trait declares two functions: <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.Key.html#tymethod.as_big_endian_bytes"><code>as_big_endian_bytes()</code></a> and <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.Key.html#tymethod.from_big_endian_bytes"><code>from_big_endian_bytes</code></a>. The intention is to convert the type to bytes using a network byte order for numerical types, and for non-numerical types, the bytes need to be stored in binary-sortable order.</p>
+<p>The <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.Key.html"><code>Key</code></a> trait declares two functions: <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.Key.html#tymethod.as_ord_bytes"><code>as_ord_bytes()</code></a> and <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.Key.html#tymethod.from_ord_bytes"><code>from_ord_bytes</code></a>. The intention is to convert the type to bytes using a network byte order for numerical types, and for non-numerical types, the bytes need to be stored in binary-sortable order.</p>
 <p>Here is how BonsaiDb implements Key for <code>EnumKey</code>:</p>
-<pre><code class="language-rust noplayground no_run">impl&lt;'a, T&gt; Key&lt;'a&gt; for T
-where
-    T: EnumKey,
-{
-    type Error = std::io::Error;
-    const LENGTH: Option&lt;usize&gt; = None;
-
-    fn as_big_endian_bytes(&amp;'a self) -&gt; Result&lt;Cow&lt;'a, [u8]&gt;, Self::Error&gt; {
-        let integer = self
-            .to_u64()
-            .map(Unsigned::from)
-            .ok_or_else(|| std::io::Error::new(ErrorKind::InvalidData, IncorrectByteLength))?;
-        Ok(Cow::Owned(integer.to_variable_vec()?))
-    }
-
-    fn from_big_endian_bytes(bytes: &amp;'a [u8]) -&gt; Result&lt;Self, Self::Error&gt; {
-        let primitive = u64::decode_variable(bytes)?;
-        Self::from_u64(primitive)
-            .ok_or_else(|| std::io::Error::new(ErrorKind::InvalidData, UnknownEnumVariant))
-    }
-}
+<pre><code class="language-rust noplayground no_run">{{#include ../../../../crates/bonsaidb-core/src/schema/view/key.rs:impl_key_for_enumkey}}
 </code></pre>
 <p>By implementing <code>Key</code> you can take full control of converting your view keys.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="schema"><a class="header" href="#schema">Schema</a></h1>
