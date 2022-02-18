@@ -156,6 +156,78 @@ multiple <a href="./schema.html">Schemas</a> or applications.</p>
 To help prevent naming collisions, an <code>authority</code> can be specified which
 provides a level of namespacing.</p>
 <p>A Collection can contain one or more <a href="./view.html">Views</a>.</p>
+<h2 id="primary-keys"><a class="header" href="#primary-keys">Primary Keys</a></h2>
+<p>All documents stored in a collection have a unique id. Primary keys in BonsaiDb
+are immutable -- once a document has an id, it cannot be changed. If you wish
+for a unique key that can be updated, use a unique view, and use a separate
+value as a primary key.</p>
+<p>The type is controlled by the <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.Collection.html#associatedtype.PrimaryKey"><code>Collection::PrimaryKey</code> associated
+type</a>. If you're using the derive macro, the type can be specified
+using the <code>primary_key</code> parameter as in <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-local/examples/primary-keys.rs">this example</a>:</p>
+<pre><code class="language-rust noplayground no_run">#[derive(Debug, Serialize, Deserialize, Collection, Eq, PartialEq)]
+#[collection(name = &quot;multi-key&quot;, primary_key = (u32, u64))]
+struct MultiKey {
+    value: String,
+}
+</code></pre>
+<p>If no <code>primary_key</code> is specified in the derive, <code>u64</code> will be used.</p>
+<p>Inserting and accessing the collection can be done using the newly defined
+primary key type:</p>
+<pre><code class="language-rust noplayground no_run">    let inserted = MultiKey {
+        value: String::from(&quot;hello&quot;),
+    }
+    .insert_into((42, 64), &amp;db)
+    .await?;
+    let retrieved = MultiKey::get((42, 64), &amp;db)
+        .await?
+        .expect(&quot;document not found&quot;);
+    assert_eq!(inserted, retrieved);
+</code></pre>
+<h3 id="natural-ids"><a class="header" href="#natural-ids">Natural Ids</a></h3>
+<p>It's not uncommon to need to store data in a database that has an &quot;external&quot;
+identifier. Some examples could be externally authenticated user profiles,
+social networking site posts, or for normalizing a single type's fields across
+multiple Collections. These types of values are often called &quot;Natural Keys&quot; or
+&quot;Natural Identifiers&quot;.</p>
+<p><a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.SerializedCollection.html#method.natural_id"><code>SerializedCollection::natural_id()</code></a> or
+<a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.DefaultSerialization.html#method.natural_id"><code>DefaultSerialzation::natural_id</code></a> can be implemented to return
+a value from the contents of a new document. When using the derive marco, the
+<code>natural_id</code> parameter can be specified with either a closure or a path to a
+function with the same signature.</p>
+<p>In this <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-local/examples/primary-keys.rs">example</a>, the <code>UserProfile</code> type is used to represent a user that has a
+unique ID in an external database:</p>
+<pre><code class="language-rust noplayground no_run">#[derive(Debug, Serialize, Deserialize, Collection, Eq, PartialEq)]
+#[collection(name = &quot;user-profiles&quot;, primary_key = u32, natural_id = |user: &amp;UserProfile| Some(user.external_id))]
+struct UserProfile {
+    pub external_id: u32,
+    pub name: String,
+}
+</code></pre>
+<p>When pushing a <code>UserProfile</code> into the collection, the id will automatically be
+assigned by calling <code>natural_id()</code>:</p>
+<pre><code class="language-rust noplayground no_run">    let user = UserProfile {
+        external_id: 42,
+        name: String::from(&quot;ecton&quot;),
+    }
+    .push_into(&amp;db)
+    .await?;
+    let retrieved_from_database = UserProfile::get(42, &amp;db)
+        .await?
+        .expect(&quot;document not found&quot;);
+    assert_eq!(user, retrieved_from_database);
+</code></pre>
+<h3 id="custom-primary-keys"><a class="header" href="#custom-primary-keys">Custom Primary Keys</a></h3>
+<p>All primary keys must implement the <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/key/trait.Key.html"><code>Key</code> trait</a> . BonsaiDb provides implementations for many types, but any type that implements the trait can be used.</p>
+<p>When using <code>push</code>/<code>push_into</code>, BonsaiDb needs to assign a unique ID to the incoming document. If <code>natural_id()</code> returns None, the storage backend will handle id assignment.</p>
+<p>If the document being pushed is the first document in the collection, <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/key/trait.Key.html#method.first_value"><code>Key::first_value()</code></a> is called and the resulting value is used as the document's id.</p>
+<p>If the collection already has documents, the highest-ordered key is queried from
+the collection. <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/key/trait.Key.html#method.next_value"><code>Key::next_value()</code></a> is then called and the resulting value is
+used as the document's id. <code>Key</code> implementors should not allow <code>next_value()</code> to
+return a value that is less than the current value. <code>NextValueError::WouldWrap</code>
+should be returned instead of wrapping.</p>
+<p>Both <code>first_value()</code> and <code>next_value()</code> by default return
+<code>NextValueError::Unimplemented</code>. If any error occurs while trying to assign a
+unique id, the transaction will be aborted and rolled back.</p>
 
                     </main>
 
