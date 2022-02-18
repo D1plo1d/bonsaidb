@@ -1153,6 +1153,32 @@
 <span id="1152">1152</span>
 <span id="1153">1153</span>
 <span id="1154">1154</span>
+<span id="1155">1155</span>
+<span id="1156">1156</span>
+<span id="1157">1157</span>
+<span id="1158">1158</span>
+<span id="1159">1159</span>
+<span id="1160">1160</span>
+<span id="1161">1161</span>
+<span id="1162">1162</span>
+<span id="1163">1163</span>
+<span id="1164">1164</span>
+<span id="1165">1165</span>
+<span id="1166">1166</span>
+<span id="1167">1167</span>
+<span id="1168">1168</span>
+<span id="1169">1169</span>
+<span id="1170">1170</span>
+<span id="1171">1171</span>
+<span id="1172">1172</span>
+<span id="1173">1173</span>
+<span id="1174">1174</span>
+<span id="1175">1175</span>
+<span id="1176">1176</span>
+<span id="1177">1177</span>
+<span id="1178">1178</span>
+<span id="1179">1179</span>
+<span id="1180">1180</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">collections</span>::{<span class="ident">btree_map</span>, <span class="ident">BTreeMap</span>, <span class="ident">VecDeque</span>},
@@ -1378,7 +1404,7 @@
     <span class="ident">roots</span>: <span class="ident">Roots</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>,
     <span class="ident">persistence</span>: <span class="ident">KeyValuePersistence</span>,
     <span class="ident">last_commit</span>: <span class="ident">Timestamp</span>,
-    <span class="ident">background_worker_target</span>: <span class="ident">watch::Sender</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">background_worker_target</span>: <span class="ident">watch::Sender</span><span class="op">&lt;</span><span class="ident">BackgroundWorkerProcessTarget</span><span class="op">&gt;</span>,
     <span class="ident">expiring_keys</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Timestamp</span><span class="op">&gt;</span>,
     <span class="ident">expiration_order</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="ident">dirty_keys</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Entry</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -1390,7 +1416,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">persistence</span>: <span class="ident">KeyValuePersistence</span>,
         <span class="ident">roots</span>: <span class="ident">Roots</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>,
-        <span class="ident">background_worker_target</span>: <span class="ident">watch::Sender</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">background_worker_target</span>: <span class="ident">watch::Sender</span><span class="op">&lt;</span><span class="ident">BackgroundWorkerProcessTarget</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">roots</span>,
@@ -1747,18 +1773,33 @@
                     <span class="kw-2">*</span><span class="ident">expiration_timeout</span>
                 });
         <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Timestamp::now</span>();
-        <span class="kw">let</span> <span class="ident">duration_until_commit</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">keys_being_persisted</span>.<span class="ident">is_some</span>() {
-            <span class="ident">Duration::MAX</span>
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">keys_being_persisted</span>.<span class="ident">is_some</span>() {
+            <span class="ident">drop</span>(
+                <span class="self">self</span>.<span class="ident">background_worker_target</span>
+                    .<span class="ident">send</span>(<span class="ident">BackgroundWorkerProcessTarget::Never</span>),
+            );
+            <span class="kw">return</span>;
+        }
+        <span class="kw">let</span> <span class="ident">duration_until_commit</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">persistence</span>.<span class="ident">duration_until_next_commit</span>(
+            <span class="self">self</span>.<span class="ident">dirty_keys</span>.<span class="ident">len</span>(),
+            (<span class="ident">now</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">last_commit</span>).<span class="ident">unwrap_or_default</span>(),
+        );
+        <span class="kw">if</span> <span class="ident">duration_until_commit</span> <span class="op">==</span> <span class="ident">Duration::ZERO</span> {
+            <span class="ident">drop</span>(
+                <span class="self">self</span>.<span class="ident">background_worker_target</span>
+                    .<span class="ident">send</span>(<span class="ident">BackgroundWorkerProcessTarget::Now</span>),
+            );
         } <span class="kw">else</span> {
-            <span class="self">self</span>.<span class="ident">persistence</span>.<span class="ident">duration_until_next_commit</span>(
-                <span class="self">self</span>.<span class="ident">dirty_keys</span>.<span class="ident">len</span>(),
-                (<span class="ident">now</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">last_commit</span>).<span class="ident">unwrap_or_default</span>(),
-            )
-        };
-        <span class="kw">let</span> <span class="ident">commit_target</span> <span class="op">=</span> <span class="ident">now</span> <span class="op">+</span> <span class="ident">duration_until_commit</span>;
-        <span class="kw">let</span> <span class="ident">closest_target</span> <span class="op">=</span> <span class="ident">key_expiration_target</span>.<span class="ident">min</span>(<span class="ident">commit_target</span>);
-        <span class="kw">if</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">background_worker_target</span>.<span class="ident">borrow</span>() <span class="op">!</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">closest_target</span>) {
-            <span class="ident">drop</span>(<span class="self">self</span>.<span class="ident">background_worker_target</span>.<span class="ident">send</span>(<span class="prelude-val">Some</span>(<span class="ident">closest_target</span>)));
+            <span class="kw">let</span> <span class="ident">commit_target</span> <span class="op">=</span> <span class="ident">now</span> <span class="op">+</span> <span class="ident">duration_until_commit</span>;
+            <span class="kw">let</span> <span class="ident">closest_target</span> <span class="op">=</span> <span class="ident">key_expiration_target</span>.<span class="ident">min</span>(<span class="ident">commit_target</span>);
+            <span class="kw">if</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">background_worker_target</span>.<span class="ident">borrow</span>()
+                <span class="op">!</span><span class="op">=</span> <span class="ident">BackgroundWorkerProcessTarget::Timestamp</span>(<span class="ident">closest_target</span>)
+            {
+                <span class="ident">drop</span>(
+                    <span class="self">self</span>.<span class="ident">background_worker_target</span>
+                        .<span class="ident">send</span>(<span class="ident">BackgroundWorkerProcessTarget::Timestamp</span>(<span class="ident">closest_target</span>)),
+                );
+            }
         }
     }
 
@@ -1884,13 +1925,14 @@
 
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">background_worker</span>(
     <span class="ident">key_value_state</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">KeyValueState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw-2">mut</span> <span class="ident">timestamp_receiver</span>: <span class="ident">watch::Receiver</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw-2">mut</span> <span class="ident">timestamp_receiver</span>: <span class="ident">watch::Receiver</span><span class="op">&lt;</span><span class="ident">BackgroundWorkerProcessTarget</span><span class="op">&gt;</span>,
 ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">loop</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">perform_operations</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="kw">let</span> <span class="ident">current_timestamp</span> <span class="op">=</span> <span class="kw-2">*</span><span class="ident">timestamp_receiver</span>.<span class="ident">borrow_and_update</span>();
         <span class="kw">let</span> <span class="ident">changed_result</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">current_timestamp</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">target</span>) =&gt; {
+            <span class="ident">BackgroundWorkerProcessTarget::Never</span> =&gt; <span class="ident">timestamp_receiver</span>.<span class="ident">changed</span>().<span class="kw">await</span>,
+            <span class="ident">BackgroundWorkerProcessTarget::Timestamp</span>(<span class="ident">target</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">target</span> <span class="op">-</span> <span class="ident">Timestamp::now</span>();
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">remaining</span>) <span class="op">=</span> <span class="ident">remaining</span> {
                     <span class="macro">tokio::select!</span> {
@@ -1905,7 +1947,10 @@
                     <span class="prelude-val">Ok</span>(())
                 }
             }
-            <span class="prelude-val">None</span> =&gt; <span class="ident">timestamp_receiver</span>.<span class="ident">changed</span>().<span class="kw">await</span>,
+            <span class="ident">BackgroundWorkerProcessTarget::Now</span> =&gt; {
+                <span class="ident">perform_operations</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                <span class="prelude-val">Ok</span>(())
+            }
         };
 
         <span class="kw">if</span> <span class="ident">changed_result</span>.<span class="ident">is_err</span>() {
@@ -1924,6 +1969,13 @@
     }
 
     <span class="prelude-val">Ok</span>(())
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BackgroundWorkerProcessTarget</span> {
+    <span class="ident">Now</span>,
+    <span class="ident">Timestamp</span>(<span class="ident">Timestamp</span>),
+    <span class="ident">Never</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>

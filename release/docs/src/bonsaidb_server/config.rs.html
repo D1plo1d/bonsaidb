@@ -204,17 +204,27 @@
 <span id="203">203</span>
 <span id="204">204</span>
 <span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::path::Path</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_core::document::KeyId</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{<span class="ident">permissions::Permissions</span>, <span class="ident">schema::Schema</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">bonsaidb_local::config::Compression</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_local::config</span>::{<span class="ident">Builder</span>, <span class="ident">KeyValuePersistence</span>, <span class="ident">StorageConfiguration</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_local::vault::AnyVaultKeyStorage</span>;
 
 <span class="doccomment">/// Configuration options for [`Server`](crate::Server)</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServerConfiguration</span> {
@@ -310,7 +320,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">acme</span> {
     <span class="doccomment">/// The Automated Certificate Management Environment (ACME) configuration.</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AcmeConfiguration</span> {
         <span class="doccomment">/// The contact email to register with the ACME directory for the account.</span>
         <span class="kw">pub</span> <span class="ident">contact_email</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -335,7 +345,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">acme</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// The default permissions to use for all connections to the server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DefaultPermissions</span> {
     <span class="doccomment">/// Allow all permissions. Do not use outside of completely trusted environments.</span>
     <span class="ident">AllowAll</span>,
@@ -384,13 +394,19 @@
         <span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">key_storage</span>: <span class="ident">VaultKeyStorage</span>,
     ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">key_storage</span>));
+        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">std::sync::Arc::new</span>(<span class="ident">key_storage</span>));
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
     <span class="kw">fn</span> <span class="ident">default_encryption_key</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">KeyId</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">default_encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">key</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">default_compression</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">compression</span>: <span class="ident">Compression</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">default_compression</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">compression</span>);
         <span class="self">self</span>
     }
 
