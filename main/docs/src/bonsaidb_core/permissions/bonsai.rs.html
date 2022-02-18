@@ -265,7 +265,6 @@
 <span id="264">264</span>
 <span id="265">265</span>
 <span id="266">266</span>
-<span id="267">267</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>, <span class="ident">ResourceName</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
@@ -301,12 +300,11 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">document_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
     <span class="ident">database</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Identifier</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-    <span class="ident">id</span>: <span class="ident">DocumentId</span>,
+    <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DocumentId</span>,
 ) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="comment">// TODO this should borrow DocumentId</span>
     <span class="ident">collection_resource_name</span>(<span class="ident">database</span>, <span class="ident">collection</span>)
         .<span class="ident">and</span>(<span class="string">&quot;document&quot;</span>)
-        .<span class="ident">and</span>(<span class="ident">id</span>.<span class="ident">to_string</span>())
+        .<span class="ident">and</span>(<span class="ident">id</span>)
 }
 
 <span class="doccomment">/// Creaets a resource name for a `view` within `database`.</span>
