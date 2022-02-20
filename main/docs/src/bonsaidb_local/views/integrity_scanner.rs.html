@@ -250,7 +250,6 @@
 <span id="249">249</span>
 <span id="250">250</span>
 <span id="251">251</span>
-<span id="252">252</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">collections::HashSet</span>, <span class="ident">convert::Infallible</span>, <span class="ident">hash::Hash</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">async_lock::Mutex</span>;
@@ -272,8 +271,7 @@
 };
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">database</span>::{<span class="ident">document_tree_name</span>, <span class="ident">Database</span>},
-    <span class="ident">jobs</span>::{<span class="ident">task</span>, <span class="ident">Job</span>, <span class="ident">Keyed</span>},
-    <span class="ident">tasks::Task</span>,
+    <span class="ident">tasks</span>::{<span class="ident">handle::Handle</span>, <span class="ident">Job</span>, <span class="ident">Keyed</span>, <span class="ident">Task</span>},
     <span class="ident">Error</span>,
 };
 
@@ -291,7 +289,7 @@
     <span class="kw">pub</span> <span class="ident">view_name</span>: <span class="ident">ViewName</span>,
 }
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">OptionalViewMapHandle</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">task::Handle</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Error</span>, <span class="ident">Task</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">OptionalViewMapHandle</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Handle</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">impl</span> <span class="ident">Job</span> <span class="kw">for</span> <span class="ident">IntegrityScanner</span> {
