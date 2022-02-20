@@ -2022,6 +2022,13 @@
 <span id="2021">2021</span>
 <span id="2022">2022</span>
 <span id="2023">2023</span>
+<span id="2024">2024</span>
+<span id="2025">2025</span>
+<span id="2026">2026</span>
+<span id="2027">2027</span>
+<span id="2028">2028</span>
+<span id="2029">2029</span>
+<span id="2030">2030</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -2344,6 +2351,13 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestDirectory</span>(<span class="kw">pub</span> <span class="ident">PathBuf</span>);
 
 <span class="kw">impl</span> <span class="ident">TestDirectory</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">absolute</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">S</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">as_ref</span>().<span class="ident">to_owned</span>();
+        <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">exists</span>() {
+            <span class="ident">std::fs::remove_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>).<span class="ident">expect</span>(<span class="string">&quot;error clearing temporary directory&quot;</span>);
+        }
+        <span class="self">Self</span>(<span class="ident">path</span>)
+    }
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="ident">S</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">std::env::temp_dir</span>().<span class="ident">join</span>(<span class="ident">name</span>);
         <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">exists</span>() {
