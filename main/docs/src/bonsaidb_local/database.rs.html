@@ -1665,6 +1665,30 @@
 <span id="1664">1664</span>
 <span id="1665">1665</span>
 <span id="1666">1666</span>
+<span id="1667">1667</span>
+<span id="1668">1668</span>
+<span id="1669">1669</span>
+<span id="1670">1670</span>
+<span id="1671">1671</span>
+<span id="1672">1672</span>
+<span id="1673">1673</span>
+<span id="1674">1674</span>
+<span id="1675">1675</span>
+<span id="1676">1676</span>
+<span id="1677">1677</span>
+<span id="1678">1678</span>
+<span id="1679">1679</span>
+<span id="1680">1680</span>
+<span id="1681">1681</span>
+<span id="1682">1682</span>
+<span id="1683">1683</span>
+<span id="1684">1684</span>
+<span id="1685">1685</span>
+<span id="1686">1686</span>
+<span id="1687">1687</span>
+<span id="1688">1688</span>
+<span id="1689">1689</span>
+<span id="1690">1690</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
@@ -1698,7 +1722,8 @@
         <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">Map</span>, <span class="ident">MappedValue</span>, <span class="ident">Schema</span>, <span class="ident">Schematic</span>, <span class="ident">ViewName</span>,
     },
     <span class="ident">transaction</span>::{
-        <span class="self">self</span>, <span class="ident">ChangedDocument</span>, <span class="ident">Changes</span>, <span class="ident">Command</span>, <span class="ident">Operation</span>, <span class="ident">OperationResult</span>, <span class="ident">Transaction</span>,
+        <span class="self">self</span>, <span class="ident">ChangedDocument</span>, <span class="ident">Changes</span>, <span class="ident">Command</span>, <span class="ident">DocumentChanges</span>, <span class="ident">Operation</span>, <span class="ident">OperationResult</span>,
+        <span class="ident">Transaction</span>,
     },
 };
 <span class="kw">use</span> <span class="ident">bonsaidb_utils::fast_async_lock</span>;
@@ -1731,6 +1756,7 @@
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">keyvalue</span>;
 
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">compat</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pubsub</span>;
 
 <span class="doccomment">/// A local, file-based database.</span>
@@ -2346,6 +2372,8 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">changed_documents</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">collection_indexes</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">collections</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">for</span> <span class="ident">op</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">transaction</span>.<span class="ident">operations</span> {
             <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">execute_operation</span>(
                 <span class="ident">op</span>,
@@ -2353,57 +2381,83 @@
                 <span class="kw-2">&amp;</span><span class="ident">open_trees</span>.<span class="ident">trees_index_by_name</span>,
             )<span class="question-mark">?</span>;
 
-            <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">result</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">collection</span>, <span class="ident">id</span>, <span class="ident">deleted</span>)) <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">result</span> {
                 <span class="ident">OperationResult::DocumentUpdated</span> { <span class="ident">header</span>, <span class="ident">collection</span> } =&gt; {
-                    <span class="ident">changed_documents</span>.<span class="ident">push</span>(<span class="ident">ChangedDocument</span> {
-                        <span class="ident">collection</span>: <span class="ident">collection</span>.<span class="ident">clone</span>(),
-                        <span class="ident">id</span>: <span class="ident">header</span>.<span class="ident">id</span>,
-                        <span class="ident">deleted</span>: <span class="bool-val">false</span>,
-                    });
+                    <span class="prelude-val">Some</span>((<span class="ident">collection</span>, <span class="ident">header</span>.<span class="ident">id</span>, <span class="bool-val">false</span>))
                 }
                 <span class="ident">OperationResult::DocumentDeleted</span> { <span class="ident">id</span>, <span class="ident">collection</span> } =&gt; {
-                    <span class="ident">changed_documents</span>.<span class="ident">push</span>(<span class="ident">ChangedDocument</span> {
-                        <span class="ident">collection</span>: <span class="ident">collection</span>.<span class="ident">clone</span>(),
-                        <span class="ident">id</span>: <span class="kw-2">*</span><span class="ident">id</span>,
-                        <span class="ident">deleted</span>: <span class="bool-val">true</span>,
-                    });
+                    <span class="prelude-val">Some</span>((<span class="ident">collection</span>, <span class="kw-2">*</span><span class="ident">id</span>, <span class="bool-val">true</span>))
                 }
-                <span class="ident">OperationResult::Success</span> =&gt; {}
+                <span class="ident">OperationResult::Success</span> =&gt; <span class="prelude-val">None</span>,
+            } {
+                <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">collection_indexes</span>.<span class="ident">get</span>(<span class="ident">collection</span>) {
+                    <span class="prelude-val">Some</span>(<span class="ident">index</span>) =&gt; <span class="kw-2">*</span><span class="ident">index</span>,
+                    <span class="prelude-val">None</span> =&gt; {
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">id</span>) <span class="op">=</span> <span class="ident">u16::try_from</span>(<span class="ident">collections</span>.<span class="ident">len</span>()) {
+                            <span class="ident">collection_indexes</span>.<span class="ident">insert</span>(<span class="ident">collection</span>.<span class="ident">clone</span>(), <span class="ident">id</span>);
+                            <span class="ident">collections</span>.<span class="ident">push</span>(<span class="ident">collection</span>.<span class="ident">clone</span>());
+                            <span class="ident">id</span>
+                        } <span class="kw">else</span> {
+                            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::TransactionTooLarge</span>);
+                        }
+                    }
+                };
+                <span class="ident">changed_documents</span>.<span class="ident">push</span>(<span class="ident">ChangedDocument</span> {
+                    <span class="ident">collection</span>,
+                    <span class="ident">id</span>,
+                    <span class="ident">deleted</span>,
+                });
             }
             <span class="ident">results</span>.<span class="ident">push</span>(<span class="ident">result</span>);
         }
 
-        <span class="comment">// Insert invalidations for each record changed</span>
-        <span class="kw">for</span> (<span class="ident">collection</span>, <span class="ident">changed_documents</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">changed_documents</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">group_by</span>(<span class="op">|</span><span class="ident">doc</span><span class="op">|</span> <span class="ident">doc</span>.<span class="ident">collection</span>.<span class="ident">clone</span>())
-        {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">views</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">schema</span>.<span class="ident">views_in_collection</span>(<span class="kw-2">&amp;</span><span class="ident">collection</span>) {
-                <span class="kw">let</span> <span class="ident">changed_documents</span> <span class="op">=</span> <span class="ident">changed_documents</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-                <span class="kw">for</span> <span class="ident">view</span> <span class="kw">in</span> <span class="ident">views</span> {
-                    <span class="kw">if</span> <span class="op">!</span><span class="ident">view</span>.<span class="ident">unique</span>() {
-                        <span class="kw">let</span> <span class="ident">view_name</span> <span class="op">=</span> <span class="ident">view</span>.<span class="ident">view_name</span>();
-                        <span class="kw">for</span> <span class="ident">changed_document</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">changed_documents</span> {
-                            <span class="kw">let</span> <span class="ident">invalidated_docs</span> <span class="op">=</span> <span class="ident">roots_transaction</span>
-                                .<span class="ident">tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span><span class="op">&gt;</span>(
-                                    <span class="ident">open_trees</span>.<span class="ident">trees_index_by_name</span>
-                                        [<span class="kw-2">&amp;</span><span class="ident">view_invalidated_docs_tree_name</span>(<span class="kw-2">&amp;</span><span class="ident">view_name</span>)],
-                                )
-                                .<span class="ident">unwrap</span>();
-                            <span class="ident">invalidated_docs</span>.<span class="ident">set</span>(<span class="ident">changed_document</span>.<span class="ident">id</span>.<span class="ident">as_ref</span>().<span class="ident">to_vec</span>(), <span class="string">b&quot;&quot;</span>)<span class="question-mark">?</span>;
-                        }
-                    }
-                }
-            }
-        }
+        <span class="self">self</span>.<span class="ident">invalidate_changed_documents</span>(
+            <span class="kw-2">&amp;mut</span> <span class="ident">roots_transaction</span>,
+            <span class="kw-2">&amp;</span><span class="ident">open_trees</span>,
+            <span class="kw-2">&amp;</span><span class="ident">collections</span>,
+            <span class="kw-2">&amp;</span><span class="ident">changed_documents</span>,
+        )<span class="question-mark">?</span>;
 
         <span class="ident">roots_transaction</span>
             .<span class="ident">entry_mut</span>()
-            .<span class="ident">set_data</span>(<span class="ident">pot::to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">Changes::Documents</span>(<span class="ident">changed_documents</span>))<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+            .<span class="ident">set_data</span>(<span class="ident">compat::serialize_executed_transaction_changes</span>(
+                <span class="kw-2">&amp;</span><span class="ident">Changes::Documents</span>(<span class="ident">DocumentChanges</span> {
+                    <span class="ident">collections</span>,
+                    <span class="ident">documents</span>: <span class="ident">changed_documents</span>,
+                }),
+            )<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
         <span class="ident">roots_transaction</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="ident">results</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">invalidate_changed_documents</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">roots_transaction</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ExecutingTransaction</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>,
+        <span class="ident">open_trees</span>: <span class="kw-2">&amp;</span><span class="ident">OpenTrees</span>,
+        <span class="ident">collections</span>: <span class="kw-2">&amp;</span>[<span class="ident">CollectionName</span>],
+        <span class="ident">changed_documents</span>: <span class="kw-2">&amp;</span>[<span class="ident">ChangedDocument</span>],
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">for</span> (<span class="ident">collection</span>, <span class="ident">changed_documents</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">changed_documents</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">group_by</span>(<span class="op">|</span><span class="ident">doc</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">collections</span>[<span class="ident">usize::from</span>(<span class="ident">doc</span>.<span class="ident">collection</span>)])
+        {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">views</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">schema</span>.<span class="ident">views_in_collection</span>(<span class="ident">collection</span>) {
+                <span class="kw">let</span> <span class="ident">changed_documents</span> <span class="op">=</span> <span class="ident">changed_documents</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+                <span class="kw">for</span> <span class="ident">view</span> <span class="kw">in</span> <span class="ident">views</span>.<span class="ident">into_iter</span>().<span class="ident">filter</span>(<span class="op">|</span><span class="ident">view</span><span class="op">|</span> <span class="op">!</span><span class="ident">view</span>.<span class="ident">unique</span>()) {
+                    <span class="kw">let</span> <span class="ident">view_name</span> <span class="op">=</span> <span class="ident">view</span>.<span class="ident">view_name</span>();
+                    <span class="kw">let</span> <span class="ident">tree_name</span> <span class="op">=</span> <span class="ident">view_invalidated_docs_tree_name</span>(<span class="kw-2">&amp;</span><span class="ident">view_name</span>);
+                    <span class="kw">for</span> <span class="ident">changed_document</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">changed_documents</span> {
+                        <span class="kw">let</span> <span class="ident">invalidated_docs</span> <span class="op">=</span> <span class="ident">roots_transaction</span>
+                            .<span class="ident">tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span><span class="op">&gt;</span>(<span class="ident">open_trees</span>.<span class="ident">trees_index_by_name</span>[<span class="kw-2">&amp;</span><span class="ident">tree_name</span>])
+                            .<span class="ident">unwrap</span>();
+                        <span class="ident">invalidated_docs</span>.<span class="ident">set</span>(<span class="ident">changed_document</span>.<span class="ident">id</span>.<span class="ident">as_ref</span>().<span class="ident">to_vec</span>(), <span class="string">b&quot;&quot;</span>)<span class="question-mark">?</span>;
+                    }
+                }
+            }
+        }
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">fn</span> <span class="ident">execute_operation</span>(
@@ -2995,13 +3049,7 @@
                     .<span class="ident">into_iter</span>()
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">entry</span><span class="op">|</span> {
                         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="ident">entry</span>.<span class="ident">data</span>() {
-                            <span class="kw">let</span> <span class="ident">changes</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">pot::from_slice</span>(<span class="ident">data</span>) {
-                                <span class="prelude-val">Ok</span>(<span class="ident">changes</span>) =&gt; <span class="ident">changes</span>,
-                                <span class="prelude-val">Err</span>(<span class="ident">pot::Error::NotAPot</span>) =&gt; {
-                                    <span class="ident">Changes::Documents</span>(<span class="ident">bincode::deserialize</span>(<span class="ident">entry</span>.<span class="ident">data</span>().<span class="ident">unwrap</span>())<span class="question-mark">?</span>)
-                                }
-                                <span class="ident">other</span> =&gt; <span class="ident">other</span><span class="question-mark">?</span>,
-                            };
+                            <span class="kw">let</span> <span class="ident">changes</span> <span class="op">=</span> <span class="ident">compat::deserialize_executed_transaction_changes</span>(<span class="ident">data</span>)<span class="question-mark">?</span>;
                             <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">transaction::Executed</span> {
                                 <span class="ident">id</span>: <span class="ident">entry</span>.<span class="ident">id</span>,
                                 <span class="ident">changes</span>,

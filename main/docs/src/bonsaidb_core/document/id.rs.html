@@ -390,14 +390,6 @@
 <span id="389">389</span>
 <span id="390">390</span>
 <span id="391">391</span>
-<span id="392">392</span>
-<span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
-<span id="398">398</span>
-<span id="399">399</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp::Ordering</span>,
     <span class="ident">fmt</span>::{<span class="ident">Display</span>, <span class="ident">Write</span>},
@@ -743,14 +735,6 @@
         } <span class="kw">else</span> {
             <span class="prelude-val">Err</span>(<span class="ident">E::invalid_length</span>(<span class="ident">v</span>.<span class="ident">len</span>(), <span class="kw-2">&amp;</span><span class="string">&quot;&lt; 64 bytes&quot;</span>))
         }
-    }
-
-    <span class="comment">// Provided for backwards compatibility. No new data is written with this.</span>
-    <span class="kw">fn</span> <span class="ident">visit_u64</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">v</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Value</span>, <span class="ident">E</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">E</span>: <span class="ident">serde::de::Error</span>,
-    {
-        <span class="prelude-val">Ok</span>(<span class="ident">DocumentId::from_u64</span>(<span class="ident">v</span>))
     }
 }
 
