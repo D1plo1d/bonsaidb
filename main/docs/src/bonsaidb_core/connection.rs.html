@@ -1817,6 +1817,71 @@
 <span id="1816">1816</span>
 <span id="1817">1817</span>
 <span id="1818">1818</span>
+<span id="1819">1819</span>
+<span id="1820">1820</span>
+<span id="1821">1821</span>
+<span id="1822">1822</span>
+<span id="1823">1823</span>
+<span id="1824">1824</span>
+<span id="1825">1825</span>
+<span id="1826">1826</span>
+<span id="1827">1827</span>
+<span id="1828">1828</span>
+<span id="1829">1829</span>
+<span id="1830">1830</span>
+<span id="1831">1831</span>
+<span id="1832">1832</span>
+<span id="1833">1833</span>
+<span id="1834">1834</span>
+<span id="1835">1835</span>
+<span id="1836">1836</span>
+<span id="1837">1837</span>
+<span id="1838">1838</span>
+<span id="1839">1839</span>
+<span id="1840">1840</span>
+<span id="1841">1841</span>
+<span id="1842">1842</span>
+<span id="1843">1843</span>
+<span id="1844">1844</span>
+<span id="1845">1845</span>
+<span id="1846">1846</span>
+<span id="1847">1847</span>
+<span id="1848">1848</span>
+<span id="1849">1849</span>
+<span id="1850">1850</span>
+<span id="1851">1851</span>
+<span id="1852">1852</span>
+<span id="1853">1853</span>
+<span id="1854">1854</span>
+<span id="1855">1855</span>
+<span id="1856">1856</span>
+<span id="1857">1857</span>
+<span id="1858">1858</span>
+<span id="1859">1859</span>
+<span id="1860">1860</span>
+<span id="1861">1861</span>
+<span id="1862">1862</span>
+<span id="1863">1863</span>
+<span id="1864">1864</span>
+<span id="1865">1865</span>
+<span id="1866">1866</span>
+<span id="1867">1867</span>
+<span id="1868">1868</span>
+<span id="1869">1869</span>
+<span id="1870">1870</span>
+<span id="1871">1871</span>
+<span id="1872">1872</span>
+<span id="1873">1873</span>
+<span id="1874">1874</span>
+<span id="1875">1875</span>
+<span id="1876">1876</span>
+<span id="1877">1877</span>
+<span id="1878">1878</span>
+<span id="1879">1879</span>
+<span id="1880">1880</span>
+<span id="1881">1881</span>
+<span id="1882">1882</span>
+<span id="1883">1883</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeMap</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>};
 
 <span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
@@ -1832,7 +1897,7 @@
     <span class="ident">document</span>::{
         <span class="ident">AnyDocumentId</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Document</span>, <span class="ident">HasHeader</span>, <span class="ident">OwnedDocument</span>,
     },
-    <span class="ident">key::Key</span>,
+    <span class="ident">key</span>::{<span class="ident">IntoPrefixRange</span>, <span class="ident">Key</span>},
     <span class="ident">permissions::Permissions</span>,
     <span class="ident">schema</span>::{
         <span class="self">self</span>,
@@ -2525,6 +2590,38 @@
         )
     }
 
+    <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// use bonsaidb_core::{</span>
+    <span class="doccomment">///     connection::Connection,</span>
+    <span class="doccomment">///     document::OwnedDocument,</span>
+    <span class="doccomment">///     schema::{Collection, Schematic, SerializedCollection},</span>
+    <span class="doccomment">///     Error,</span>
+    <span class="doccomment">/// };</span>
+    <span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default, Collection)]</span>
+    <span class="doccomment">/// #[collection(name = &quot;MyCollection&quot;, primary_key = String)]</span>
+    <span class="doccomment">/// # #[collection(core = bonsaidb_core)]</span>
+    <span class="doccomment">/// pub struct MyCollection;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// async fn starts_with_a&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;Vec&lt;OwnedDocument&gt;, Error&gt; {</span>
+    <span class="doccomment">///     db.collection::&lt;MyCollection&gt;()</span>
+    <span class="doccomment">///         .list_with_prefix(String::from(&quot;a&quot;))</span>
+    <span class="doccomment">///         .await</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_with_prefix</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="ident">Cl::PrimaryKey</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">Cl::PrimaryKey</span>: <span class="ident">IntoPrefixRange</span>,
+    {
+        <span class="ident">List::new</span>(
+            <span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>),
+            <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>().<span class="ident">map</span>(<span class="ident">AnyDocumentId::Deserialized</span>),
+        )
+    }
+
     <span class="doccomment">/// Retrieves all documents.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust</span>
@@ -2835,6 +2932,39 @@
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_range</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">range</span>: <span class="ident">R</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">range</span>.<span class="ident">into</span>()));
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Filters for entries in the view with keys that begin with `prefix`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// #[derive(View, Debug, Clone)]</span>
+    <span class="doccomment">/// #[view(name = &quot;by-name&quot;, key = String, collection = MyCollection)]</span>
+    <span class="doccomment">/// # #[view(core = bonsaidb_core)]</span>
+    <span class="doccomment">/// struct ByName;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// // score is an f32 in this example</span>
+    <span class="doccomment">/// for mapping in db</span>
+    <span class="doccomment">///     .view::&lt;ByName&gt;()</span>
+    <span class="doccomment">///     .with_key_prefix(String::from(&quot;a&quot;))</span>
+    <span class="doccomment">///     .query()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
+    <span class="doccomment">///     assert!(mapping.key.starts_with(&quot;a&quot;));</span>
+    <span class="doccomment">///     println!(&quot;{} in document {:?}&quot;, mapping.key, mapping.source);</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="ident">V::Key</span>) -&gt; <span class="self">Self</span>
+    <span class="kw">where</span>
+        <span class="ident">V::Key</span>: <span class="ident">IntoPrefixRange</span>,
+    {
+        <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>()));
         <span class="self">self</span>
     }
 

@@ -1239,6 +1239,40 @@
 <span id="1238">1238</span>
 <span id="1239">1239</span>
 <span id="1240">1240</span>
+<span id="1241">1241</span>
+<span id="1242">1242</span>
+<span id="1243">1243</span>
+<span id="1244">1244</span>
+<span id="1245">1245</span>
+<span id="1246">1246</span>
+<span id="1247">1247</span>
+<span id="1248">1248</span>
+<span id="1249">1249</span>
+<span id="1250">1250</span>
+<span id="1251">1251</span>
+<span id="1252">1252</span>
+<span id="1253">1253</span>
+<span id="1254">1254</span>
+<span id="1255">1255</span>
+<span id="1256">1256</span>
+<span id="1257">1257</span>
+<span id="1258">1258</span>
+<span id="1259">1259</span>
+<span id="1260">1260</span>
+<span id="1261">1261</span>
+<span id="1262">1262</span>
+<span id="1263">1263</span>
+<span id="1264">1264</span>
+<span id="1265">1265</span>
+<span id="1266">1266</span>
+<span id="1267">1267</span>
+<span id="1268">1268</span>
+<span id="1269">1269</span>
+<span id="1270">1270</span>
+<span id="1271">1271</span>
+<span id="1272">1272</span>
+<span id="1273">1273</span>
+<span id="1274">1274</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">task::Poll</span>};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -1253,7 +1287,7 @@
         <span class="ident">AnyDocumentId</span>, <span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">Document</span>, <span class="ident">DocumentId</span>, <span class="ident">KeyId</span>,
         <span class="ident">OwnedDocument</span>, <span class="ident">OwnedDocuments</span>,
     },
-    <span class="ident">key::Key</span>,
+    <span class="ident">key</span>::{<span class="ident">IntoPrefixRange</span>, <span class="ident">Key</span>},
     <span class="ident">schema</span>::{<span class="ident">CollectionName</span>, <span class="ident">Schematic</span>},
     <span class="ident">Error</span>,
 };
@@ -1475,7 +1509,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// use bonsaidb_core::{</span>
-<span class="doccomment">///     schema::{Collection, CollectionName, DefaultSerialization, Schematic},</span>
+<span class="doccomment">///     schema::{Collection, DefaultSerialization, Schematic},</span>
 <span class="doccomment">///     Error,</span>
 <span class="doccomment">/// };</span>
 <span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
@@ -1633,6 +1667,40 @@
         <span class="ident">List</span>(<span class="ident">connection::List::new</span>(
             <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
             <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map</span>(<span class="ident">PrimaryKey::into</span>),
+        ))
+    }
+
+    <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// use bonsaidb_core::{</span>
+    <span class="doccomment">///     connection::Connection,</span>
+    <span class="doccomment">///     document::CollectionDocument,</span>
+    <span class="doccomment">///     schema::{Collection, Schematic, SerializedCollection},</span>
+    <span class="doccomment">///     Error,</span>
+    <span class="doccomment">/// };</span>
+    <span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default, Collection)]</span>
+    <span class="doccomment">/// #[collection(name = &quot;MyCollection&quot;, primary_key = String)]</span>
+    <span class="doccomment">/// # #[collection(core = bonsaidb_core)]</span>
+    <span class="doccomment">/// pub struct MyCollection;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// async fn starts_with_a&lt;C: Connection&gt;(</span>
+    <span class="doccomment">///     db: &amp;C,</span>
+    <span class="doccomment">/// ) -&gt; Result&lt;Vec&lt;CollectionDocument&lt;MyCollection&gt;&gt;, Error&gt; {</span>
+    <span class="doccomment">///     MyCollection::list_with_prefix(String::from(&quot;a&quot;), db).await</span>
+    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">fn</span> <span class="ident">list_with_prefix</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>(<span class="ident">prefix</span>: <span class="ident"><span class="self">Self</span>::PrimaryKey</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="ident">C</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">C</span>, <span class="self">Self</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">C</span>: <span class="ident">Connection</span>,
+        <span class="self">Self</span>: <span class="ident">Sized</span>,
+        <span class="ident"><span class="self">Self</span>::PrimaryKey</span>: <span class="ident">IntoPrefixRange</span>,
+    {
+        <span class="ident">List</span>(<span class="ident">connection::List::new</span>(
+            <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
+            <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>().<span class="ident">map</span>(<span class="ident">AnyDocumentId::Deserialized</span>),
         ))
     }
 
