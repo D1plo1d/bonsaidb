@@ -427,6 +427,16 @@
 <span id="425">425</span>
 <span id="426">426</span>
 <span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::HashMap</span>,
     <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
@@ -731,38 +741,48 @@
 <span class="doccomment">/// Storage configuration builder methods.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Builder</span>: <span class="ident">Default</span> {
     <span class="doccomment">/// Creates a default configuration with `path` set.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::default</span>().<span class="ident">path</span>(<span class="ident">path</span>)
     }
 
     <span class="doccomment">/// Sets [`StorageConfiguration::path`](StorageConfiguration#structfield.memory_only) to true and returns self.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">memory_only</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
 
     <span class="doccomment">/// Registers the schema and returns self.</span>
     <span class="kw">fn</span> <span class="ident">with_schema</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Sets [`StorageConfiguration::path`](StorageConfiguration#structfield.path) to `path` and returns self.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">path</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Sets [`StorageConfiguration::unique_id`](StorageConfiguration#structfield.unique_id) to `unique_id` and returns self.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">unique_id</span>(<span class="self">self</span>, <span class="ident">unique_id</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Sets [`StorageConfiguration::vault_key_storage`](StorageConfiguration#structfield.vault_key_storage) to `key_storage` and returns self.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">vault_key_storage</span><span class="op">&lt;</span><span class="ident">VaultKeyStorage</span>: <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">key_storage</span>: <span class="ident">VaultKeyStorage</span>,
     ) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Sets [`StorageConfiguration::default_encryption_key`](StorageConfiguration#structfield.default_encryption_key) to `path` and returns self.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">default_encryption_key</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="ident">KeyId</span>) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Sets [`Tasks::worker_count`] to `worker_count` and returns self.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">tasks_worker_count</span>(<span class="self">self</span>, <span class="ident">worker_count</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Sets [`Views::check_integrity_on_open`] to `check` and returns self.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">check_view_integrity_on_open</span>(<span class="self">self</span>, <span class="ident">check</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span>;
     <span class="doccomment">/// Sets [`StorageConfiguration::default_compression`](StorageConfiguration#structfield.default_compression) to `path` and returns self.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">default_compression</span>(<span class="self">self</span>, <span class="ident">compression</span>: <span class="ident">Compression</span>) -&gt; <span class="self">Self</span>;
 
     <span class="doccomment">/// Sets [`StorageConfiguration::key_value_persistence`](StorageConfiguration#structfield.key_value_persistence) to `persistence` and returns self.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">key_value_persistence</span>(<span class="self">self</span>, <span class="ident">persistence</span>: <span class="ident">KeyValuePersistence</span>) -&gt; <span class="self">Self</span>;
 }
 

@@ -2071,6 +2071,7 @@
 <span class="comment">// This collection purposely uses names with characters that need</span>
 <span class="comment">// escaping, since it&#39;s used in backup/restore.</span>
 <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;_basic&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs_&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">BasicCount</span>, <span class="ident">BasicByParentId</span>, <span class="ident">BasicByTag</span>, <span class="ident">BasicByCategory</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Basic</span> {
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">category</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -2098,7 +2099,6 @@
         <span class="self">self</span>
     }
 
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_parent_id</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">parent_id</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">parent_id</span>.<span class="ident">into</span>().<span class="ident">to_primary_key</span>().<span class="ident">unwrap</span>());
         <span class="self">self</span>
@@ -2217,6 +2217,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Collection</span>)]</span>
 <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;encrypted-basic&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">EncryptedBasicCount</span>, <span class="ident">EncryptedBasicByParentId</span>, <span class="ident">EncryptedBasicByCategory</span>]</span>)]
 <span class="attribute">#[<span class="ident">collection</span>(<span class="ident">encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyId::Master</span>), <span class="ident">encryption_optional</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]</span>
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EncryptedBasic</span> {
     <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">category</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
@@ -2237,7 +2238,6 @@
         <span class="self">self</span>
     }
 
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">with_parent_id</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">parent_id</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">parent_id</span>);
         <span class="self">self</span>
