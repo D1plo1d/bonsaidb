@@ -383,6 +383,12 @@
 <span id="381">381</span>
 <span id="382">382</span>
 <span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 <span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
@@ -468,6 +474,12 @@
     <span class="ident">CreateUser</span> {
         <span class="doccomment">/// The unique username of the user to create.</span>
         <span class="ident">username</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Deletes a user.</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;simple&quot;</span>))]</span>
+    <span class="ident">DeleteUser</span> {
+        <span class="doccomment">/// The unique primary key of the user to be deleted.</span>
+        <span class="ident">user</span>: <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">u64</span><span class="op">&gt;</span>,
     },
     <span class="doccomment">/// Set&#39;s a user&#39;s password.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
