@@ -132,11 +132,27 @@ enabled, all DNS resolution is done with the OS’s default name resolver.</li>
 <li><code>client-password-hashing</code>: Enables the ability to use password authentication
 using Argon2.</li>
 </ul>
-<h3 id="developing-bonsaidb" class="section-header"><a href="#developing-bonsaidb">Developing BonsaiDb</a></h3><h4 id="pre-commit-hook" class="section-header"><a href="#pre-commit-hook">Pre-commit hook</a></h4>
+<h3 id="developing-bonsaidb" class="section-header"><a href="#developing-bonsaidb">Developing BonsaiDb</a></h3><h4 id="writing-unit-tests" class="section-header"><a href="#writing-unit-tests">Writing Unit Tests</a></h4>
+<p>Unless there is a good reason not to, every feature in BonsaiDb should have
+thorough unit tests. Many tests are implemented in <code>bonsaidb_core::test_util</code>
+via a macro that allows the suite to run using various methods of accessing
+BonsaiDb.</p>
+<p>Some features aren’t able to be tested using the <code>Connection</code>,
+<code>StorageConnection</code>, <code>KeyValue</code>, and <code>PubSub</code> traits only. If that’s the case,
+you should add tests to whichever crates makes the most sense to test the code.
+For example, if it’s a feature that only can be used in <code>bonsaidb-server</code>, the
+test should be somewhere in the <code>bonsaidb-server</code> crate.</p>
+<p>Tests that require both a client and server can be added to the <code>core-suite</code>
+test file in the <code>bonsaidb</code> crate.</p>
+<h4 id="checking-syntax" class="section-header"><a href="#checking-syntax">Checking Syntax</a></h4>
+<p>We use <code>clippy</code> to give additional guidance on our code. Clippy should always return with no errors, regardless of feature flags being enabled:</p>
+<div class="example-wrap"><pre class="language-bash"><code>cargo clippy --all-features</code></pre></div><h4 id="running-all-tests" class="section-header"><a href="#running-all-tests">Running all tests</a></h4>
 <p>Our CI processes require that some commands succeed without warnings or errors. These checks can be performed manually by running:</p>
 <div class="example-wrap"><pre class="language-bash"><code>cargo xtask test --fail-on-warnings</code></pre></div>
 <p>Or, if you would like to run all these checks before each commit, you can install the check as a pre-commit hook:</p>
-<div class="example-wrap"><pre class="language-bash"><code>cargo xtask install-pre-commit-hook</code></pre></div><h3 id="open-source-licenses" class="section-header"><a href="#open-source-licenses">Open-source Licenses</a></h3>
+<div class="example-wrap"><pre class="language-bash"><code>cargo xtask install-pre-commit-hook</code></pre></div><h4 id="formatting-code" class="section-header"><a href="#formatting-code">Formatting Code</a></h4>
+<p>We have a custom rustfmt configuration that enables several options only available in nightly builds:</p>
+<div class="example-wrap"><pre class="language-bash"><code>cargo +nightly fmt</code></pre></div><h3 id="open-source-licenses" class="section-header"><a href="#open-source-licenses">Open-source Licenses</a></h3>
 <p>This project, like all projects from <a href="https://khonsulabs.com/">Khonsu Labs</a>, are
 open-source. This repository is available under the <a href="./LICENSE-MIT">MIT License</a>
 or the <a href="./LICENSE-APACHE">Apache License 2.0</a>.</p>
