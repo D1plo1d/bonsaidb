@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["SdkError","Failed SDK Result"]],"struct":[["AggregatedBytes","Non-contiguous Binary Data Storage"],["Blob","Binary Blob Type"],["ByteStream","Stream of binary data"],["DateTime","DateTime in time."]]});
