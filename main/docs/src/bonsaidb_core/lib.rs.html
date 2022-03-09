@@ -271,6 +271,8 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Core functionality and types for BonsaiDb.</span>
 
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -296,9 +298,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">admin</span>;
 <span class="doccomment">/// Types for interacting with BonsaiDb.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">connection</span>;
-<span class="doccomment">/// Types for interacting with `Document`s.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">document</span>;
-<span class="doccomment">/// Limits used within BonsaiDb.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">limits</span>;
 <span class="doccomment">/// Types for defining database schema.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">schema</span>;
@@ -366,6 +366,10 @@
     <span class="doccomment">/// The [`SchemaName`] requested was not registered.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;schema &#39;{0}&#39; is not registered&quot;</span>)]</span>
     <span class="ident">SchemaNotRegistered</span>(<span class="ident">SchemaName</span>),
+
+    <span class="doccomment">/// The [`ViewName`] returned has already been registered.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;view &#39;{0}&#39; was already registered&quot;</span>)]</span>
+    <span class="ident">ViewAlreadyRegistered</span>(<span class="ident">ViewName</span>),
 
     <span class="doccomment">/// An invalid database name was specified. See</span>
     <span class="doccomment">/// [`StorageConnection::create_database()`](connection::StorageConnection::create_database)</span>

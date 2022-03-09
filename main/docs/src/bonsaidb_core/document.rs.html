@@ -225,7 +225,57 @@
 <span id="223">223</span>
 <span id="224">224</span>
 <span id="225">225</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Types for interacting with `Document`s.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A document is a stored value in a [`Collection`]. Each document has a</span>
+<span class="doccomment">//! [`Header`], which contains a unique ID and information about the currently</span>
+<span class="doccomment">//! stored revision. BonsaiDb adds extra protections by requiring update</span>
+<span class="doccomment">//! operations to include the document&#39;s current header. If the document header</span>
+<span class="doccomment">//! doesn&#39;t match the currently stored information,</span>
+<span class="doccomment">//! [`Error::DocumentConflict`](crate::Error::DocumentConflict) will be</span>
+<span class="doccomment">//! returned.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The lower-level interface for BonsaiDb uses [`OwnedDocument`] and</span>
+<span class="doccomment">//! [`BorrowedDocument`]. These types contain a buffer of bytes that have been</span>
+<span class="doccomment">//! inserted into a collection previously. This interface is useful if you are</span>
+<span class="doccomment">//! wanting to do borrowing or zero-copy deserialization, as the handling of the</span>
+<span class="doccomment">//! bytes is left up to the user. Views implemented using</span>
+<span class="doccomment">//! [`ViewSchema`](crate::schema::ViewSchema) receive a [`BorrowedDocument`]</span>
+<span class="doccomment">//! parameter to the map function.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The higher-level interface uses [`CollectionDocument&lt;T&gt;`] which</span>
+<span class="doccomment">//! automatically serializes and deserialized from</span>
+<span class="doccomment">//! [`OwnedDocument`]/[`BorrowedDocument`] using the [`SerializedCollection`]</span>
+<span class="doccomment">//! trait. This interface is recommended for most users, as it is significantly</span>
+<span class="doccomment">//! more ergonomic. Views implemented using</span>
+<span class="doccomment">//! [`CollectionViewSchema`](crate::schema::CollectionViewSchema) receive a</span>
+<span class="doccomment">//! [`CollectionDocument&lt;T&gt;`] parameter to the map function.</span>
+<span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
 
 <span class="kw">use</span> <span class="ident">arc_bytes::serde</span>::{<span class="ident">Bytes</span>, <span class="ident">CowBytes</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};

@@ -303,6 +303,10 @@
 <span id="301">301</span>
 <span id="302">302</span>
 <span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">any::TypeId</span>,
     <span class="ident">collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
@@ -400,8 +404,12 @@
         <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">collection</span>();
         <span class="kw">let</span> <span class="ident">unique</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">unique</span>();
         <span class="self">self</span>.<span class="ident">views</span>.<span class="ident">insert</span>(<span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(), <span class="ident">Box::new</span>(<span class="ident">instance</span>));
-        <span class="comment">// TODO check for name collision</span>
+
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">views_by_name</span>.<span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>) {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ViewAlreadyRegistered</span>(<span class="ident">name</span>));
+        }
         <span class="self">self</span>.<span class="ident">views_by_name</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>());
+
         <span class="kw">if</span> <span class="ident">unique</span> {
             <span class="kw">let</span> <span class="ident">unique_views</span> <span class="op">=</span> <span class="self">self</span>
                 .<span class="ident">unique_views_by_collection</span>
