@@ -248,7 +248,7 @@
 };
 <span class="kw">use</span> <span class="ident">nebari</span>::{
     <span class="ident">io::any::AnyFile</span>,
-    <span class="ident">tree</span>::{<span class="ident">KeyEvaluation</span>, <span class="ident">Operation</span>, <span class="ident">Unversioned</span>, <span class="ident">Versioned</span>},
+    <span class="ident">tree</span>::{<span class="ident">Operation</span>, <span class="ident">ScanEvaluation</span>, <span class="ident">Unversioned</span>, <span class="ident">Versioned</span>},
     <span class="ident">ArcBytes</span>, <span class="ident">Roots</span>, <span class="ident">Tree</span>,
 };
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
@@ -439,10 +439,10 @@
     <span class="ident">tree</span>.<span class="ident">scan</span>::<span class="op">&lt;</span><span class="ident">Infallible</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span>(..),
         <span class="bool-val">true</span>,
-        <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="bool-val">true</span>,
+        <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="ident">ScanEvaluation::ReadData</span>,
         <span class="op">|</span><span class="ident">key</span>, <span class="kw">_</span><span class="op">|</span> {
             <span class="ident">ids</span>.<span class="ident">push</span>(<span class="ident">key</span>.<span class="ident">clone</span>());
-            <span class="ident">KeyEvaluation::Skip</span>
+            <span class="ident">ScanEvaluation::Skip</span>
         },
         <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="macro">unreachable!</span>(),
     )<span class="question-mark">?</span>;
