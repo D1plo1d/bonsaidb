@@ -1755,6 +1755,100 @@
 <span id="1753">1753</span>
 <span id="1754">1754</span>
 <span id="1755">1755</span>
+<span id="1756">1756</span>
+<span id="1757">1757</span>
+<span id="1758">1758</span>
+<span id="1759">1759</span>
+<span id="1760">1760</span>
+<span id="1761">1761</span>
+<span id="1762">1762</span>
+<span id="1763">1763</span>
+<span id="1764">1764</span>
+<span id="1765">1765</span>
+<span id="1766">1766</span>
+<span id="1767">1767</span>
+<span id="1768">1768</span>
+<span id="1769">1769</span>
+<span id="1770">1770</span>
+<span id="1771">1771</span>
+<span id="1772">1772</span>
+<span id="1773">1773</span>
+<span id="1774">1774</span>
+<span id="1775">1775</span>
+<span id="1776">1776</span>
+<span id="1777">1777</span>
+<span id="1778">1778</span>
+<span id="1779">1779</span>
+<span id="1780">1780</span>
+<span id="1781">1781</span>
+<span id="1782">1782</span>
+<span id="1783">1783</span>
+<span id="1784">1784</span>
+<span id="1785">1785</span>
+<span id="1786">1786</span>
+<span id="1787">1787</span>
+<span id="1788">1788</span>
+<span id="1789">1789</span>
+<span id="1790">1790</span>
+<span id="1791">1791</span>
+<span id="1792">1792</span>
+<span id="1793">1793</span>
+<span id="1794">1794</span>
+<span id="1795">1795</span>
+<span id="1796">1796</span>
+<span id="1797">1797</span>
+<span id="1798">1798</span>
+<span id="1799">1799</span>
+<span id="1800">1800</span>
+<span id="1801">1801</span>
+<span id="1802">1802</span>
+<span id="1803">1803</span>
+<span id="1804">1804</span>
+<span id="1805">1805</span>
+<span id="1806">1806</span>
+<span id="1807">1807</span>
+<span id="1808">1808</span>
+<span id="1809">1809</span>
+<span id="1810">1810</span>
+<span id="1811">1811</span>
+<span id="1812">1812</span>
+<span id="1813">1813</span>
+<span id="1814">1814</span>
+<span id="1815">1815</span>
+<span id="1816">1816</span>
+<span id="1817">1817</span>
+<span id="1818">1818</span>
+<span id="1819">1819</span>
+<span id="1820">1820</span>
+<span id="1821">1821</span>
+<span id="1822">1822</span>
+<span id="1823">1823</span>
+<span id="1824">1824</span>
+<span id="1825">1825</span>
+<span id="1826">1826</span>
+<span id="1827">1827</span>
+<span id="1828">1828</span>
+<span id="1829">1829</span>
+<span id="1830">1830</span>
+<span id="1831">1831</span>
+<span id="1832">1832</span>
+<span id="1833">1833</span>
+<span id="1834">1834</span>
+<span id="1835">1835</span>
+<span id="1836">1836</span>
+<span id="1837">1837</span>
+<span id="1838">1838</span>
+<span id="1839">1839</span>
+<span id="1840">1840</span>
+<span id="1841">1841</span>
+<span id="1842">1842</span>
+<span id="1843">1843</span>
+<span id="1844">1844</span>
+<span id="1845">1845</span>
+<span id="1846">1846</span>
+<span id="1847">1847</span>
+<span id="1848">1848</span>
+<span id="1849">1849</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
@@ -2085,6 +2179,18 @@
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;internal-apis&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_headers_from_collection</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">list_headers</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">collection</span>).<span class="kw">await</span>
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;internal-apis&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">count_from_collection</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
@@ -2346,6 +2452,67 @@
             .<span class="ident">unwrap</span>();
 
             <span class="prelude-val">Ok</span>(<span class="ident">found_docs</span>)
+        })
+        .<span class="kw">await</span>
+        .<span class="ident">unwrap</span>()
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_headers</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
+        <span class="ident">sort</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
+        <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">clone</span>();
+        <span class="ident">tokio::task::spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">tree</span> <span class="op">=</span> <span class="ident">task_self</span>
+                .<span class="ident">data</span>
+                .<span class="ident">context</span>
+                .<span class="ident">roots</span>
+                .<span class="ident">tree</span>(<span class="ident">task_self</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Versioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
+                    <span class="kw-2">&amp;</span><span class="ident">collection</span>,
+                    <span class="ident">document_tree_name</span>(<span class="kw-2">&amp;</span><span class="ident">collection</span>),
+                )<span class="question-mark">?</span>)
+                .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_headers</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys_read</span> <span class="op">=</span> <span class="number">0</span>;
+            <span class="kw">let</span> <span class="ident">ids</span> <span class="op">=</span> <span class="ident">DocumentIdRange</span>(<span class="ident">ids</span>);
+            <span class="ident">tree</span>.<span class="ident">scan</span>(
+                <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">borrow_as_bytes</span>(),
+                <span class="kw">match</span> <span class="ident">sort</span> {
+                    <span class="ident">Sort::Ascending</span> =&gt; <span class="bool-val">true</span>,
+                    <span class="ident">Sort::Descending</span> =&gt; <span class="bool-val">false</span>,
+                },
+                <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="ident">ScanEvaluation::ReadData</span>,
+                <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">limit</span>) <span class="op">=</span> <span class="ident">limit</span> {
+                        <span class="kw">if</span> <span class="ident">keys_read</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">limit</span> {
+                            <span class="kw">return</span> <span class="ident">ScanEvaluation::Stop</span>;
+                        }
+
+                        <span class="ident">keys_read</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                    }
+                    <span class="ident">ScanEvaluation::ReadData</span>
+                },
+                <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">doc</span><span class="op">|</span> {
+                    <span class="ident">found_headers</span>.<span class="ident">push</span>(
+                        <span class="ident">deserialize_document</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)
+                            .<span class="ident">map</span>(<span class="ident">BorrowedDocument::into_owned</span>)
+                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">doc</span><span class="op">|</span> <span class="ident">doc</span>.<span class="ident">header</span>)
+                            .<span class="ident">map_err</span>(<span class="ident">AbortError::Other</span>)<span class="question-mark">?</span>,
+                    );
+                    <span class="prelude-val">Ok</span>(())
+                },
+            )
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">err</span> {
+                <span class="ident">AbortError::Other</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
+                <span class="ident">AbortError::Nebari</span>(<span class="ident">err</span>) =&gt; <span class="ident"><span class="kw">crate</span>::Error::from</span>(<span class="ident">err</span>),
+            })
+            .<span class="ident">unwrap</span>();
+
+            <span class="prelude-val">Ok</span>(<span class="ident">found_headers</span>)
         })
         .<span class="kw">await</span>
         .<span class="ident">unwrap</span>()
@@ -3133,6 +3300,27 @@
         <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
     {
         <span class="self">self</span>.<span class="ident">list</span>(
+            <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map_result</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> <span class="ident">id</span>.<span class="ident">into</span>().<span class="ident">to_document_id</span>())<span class="question-mark">?</span>,
+            <span class="ident">order</span>,
+            <span class="ident">limit</span>,
+            <span class="kw-2">&amp;</span><span class="ident">C::collection_name</span>(),
+        )
+        .<span class="kw">await</span>
+    }
+
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>)))]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_headers</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">R</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">R</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">C</span>: <span class="ident">schema::Collection</span>,
+        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    {
+        <span class="self">self</span>.<span class="ident">list_headers</span>(
             <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map_result</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> <span class="ident">id</span>.<span class="ident">into</span>().<span class="ident">to_document_id</span>())<span class="question-mark">?</span>,
             <span class="ident">order</span>,
             <span class="ident">limit</span>,

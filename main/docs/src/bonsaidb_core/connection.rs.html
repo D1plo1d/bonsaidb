@@ -2013,6 +2013,66 @@
 <span id="2011">2011</span>
 <span id="2012">2012</span>
 <span id="2013">2013</span>
+<span id="2014">2014</span>
+<span id="2015">2015</span>
+<span id="2016">2016</span>
+<span id="2017">2017</span>
+<span id="2018">2018</span>
+<span id="2019">2019</span>
+<span id="2020">2020</span>
+<span id="2021">2021</span>
+<span id="2022">2022</span>
+<span id="2023">2023</span>
+<span id="2024">2024</span>
+<span id="2025">2025</span>
+<span id="2026">2026</span>
+<span id="2027">2027</span>
+<span id="2028">2028</span>
+<span id="2029">2029</span>
+<span id="2030">2030</span>
+<span id="2031">2031</span>
+<span id="2032">2032</span>
+<span id="2033">2033</span>
+<span id="2034">2034</span>
+<span id="2035">2035</span>
+<span id="2036">2036</span>
+<span id="2037">2037</span>
+<span id="2038">2038</span>
+<span id="2039">2039</span>
+<span id="2040">2040</span>
+<span id="2041">2041</span>
+<span id="2042">2042</span>
+<span id="2043">2043</span>
+<span id="2044">2044</span>
+<span id="2045">2045</span>
+<span id="2046">2046</span>
+<span id="2047">2047</span>
+<span id="2048">2048</span>
+<span id="2049">2049</span>
+<span id="2050">2050</span>
+<span id="2051">2051</span>
+<span id="2052">2052</span>
+<span id="2053">2053</span>
+<span id="2054">2054</span>
+<span id="2055">2055</span>
+<span id="2056">2056</span>
+<span id="2057">2057</span>
+<span id="2058">2058</span>
+<span id="2059">2059</span>
+<span id="2060">2060</span>
+<span id="2061">2061</span>
+<span id="2062">2062</span>
+<span id="2063">2063</span>
+<span id="2064">2064</span>
+<span id="2065">2065</span>
+<span id="2066">2066</span>
+<span id="2067">2067</span>
+<span id="2068">2068</span>
+<span id="2069">2069</span>
+<span id="2070">2070</span>
+<span id="2071">2071</span>
+<span id="2072">2072</span>
+<span id="2073">2073</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeMap</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>};
 
 <span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
@@ -2026,7 +2086,8 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::Nameable</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">document</span>::{
-        <span class="ident">AnyDocumentId</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Document</span>, <span class="ident">HasHeader</span>, <span class="ident">OwnedDocument</span>,
+        <span class="ident">AnyDocumentId</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Document</span>, <span class="ident">HasHeader</span>, <span class="ident">Header</span>,
+        <span class="ident">OwnedDocument</span>,
     },
     <span class="ident">key</span>::{<span class="ident">IntoPrefixRange</span>, <span class="ident">Key</span>},
     <span class="ident">permissions::Permissions</span>,
@@ -2199,6 +2260,27 @@
         <span class="ident">order</span>: <span class="ident">Sort</span>,
         <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">C</span>: <span class="ident">schema::Collection</span>,
+        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>;
+
+    <span class="doccomment">/// Retrieves all documents within the range of `ids`. To retrieve all</span>
+    <span class="doccomment">/// documents, pass in `..` for `ids`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is the lower-level API. For better ergonomics, consider using one</span>
+    <span class="doccomment">/// of:</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// - [`SerializedCollection::all()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().all()`](Collection::all)</span>
+    <span class="doccomment">/// - [`SerializedCollection::list_headers()`]</span>
+    <span class="doccomment">/// - [`self.collection::&lt;Collection&gt;().list_headers()`](Collection::list_headers)</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_headers</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">R</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">R</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">C</span>: <span class="ident">schema::Collection</span>,
         <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
@@ -2916,6 +2998,44 @@
             <span class="ident">ListState::Pending</span>(<span class="prelude-val">Some</span>(<span class="ident">ListBuilder</span> {
                 <span class="ident">collection</span>, <span class="ident">range</span>, ..
             })) =&gt; <span class="ident">collection</span>.<span class="ident">connection</span>.<span class="ident">count</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">range</span>).<span class="kw">await</span>,
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Attempted to use after retrieving the result&quot;</span>),
+        }
+    }
+
+    <span class="doccomment">/// Returns the list of headers for documents contained within the range.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Order and limit are ignored if they were set.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Number of documents with id 42 or larger: {:?}&quot;,</span>
+    <span class="doccomment">///     db.collection::&lt;MyCollection&gt;().list(42..).headers().await?</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Number of documents in MyCollection: {:?}&quot;,</span>
+    <span class="doccomment">///     db.collection::&lt;MyCollection&gt;().all().headers().await?</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span> {
+            <span class="ident">ListState::Pending</span>(<span class="prelude-val">Some</span>(<span class="ident">ListBuilder</span> {
+                <span class="ident">collection</span>,
+                <span class="ident">range</span>,
+                <span class="ident">sort</span>,
+                <span class="ident">limit</span>,
+                ..
+            })) =&gt; {
+                <span class="ident">collection</span>
+                    .<span class="ident">connection</span>
+                    .<span class="ident">list_headers</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">range</span>, <span class="ident">sort</span>, <span class="ident">limit</span>)
+                    .<span class="kw">await</span>
+            }
             <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Attempted to use after retrieving the result&quot;</span>),
         }
     }

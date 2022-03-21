@@ -389,6 +389,20 @@
 <span id="387">387</span>
 <span id="388">388</span>
 <span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 <span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
@@ -396,7 +410,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">Authenticated</span>, <span class="ident">Database</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>},
-    <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">keyvalue</span>::{<span class="ident">KeyOperation</span>, <span class="ident">Output</span>},
     <span class="ident">schema</span>::{
         <span class="self">self</span>,
@@ -550,6 +564,18 @@
     <span class="doccomment">/// Retrieve multiple documents.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;simple&quot;</span>))]</span>
     <span class="ident">List</span> {
+        <span class="doccomment">/// The collection of the documents.</span>
+        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
+        <span class="doccomment">/// The range of ids to list.</span>
+        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
+        <span class="doccomment">/// The order for the query into the collection.</span>
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="doccomment">/// The maximum number of results to return.</span>
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+    },
+    <span class="doccomment">/// Retrieve headers of multiple documents.</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actionable-traits&quot;</span>, <span class="ident">actionable</span>(<span class="ident">protection</span> <span class="op">=</span> <span class="string">&quot;simple&quot;</span>))]</span>
+    <span class="ident">ListHeaders</span> {
         <span class="doccomment">/// The collection of the documents.</span>
         <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
         <span class="doccomment">/// The range of ids to list.</span>
@@ -732,6 +758,8 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DatabaseResponse</span> {
     <span class="doccomment">/// One or more documents.</span>
     <span class="ident">Documents</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>),
+    <span class="doccomment">/// One or more document headers.</span>
+    <span class="ident">DocumentHeaders</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>),
     <span class="doccomment">/// A result count.</span>
     <span class="ident">Count</span>(<span class="ident">u64</span>),
     <span class="doccomment">/// Results of [`DatabaseRequest::ApplyTransaction`].</span>

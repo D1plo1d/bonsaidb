@@ -487,13 +487,47 @@
 <span id="485">485</span>
 <span id="486">486</span>
 <span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ops::Deref</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">Connection</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>},
     <span class="ident">custom_api::CustomApi</span>,
-    <span class="ident">document</span>::{<span class="ident">AnyDocumentId</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">document</span>::{<span class="ident">AnyDocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">key::Key</span>,
     <span class="ident">networking</span>::{<span class="ident">DatabaseRequest</span>, <span class="ident">DatabaseResponse</span>, <span class="ident">Request</span>, <span class="ident">Response</span>},
     <span class="ident">schema</span>::{
@@ -638,6 +672,40 @@
             .<span class="kw">await</span><span class="question-mark">?</span>
         {
             <span class="ident">Response::Database</span>(<span class="ident">DatabaseResponse::Documents</span>(<span class="ident">documents</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">documents</span>),
+            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
+            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
+                <span class="ident">bonsaidb_core::networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
+            )),
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_headers</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">R</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">R</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">C</span>: <span class="ident">Collection</span>,
+        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    {
+        <span class="kw">match</span> <span class="self">self</span>
+            .<span class="ident">client</span>
+            .<span class="ident">send_request</span>(<span class="ident">Request::Database</span> {
+                <span class="ident">database</span>: <span class="self">self</span>.<span class="ident">name</span>.<span class="ident">to_string</span>(),
+                <span class="ident">request</span>: <span class="ident">DatabaseRequest::ListHeaders</span> {
+                    <span class="ident">collection</span>: <span class="ident">C::collection_name</span>(),
+                    <span class="ident">ids</span>: <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map_result</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> <span class="ident">id</span>.<span class="ident">into</span>().<span class="ident">to_document_id</span>())<span class="question-mark">?</span>,
+                    <span class="ident">order</span>,
+                    <span class="ident">limit</span>,
+                },
+            })
+            .<span class="kw">await</span><span class="question-mark">?</span>
+        {
+            <span class="ident">Response::Database</span>(<span class="ident">DatabaseResponse::DocumentHeaders</span>(<span class="ident">document_headers</span>)) =&gt; {
+                <span class="prelude-val">Ok</span>(<span class="ident">document_headers</span>)
+            }
             <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
             <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
                 <span class="ident">bonsaidb_core::networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),

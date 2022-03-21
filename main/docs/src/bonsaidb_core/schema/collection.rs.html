@@ -1299,6 +1299,30 @@
 <span id="1297">1297</span>
 <span id="1298">1298</span>
 <span id="1299">1299</span>
+<span id="1300">1300</span>
+<span id="1301">1301</span>
+<span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
+<span id="1307">1307</span>
+<span id="1308">1308</span>
+<span id="1309">1309</span>
+<span id="1310">1310</span>
+<span id="1311">1311</span>
+<span id="1312">1312</span>
+<span id="1313">1313</span>
+<span id="1314">1314</span>
+<span id="1315">1315</span>
+<span id="1316">1316</span>
+<span id="1317">1317</span>
+<span id="1318">1318</span>
+<span id="1319">1319</span>
+<span id="1320">1320</span>
+<span id="1321">1321</span>
+<span id="1322">1322</span>
+<span id="1323">1323</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">task::Poll</span>};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -1310,7 +1334,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">connection</span>::{<span class="self">self</span>, <span class="ident">Connection</span>, <span class="ident">Range</span>},
     <span class="ident">document</span>::{
-        <span class="ident">AnyDocumentId</span>, <span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">Document</span>, <span class="ident">DocumentId</span>, <span class="ident">KeyId</span>,
+        <span class="ident">AnyDocumentId</span>, <span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">Document</span>, <span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">KeyId</span>,
         <span class="ident">OwnedDocument</span>, <span class="ident">OwnedDocuments</span>,
     },
     <span class="ident">key</span>::{<span class="ident">IntoPrefixRange</span>, <span class="ident">Key</span>},
@@ -2579,6 +2603,30 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">count</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">count</span>().<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Returns the number of list of document headers contained within the range.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Order and limit are ignored if they were set.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
+    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
+    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Number of documents with id 42 or larger: {:?}&quot;,</span>
+    <span class="doccomment">///     MyCollection::list(42.., db).headers().await?</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// println!(</span>
+    <span class="doccomment">///     &quot;Number of documents in MyCollection: {:?}&quot;,</span>
+    <span class="doccomment">///     MyCollection::all(db).headers().await?</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// # Ok(())</span>
+    <span class="doccomment">/// # })</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">headers</span>().<span class="kw">await</span>
     }
 }
 
