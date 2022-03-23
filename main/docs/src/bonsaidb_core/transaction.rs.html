@@ -499,6 +499,8 @@
 <span id="497">497</span>
 <span id="498">498</span>
 <span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
@@ -623,7 +625,7 @@
     <span class="doccomment">/// Pushes a new document with the serialized representation of `contents`</span>
     <span class="doccomment">/// into `collection`.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ## Automatic Id Assignment</span>
+    <span class="doccomment">/// ## Automatic ID Assignment</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This function calls [`SerializedCollection::natural_id()`] to try to</span>
     <span class="doccomment">/// retrieve a primary key value from `contents`. If an id is returned, the</span>
@@ -913,6 +915,8 @@
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">document_changes_iter</span>() {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::Qualified</span>;
+
     <span class="kw">let</span> <span class="ident">changes</span> <span class="op">=</span> <span class="ident">DocumentChanges</span> {
         <span class="ident">collections</span>: <span class="macro">vec!</span>[<span class="ident">CollectionName::private</span>(<span class="string">&quot;a&quot;</span>), <span class="ident">CollectionName::private</span>(<span class="string">&quot;b&quot;</span>)],
         <span class="ident">documents</span>: <span class="macro">vec!</span>[

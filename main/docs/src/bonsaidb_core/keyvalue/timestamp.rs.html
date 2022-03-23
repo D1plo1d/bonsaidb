@@ -105,6 +105,9 @@
 <span id="103">103</span>
 <span id="104">104</span>
 <span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>, <span class="ident">UNIX_EPOCH</span>},
@@ -124,19 +127,22 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Timestamp</span> {
+    <span class="doccomment">/// The minimum representable Timestamp. This is equivalent to [`UNIX_EPOCH`].</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MIN</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> {
+        <span class="ident">seconds</span>: <span class="number">0</span>,
+        <span class="ident">nanos</span>: <span class="number">0</span>,
+    };
+
+    <span class="doccomment">/// The maximum valid value of Timestamp.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> {
+        <span class="ident">seconds</span>: <span class="ident">u64::MAX</span>,
+        <span class="ident">nanos</span>: <span class="number">999_999_999</span>,
+    };
+
     <span class="doccomment">/// Returns the current timestamp according to the OS. Uses [`SystemTime::now()`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">now</span>() -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">SystemTime::now</span>())
-    }
-
-    <span class="doccomment">/// Returns the maximum value for this type.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">max</span>() -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">seconds</span>: <span class="ident">u64::MAX</span>,
-            <span class="ident">nanos</span>: <span class="number">999_999_999</span>,
-        }
     }
 }
 

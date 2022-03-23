@@ -2056,6 +2056,15 @@
 <span id="2054">2054</span>
 <span id="2055">2055</span>
 <span id="2056">2056</span>
+<span id="2057">2057</span>
+<span id="2058">2058</span>
+<span id="2059">2059</span>
+<span id="2060">2060</span>
+<span id="2061">2061</span>
+<span id="2062">2062</span>
+<span id="2063">2063</span>
+<span id="2064">2064</span>
+<span id="2065">2065</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -2070,23 +2079,22 @@
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 <span class="kw">use</span> <span class="ident">transmog_pot::Pot</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::admin</span>::{<span class="ident">PermissionGroup</span>, <span class="ident">Role</span>, <span class="ident">User</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">Connection</span>, <span class="ident">StorageConnection</span>},
+    <span class="ident">admin</span>::{<span class="ident">PermissionGroup</span>, <span class="ident">Role</span>, <span class="ident">User</span>},
+    <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">AsyncConnection</span>, <span class="ident">AsyncStorageConnection</span>},
     <span class="ident">document</span>::{
         <span class="ident">AnyDocumentId</span>, <span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">DocumentId</span>, <span class="ident">Emit</span>,
         <span class="ident">Header</span>, <span class="ident">KeyId</span>,
     },
-    <span class="ident">keyvalue::KeyValue</span>,
+    <span class="ident">keyvalue::AsyncKeyValue</span>,
     <span class="ident">limits</span>::{<span class="ident">LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT</span>, <span class="ident">LIST_TRANSACTIONS_MAX_RESULTS</span>},
     <span class="ident">schema</span>::{
         <span class="ident">view</span>::{
             <span class="ident">map</span>::{<span class="ident">Mappings</span>, <span class="ident">ViewMappedValue</span>},
             <span class="ident">ReduceResult</span>, <span class="ident">ViewSchema</span>,
         },
-        <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">MappedValue</span>, <span class="ident">NamedCollection</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>,
-        <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>,
+        <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">MappedValue</span>, <span class="ident">NamedCollection</span>, <span class="ident">Qualified</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>,
+        <span class="ident">Schematic</span>, <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>,
     },
     <span class="ident">Error</span>,
 };
@@ -2521,7 +2529,7 @@
     }};
 }
 
-<span class="doccomment">/// Creates a test suite that tests methods available on [`Connection`]</span>
+<span class="doccomment">/// Creates a test suite that tests methods available on [`AsyncConnection`]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">define_connection_test_suite</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness</span>:<span class="ident">ident</span>) =&gt; {
@@ -2685,7 +2693,6 @@
         }
 
         <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;local-multiuser&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;server&quot;</span>))]</span>
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">user_management</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::UserManagement</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">_db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2714,7 +2721,7 @@
     };
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">store_retrieve_update_delete_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">store_retrieve_update_delete_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">original_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;initial_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2776,10 +2783,10 @@
     <span class="macro">assert!</span>(<span class="ident">changes</span>.<span class="ident">documents</span>[<span class="number">0</span>].<span class="ident">deleted</span>);
 
     <span class="comment">// Use the Collection interface</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">original_value</span>.<span class="ident">clone</span>().<span class="ident">push_into</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">original_value</span>.<span class="ident">clone</span>().<span class="ident">push_into_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">category</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;updated&quot;</span>));
-    <span class="ident">doc</span>.<span class="ident">update</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">reloaded</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="ident">doc</span>.<span class="ident">update_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">reloaded</span> <span class="op">=</span> <span class="ident">Basic::get_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>, <span class="ident">reloaded</span>.<span class="ident">contents</span>);
 
     <span class="comment">// Test Connection::insert with a specified id</span>
@@ -2788,19 +2795,19 @@
         .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_42</span>.<span class="ident">id</span>, <span class="number">42</span>);
-    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="number">43</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into_async</span>(<span class="number">43</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="number">43</span>);
 
     <span class="comment">// Test that inserting a document with the same ID results in a conflict:</span>
     <span class="kw">let</span> <span class="ident">conflict_err</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
-        .<span class="ident">insert_into</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="ident">insert_into_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap_err</span>();
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">conflict_err</span>.<span class="ident">error</span>, <span class="ident">Error::DocumentConflict</span>(..)));
 
     <span class="comment">// Test that overwriting works</span>
     <span class="kw">let</span> <span class="ident">overwritten</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
-        .<span class="ident">overwrite_into</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="ident">overwrite_into_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
     <span class="macro">assert!</span>(<span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span> <span class="op">&gt;</span> <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span>);
@@ -2808,7 +2815,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">not_found_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">not_found_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="number">1</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">is_none</span>());
 
     <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">last_transaction_id</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">is_none</span>());
@@ -2816,7 +2823,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">conflict_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">conflict_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">original_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;initial_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2851,18 +2858,18 @@
 
     <span class="comment">// Now, let&#39;s use the CollectionDocument API to modify the document through a refetch.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">CollectionDocument</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span><span class="ident">::try_from</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
-    <span class="ident">doc</span>.<span class="ident">modify</span>(<span class="ident">db</span>, <span class="op">|</span><span class="ident">doc</span><span class="op">|</span> {
+    <span class="ident">doc</span>.<span class="ident">modify_async</span>(<span class="ident">db</span>, <span class="op">|</span><span class="ident">doc</span><span class="op">|</span> {
         <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;modify worked&quot;</span>);
     })
     .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;modify worked&quot;</span>);
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">Basic::get_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;modify worked&quot;</span>);
 
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">bad_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">bad_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::default</span>())<span class="question-mark">?</span>;
     <span class="kw">match</span> <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>).<span class="kw">await</span> {
         <span class="prelude-val">Err</span>(<span class="ident">Error::DocumentNotFound</span>(<span class="ident">collection</span>, <span class="ident">id</span>)) =&gt; {
@@ -2874,7 +2881,7 @@
     }
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">no_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">no_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">original_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;initial_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2890,7 +2897,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">doc1_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;initial_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">doc1</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">doc1_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2898,10 +2905,10 @@
     <span class="kw">let</span> <span class="ident">doc2_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;second_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">doc2</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">doc2_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::get_multiple</span>([<span class="ident">doc1</span>.<span class="ident">id</span>, <span class="ident">doc2</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::get_multiple_async</span>([<span class="ident">doc1</span>.<span class="ident">id</span>, <span class="ident">doc2</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">both_docs</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
-    <span class="kw">let</span> <span class="ident">out_of_order</span> <span class="op">=</span> <span class="ident">Basic::get_multiple</span>([<span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">doc1</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">out_of_order</span> <span class="op">=</span> <span class="ident">Basic::get_multiple_async</span>([<span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">doc1</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">out_of_order</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
     <span class="comment">// The order of get_multiple isn&#39;t guaranteed, so these two checks are done</span>
@@ -2920,7 +2927,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">doc1_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;initial_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">doc1</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">doc1_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2928,29 +2935,25 @@
     <span class="kw">let</span> <span class="ident">doc2_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;second_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">doc2</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">doc2_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">all_docs</span> <span class="op">=</span> <span class="ident">Basic::all</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">all_docs</span> <span class="op">=</span> <span class="ident">Basic::all_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">all_docs</span>.<span class="ident">len</span>(), <span class="number">2</span>);
-    <span class="macro">assert_eq!</span>(<span class="ident">Basic::all</span>(<span class="ident">db</span>).<span class="ident">count</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="number">2</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">Basic::all_async</span>(<span class="ident">db</span>).<span class="ident">count</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="number">2</span>);
 
-    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::list</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::list_async</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">both_docs</span>.<span class="ident">len</span>(), <span class="number">2</span>);
-    <span class="macro">assert_eq!</span>(<span class="ident">Basic::list</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="ident">count</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="number">2</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">Basic::list_async</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="ident">count</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="number">2</span>);
 
     <span class="macro">assert_eq!</span>(<span class="ident">both_docs</span>[<span class="number">0</span>].<span class="ident">contents</span>.<span class="ident">value</span>, <span class="ident">doc1_value</span>.<span class="ident">value</span>);
     <span class="macro">assert_eq!</span>(<span class="ident">both_docs</span>[<span class="number">1</span>].<span class="ident">contents</span>.<span class="ident">value</span>, <span class="ident">doc2_value</span>.<span class="ident">value</span>);
 
-    <span class="kw">let</span> <span class="ident">both_headers</span> <span class="op">=</span> <span class="ident">db</span>
-        .<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>()
-        .<span class="ident">list</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>)
-        .<span class="ident">headers</span>()
-        .<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">both_headers</span> <span class="op">=</span> <span class="ident">Basic::list_async</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="ident">headers</span>().<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="macro">assert_eq!</span>(<span class="ident">both_headers</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
-    <span class="kw">let</span> <span class="ident">one_doc</span> <span class="op">=</span> <span class="ident">Basic::list</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">one_doc</span> <span class="op">=</span> <span class="ident">Basic::list_async</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">one_doc</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
-    <span class="kw">let</span> <span class="ident">limited</span> <span class="op">=</span> <span class="ident">Basic::list</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+    <span class="kw">let</span> <span class="ident">limited</span> <span class="op">=</span> <span class="ident">Basic::list_async</span>(<span class="ident">doc1</span>.<span class="ident">id</span>..<span class="op">=</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">db</span>)
         .<span class="ident">limit</span>(<span class="number">1</span>)
         .<span class="ident">descending</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2960,7 +2963,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_transactions_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_transactions_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
 
     <span class="comment">// create LIST_TRANSACTIONS_MAX_RESULTS + 1 items, giving us just enough</span>
@@ -3015,7 +3018,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_query_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_query_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;A&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;B&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -3114,7 +3117,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unassociated_collection_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unassociated_collection_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">UnassociatedCollection</span><span class="op">&gt;</span>()
         .<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">UnassociatedCollection</span>)
@@ -3127,7 +3130,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unimplemented_reduce</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unimplemented_reduce</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">UniqueValue</span><span class="op">&gt;</span>().<span class="ident">reduce</span>().<span class="kw">await</span>,
         <span class="prelude-val">Err</span>(<span class="ident">Error::ReduceUnimplemented</span>)
@@ -3135,7 +3138,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;A&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -3220,16 +3223,16 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_multi_emit_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_multi_emit_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;A&quot;</span>)
         .<span class="ident">with_tag</span>(<span class="string">&quot;red&quot;</span>)
         .<span class="ident">with_tag</span>(<span class="string">&quot;green&quot;</span>)
-        .<span class="ident">push_into</span>(<span class="ident">db</span>)
+        .<span class="ident">push_into_async</span>(<span class="ident">db</span>)
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;B&quot;</span>)
         .<span class="ident">with_tag</span>(<span class="string">&quot;blue&quot;</span>)
         .<span class="ident">with_tag</span>(<span class="string">&quot;green&quot;</span>)
-        .<span class="ident">push_into</span>(<span class="ident">db</span>)
+        .<span class="ident">push_into_async</span>(<span class="ident">db</span>)
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">query</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">4</span>);
@@ -3263,7 +3266,7 @@
 
     <span class="comment">// Change tags</span>
     <span class="ident">a</span>.<span class="ident">contents</span>.<span class="ident">tags</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>), <span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>)];
-    <span class="ident">a</span>.<span class="ident">update</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="ident">a</span>.<span class="ident">update_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
@@ -3292,7 +3295,7 @@
         <span class="number">2</span>
     );
     <span class="ident">b</span>.<span class="ident">contents</span>.<span class="ident">tags</span>.<span class="ident">clear</span>();
-    <span class="ident">b</span>.<span class="ident">update</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="ident">b</span>.<span class="ident">update_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
@@ -3324,7 +3327,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_access_policy_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">view_access_policy_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;A&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -3376,7 +3379,7 @@
     <span class="macro">panic!</span>(<span class="string">&quot;view never updated&quot;</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unique_view_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unique_view_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">first_doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Unique</span><span class="op">&gt;</span>().<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Unique::new</span>(<span class="string">&quot;1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">Error::UniqueKeyViolation</span> {
@@ -3416,15 +3419,15 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">named_collection_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="ident">Unique::new</span>(<span class="string">&quot;0&quot;</span>).<span class="ident">push_into</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">original_entry</span> <span class="op">=</span> <span class="ident">Unique::entry</span>(<span class="string">&quot;1&quot;</span>, <span class="ident">db</span>)
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">named_collection_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">Unique::new</span>(<span class="string">&quot;0&quot;</span>).<span class="ident">push_into_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">original_entry</span> <span class="op">=</span> <span class="ident">Unique::entry_async</span>(<span class="string">&quot;1&quot;</span>, <span class="ident">db</span>)
         .<span class="ident">update_with</span>(<span class="op">|</span><span class="ident">_existing</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Unique</span><span class="op">|</span> <span class="macro">unreachable!</span>())
         .<span class="ident">or_insert_with</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Unique::new</span>(<span class="string">&quot;1&quot;</span>))
         .<span class="kw">await</span><span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;Document not inserted&quot;</span>);
 
-    <span class="kw">let</span> <span class="ident">updated</span> <span class="op">=</span> <span class="ident">Unique::entry</span>(<span class="string">&quot;1&quot;</span>, <span class="ident">db</span>)
+    <span class="kw">let</span> <span class="ident">updated</span> <span class="op">=</span> <span class="ident">Unique::entry_async</span>(<span class="string">&quot;1&quot;</span>, <span class="ident">db</span>)
         .<span class="ident">update_with</span>(<span class="op">|</span><span class="ident">existing</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Unique</span><span class="op">|</span> {
             <span class="ident">existing</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;2&quot;</span>);
         })
@@ -3434,10 +3437,10 @@
     <span class="macro">assert_eq!</span>(<span class="ident">original_entry</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">updated</span>.<span class="ident">header</span>.<span class="ident">id</span>);
     <span class="macro">assert_ne!</span>(<span class="ident">original_entry</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="ident">updated</span>.<span class="ident">contents</span>.<span class="ident">value</span>);
 
-    <span class="kw">let</span> <span class="ident">retrieved</span> <span class="op">=</span> <span class="ident">Unique::entry</span>(<span class="string">&quot;2&quot;</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">retrieved</span> <span class="op">=</span> <span class="ident">Unique::entry_async</span>(<span class="string">&quot;2&quot;</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">retrieved</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="ident">updated</span>.<span class="ident">contents</span>.<span class="ident">value</span>);
 
-    <span class="kw">let</span> <span class="ident">conflict</span> <span class="op">=</span> <span class="ident">Unique::entry</span>(<span class="string">&quot;2&quot;</span>, <span class="ident">db</span>)
+    <span class="kw">let</span> <span class="ident">conflict</span> <span class="op">=</span> <span class="ident">Unique::entry_async</span>(<span class="string">&quot;2&quot;</span>, <span class="ident">db</span>)
         .<span class="ident">update_with</span>(<span class="op">|</span><span class="ident">existing</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Unique</span><span class="op">|</span> {
             <span class="ident">existing</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;0&quot;</span>);
         })
@@ -3447,7 +3450,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compaction_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span> <span class="op">+</span> <span class="ident">KeyValue</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compaction_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span> <span class="op">+</span> <span class="ident">AsyncKeyValue</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">original_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;initial_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -3465,8 +3468,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;multiuser&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">user_management_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span>, <span class="ident">S</span>: <span class="ident">StorageConnection</span><span class="op">&gt;</span>(
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">user_management_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span>, <span class="ident">S</span>: <span class="ident">AsyncStorageConnection</span><span class="op">&gt;</span>(
     <span class="ident">admin</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
     <span class="ident">server</span>: <span class="ident">S</span>,
     <span class="ident">server_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
@@ -3475,7 +3477,7 @@
     <span class="kw">let</span> <span class="ident">user_id</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">create_user</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="comment">// Test the default created user state.</span>
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
@@ -3485,11 +3487,11 @@
     }
 
     <span class="kw">let</span> <span class="ident">role</span> <span class="op">=</span> <span class="ident">Role::named</span>(<span class="macro">format!</span>(<span class="string">&quot;role-{}&quot;</span>, <span class="ident">server_name</span>))
-        .<span class="ident">push_into</span>(<span class="ident">admin</span>)
+        .<span class="ident">push_into_async</span>(<span class="ident">admin</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="ident">group</span> <span class="op">=</span> <span class="ident">PermissionGroup::named</span>(<span class="macro">format!</span>(<span class="string">&quot;group-{}&quot;</span>, <span class="ident">server_name</span>))
-        .<span class="ident">push_into</span>(<span class="ident">admin</span>)
+        .<span class="ident">push_into_async</span>(<span class="ident">admin</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
 
@@ -3502,7 +3504,7 @@
 
     <span class="comment">// Test the results</span>
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
@@ -3517,7 +3519,7 @@
         .<span class="ident">unwrap</span>();
     <span class="ident">server</span>.<span class="ident">add_role_to_user</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>, <span class="kw-2">&amp;</span><span class="ident">role</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::load</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>, <span class="ident">admin</span>)
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::load_async</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>, <span class="ident">admin</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
@@ -3532,7 +3534,7 @@
         .<span class="ident">unwrap</span>();
     <span class="ident">server</span>.<span class="ident">remove_role_from_user</span>(<span class="ident">user_id</span>, <span class="kw-2">&amp;</span><span class="ident">role</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
@@ -3549,7 +3551,8 @@
     <span class="comment">// Remove the user</span>
     <span class="ident">server</span>.<span class="ident">delete_user</span>(<span class="ident">user_id</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="comment">// Test if user is removed.</span>
-    <span class="macro">assert!</span>(<span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">is_none</span>());
+
+    <span class="macro">assert!</span>(<span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">is_none</span>());
 
     <span class="prelude-val">Ok</span>(())
 }
@@ -3560,7 +3563,7 @@
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness</span>:<span class="ident">ident</span>) =&gt; {
         <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basic_kv_test</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
+            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyStatus</span>};
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvBasic</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="macro">assert_eq!</span>(
@@ -3602,7 +3605,7 @@
 
         <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">kv_concurrency</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
+            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyStatus</span>};
             <span class="kw">const</span> <span class="ident">WRITERS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100</span>;
             <span class="kw">const</span> <span class="ident">INCREMENTS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100</span>;
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvConcurrency</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -3630,7 +3633,7 @@
 
         <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">kv_set_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
+            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyStatus</span>};
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvSet</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">kv</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">with_key_namespace</span>(<span class="string">&quot;set&quot;</span>);
@@ -3663,7 +3666,7 @@
 
         <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">kv_increment_decrement_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
+            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyStatus</span>};
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span>
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvIncrementDecrement</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -3847,7 +3850,7 @@
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">kv_expiration_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
 
-            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
+            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyStatus</span>};
 
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvExpiration</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -3897,7 +3900,7 @@
 
                 <span class="comment">// Before checking the value, make sure we haven&#39;t elapsed too</span>
                 <span class="comment">// much time. If so, just restart the test.</span>
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">timing</span>.<span class="ident">wait_until</span>(<span class="ident">Duration::from_secs_f32</span>(<span class="number">3.</span>)).<span class="kw">await</span> {
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">timing</span>.<span class="ident">wait_until_async</span>(<span class="ident">Duration::from_secs_f32</span>(<span class="number">3.</span>)).<span class="kw">await</span> {
                     <span class="macro">println!</span>(
                         <span class="string">&quot;Restarting test {}. Took too long {:?}&quot;</span>,
                         <span class="macro">line!</span>(),
@@ -3908,7 +3911,7 @@
 
                 <span class="macro">assert_eq!</span>(<span class="ident">kv</span>.<span class="ident">get_key</span>(<span class="string">&quot;b&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>, <span class="prelude-val">None</span>, <span class="string">&quot;b never expired&quot;</span>);
 
-                <span class="ident">timing</span>.<span class="ident">wait_until</span>(<span class="ident">Duration::from_secs_f32</span>(<span class="number">5.</span>)).<span class="kw">await</span>;
+                <span class="ident">timing</span>.<span class="ident">wait_until_async</span>(<span class="ident">Duration::from_secs_f32</span>(<span class="number">5.</span>)).<span class="kw">await</span>;
                 <span class="macro">assert_eq!</span>(<span class="ident">kv</span>.<span class="ident">get_key</span>(<span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>, <span class="prelude-val">None</span>, <span class="string">&quot;a never expired&quot;</span>);
                 <span class="kw">break</span>;
             }
@@ -3921,7 +3924,7 @@
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_expire_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
 
-            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
+            <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyStatus</span>};
 
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvDeleteExpire</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -3949,7 +3952,7 @@
                     );
                     <span class="kw">continue</span>;
                 }
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">timing</span>.<span class="ident">wait_until</span>(<span class="ident">Duration::from_secs_f32</span>(<span class="number">2.5</span>)).<span class="kw">await</span> {
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">timing</span>.<span class="ident">wait_until_async</span>(<span class="ident">Duration::from_secs_f32</span>(<span class="number">2.5</span>)).<span class="kw">await</span> {
                     <span class="macro">println!</span>(
                         <span class="string">&quot;Restarting test {}. Took too long {:?}&quot;</span>,
                         <span class="macro">line!</span>(),
@@ -3968,13 +3971,17 @@
         }
 
         <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
+        <span class="comment">// This test can fail when the machine its running on is under high load or</span>
+        <span class="comment">// constrained resources. We need a command that persists (and waits until</span>
+        <span class="comment">// persist) to make this test fully deterministic.</span>
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">kv_transaction_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
 
             <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::{
-                <span class="macro-nonterminal">connection::Connection</span>,
-                <span class="ident">keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>},
+                <span class="macro-nonterminal">connection::AsyncConnection</span>,
+                <span class="ident">keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyStatus</span>},
             };
+            <span class="comment">// loop {</span>
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvTransactions</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="comment">// Generate several transactions that we can validate. Persisting</span>
@@ -3983,46 +3990,44 @@
             <span class="ident">db</span>.<span class="ident">set_key</span>(<span class="string">&quot;expires&quot;</span>, <span class="kw-2">&amp;</span><span class="number">0_u32</span>)
                 .<span class="ident">expire_in</span>(<span class="ident">Duration::from_secs</span>(<span class="number">1</span>))
                 .<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
             <span class="ident">db</span>.<span class="ident">set_key</span>(<span class="string">&quot;akey&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;avalue&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
-            <span class="ident">db</span>.<span class="ident">get_key</span>(<span class="string">&quot;akey&quot;</span>).<span class="ident">and_delete</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
             <span class="ident">db</span>.<span class="ident">set_numeric_key</span>(<span class="string">&quot;nkey&quot;</span>, <span class="number">0_u64</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
+            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">500</span>)).<span class="kw">await</span>;
             <span class="ident">db</span>.<span class="ident">increment_key_by</span>(<span class="string">&quot;nkey&quot;</span>, <span class="number">1_u64</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
+            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">500</span>)).<span class="kw">await</span>;
             <span class="ident">db</span>.<span class="ident">delete_key</span>(<span class="string">&quot;nkey&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
+            <span class="ident">db</span>.<span class="ident">get_key</span>(<span class="string">&quot;akey&quot;</span>).<span class="ident">and_delete</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">500</span>)).<span class="kw">await</span>;
             <span class="comment">// Ensure this doesn&#39;t generate a transaction.</span>
             <span class="ident">db</span>.<span class="ident">delete_key</span>(<span class="string">&quot;nkey&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_secs</span>(<span class="number">1</span>)).<span class="kw">await</span>;
 
-            <span class="kw">let</span> <span class="ident">transactions</span> <span class="op">=</span> <span class="ident">Connection::list_executed_transactions</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">transactions</span> <span class="op">=</span> <span class="ident">AsyncConnection::list_executed_transactions</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">deleted_keys</span> <span class="op">=</span> <span class="ident">transactions</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">tx</span><span class="op">|</span> <span class="ident">tx</span>.<span class="ident">changes</span>.<span class="ident">keys</span>())
                 .<span class="ident">flatten</span>()
-                .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">changed_key</span><span class="op">|</span> <span class="ident">changed_key</span>.<span class="ident">deleted</span>)
+                .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">changed_key</span><span class="op">|</span> <span class="macro">dbg!</span>(<span class="ident">changed_key</span>).<span class="ident">deleted</span>)
                 .<span class="ident">count</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">deleted_keys</span>, <span class="number">3</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">deleted_keys</span>, <span class="number">3</span>, <span class="string">&quot;deleted keys wasn&#39;t 3&quot;</span>);
             <span class="kw">let</span> <span class="ident">akey_changes</span> <span class="op">=</span> <span class="ident">transactions</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">tx</span><span class="op">|</span> <span class="ident">tx</span>.<span class="ident">changes</span>.<span class="ident">keys</span>())
                 .<span class="ident">flatten</span>()
                 .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">changed_key</span><span class="op">|</span> <span class="ident">changed_key</span>.<span class="ident">key</span> <span class="op">==</span> <span class="string">&quot;akey&quot;</span>)
                 .<span class="ident">count</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">akey_changes</span>, <span class="number">2</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">akey_changes</span>, <span class="number">2</span>, <span class="string">&quot;akey changes wasn&#39;t 2&quot;</span>);
             <span class="kw">let</span> <span class="ident">nkey_changes</span> <span class="op">=</span> <span class="ident">transactions</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">tx</span><span class="op">|</span> <span class="ident">tx</span>.<span class="ident">changes</span>.<span class="ident">keys</span>())
                 .<span class="ident">flatten</span>()
                 .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">changed_key</span><span class="op">|</span> <span class="ident">changed_key</span>.<span class="ident">key</span> <span class="op">==</span> <span class="string">&quot;nkey&quot;</span>)
                 .<span class="ident">count</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">nkey_changes</span>, <span class="number">3</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">nkey_changes</span>, <span class="number">3</span>, <span class="string">&quot;nkey changes wasn&#39;t 3&quot;</span>);
 
             <span class="ident">harness</span>.<span class="ident">shutdown</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="comment">// }</span>
 
             <span class="prelude-val">Ok</span>(())
         }
@@ -4043,7 +4048,20 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">wait_until</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">absolute_duration</span>: <span class="ident">Duration</span>) -&gt; <span class="ident">bool</span> {
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::must_use_candidate</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wait_until</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">absolute_duration</span>: <span class="ident">Duration</span>) -&gt; <span class="ident">bool</span> {
+        <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">absolute_duration</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sleep_duration</span>) <span class="op">=</span> <span class="ident">target</span>.<span class="ident">checked_duration_since</span>(<span class="ident">now</span>) {
+            <span class="ident">std::thread::sleep</span>(<span class="ident">sleep_duration</span>);
+            <span class="ident">now</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
+        }
+        <span class="kw">let</span> <span class="ident">amount_past</span> <span class="op">=</span> <span class="ident">now</span>.<span class="ident">checked_duration_since</span>(<span class="ident">target</span>);
+        <span class="comment">// Return false if we&#39;re beyond the tolerance given</span>
+        <span class="ident">amount_past</span>.<span class="ident">unwrap_or_default</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">tolerance</span>
+    }
+
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">wait_until_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">absolute_duration</span>: <span class="ident">Duration</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">start</span> <span class="op">+</span> <span class="ident">absolute_duration</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
         <span class="kw">if</span> <span class="ident">now</span> <span class="op">&lt;</span> <span class="ident">target</span> {
@@ -4064,7 +4082,7 @@
     }
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basic_server_connection_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">StorageConnection</span><span class="op">&gt;</span>(
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basic_server_connection_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncStorageConnection</span><span class="op">&gt;</span>(
     <span class="ident">server</span>: <span class="ident">C</span>,
     <span class="ident">newdb_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
 ) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {

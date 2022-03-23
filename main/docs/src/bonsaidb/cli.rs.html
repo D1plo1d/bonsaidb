@@ -197,11 +197,9 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
 </pre><pre class="rust"><code><span class="doccomment">//! BonsaiDb command line tools.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::OsString</span>, <span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">path::PathBuf</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::OsString</span>, <span class="ident">fmt::Debug</span>, <span class="ident">path::PathBuf</span>};
 
 <span class="kw">use</span> <span class="ident">bonsaidb_client</span>::{<span class="ident">fabruic::Certificate</span>, <span class="ident">Client</span>};
 <span class="kw">use</span> <span class="ident">bonsaidb_core::async_trait::async_trait</span>;
@@ -249,14 +247,14 @@
             }
             <span class="ident">other</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">server_url</span>) <span class="op">=</span> <span class="ident">server_url</span> {
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">server_url</span>)
-                        .<span class="ident">with_custom_api</span>::<span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">Cli::Backend</span> <span class="kw">as</span> <span class="ident">Backend</span><span class="op">&gt;</span><span class="ident">::CustomApi</span><span class="op">&gt;</span>();
+                    <span class="comment">// TODO how does custom API handling work here?</span>
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">server_url</span>);
 
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">certificate</span>) <span class="op">=</span> <span class="ident">pinned_certificate</span> {
                         <span class="ident">client</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">with_certificate</span>(<span class="ident">certificate</span>);
                     }
 
-                    <span class="ident">AnyServerConnection::Networked</span>(<span class="ident">client</span>.<span class="ident">finish</span>().<span class="kw">await</span><span class="question-mark">?</span>)
+                    <span class="ident">AnyServerConnection::Networked</span>(<span class="ident">client</span>.<span class="ident">finish</span>()<span class="question-mark">?</span>)
                 } <span class="kw">else</span> {
                     <span class="ident">AnyServerConnection::Local</span>(<span class="ident">cli</span>.<span class="ident">open_server</span>().<span class="kw">await</span><span class="question-mark">?</span>)
                 };
@@ -334,7 +332,7 @@
     }
 
     <span class="doccomment">/// Returns the server configuration to use when initializing a local server.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">configuration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">configuration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Backend</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Execute the command on `connection`.</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute</span>(
@@ -364,19 +362,17 @@
 
 <span class="doccomment">/// Runs the command-line interface with only the built-in commands, using</span>
 <span class="doccomment">/// `configuration` to launch a server if running a local command.</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span>(<span class="ident">configuration</span>: <span class="ident">ServerConfiguration</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span>(<span class="ident">configuration</span>: <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">Args::parse</span>()
         .<span class="ident">execute</span>(<span class="ident">NoCommandLine</span>::<span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
             <span class="ident">configuration</span>: <span class="prelude-val">Some</span>(<span class="ident">configuration</span>),
-            <span class="ident">_backend</span>: <span class="ident">PhantomData</span>,
         })
         .<span class="kw">await</span>
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">struct</span> <span class="ident">NoCommandLine</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> {
-    <span class="ident">configuration</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&gt;</span>,
-    <span class="ident">_backend</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+    <span class="ident">configuration</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
@@ -384,7 +380,7 @@
     <span class="kw">type</span> <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">B</span>;
     <span class="kw">type</span> <span class="ident">Subcommand</span> <span class="op">=</span> <span class="ident">NoBackend</span>;
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">configuration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">configuration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">configuration</span>
             .<span class="ident">take</span>()
             .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">anyhow::anyhow!</span>(<span class="string">&quot;configuration already consumed&quot;</span>))

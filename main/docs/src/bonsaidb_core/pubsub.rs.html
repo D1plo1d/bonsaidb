@@ -279,93 +279,392 @@
 <span id="277">277</span>
 <span id="278">278</span>
 <span id="279">279</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
-
-<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
-<span class="kw">use</span> <span class="ident">circulate</span>::{<span class="ident">flume</span>, <span class="ident">Message</span>, <span class="ident">Relay</span>};
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
+<span class="kw">use</span> <span class="ident">circulate</span>::{<span class="ident">flume</span>, <span class="ident">Message</span>};
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
 
 <span class="doccomment">/// Publishes and Subscribes to messages on topics.</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PubSub</span> {
     <span class="doccomment">/// The Subscriber type for this `PubSub` connection.</span>
     <span class="kw">type</span> <span class="ident">Subscriber</span>: <span class="ident">Subscriber</span>;
 
     <span class="doccomment">/// Create a new [`Subscriber`] for this relay.</span>
+    <span class="kw">fn</span> <span class="ident">create_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Subscriber</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// Publishes a `payload` to all subscribers of `topic`.</span>
+    <span class="kw">fn</span> <span class="ident">publish</span><span class="op">&lt;</span><span class="ident">Topic</span>: <span class="ident">Serialize</span>, <span class="ident">Payload</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">Topic</span>,
+        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">Payload</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">publish_bytes</span>(<span class="ident">pot::to_vec</span>(<span class="ident">topic</span>)<span class="question-mark">?</span>, <span class="ident">pot::to_vec</span>(<span class="ident">payload</span>)<span class="question-mark">?</span>)
+    }
+
+    <span class="doccomment">/// Publishes a `payload` to all subscribers of `topic`.</span>
+    <span class="kw">fn</span> <span class="ident">publish_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// Publishes a `payload` to all subscribers of all `topics`.</span>
+    <span class="kw">fn</span> <span class="ident">publish_to_all</span><span class="op">&lt;</span>
+        <span class="lifetime">&#39;topics</span>,
+        <span class="ident">Topics</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;topics</span> <span class="ident">Topic</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;topics</span>,
+        <span class="ident">Topic</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="lifetime">&#39;topics</span>,
+        <span class="ident">Payload</span>: <span class="ident">Serialize</span>,
+    <span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">topics</span>: <span class="ident">Topics</span>,
+        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">Payload</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">topics</span> <span class="op">=</span> <span class="ident">topics</span>
+            .<span class="ident">into_iter</span>()
+            .<span class="ident">map</span>(<span class="ident">pot::to_vec</span>)
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">publish_bytes_to_all</span>(<span class="ident">topics</span>, <span class="ident">pot::to_vec</span>(<span class="ident">payload</span>)<span class="question-mark">?</span>)
+    }
+
+    <span class="doccomment">/// Publishes a `payload` to all subscribers of all `topics`.</span>
+    <span class="kw">fn</span> <span class="ident">publish_bytes_to_all</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">topics</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+}
+
+<span class="doccomment">/// A subscriber to one or more topics.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Subscriber</span> {
+    <span class="doccomment">/// Subscribe to [`Message`]s published to `topic`.</span>
+    <span class="kw">fn</span> <span class="ident">subscribe_to</span><span class="op">&lt;</span><span class="ident">Topic</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">Topic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">subscribe_to_bytes</span>(<span class="ident">pot::to_vec</span>(<span class="ident">topic</span>)<span class="question-mark">?</span>)
+    }
+
+    <span class="doccomment">/// Subscribe to [`Message`]s published to `topic`.</span>
+    <span class="kw">fn</span> <span class="ident">subscribe_to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// Unsubscribe from [`Message`]s published to `topic`.</span>
+    <span class="kw">fn</span> <span class="ident">unsubscribe_from</span><span class="op">&lt;</span><span class="ident">Topic</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">Topic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">unsubscribe_from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">pot::to_vec</span>(<span class="ident">topic</span>)<span class="question-mark">?</span>)
+    }
+
+    <span class="doccomment">/// Unsubscribe from [`Message`]s published to `topic`.</span>
+    <span class="kw">fn</span> <span class="ident">unsubscribe_from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// Returns the receiver to receive [`Message`]s.</span>
+    <span class="kw">fn</span> <span class="ident">receiver</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Receiver</span>;
+}
+
+<span class="doccomment">/// Publishes and Subscribes to messages on topics.</span>
+<span class="attribute">#[<span class="ident">async_trait</span>]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AsyncPubSub</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
+    <span class="doccomment">/// The Subscriber type for this `PubSub` connection.</span>
+    <span class="kw">type</span> <span class="ident">Subscriber</span>: <span class="ident">AsyncSubscriber</span>;
+
+    <span class="doccomment">/// Create a new [`Subscriber`] for this relay.</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Subscriber</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Publishes a `payload` to all subscribers of `topic`.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>, <span class="ident">P</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish</span><span class="op">&lt;</span><span class="ident">Topic</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>, <span class="ident">Payload</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">topic</span>: <span class="ident">S</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">P</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+        <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">Topic</span>,
+        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">Payload</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">topic</span> <span class="op">=</span> <span class="ident">pot::to_vec</span>(<span class="ident">topic</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">pot::to_vec</span>(<span class="ident">payload</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">publish_bytes</span>(<span class="ident">topic</span>, <span class="ident">payload</span>).<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Publishes a `payload` to all subscribers of `topic`.</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Publishes a `payload` to all subscribers of all `topics`.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_to_all</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_to_all</span><span class="op">&lt;</span>
+        <span class="lifetime">&#39;topics</span>,
+        <span class="ident">Topics</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;topics</span> <span class="ident">Topic</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;topics</span>,
+        <span class="ident">Topic</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;topics</span>,
+        <span class="ident">Payload</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+    <span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">topics</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">P</span>,
+        <span class="ident">topics</span>: <span class="ident">Topics</span>,
+        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">Payload</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">topics</span> <span class="op">=</span> <span class="ident">topics</span>
+            .<span class="ident">into_iter</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">topic</span><span class="op">|</span> <span class="ident">pot::to_vec</span>(<span class="ident">topic</span>))
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">publish_bytes_to_all</span>(<span class="ident">topics</span>, <span class="ident">pot::to_vec</span>(<span class="ident">payload</span>)<span class="question-mark">?</span>)
+            .<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Publishes a `payload` to all subscribers of all `topics`.</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_bytes_to_all</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">topics</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;async_trait</span>,
+        <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// A subscriber to one or more topics.</span>
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Subscriber</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AsyncSubscriber</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="doccomment">/// Subscribe to [`Message`]s published to `topic`.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">subscribe_to</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">subscribe_to</span><span class="op">&lt;</span><span class="ident">Topic</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">Topic</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">subscribe_to_bytes</span>(<span class="ident">pot::to_vec</span>(<span class="ident">topic</span>)<span class="question-mark">?</span>).<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Subscribe to [`Message`]s published to `topic`.</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">subscribe_to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Unsubscribe from [`Message`]s published to `topic`.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unsubscribe_from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unsubscribe_from</span><span class="op">&lt;</span><span class="ident">Topic</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">Topic</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">unsubscribe_from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">pot::to_vec</span>(<span class="ident">topic</span>)<span class="question-mark">?</span>).<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Unsubscribe from [`Message`]s published to `topic`.</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unsubscribe_from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Returns the receiver to receive [`Message`]s.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">fn</span> <span class="ident">receiver</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">receiver</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Receiver</span>;
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span> <span class="ident">PubSub</span> <span class="kw">for</span> <span class="ident">Relay</span> {
-    <span class="kw">type</span> <span class="ident">Subscriber</span> <span class="op">=</span> <span class="ident">circulate::Subscriber</span>;
+<span class="doccomment">/// Receiver of PubSub [`Message`]s.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Receiver</span> {
+    <span class="ident">receiver</span>: <span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span>,
+    <span class="ident">strip_database</span>: <span class="ident">bool</span>,
+}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Subscriber</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">create_subscriber</span>().<span class="kw">await</span>)
+<span class="kw">impl</span> <span class="ident">Receiver</span> {
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_stripping_prefixes</span>(<span class="ident">receiver</span>: <span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">receiver</span>,
+            <span class="ident">strip_database</span>: <span class="bool-val">true</span>,
+        }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>, <span class="ident">P</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">topic</span>: <span class="ident">S</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">P</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">publish</span>(<span class="ident">topic</span>, <span class="ident">payload</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">receiver</span>: <span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">receiver</span>,
+            <span class="ident">strip_database</span>: <span class="bool-val">false</span>,
+        }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_to_all</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">topics</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">P</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">publish_to_all</span>(<span class="ident">topics</span>, <span class="ident">payload</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
+    <span class="doccomment">/// Receive the next [`Message`]. Blocks the current thread until a message</span>
+    <span class="doccomment">/// is available. If the receiver becomes disconnected, an error will be</span>
+    <span class="doccomment">/// returned.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">receive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">Disconnected</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">receiver</span>
+            .<span class="ident">recv</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">message</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">remove_database_prefix</span>(<span class="ident">message</span>))
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Disconnected</span>)
+    }
+
+    <span class="doccomment">/// Receive the next [`Message`]. Blocks the current task until a new</span>
+    <span class="doccomment">/// message is available. If the receiver becomes disconnected, an error</span>
+    <span class="doccomment">/// will be returned.</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">receive_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">Disconnected</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">receiver</span>
+            .<span class="ident">recv_async</span>()
+            .<span class="kw">await</span>
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">message</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">remove_database_prefix</span>(<span class="ident">message</span>))
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Disconnected</span>)
+    }
+
+    <span class="doccomment">/// Try to receive the next [`Message`]. This function will not block, and</span>
+    <span class="doccomment">/// only returns a message if one is already available.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_receive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Message</span>, <span class="ident">TryReceiveError</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">receiver</span>
+            .<span class="ident">try_recv</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">message</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">remove_database_prefix</span>(<span class="ident">message</span>))
+            .<span class="ident">map_err</span>(<span class="ident">TryReceiveError::from</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">remove_database_prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">message</span>: <span class="ident">Message</span>) -&gt; <span class="ident">Message</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">strip_database</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">database_length</span>) <span class="op">=</span> <span class="ident">message</span>.<span class="ident">topic</span>.<span class="ident">iter</span>().<span class="ident">position</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">==</span> <span class="number">0</span>) {
+                <span class="ident">message</span>.<span class="ident">topic</span>.<span class="number">0</span>.<span class="ident">read_bytes</span>(<span class="ident">database_length</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>();
+            }
+        }
+
+        <span class="ident">message</span>
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span> <span class="ident">Subscriber</span> <span class="kw">for</span> <span class="ident">circulate::Subscriber</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">subscribe_to</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">subscribe_to</span>(<span class="ident">topic</span>).<span class="kw">await</span>;
-        <span class="prelude-val">Ok</span>(())
-    }
+<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Receiver</span> {
+    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Message</span>;
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unsubscribe_from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">unsubscribe_from</span>(<span class="ident">topic</span>).<span class="kw">await</span>;
-        <span class="prelude-val">Ok</span>(())
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">receive</span>().<span class="ident">ok</span>()
     }
+}
 
-    <span class="kw">fn</span> <span class="ident">receiver</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">receiver</span>()
+<span class="doccomment">/// The [`Receiver`] was disconnected</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;the receiver is disconnected&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Disconnected</span>;
+
+<span class="doccomment">/// An error occurred trying to receive a message.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TryReceiveError</span> {
+    <span class="doccomment">/// The receiver was disconnected</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;the receiver is disconnected&quot;</span>)]</span>
+    <span class="ident">Disconnected</span>,
+    <span class="doccomment">/// No message was avaiable</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;the receiver was empty&quot;</span>)]</span>
+    <span class="ident">Empty</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">flume::TryRecvError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TryReceiveError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">flume::TryRecvError</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">match</span> <span class="ident">err</span> {
+            <span class="ident">flume::TryRecvError::Empty</span> =&gt; <span class="ident"><span class="self">Self</span>::Empty</span>,
+            <span class="ident">flume::TryRecvError::Disconnected</span> =&gt; <span class="ident"><span class="self">Self</span>::Disconnected</span>,
+        }
     }
 }
 
@@ -374,36 +673,40 @@
 <span class="doccomment">/// Client and Server must agree on this format, which is why it lives in core.</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">database_topic</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">String</span> {
-    <span class="macro">format!</span>(<span class="string">&quot;{}\u{0}{}&quot;</span>, <span class="ident">database</span>, <span class="ident">topic</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">database_topic</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">namespaced_topic</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">database</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">topic</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="number">1</span>);
+
+    <span class="ident">namespaced_topic</span>.<span class="ident">extend</span>(<span class="ident">database</span>.<span class="ident">bytes</span>());
+    <span class="ident">namespaced_topic</span>.<span class="ident">push</span>(<span class="string">b&#39;\0&#39;</span>);
+    <span class="ident">namespaced_topic</span>.<span class="ident">extend</span>(<span class="ident">topic</span>);
+
+    <span class="ident">namespaced_topic</span>
 }
 
 <span class="doccomment">/// Expands into a suite of pubsub unit tests using the passed type as the test harness.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">test</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>, <span class="ident">macro_export</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">define_pubsub_test_suite</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness</span>:<span class="ident">ident</span>) =&gt; {
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-        <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::pubsub</span>::{<span class="ident">PubSub</span>, <span class="ident">Subscriber</span>};
+        <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::pubsub</span>::{<span class="ident">AsyncPubSub</span>, <span class="ident">AsyncSubscriber</span>};
 
         <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">simple_pubsub_test</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::PubSubSimple</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">pubsub</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">subscriber</span> <span class="op">=</span> <span class="ident">PubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="string">&quot;mytopic&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;mytopic&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;othertopic&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="kw-2">&amp;</span><span class="string">&quot;mytopic&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;mytopic&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;othertopic&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;test&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">clone</span>();
-            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span>.<span class="ident">expect</span>(<span class="string">&quot;No message received&quot;</span>);
+            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">receive_async</span>().<span class="kw">await</span>.<span class="ident">expect</span>(<span class="string">&quot;No message received&quot;</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">topic</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;mytopic&quot;</span>);
             <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;test&quot;</span>);
             <span class="comment">// The message should only be received once.</span>
             <span class="macro">assert!</span>(<span class="macro">matches!</span>(
-                <span class="ident">tokio::task::spawn_blocking</span>(
-                    <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">receiver</span>.<span class="ident">recv_timeout</span>(<span class="ident">std::time::Duration::from_millis</span>(<span class="number">100</span>))
-                )
-                .<span class="kw">await</span>,
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(<span class="kw">_</span>))
+                <span class="ident">receiver</span>.<span class="ident">try_receive</span>(),
+                <span class="prelude-val">Err</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::pubsub::TryReceiveError::Empty</span>)
             ));
             <span class="prelude-val">Ok</span>(())
         }
@@ -413,51 +716,51 @@
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span>
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::PubSubMultipleSubscribers</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">pubsub</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">subscriber_a</span> <span class="op">=</span> <span class="ident">PubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">subscriber_ab</span> <span class="op">=</span> <span class="ident">PubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_a</span>, <span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_ab</span>, <span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_ab</span>, <span class="string">&quot;b&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber_a</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber_ab</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_a</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_ab</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_ab</span>, <span class="kw-2">&amp;</span><span class="string">&quot;b&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">messages_a</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">messages_ab</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="ident">messages_a</span>.<span class="ident">push</span>(
                 <span class="ident">subscriber_a</span>
                     .<span class="ident">receiver</span>()
-                    .<span class="ident">recv_async</span>()
+                    .<span class="ident">receive_async</span>()
                     .<span class="kw">await</span><span class="question-mark">?</span>
                     .<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>,
             );
             <span class="ident">messages_ab</span>.<span class="ident">push</span>(
                 <span class="ident">subscriber_ab</span>
                     .<span class="ident">receiver</span>()
-                    .<span class="ident">recv_async</span>()
+                    .<span class="ident">receive_async</span>()
                     .<span class="kw">await</span><span class="question-mark">?</span>
                     .<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>,
             );
 
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;b&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;b1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;b&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;b1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="ident">messages_ab</span>.<span class="ident">push</span>(
                 <span class="ident">subscriber_ab</span>
                     .<span class="ident">receiver</span>()
-                    .<span class="ident">recv_async</span>()
+                    .<span class="ident">receive_async</span>()
                     .<span class="kw">await</span><span class="question-mark">?</span>
                     .<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>,
             );
 
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a2&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a2&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="ident">messages_a</span>.<span class="ident">push</span>(
                 <span class="ident">subscriber_a</span>
                     .<span class="ident">receiver</span>()
-                    .<span class="ident">recv_async</span>()
+                    .<span class="ident">receive_async</span>()
                     .<span class="kw">await</span><span class="question-mark">?</span>
                     .<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>,
             );
             <span class="ident">messages_ab</span>.<span class="ident">push</span>(
                 <span class="ident">subscriber_ab</span>
                     .<span class="ident">receiver</span>()
-                    .<span class="ident">recv_async</span>()
+                    .<span class="ident">receive_async</span>()
                     .<span class="kw">await</span><span class="question-mark">?</span>
                     .<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>,
             );
@@ -476,19 +779,19 @@
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unsubscribe_test</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::PubSubUnsubscribe</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">pubsub</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">subscriber</span> <span class="op">=</span> <span class="ident">PubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::unsubscribe_from</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a2&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">pubsub</span>.<span class="ident">publish</span>(<span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a3&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::unsubscribe_from</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a2&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a3&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="comment">// Check subscriber_a for a1 and a2.</span>
-            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">recv_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">receive_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;a1&quot;</span>);
-            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">recv_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">receive_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;a3&quot;</span>);
 
             <span class="prelude-val">Ok</span>(())
@@ -498,34 +801,29 @@
         <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_to_all_test</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::PubSubPublishAll</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">pubsub</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">subscriber_a</span> <span class="op">=</span> <span class="ident">PubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">subscriber_b</span> <span class="op">=</span> <span class="ident">PubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">subscriber_c</span> <span class="op">=</span> <span class="ident">PubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_a</span>, <span class="string">&quot;1&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_b</span>, <span class="string">&quot;1&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_b</span>, <span class="string">&quot;2&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_c</span>, <span class="string">&quot;2&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_a</span>, <span class="string">&quot;3&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="ident">Subscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_c</span>, <span class="string">&quot;3&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber_a</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber_b</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber_c</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_a</span>, <span class="kw-2">&amp;</span><span class="string">&quot;1&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_b</span>, <span class="kw-2">&amp;</span><span class="string">&quot;1&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_b</span>, <span class="kw-2">&amp;</span><span class="string">&quot;2&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_c</span>, <span class="kw-2">&amp;</span><span class="string">&quot;2&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_a</span>, <span class="kw-2">&amp;</span><span class="string">&quot;3&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_c</span>, <span class="kw-2">&amp;</span><span class="string">&quot;3&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-            <span class="ident">pubsub</span>
-                .<span class="ident">publish_to_all</span>(
-                    <span class="macro">vec!</span>[<span class="ident">String::from</span>(<span class="string">&quot;1&quot;</span>), <span class="ident">String::from</span>(<span class="string">&quot;2&quot;</span>), <span class="ident">String::from</span>(<span class="string">&quot;3&quot;</span>)],
-                    <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;1&quot;</span>),
-                )
-                .<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncPubSub::publish_to_all</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, [<span class="kw-2">&amp;</span><span class="string">&quot;1&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;2&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;3&quot;</span>], <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="comment">// Each subscriber should get &quot;1&quot; twice on separate topics</span>
             <span class="kw">for</span> <span class="ident">subscriber</span> <span class="kw">in</span> <span class="kw-2">&amp;</span>[<span class="ident">subscriber_a</span>, <span class="ident">subscriber_b</span>, <span class="ident">subscriber_c</span>] {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message_topics</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                 <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">2_u8</span> {
-                    <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">recv_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">receive_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
                     <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;1&quot;</span>);
                     <span class="ident">message_topics</span>.<span class="ident">push</span>(<span class="ident">message</span>.<span class="ident">topic</span>.<span class="ident">clone</span>());
                 }
                 <span class="macro">assert!</span>(<span class="macro">matches!</span>(
-                    <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">try_recv</span>(),
-                    <span class="prelude-val">Err</span>(<span class="ident">flume::TryRecvError::Empty</span>)
+                    <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">try_receive</span>(),
+                    <span class="prelude-val">Err</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::pubsub::TryReceiveError::Empty</span>)
                 ));
                 <span class="macro">assert!</span>(<span class="ident">message_topics</span>[<span class="number">0</span>] <span class="op">!</span><span class="op">=</span> <span class="ident">message_topics</span>[<span class="number">1</span>]);
             }
@@ -533,30 +831,6 @@
             <span class="prelude-val">Ok</span>(())
         }
     };
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test_util::HarnessTest</span>;
-
-    <span class="kw">struct</span> <span class="ident">Harness</span> {
-        <span class="ident">relay</span>: <span class="ident">Relay</span>,
-    }
-
-    <span class="kw">impl</span> <span class="ident">Harness</span> {
-        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="kw">_</span>: <span class="ident">HarnessTest</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-                <span class="ident">relay</span>: <span class="ident">Relay::default</span>(),
-            })
-        }
-
-        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Relay</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-            <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">relay</span>.<span class="ident">clone</span>())
-        }
-    }
-
-    <span class="macro">define_pubsub_test_suite!</span>(<span class="ident">Harness</span>);
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>

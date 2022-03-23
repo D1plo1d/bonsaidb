@@ -31,6 +31,7 @@
 <span id="29">29</span>
 <span id="30">30</span>
 <span id="31">31</span>
+<span id="32">32</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">doc</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;.crate-docs.md&quot;</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;included-from-omnibus&quot;</span>), <span class="ident">doc</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../client-feature-flags.md&quot;</span>))]</span>
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -46,6 +47,7 @@
 <span class="attribute">#![<span class="ident">allow</span>(
     <span class="ident">clippy::missing_errors_doc</span>, <span class="comment">// TODO clippy::missing_errors_doc</span>
     <span class="ident">clippy::option_if_let_else</span>,
+    <span class="ident">clippy::module_name_repetitions</span>,
 )]</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">url</span>;
@@ -59,8 +61,8 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
     <span class="ident">builder::Builder</span>,
-    <span class="ident">client</span>::{<span class="ident">Client</span>, <span class="ident">CustomApiCallback</span>, <span class="ident">RemoteDatabase</span>, <span class="ident">RemoteSubscriber</span>},
-    <span class="ident">error::Error</span>,
+    <span class="ident">client</span>::{<span class="ident">ApiCallback</span>, <span class="ident">Client</span>, <span class="ident">RemoteDatabase</span>, <span class="ident">RemoteSubscriber</span>},
+    <span class="ident">error</span>::{<span class="ident">ApiError</span>, <span class="ident">Error</span>},
 };
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_client" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>

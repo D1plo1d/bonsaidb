@@ -372,9 +372,29 @@
 <span id="370">370</span>
 <span id="371">371</span>
 <span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Write</span>},
+    <span class="ident">ops::Deref</span>,
     <span class="ident">sync::Arc</span>,
 };
 
@@ -558,31 +578,36 @@
     }
 }
 
-<span class="doccomment">/// The name of a [`Schema`](super::Schema).</span>
+<span class="doccomment">/// A namespaced name.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SchemaName</span> {
-    <span class="doccomment">/// The authority of this schema.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">QualifiedName</span> {
+    <span class="doccomment">/// The authority that defines this name.</span>
     <span class="kw">pub</span> <span class="ident">authority</span>: <span class="ident">Authority</span>,
 
-    <span class="doccomment">/// The name of this schema.</span>
+    <span class="doccomment">/// The name, unique within `authority`.</span>
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Name</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">SchemaName</span> {
-    <span class="doccomment">/// Creates a name for a [`Schema`](super::Schema) that is not meant</span>
-    <span class="doccomment">/// to be shared with other developers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">private</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">Authority::from</span>(<span class="string">&quot;private&quot;</span>);
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">into</span>();
-        <span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> }
+<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">QualifiedName</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
+        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">authority</span>, <span class="ident">f</span>)<span class="question-mark">?</span>;
+        <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;.&#39;</span>)<span class="question-mark">?</span>;
+        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="ident">f</span>)
+    }
+}
+
+<span class="doccomment">/// Functions for creating qualified names</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Qualified</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Sized</span> {
+    <span class="doccomment">/// Creates a name that is not meant to be shared with other developers or</span>
+    <span class="doccomment">/// projects.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">fn</span> <span class="ident">private</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">Authority::from</span>(<span class="string">&quot;private&quot;</span>), <span class="ident">name</span>)
     }
 
-    <span class="doccomment">/// Creates a new schema name.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">into</span>();
-        <span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> }
-    }
+    <span class="doccomment">/// Creates a new qualified name.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span>;
 
     <span class="doccomment">/// Parses a schema name that was previously encoded via</span>
     <span class="doccomment">/// [`Self::encoded()`].</span>
@@ -591,7 +616,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns [`InvalidNameError`] if the name contains invalid escape</span>
     <span class="doccomment">/// sequences or contains more than two periods.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_encoded</span>(<span class="ident">schema_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">parse_encoded</span>(<span class="ident">schema_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">schema_name</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>);
         <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">authority</span>), <span class="prelude-val">Some</span>(<span class="ident">name</span>), <span class="prelude-val">None</span>) <span class="op">=</span> (<span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>()) {
             <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">Name::parse_encoded</span>(<span class="ident">authority</span>)<span class="question-mark">?</span>;
@@ -606,79 +631,92 @@
     <span class="doccomment">/// Encodes this schema name such that the authority and name can be</span>
     <span class="doccomment">/// safely parsed using [`Self::parse_encoded`].</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encoded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
+    <span class="kw">fn</span> <span class="ident">encoded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">format!</span>(<span class="string">&quot;{:#}&quot;</span>, <span class="self">self</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Qualified</span> <span class="kw">for</span> <span class="ident">QualifiedName</span> {
+    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">authority</span>: <span class="ident">authority</span>.<span class="ident">into</span>(),
+            <span class="ident">name</span>: <span class="ident">name</span>.<span class="ident">into</span>(),
+        }
+    }
+}
+
+<span class="doccomment">/// The name of a [`Schema`](super::Schema).</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">transparent</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SchemaName</span>(<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">QualifiedName</span>);
+
+<span class="kw">impl</span> <span class="ident">Qualified</span> <span class="kw">for</span> <span class="ident">SchemaName</span> {
+    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span>(<span class="ident">QualifiedName::new</span>(<span class="ident">authority</span>, <span class="ident">name</span>))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">SchemaName</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">authority</span>, <span class="ident">f</span>)<span class="question-mark">?</span>;
-        <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;.&#39;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="ident">f</span>)
+        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, <span class="ident">f</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">SchemaName</span> {
+    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">QualifiedName</span>;
+
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 }
 
 <span class="doccomment">/// The namespaced name of a [`Collection`](super::Collection).</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionName</span> {
-    <span class="doccomment">/// The authority of this collection. This name is used to ensure</span>
-    <span class="doccomment">/// collections from multiple authors/authorities can be used in the same</span>
-    <span class="doccomment">/// schema.</span>
-    <span class="kw">pub</span> <span class="ident">authority</span>: <span class="ident">Authority</span>,
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">transparent</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionName</span>(<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">QualifiedName</span>);
 
-    <span class="doccomment">/// The name of this collection. Must be unique within the [`Schema`](super::Schema)</span>
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Name</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">CollectionName</span> {
-    <span class="doccomment">/// Creates a name for a [`Collection`](super::Collection) that is not meant</span>
-    <span class="doccomment">/// to be shared with other developers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">private</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">Authority::from</span>(<span class="string">&quot;private&quot;</span>);
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">into</span>();
-        <span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> }
-    }
-
-    <span class="doccomment">/// Creates a new collection name.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">into</span>();
-        <span class="self">Self</span> { <span class="ident">authority</span>, <span class="ident">name</span> }
-    }
-
-    <span class="doccomment">/// Parses a colleciton name that was previously encoded via</span>
-    <span class="doccomment">/// [`Self::encoded()`].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Errors</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns [`InvalidNameError`] if the name contains invalid escape</span>
-    <span class="doccomment">/// sequences or contains more than two periods.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_encoded</span>(<span class="ident">collection_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidNameError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">parts</span> <span class="op">=</span> <span class="ident">collection_name</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>);
-        <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">authority</span>), <span class="prelude-val">Some</span>(<span class="ident">name</span>), <span class="prelude-val">None</span>) <span class="op">=</span> (<span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>(), <span class="ident">parts</span>.<span class="ident">next</span>()) {
-            <span class="kw">let</span> <span class="ident">authority</span> <span class="op">=</span> <span class="ident">Name::parse_encoded</span>(<span class="ident">authority</span>)<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::parse_encoded</span>(<span class="ident">name</span>)<span class="question-mark">?</span>;
-
-            <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">authority</span>, <span class="ident">name</span>))
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">InvalidNameError</span>(<span class="ident">collection_name</span>.<span class="ident">to_string</span>()))
-        }
-    }
-
-    <span class="doccomment">/// Encodes this collection name such that the authority and name can be</span>
-    <span class="doccomment">/// safely parsed using [`Self::parse_encoded`].</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encoded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="macro">format!</span>(<span class="string">&quot;{:#}&quot;</span>, <span class="self">self</span>)
+<span class="kw">impl</span> <span class="ident">Qualified</span> <span class="kw">for</span> <span class="ident">CollectionName</span> {
+    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span>(<span class="ident">QualifiedName::new</span>(<span class="ident">authority</span>, <span class="ident">name</span>))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">CollectionName</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">authority</span>, <span class="ident">f</span>)<span class="question-mark">?</span>;
-        <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;.&#39;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>, <span class="ident">f</span>)
+        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, <span class="ident">f</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">CollectionName</span> {
+    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">QualifiedName</span>;
+
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
+    }
+}
+
+<span class="doccomment">/// The qualified name of an [`Api`](crate::api::Api).</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">transparent</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ApiName</span>(<span class="ident">QualifiedName</span>);
+
+<span class="kw">impl</span> <span class="ident">Qualified</span> <span class="kw">for</span> <span class="ident">ApiName</span> {
+    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span>(<span class="ident">QualifiedName::new</span>(<span class="ident">authority</span>, <span class="ident">name</span>))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">ApiName</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
+        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, <span class="ident">f</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">ApiName</span> {
+    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">QualifiedName</span>;
+
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 }
 

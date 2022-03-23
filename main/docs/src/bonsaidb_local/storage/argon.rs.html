@@ -311,6 +311,7 @@
 <span id="309">309</span>
 <span id="310">310</span>
 <span id="311">311</span>
+<span id="312">312</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">sync::Arc</span>,
     <span class="ident">thread::JoinHandle</span>,
@@ -324,7 +325,6 @@
 <span class="kw">use</span> <span class="ident">bonsaidb_core::connection::SensitiveString</span>;
 <span class="kw">use</span> <span class="ident">once_cell::sync::OnceCell</span>;
 <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">thread_rng</span>, <span class="ident">CryptoRng</span>, <span class="ident">Rng</span>};
-<span class="kw">use</span> <span class="ident">tokio::sync::oneshot</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">config</span>::{<span class="ident">ArgonConfiguration</span>, <span class="ident">ArgonParams</span>},
@@ -351,13 +351,18 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">threads</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">config</span>.<span class="ident">hashers</span> <span class="kw">as</span> <span class="ident">usize</span>);
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">config</span>.<span class="ident">hashers</span>.<span class="ident">max</span>(<span class="number">1</span>) {
             <span class="kw">let</span> <span class="ident">thread</span> <span class="op">=</span> <span class="ident">thread</span>.<span class="ident">clone</span>();
-            <span class="ident">threads</span>.<span class="ident">push</span>(<span class="ident">std::thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">thread</span>.<span class="ident">process_requests</span>()));
+            <span class="ident">threads</span>.<span class="ident">push</span>(
+                <span class="ident">std::thread::Builder::new</span>()
+                    .<span class="ident">name</span>(<span class="ident">String::from</span>(<span class="string">&quot;argon2&quot;</span>))
+                    .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">thread</span>.<span class="ident">process_requests</span>())
+                    .<span class="ident">unwrap</span>(),
+            );
         }
         <span class="ident">Hasher</span> { <span class="ident">sender</span>, <span class="ident">threads</span> }
     }
 
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">hash</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u64</span>, <span class="ident">password</span>: <span class="ident">SensitiveString</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SensitiveString</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">oneshot::channel</span>();
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hash</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u64</span>, <span class="ident">password</span>: <span class="ident">SensitiveString</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SensitiveString</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
         <span class="kw">if</span> <span class="self">self</span>
             .<span class="ident">sender</span>
             .<span class="ident">send</span>(<span class="ident">HashRequest</span> {
@@ -368,7 +373,7 @@
             })
             .<span class="ident">is_ok</span>()
         {
-            <span class="kw">match</span> <span class="ident">result_receiver</span>.<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">map_err</span>(<span class="ident">Error::from</span>) {
+            <span class="kw">match</span> <span class="ident">result_receiver</span>.<span class="ident">recv</span>()<span class="question-mark">?</span>.<span class="ident">map_err</span>(<span class="ident">Error::from</span>) {
                 <span class="prelude-val">Ok</span>(<span class="ident">HashResponse::Hash</span>(<span class="ident">hash</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">hash</span>),
                 <span class="prelude-val">Ok</span>(<span class="ident">HashResponse::Verified</span>) =&gt; <span class="macro">unreachable!</span>(),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
@@ -378,13 +383,13 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">verify</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">verify</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">u64</span>,
         <span class="ident">password</span>: <span class="ident">SensitiveString</span>,
         <span class="ident">saved_hash</span>: <span class="ident">SensitiveString</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">oneshot::channel</span>();
+        <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
         <span class="kw">if</span> <span class="self">self</span>
             .<span class="ident">sender</span>
             .<span class="ident">send</span>(<span class="ident">HashRequest</span> {
@@ -395,7 +400,7 @@
             })
             .<span class="ident">is_ok</span>()
         {
-            <span class="kw">match</span> <span class="ident">result_receiver</span>.<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">map_err</span>(<span class="ident">Error::from</span>) {
+            <span class="kw">match</span> <span class="ident">result_receiver</span>.<span class="ident">recv</span>()<span class="question-mark">?</span>.<span class="ident">map_err</span>(<span class="ident">Error::from</span>) {
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(()),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
                     <span class="macro">eprintln!</span>(<span class="string">&quot;Error validating password for user {}: {:?}&quot;</span>, <span class="ident">id</span>, <span class="ident">err</span>);
@@ -576,7 +581,7 @@
     <span class="ident">id</span>: <span class="ident">u64</span>,
     <span class="ident">password</span>: <span class="ident">SensitiveString</span>,
     <span class="ident">verify_against</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SensitiveString</span><span class="op">&gt;</span>,
-    <span class="ident">result_sender</span>: <span class="ident">oneshot::Sender</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">result_sender</span>: <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -604,17 +609,14 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">tokio::test</span>]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basic_test</span>() {
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">basic_test</span>() {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config::SystemDefault</span>;
     <span class="kw">let</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">Hasher::new</span>(<span class="ident">ArgonConfiguration::default</span>());
 
     <span class="kw">let</span> <span class="ident">password</span> <span class="op">=</span> <span class="ident">SensitiveString</span>(<span class="ident">String::from</span>(<span class="string">&quot;hunter2&quot;</span>));
-    <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">hasher</span>.<span class="ident">hash</span>(<span class="number">1</span>, <span class="ident">password</span>.<span class="ident">clone</span>()).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-    <span class="ident">hasher</span>
-        .<span class="ident">verify</span>(<span class="number">1</span>, <span class="ident">password</span>.<span class="ident">clone</span>(), <span class="ident">hash</span>.<span class="ident">clone</span>())
-        .<span class="kw">await</span>
-        .<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">hasher</span>.<span class="ident">hash</span>(<span class="number">1</span>, <span class="ident">password</span>.<span class="ident">clone</span>()).<span class="ident">unwrap</span>();
+    <span class="ident">hasher</span>.<span class="ident">verify</span>(<span class="number">1</span>, <span class="ident">password</span>, <span class="ident">hash</span>).<span class="ident">unwrap</span>();
 
     <span class="kw">let</span> <span class="ident">Hasher</span> { <span class="ident">sender</span>, <span class="ident">threads</span> } <span class="op">=</span> <span class="ident">hasher</span>;
     <span class="ident">drop</span>(<span class="ident">sender</span>);

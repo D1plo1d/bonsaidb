@@ -354,8 +354,6 @@
 <span id="352">352</span>
 <span id="353">353</span>
 <span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::DeserializeOwned</span>, <span class="ident">Serialize</span>};
@@ -402,12 +400,10 @@
 }
 
 <span class="doccomment">/// A type alias for the result of `ViewSchema::map()`.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">type_alias_bounds</span>)]</span> <span class="comment">// False positive, required for associated types</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ViewMapResult</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ViewMapResult</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">V</span> <span class="kw">as</span> <span class="ident">View</span><span class="op">&gt;</span><span class="ident">::Key</span>, <span class="op">&lt;</span><span class="ident">V</span> <span class="kw">as</span> <span class="ident">View</span><span class="op">&gt;</span><span class="ident">::Value</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// A type alias for the result of `ViewSchema::reduce()`.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">type_alias_bounds</span>)]</span> <span class="comment">// False positive, required for associated types</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ReduceResult</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">View</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">V::Value</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ReduceResult</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">V</span> <span class="kw">as</span> <span class="ident">View</span><span class="op">&gt;</span><span class="ident">::Value</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// A mechanism for accessing mapped and/or reduced data from a [`Collection`].</span>
 <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;\n&quot;</span>]</span>

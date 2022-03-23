@@ -76,11 +76,14 @@
     <span class="ident">clippy::module_name_repetitions</span>,
 )]</span>
 
+<span class="doccomment">/// Types for defining API handlers.</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">api</span>;
 <span class="kw">mod</span> <span class="ident">backend</span>;
 <span class="doccomment">/// Command-line interface for the server.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cli&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">cli</span>;
 <span class="kw">mod</span> <span class="ident">config</span>;
+<span class="kw">mod</span> <span class="ident">dispatch</span>;
 <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">hosted</span>;
 <span class="kw">mod</span> <span class="ident">server</span>;
@@ -91,15 +94,12 @@
 };
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
-    <span class="ident">backend</span>::{
-        <span class="ident">Backend</span>, <span class="ident">BackendError</span>, <span class="ident">ConnectionHandling</span>, <span class="ident">CustomApiDispatcher</span>, <span class="ident">NoBackend</span>, <span class="ident">NoDispatcher</span>,
-    },
+    <span class="ident">backend</span>::{<span class="ident">Backend</span>, <span class="ident">BackendError</span>, <span class="ident">ConnectionHandling</span>, <span class="ident">NoBackend</span>},
     <span class="ident">config</span>::{<span class="ident">DefaultPermissions</span>, <span class="ident">ServerConfiguration</span>},
     <span class="ident">error::Error</span>,
     <span class="ident">server</span>::{
         <span class="ident">ApplicationProtocols</span>, <span class="ident">ConnectedClient</span>, <span class="ident">CustomServer</span>, <span class="ident">HttpService</span>, <span class="ident">LockedClientDataGuard</span>,
-        <span class="ident">Peer</span>, <span class="ident">Server</span>, <span class="ident">ServerDatabase</span>, <span class="ident">ServerSubscriber</span>, <span class="ident">StandardTcpProtocols</span>, <span class="ident">TcpService</span>,
-        <span class="ident">Transport</span>,
+        <span class="ident">Peer</span>, <span class="ident">Server</span>, <span class="ident">ServerDatabase</span>, <span class="ident">StandardTcpProtocols</span>, <span class="ident">TcpService</span>, <span class="ident">Transport</span>,
     },
 };
 
