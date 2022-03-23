@@ -196,7 +196,7 @@
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Subscriber</span> {
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="comment">// TODO</span>
+        <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">storage</span>().<span class="ident">instance</span>.<span class="ident">unregister_subscriber</span>(<span class="self">self</span>);
     }
 }
 

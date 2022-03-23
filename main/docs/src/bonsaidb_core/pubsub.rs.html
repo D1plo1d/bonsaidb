@@ -416,6 +416,32 @@
 <span id="414">414</span>
 <span id="415">415</span>
 <span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">use</span> <span class="ident">circulate</span>::{<span class="ident">flume</span>, <span class="ident">Message</span>};
 <span class="kw">use</span> <span class="ident">serde::Serialize</span>;
@@ -793,6 +819,32 @@
             <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;a1&quot;</span>);
             <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">receive_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;a3&quot;</span>);
+
+            <span class="prelude-val">Ok</span>(())
+        }
+
+        <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
+        <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">pubsub_drop_cleanup_test</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::PubSubDropCleanup</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">pubsub</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">subscriber</span> <span class="op">=</span> <span class="ident">AsyncPubSub::create_subscriber</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">AsyncSubscriber::subscribe_to</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">clone</span>();
+            <span class="ident">drop</span>(<span class="ident">subscriber</span>);
+
+            <span class="comment">// The receiver should now be disconnected, but after receiving the</span>
+            <span class="comment">// first message. For when we&#39;re testing network connections, we</span>
+            <span class="comment">// need to insert a little delay here to allow the server to process</span>
+            <span class="comment">// the drop.</span>
+            <span class="ident">tokio::time::sleep</span>(<span class="ident">std::time::Duration::from_millis</span>(<span class="number">100</span>)).<span class="kw">await</span>;
+
+            <span class="ident">AsyncPubSub::publish</span>(<span class="kw-2">&amp;</span><span class="ident">pubsub</span>, <span class="kw-2">&amp;</span><span class="string">&quot;a&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">String::from</span>(<span class="string">&quot;a1&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+
+            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">receive_async</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="macro">assert_eq!</span>(<span class="ident">message</span>.<span class="ident">payload</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>()<span class="question-mark">?</span>, <span class="string">&quot;a1&quot;</span>);
+            <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::pubsub::Disconnected</span> <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">receive_async</span>().<span class="kw">await</span>.<span class="ident">unwrap_err</span>();
 
             <span class="prelude-val">Ok</span>(())
         }
