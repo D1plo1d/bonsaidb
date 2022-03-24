@@ -813,6 +813,101 @@
 <span id="811">811</span>
 <span id="812">812</span>
 <span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_core::connection::Authentication</span>;
@@ -842,9 +937,21 @@
 };
 
 <span class="doccomment">/// A file-based, multi-database, multi-user database engine. This type is</span>
-<span class="doccomment">/// designed for use with [Tokio](https://tokio.rs). For non-asynchronous code,</span>
-<span class="doccomment">/// see the [`Storage`] type instead. This type can be converted using</span>
-<span class="doccomment">/// [`std::convert::From`].</span>
+<span class="doccomment">/// designed for use with [Tokio](https://tokio.rs). For blocking</span>
+<span class="doccomment">/// (non-asynchronous) code, see the [`Storage`] type instead.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Converting between Blocking and Async Types</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`AsyncDatabase`] and [`Database`] can be converted to and from each other</span>
+<span class="doccomment">/// using:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - [`AsyncStorage::into_blocking()`]</span>
+<span class="doccomment">/// - [`AsyncStorage::to_blocking()`]</span>
+<span class="doccomment">/// - [`AsyncStorage::as_blocking()`]</span>
+<span class="doccomment">/// - [`Storage::into_async()`]</span>
+<span class="doccomment">/// - [`Storage::to_async()`]</span>
+<span class="doccomment">/// - [`Storage::into_async_with_runtime()`]</span>
+<span class="doccomment">/// - [`Storage::to_async_with_runtime()`]</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Converting from `AsyncDatabase::open` to `AsyncStorage::open`</span>
 <span class="doccomment">///</span>
@@ -876,8 +983,8 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Using multiple databases</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This example shows how to use `AsyncStorage` to create and use multiple databases</span>
-<span class="doccomment">/// with multiple schemas:</span>
+<span class="doccomment">/// This example shows how to use `AsyncStorage` to create and use multiple</span>
+<span class="doccomment">/// databases with multiple schemas:</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// use bonsaidb_core::{</span>
@@ -934,8 +1041,8 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncStorage</span> {
-    <span class="ident">storage</span>: <span class="ident">Storage</span>,
-    <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">storage</span>: <span class="ident">Storage</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">AsyncStorage</span> {
@@ -943,7 +1050,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">open</span>(<span class="ident">configuration</span>: <span class="ident">StorageConfiguration</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">tokio::task::spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">Storage::open</span>(<span class="ident">configuration</span>))
             .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::from</span>)
+            .<span class="ident">map</span>(<span class="ident">Storage::into_async</span>)
     }
 
     <span class="doccomment">/// Restores all data from a previously stored backup `location`.</span>
@@ -964,10 +1071,14 @@
 
     <span class="doccomment">/// Restricts an unauthenticated instance to having `effective_permissions`.</span>
     <span class="doccomment">/// Returns `None` if a session has already been established.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_effective_permissions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">effective_permissions</span>: <span class="ident">Permissions</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">storage</span>
             .<span class="ident">with_effective_permissions</span>(<span class="ident">effective_permissions</span>)
-            .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::from</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">storage</span><span class="op">|</span> <span class="self">Self</span> {
+                <span class="ident">storage</span>,
+                <span class="ident">runtime</span>: <span class="self">self</span>.<span class="ident">runtime</span>.<span class="ident">clone</span>(),
+            })
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;internal-apis&quot;</span>)]</span>
@@ -976,39 +1087,43 @@
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">to_owned</span>();
         <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="self">self</span>.<span class="ident">runtime</span>
-            .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">task_self</span>.<span class="ident">storage</span>.<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>))
+            .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">task_self</span>
+                    .<span class="ident">storage</span>
+                    .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>)
+                    .<span class="ident">map</span>(<span class="ident">Database::into_async</span>)
+            })
             .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">map</span>(<span class="ident">AsyncDatabase::from</span>)
     }
-}
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Storage</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AsyncStorage</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">storage</span>: <span class="ident">Storage</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">storage</span>,
-            <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle::current</span>(),
-        }
+    <span class="doccomment">/// Converts this instance into its blocking version, which is able to be</span>
+    <span class="doccomment">/// used without async.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_blocking</span>(<span class="self">self</span>) -&gt; <span class="ident">Storage</span> {
+        <span class="self">self</span>.<span class="ident">storage</span>
     }
-}
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Storage</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AsyncStorage</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">storage</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Storage</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">storage</span>: <span class="ident">storage</span>.<span class="ident">clone</span>(),
-            <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle::current</span>(),
-        }
+    <span class="doccomment">/// Converts this instance into its blocking version, which is able to be</span>
+    <span class="doccomment">/// used without async.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_blocking</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Storage</span> {
+        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">clone</span>()
+    }
+
+    <span class="doccomment">/// Returns a reference to this instance&#39;s blocking version, which is able</span>
+    <span class="doccomment">/// to be used without async.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_blocking</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Storage</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage</span>
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AsyncStorage</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Storage</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">storage</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AsyncStorage</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">storage</span>.<span class="ident">storage</span>.<span class="ident">clone</span>()
+        <span class="ident">storage</span>.<span class="ident">to_blocking</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">AsyncStorage</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Storage</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">storage</span>: <span class="ident">AsyncStorage</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">storage</span>.<span class="ident">storage</span>
+        <span class="ident">storage</span>.<span class="ident">into_blocking</span>()
     }
 }
 
@@ -1025,52 +1140,115 @@
 }
 
 <span class="doccomment">/// A database stored in BonsaiDb. This type is designed for use with</span>
-<span class="doccomment">/// [Tokio](https://tokio.rs). For non-asynchronous code, see the [`Database`]</span>
-<span class="doccomment">/// type instead. This type can be converted using [`std::convert::From`].</span>
+<span class="doccomment">/// [Tokio](https://tokio.rs). For blocking (non-asynchronous) code, see the</span>
+<span class="doccomment">/// [`Database`] type instead.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Converting between Async and Blocking Types</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [`AsyncDatabase`] and [`Database`] can be converted to and from each other</span>
+<span class="doccomment">/// using:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// - [`AsyncDatabase::into_blocking()`]</span>
+<span class="doccomment">/// - [`AsyncDatabase::to_blocking()`]</span>
+<span class="doccomment">/// - [`AsyncDatabase::as_blocking()`]</span>
+<span class="doccomment">/// - [`Database::into_async()`]</span>
+<span class="doccomment">/// - [`Database::to_async()`]</span>
+<span class="doccomment">/// - [`Database::into_async_with_runtime()`]</span>
+<span class="doccomment">/// - [`Database::to_async_with_runtime()`]</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## Using `Database` to create a single database</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `Database`provides an easy mechanism to open and access a single database:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// // `bonsaidb_core` is re-exported to `bonsaidb::core` or `bonsaidb_local::core`.</span>
+<span class="doccomment">/// use bonsaidb_core::schema::Collection;</span>
+<span class="doccomment">/// // `bonsaidb_local` is re-exported to `bonsaidb::local` if using the omnibus crate.</span>
+<span class="doccomment">/// use bonsaidb_local::{</span>
+<span class="doccomment">///     config::{Builder, StorageConfiguration},</span>
+<span class="doccomment">///     AsyncDatabase,</span>
+<span class="doccomment">/// };</span>
+<span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Collection)]</span>
+<span class="doccomment">/// #[collection(name = &quot;blog-posts&quot;)]</span>
+<span class="doccomment">/// # #[collection(core = bonsaidb_core)]</span>
+<span class="doccomment">/// struct BlogPost {</span>
+<span class="doccomment">///     pub title: String,</span>
+<span class="doccomment">///     pub contents: String,</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # async fn test_fn() -&gt; Result&lt;(), bonsaidb_core::Error&gt; {</span>
+<span class="doccomment">/// let db = AsyncDatabase::open::&lt;BlogPost&gt;(StorageConfiguration::new(&quot;my-db.bonsaidb&quot;)).await?;</span>
+<span class="doccomment">/// #     Ok(())</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Under the hood, this initializes a [`AsyncStorage`] instance pointing at</span>
+<span class="doccomment">/// &quot;./my-db.bonsaidb&quot;. It then returns (or creates) a database named &quot;default&quot;</span>
+<span class="doccomment">/// with the schema `BlogPost`.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// In this example, `BlogPost` implements the</span>
+<span class="doccomment">/// [`Collection`](schema::Collection) trait, and all collections can be used as</span>
+<span class="doccomment">/// a [`Schema`].</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncDatabase</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">database</span>: <span class="ident">Database</span>,
-    <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">AsyncDatabase</span> {
     <span class="doccomment">/// Creates a `Storage` with a single-database named &quot;default&quot; with its data stored at `path`.</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">open</span><span class="op">&lt;</span><span class="ident">DB</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(<span class="ident">configuration</span>: <span class="ident">StorageConfiguration</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">tokio::task::spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">Database::open</span>::<span class="op">&lt;</span><span class="ident">DB</span><span class="op">&gt;</span>(<span class="ident">configuration</span>))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::from</span>)
+        <span class="ident">tokio::task::spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+            <span class="ident">Database::open</span>::<span class="op">&lt;</span><span class="ident">DB</span><span class="op">&gt;</span>(<span class="ident">configuration</span>).<span class="ident">map</span>(<span class="ident">Database::into_async</span>)
+        })
+        .<span class="kw">await</span><span class="question-mark">?</span>
     }
 
     <span class="doccomment">/// Restricts an unauthenticated instance to having `effective_permissions`.</span>
     <span class="doccomment">/// Returns `None` if a session has already been established.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_effective_permissions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">effective_permissions</span>: <span class="ident">Permissions</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">database</span>
             .<span class="ident">with_effective_permissions</span>(<span class="ident">effective_permissions</span>)
-            .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::from</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">database</span><span class="op">|</span> <span class="self">Self</span> {
+                <span class="ident">database</span>,
+                <span class="ident">runtime</span>: <span class="self">self</span>.<span class="ident">runtime</span>.<span class="ident">clone</span>(),
+            })
     }
-}
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Database</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AsyncDatabase</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">database</span>: <span class="ident">Database</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">database</span>,
-            <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle::current</span>(),
-        }
+    <span class="doccomment">/// Converts this instance into its blocking version, which is able to be</span>
+    <span class="doccomment">/// used without async.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_blocking</span>(<span class="self">self</span>) -&gt; <span class="ident">Database</span> {
+        <span class="self">self</span>.<span class="ident">database</span>
+    }
+
+    <span class="doccomment">/// Converts this instance into its blocking version, which is able to be</span>
+    <span class="doccomment">/// used without async.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_blocking</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Database</span> {
+        <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">clone</span>()
+    }
+
+    <span class="doccomment">/// Returns a reference to this instance&#39;s blocking version, which is able</span>
+    <span class="doccomment">/// to be used without async.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_blocking</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Database</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">database</span>
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">AsyncDatabase</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Database</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">database</span>: <span class="ident">AsyncDatabase</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">database</span>.<span class="ident">database</span>
+        <span class="ident">database</span>.<span class="ident">into_blocking</span>()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Database</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AsyncDatabase</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Database</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">database</span>: <span class="ident">database</span>.<span class="ident">clone</span>(),
-            <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle::current</span>(),
-        }
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AsyncDatabase</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Database</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AsyncDatabase</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">database</span>.<span class="ident">to_blocking</span>()
     }
 }
 
@@ -1087,12 +1265,12 @@
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">admin</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Database</span> {
         <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-        <span class="ident">AsyncDatabase::from</span>(
-            <span class="self">self</span>.<span class="ident">runtime</span>
-                .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">task_self</span>.<span class="ident">storage</span>.<span class="ident">admin</span>())
-                .<span class="kw">await</span>
-                .<span class="ident">unwrap</span>(),
-        )
+
+        <span class="self">self</span>.<span class="ident">runtime</span>
+            .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">task_self</span>.<span class="ident">storage</span>.<span class="ident">admin</span>())
+            .<span class="kw">await</span>
+            .<span class="ident">unwrap</span>()
+            .<span class="ident">into_async</span>()
     }
 
     <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span> {
@@ -1127,10 +1305,14 @@
         <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">to_owned</span>();
         <span class="self">self</span>.<span class="ident">runtime</span>
-            .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">task_self</span>.<span class="ident">storage</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">DB</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>))
+            .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">task_self</span>
+                    .<span class="ident">storage</span>
+                    .<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">DB</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>)
+                    .<span class="ident">map</span>(<span class="ident">Database::into_async</span>)
+            })
             .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>
-            .<span class="ident">map</span>(<span class="ident">AsyncDatabase::from</span>)
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_database</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
@@ -1206,7 +1388,7 @@
                 <span class="ident">task_self</span>
                     .<span class="ident">storage</span>
                     .<span class="ident">authenticate</span>(<span class="ident">user</span>, <span class="ident">authentication</span>)
-                    .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::from</span>)
+                    .<span class="ident">map</span>(<span class="ident">Storage::into_async</span>)
             })
             .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>
@@ -1219,7 +1401,12 @@
         <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">identity</span> <span class="op">=</span> <span class="ident">identity</span>.<span class="ident">into_owned</span>();
         <span class="self">self</span>.<span class="ident">runtime</span>
-            .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">task_self</span>.<span class="ident">storage</span>.<span class="ident">assume_identity</span>(<span class="ident">identity</span>).<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::from</span>))
+            .<span class="ident">spawn_blocking</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+                <span class="ident">task_self</span>
+                    .<span class="ident">storage</span>
+                    .<span class="ident">assume_identity</span>(<span class="ident">identity</span>)
+                    .<span class="ident">map</span>(<span class="ident">Storage::into_async</span>)
+            })
             .<span class="kw">await</span>
             .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>
     }
@@ -1310,7 +1497,10 @@
     <span class="kw">type</span> <span class="ident">Storage</span> <span class="op">=</span> <span class="ident">AsyncStorage</span>;
 
     <span class="kw">fn</span> <span class="ident">storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Storage</span> {
-        <span class="ident">AsyncStorage::from</span>(<span class="self">self</span>.<span class="ident">database</span>.<span class="ident">storage</span>())
+        <span class="ident">AsyncStorage</span> {
+            <span class="ident">storage</span>: <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">storage</span>(),
+            <span class="ident">runtime</span>: <span class="self">self</span>.<span class="ident">runtime</span>.<span class="ident">clone</span>(),
+        }
     }
 
     <span class="attribute">#[<span class="ident">cfg_attr</span>(

@@ -247,7 +247,6 @@
 <span id="245">245</span>
 <span id="246">246</span>
 <span id="247">247</span>
-<span id="248">248</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">path::Path</span>, <span class="ident">sync::Arc</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
@@ -335,9 +334,8 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Registers a `dispatcher` for a [`Api`]. When a [`Request::Api`] is</span>
-    <span class="doccomment">/// received for this [`Api`], the dispatcher will be invoked with the</span>
-    <span class="doccomment">/// incoming request.</span>
+    <span class="doccomment">/// Registers a `handler` for a [`Api`][api::Api]. When an [`Api`][api::Api] is</span>
+    <span class="doccomment">/// received by the server, the handler will be invoked</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_custom_api</span><span class="op">&lt;</span><span class="ident">Dispatcher</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Api</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>, <span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
