@@ -3530,6 +3530,13 @@
 <span id="3528">3528</span>
 <span id="3529">3529</span>
 <span id="3530">3530</span>
+<span id="3531">3531</span>
+<span id="3532">3532</span>
+<span id="3533">3533</span>
+<span id="3534">3534</span>
+<span id="3535">3535</span>
+<span id="3536">3536</span>
+<span id="3537">3537</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -6470,6 +6477,8 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
         <span class="kw">mod</span> <span class="ident">blocking_kv</span> {
             <span class="kw">use</span> <span class="kw">super</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness</span>;
+
+            <span class="attribute">#[<span class="ident">test</span>]</span>
             <span class="kw">fn</span> <span class="ident">basic_kv_test</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
                 <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvBasic</span>)<span class="question-mark">?</span>;
@@ -6503,6 +6512,7 @@
                 <span class="prelude-val">Ok</span>(())
             }
 
+            <span class="attribute">#[<span class="ident">test</span>]</span>
             <span class="kw">fn</span> <span class="ident">kv_concurrency</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
                 <span class="kw">const</span> <span class="ident">WRITERS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100</span>;
@@ -6534,6 +6544,7 @@
                 <span class="prelude-val">Ok</span>(())
             }
 
+            <span class="attribute">#[<span class="ident">test</span>]</span>
             <span class="kw">fn</span> <span class="ident">kv_set_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
                 <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvSet</span>)<span class="question-mark">?</span>;
@@ -6566,6 +6577,7 @@
                 <span class="prelude-val">Ok</span>(())
             }
 
+            <span class="attribute">#[<span class="ident">test</span>]</span>
             <span class="kw">fn</span> <span class="ident">kv_increment_decrement_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::keyvalue</span>::{<span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>};
                 <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::KvIncrementDecrement</span>)<span class="question-mark">?</span>;
@@ -6730,6 +6742,7 @@
                 <span class="prelude-val">Ok</span>(())
             }
 
+            <span class="attribute">#[<span class="ident">test</span>]</span>
             <span class="kw">fn</span> <span class="ident">kv_expiration_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
 
@@ -6807,6 +6820,7 @@
                 <span class="prelude-val">Ok</span>(())
             }
 
+            <span class="attribute">#[<span class="ident">test</span>]</span>
             <span class="kw">fn</span> <span class="ident">delete_expire_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">use</span> <span class="ident">std::time::Duration</span>;
 
