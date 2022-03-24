@@ -703,11 +703,6 @@
 <span id="701">701</span>
 <span id="702">702</span>
 <span id="703">703</span>
-<span id="704">704</span>
-<span id="705">705</span>
-<span id="706">706</span>
-<span id="707">707</span>
-<span id="708">708</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Encryption and secret management.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! BonsaiDb&#39;s vault is the core of encryption and secret management. To offer</span>
@@ -768,7 +763,6 @@
     <span class="ident">sync::Arc</span>,
 };
 
-<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">arc_bytes::serde::Bytes</span>,
     <span class="ident">document::KeyId</span>,
@@ -1101,7 +1095,6 @@
 }
 
 <span class="doccomment">/// Stores encrypted keys for a vault.</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">VaultKeyStorage</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
     <span class="doccomment">/// The error type that the functions return.</span>
     <span class="kw">type</span> <span class="ident">Error</span>: <span class="ident">Display</span>;
@@ -1207,7 +1200,6 @@
 <span class="doccomment">/// A [`VaultKeyStorage`] trait that wraps the Error type before returning. This</span>
 <span class="doccomment">/// type is used to allow the Vault to operate without any generic parameters.</span>
 <span class="doccomment">/// This trait is auto-implemented for all [`VaultKeyStorage`] implementors.</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AnyVaultKeyStorage</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
     <span class="doccomment">/// Retrieve all previously stored master keys for a given storage id.</span>
     <span class="kw">fn</span> <span class="ident">vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
@@ -1280,7 +1272,6 @@
     <span class="ident">InvalidFile</span>,
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">impl</span> <span class="ident">VaultKeyStorage</span> <span class="kw">for</span> <span class="ident">LocalVaultKeyStorage</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">LocalVaultKeyStorageError</span>;
 
@@ -1354,7 +1345,6 @@
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
     <span class="kw">struct</span> <span class="ident">NullKeyStorage</span>;
-    <span class="attribute">#[<span class="ident">async_trait</span>]</span>
     <span class="kw">impl</span> <span class="ident">VaultKeyStorage</span> <span class="kw">for</span> <span class="ident">NullKeyStorage</span> {
         <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">anyhow::Error</span>;
 

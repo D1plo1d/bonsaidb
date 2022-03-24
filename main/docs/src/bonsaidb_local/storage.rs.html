@@ -1585,13 +1585,6 @@
 <span id="1583">1583</span>
 <span id="1584">1584</span>
 <span id="1585">1585</span>
-<span id="1586">1586</span>
-<span id="1587">1587</span>
-<span id="1588">1588</span>
-<span id="1589">1589</span>
-<span id="1590">1590</span>
-<span id="1591">1591</span>
-<span id="1592">1592</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
@@ -1669,22 +1662,21 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// // `bonsaidb_core` is re-exported to `bonsaidb::core` or `bonsaidb_local::core`.</span>
-<span class="doccomment">/// use bonsaidb_core::{connection::AsyncStorageConnection, schema::Schema};</span>
+<span class="doccomment">/// use bonsaidb_core::{connection::StorageConnection, schema::Schema};</span>
 <span class="doccomment">/// // `bonsaidb_local` is re-exported to `bonsaidb::local` if using the omnibus crate.</span>
 <span class="doccomment">/// use bonsaidb_local::{</span>
 <span class="doccomment">///     config::{Builder, StorageConfiguration},</span>
-<span class="doccomment">///     AsyncDatabase, AsyncStorage,</span>
+<span class="doccomment">///     Database, Storage,</span>
 <span class="doccomment">/// };</span>
-<span class="doccomment">/// # async fn open&lt;MySchema: Schema&gt;() -&gt; anyhow::Result&lt;()&gt; {</span>
+<span class="doccomment">/// # fn open&lt;MySchema: Schema&gt;() -&gt; anyhow::Result&lt;()&gt; {</span>
 <span class="doccomment">/// // This creates a Storage instance, creates a database, and returns it.</span>
-<span class="doccomment">/// let db = AsyncDatabase::open::&lt;MySchema&gt;(StorageConfiguration::new(&quot;my-db.bonsaidb&quot;)).await?;</span>
+<span class="doccomment">/// let db = Database::open::&lt;MySchema&gt;(StorageConfiguration::new(&quot;my-db.bonsaidb&quot;))?;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// // This is the equivalent code being executed:</span>
 <span class="doccomment">/// let storage =</span>
-<span class="doccomment">///     AsyncStorage::open(StorageConfiguration::new(&quot;my-db.bonsaidb&quot;).with_schema::&lt;MySchema&gt;()?)</span>
-<span class="doccomment">///         .await?;</span>
-<span class="doccomment">/// storage.create_database::&lt;MySchema&gt;(&quot;default&quot;, true).await?;</span>
-<span class="doccomment">/// let db = storage.database::&lt;MySchema&gt;(&quot;default&quot;).await?;</span>
+<span class="doccomment">///     Storage::open(StorageConfiguration::new(&quot;my-db.bonsaidb&quot;).with_schema::&lt;MySchema&gt;()?)?;</span>
+<span class="doccomment">/// storage.create_database::&lt;MySchema&gt;(&quot;default&quot;, true)?;</span>
+<span class="doccomment">/// let db = storage.database::&lt;MySchema&gt;(&quot;default&quot;)?;</span>
 <span class="doccomment">/// #     Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
@@ -1696,12 +1688,12 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// use bonsaidb_core::{</span>
-<span class="doccomment">///     connection::AsyncStorageConnection,</span>
+<span class="doccomment">///     connection::StorageConnection,</span>
 <span class="doccomment">///     schema::{Collection, Schema},</span>
 <span class="doccomment">/// };</span>
 <span class="doccomment">/// use bonsaidb_local::{</span>
 <span class="doccomment">///     config::{Builder, StorageConfiguration},</span>
-<span class="doccomment">///     AsyncStorage,</span>
+<span class="doccomment">///     Storage,</span>
 <span class="doccomment">/// };</span>
 <span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
 <span class="doccomment">///</span>
@@ -1726,24 +1718,18 @@
 <span class="doccomment">///     pub name: String,</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// # async fn test_fn() -&gt; Result&lt;(), bonsaidb_core::Error&gt; {</span>
-<span class="doccomment">/// let storage = AsyncStorage::open(</span>
+<span class="doccomment">/// # fn open() -&gt; anyhow::Result&lt;()&gt; {</span>
+<span class="doccomment">/// let storage = Storage::open(</span>
 <span class="doccomment">///     StorageConfiguration::new(&quot;my-db.bonsaidb&quot;)</span>
 <span class="doccomment">///         .with_schema::&lt;BlogPost&gt;()?</span>
 <span class="doccomment">///         .with_schema::&lt;MySchema&gt;()?,</span>
-<span class="doccomment">/// )</span>
-<span class="doccomment">/// .await?;</span>
+<span class="doccomment">/// )?;</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// storage</span>
-<span class="doccomment">///     .create_database::&lt;BlogPost&gt;(&quot;ectons-blog&quot;, true)</span>
-<span class="doccomment">///     .await?;</span>
-<span class="doccomment">/// let ectons_blog = storage.database::&lt;BlogPost&gt;(&quot;ectons-blog&quot;).await?;</span>
-<span class="doccomment">/// storage</span>
-<span class="doccomment">///     .create_database::&lt;MySchema&gt;(&quot;another-db&quot;, true)</span>
-<span class="doccomment">///     .await?;</span>
-<span class="doccomment">/// let another_db = storage.database::&lt;MySchema&gt;(&quot;another-db&quot;).await?;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #     Ok(())</span>
+<span class="doccomment">/// storage.create_database::&lt;BlogPost&gt;(&quot;ectons-blog&quot;, true)?;</span>
+<span class="doccomment">/// let ectons_blog = storage.database::&lt;BlogPost&gt;(&quot;ectons-blog&quot;)?;</span>
+<span class="doccomment">/// storage.create_database::&lt;MySchema&gt;(&quot;another-db&quot;, true)?;</span>
+<span class="doccomment">/// let another_db = storage.database::&lt;MySchema&gt;(&quot;another-db&quot;)?;</span>
+<span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
