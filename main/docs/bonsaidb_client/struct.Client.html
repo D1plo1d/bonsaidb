@@ -28,8 +28,9 @@ WebSockets:</p>
 <h4 id="with-tls" class="section-header"><a href="#with-tls">With TLS</a></h4>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;wss://my-server.com&quot;</span>)<span class="question-mark">?</span>).<span class="ident">finish</span>()<span class="question-mark">?</span>;</code></pre></div>
 <h3 id="using-a-api" class="section-header"><a href="#using-a-api">Using a <code>Api</code></a></h3>
-<p>Our user guide has a <a href="https://dev.bonsaidb.io/release/guide/about/access-models/custom-api-server.html">section on creating and using a
-<code>Api</code></a>.</p>
+<p>Our user guide has a <a href="https://dev.bonsaidb.io/release/guide/about/access-models/custom-api-server.html">section on creating and
+using</a>
+an <a href="../bonsaidb_core/api/trait.Api.html"><code>Api</code></a>.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="comment">// `bonsaidb_core` is re-exported to `bonsaidb::core` or `bonsaidb_client::core`.</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
@@ -57,8 +58,7 @@ WebSockets:</p>
 <span class="kw">let</span> <span class="ident">Pong</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">Ping</span>).<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
 <h4 id="receiving-out-of-band-messages-from-the-server" class="section-header"><a href="#receiving-out-of-band-messages-from-the-server">Receiving out-of-band messages from the server</a></h4>
 <p>If the server sends a message that isn’t in response to a request, the
-client will invoke it’s <a href="Builder::with_custom_api_callback">custom api
-callback</a>:</p>
+client will invoke it’s <a href="struct.Builder.html#method.with_api_callback">api callback</a>:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">Url::parse</span>(<span class="string">&quot;bonsaidb://localhost&quot;</span>)<span class="question-mark">?</span>)
     .<span class="ident">with_api_callback</span>(<span class="ident">ApiCallback</span>::<span class="op">&lt;</span><span class="ident">Ping</span><span class="op">&gt;</span><span class="ident">::new</span>(<span class="op">|</span><span class="ident">result</span>: <span class="ident">Pong</span><span class="op">|</span> <span class="kw">async</span> <span class="kw">move</span> {

@@ -153,15 +153,15 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Enables using a [`Api`] with this client. If you want to receive</span>
-    <span class="doccomment">/// out-of-band API requests, set a callback using</span>
+    <span class="doccomment">/// Enables using a [`Api`](api::Api) with this client. If you want to</span>
+    <span class="doccomment">/// receive out-of-band API requests, set a callback using</span>
     <span class="doccomment">/// `with_custom_api_callback` instead.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_api</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">custom_apis</span>.<span class="ident">insert</span>(<span class="ident">Api::name</span>(), <span class="prelude-val">None</span>);
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Enables using a [`Api`] with this client. `callback` will be</span>
+    <span class="doccomment">/// Enables using a [`Api`](api::Api) with this client. `callback` will be</span>
     <span class="doccomment">/// invoked when custom API responses are received from the server.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_api_callback</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">ApiCallback</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">custom_apis</span>
