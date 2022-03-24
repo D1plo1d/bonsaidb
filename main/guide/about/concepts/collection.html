@@ -176,11 +176,8 @@ primary key type:</p>
 <pre><code class="language-rust noplayground no_run">    let inserted = MultiKey {
         value: String::from(&quot;hello&quot;),
     }
-    .insert_into((42, 64), &amp;db)
-    .await?;
-    let retrieved = MultiKey::get((42, 64), &amp;db)
-        .await?
-        .expect(&quot;document not found&quot;);
+    .insert_into((42, 64), &amp;db)?;
+    let retrieved = MultiKey::get((42, 64), &amp;db)?.expect(&quot;document not found&quot;);
     assert_eq!(inserted, retrieved);
 </code></pre>
 <h3 id="natural-ids"><a class="header" href="#natural-ids">Natural Ids</a></h3>
@@ -209,11 +206,8 @@ assigned by calling <code>natural_id()</code>:</p>
         external_id: 42,
         name: String::from(&quot;ecton&quot;),
     }
-    .push_into(&amp;db)
-    .await?;
-    let retrieved_from_database = UserProfile::get(42, &amp;db)
-        .await?
-        .expect(&quot;document not found&quot;);
+    .push_into(&amp;db)?;
+    let retrieved_from_database = UserProfile::get(42, &amp;db)?.expect(&quot;document not found&quot;);
     assert_eq!(user, retrieved_from_database);
 </code></pre>
 <h3 id="custom-primary-keys"><a class="header" href="#custom-primary-keys">Custom Primary Keys</a></h3>

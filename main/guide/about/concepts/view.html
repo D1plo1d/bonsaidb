@@ -160,24 +160,21 @@ pub struct BlogPost {
         body: String::from(&quot;...&quot;),
         category: Some(String::from(&quot;Rust&quot;)),
     }
-    .push_into(&amp;db)
-    .await?;
+    .push_into(&amp;db)?;
 
     BlogPost {
         title: String::from(&quot;New Rust version released&quot;),
         body: String::from(&quot;...&quot;),
         category: Some(String::from(&quot;Rust&quot;)),
     }
-    .push_into(&amp;db)
-    .await?;
+    .push_into(&amp;db)?;
 
     BlogPost {
         title: String::from(&quot;Check out this great cinnamon roll recipe&quot;),
         body: String::from(&quot;...&quot;),
         category: Some(String::from(&quot;Cooking&quot;)),
     }
-    .push_into(&amp;db)
-    .await?;
+    .push_into(&amp;db)?;
 </code></pre>
 <blockquote>
 <p>All examples on this page are available in their full form in the repository at <a href="https://github.com/khonsulabs/bonsaidb/tree/main/book/book-examples/tests">book/book-examples/tests</a>.</p>
@@ -218,8 +215,7 @@ server executable only.</p>
 <pre><code class="language-rust noplayground no_run">    let rust_posts = db
         .view::&lt;BlogPostsByCategory&gt;()
         .with_key(Some(String::from(&quot;Rust&quot;)))
-        .query_with_docs()
-        .await?;
+        .query_with_docs()?;
     for mapping in &amp;rust_posts {
         let post = BlogPost::document_contents(mapping.document)?;
         println!(
@@ -233,8 +229,7 @@ server executable only.</p>
 <pre><code class="language-rust noplayground no_run">    let rust_posts = db
         .view::&lt;BlogPostsByCategory&gt;()
         .with_key(Some(String::from(&quot;Rust&quot;)))
-        .query_with_collection_docs()
-        .await?;
+        .query_with_collection_docs()?;
     for mapping in &amp;rust_posts {
         println!(
             &quot;Retrieved post #{} \&quot;{}\&quot;&quot;,
@@ -248,8 +243,7 @@ server executable only.</p>
 <pre><code class="language-rust noplayground no_run">    let rust_post_count = db
         .view::&lt;BlogPostsByCategory&gt;()
         .with_key(Some(String::from(&quot;Rust&quot;)))
-        .reduce()
-        .await?;
+        .reduce()?;
     assert_eq!(rust_post_count, 2);
 </code></pre>
 <h2 id="changing-an-exising-view"><a class="header" href="#changing-an-exising-view">Changing an exising view</a></h2>
@@ -274,7 +268,7 @@ are the view entries:</p>
 <tr><td>None</td><td>1</td></tr>
 </tbody></table>
 <p>When a reduce query is issued for a single key, the value can be returned without further processing. But, if the reduce query matches multiple keys, the View's <code>reduce()</code> function will be called with the already reduced values with <code>rereduce</code> set to <code>true</code>. For example, retrieving the total count of blog posts:</p>
-<pre><code class="language-rust noplayground no_run">    let total_post_count = db.view::&lt;BlogPostsByCategory&gt;().reduce().await?;
+<pre><code class="language-rust noplayground no_run">    let total_post_count = db.view::&lt;BlogPostsByCategory&gt;().reduce()?;
     assert_eq!(total_post_count, 3);
 </code></pre>
 <p>Once BonsaiDb has gathered each of the key's reduced values, it needs to further reduce that list into a single value. To accomplish this, the View's <code>reduce()</code> function to be invoked with <code>rereduce</code> set to <code>true</code>, and with mappings containing:</p>
@@ -307,8 +301,7 @@ impl EnumKey for Category {}
 <pre><code class="language-rust noplayground no_run">    let rust_post_count = db
         .view::&lt;BlogPostsByCategory&gt;()
         .with_key(Some(Category::Rust))
-        .reduce()
-        .await?;
+        .reduce()?;
 </code></pre>
 <p>BonsaiDb will convert the enum to a u64 and use that value as the Key. A u64 was chosen to ensure fairly wide compatibility even with some extreme usages of bitmasks. If you wish to customize this behavior, you can implement <code>Key</code> directly.</p>
 <h3 id="implementing-the-key-trait"><a class="header" href="#implementing-the-key-trait">Implementing the <code>Key</code> trait</a></h3>
