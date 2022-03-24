@@ -526,16 +526,12 @@
 <span id="524">524</span>
 <span id="525">525</span>
 <span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">fs::DirEntry</span>,
     <span class="ident">io::ErrorKind</span>,
     <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
 };
 
-<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">admin</span>,
     <span class="ident">connection</span>::{<span class="ident">LowLevelConnection</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>, <span class="ident">StorageConnection</span>},
@@ -723,7 +719,6 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AnyBackupLocation</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="kw">fn</span> <span class="ident">store</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -754,7 +749,6 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">L</span>, <span class="ident">E</span><span class="op">&gt;</span> <span class="ident">AnyBackupLocation</span> <span class="kw">for</span> <span class="ident">L</span>
 <span class="kw">where</span>
     <span class="ident">L</span>: <span class="ident">BackupLocation</span><span class="op">&lt;</span><span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;</span>,
