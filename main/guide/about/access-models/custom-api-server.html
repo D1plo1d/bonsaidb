@@ -232,9 +232,7 @@ pub async fn increment_counter&lt;S: AsyncStorageConnection&lt;Database = C&gt;,
     as_client: &amp;S,
     amount: u64,
 ) -&gt; Result&lt;u64, bonsaidb::core::Error&gt; {
-    if let Some(session) = as_client.session() {
-        session.check_permission(&amp;[Identifier::from(&quot;increment&quot;)], &amp;ExampleActions::Increment)?;
-    }
+    as_client.check_permission(&amp;[Identifier::from(&quot;increment&quot;)], &amp;ExampleActions::Increment)?;
     let database = storage.database::&lt;()&gt;(&quot;counter&quot;).await?;
     database.increment_key_by(&quot;counter&quot;, amount).await
 }
