@@ -498,6 +498,17 @@
 <span id="496">496</span>
 <span id="497">497</span>
 <span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bonsaidb_client</span>::{<span class="ident">Client</span>, <span class="ident">RemoteDatabase</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_core::connection::Authentication</span>;
@@ -506,7 +517,7 @@
     <span class="ident">async_trait::async_trait</span>,
     <span class="ident">connection</span>::{
         <span class="self">self</span>, <span class="ident">AccessPolicy</span>, <span class="ident">AsyncConnection</span>, <span class="ident">AsyncLowLevelConnection</span>, <span class="ident">AsyncStorageConnection</span>,
-        <span class="ident">IdentityReference</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Session</span>, <span class="ident">Sort</span>,
+        <span class="ident">HasSession</span>, <span class="ident">IdentityReference</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Session</span>, <span class="ident">Sort</span>,
     },
     <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">schema</span>::{
@@ -525,17 +536,19 @@
     <span class="ident">Networked</span>(<span class="ident">Client</span>),
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncStorageConnection</span> <span class="kw">for</span> <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Database</span> <span class="op">=</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Authenticated</span> <span class="op">=</span> <span class="self">Self</span>;
-
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">HasSession</span> <span class="kw">for</span> <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">session</span>(),
             <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">session</span>(),
         }
     }
+}
+
+<span class="attribute">#[<span class="ident">async_trait</span>]</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncStorageConnection</span> <span class="kw">for</span> <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Database</span> <span class="op">=</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Authenticated</span> <span class="op">=</span> <span class="self">Self</span>;
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">admin</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Database</span> {
         <span class="kw">match</span> <span class="self">self</span> {
@@ -743,6 +756,15 @@
     <span class="ident">Local</span>(<span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>),
     <span class="doccomment">/// A networked database accessed with a [`Client`].</span>
     <span class="ident">Networked</span>(<span class="ident">RemoteDatabase</span>),
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">HasSession</span> <span class="kw">for</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">session</span>(),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">session</span>(),
+        }
+    }
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>

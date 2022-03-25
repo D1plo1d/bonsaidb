@@ -1208,7 +1208,7 @@
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::GroupedReductions</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>, <span class="ident">ViewMappings</span>},
+    <span class="ident">connection</span>::{<span class="ident">AccessPolicy</span>, <span class="ident">HasSession</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>, <span class="ident">ViewMappings</span>},
     <span class="ident">document</span>::{
         <span class="ident">AnyDocumentId</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Document</span>, <span class="ident">DocumentId</span>, <span class="ident">HasHeader</span>,
         <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>,
@@ -1234,7 +1234,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This trait&#39;s methods are not designed for ergonomics. See</span>
 <span class="doccomment">/// [`Connection`](super::Connection) for a higher-level interface.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">LowLevelConnection</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">LowLevelConnection</span>: <span class="ident">HasSession</span> {
     <span class="doccomment">/// Returns the schema for the database.</span>
     <span class="kw">fn</span> <span class="ident">schematic</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Schematic</span>;
 
@@ -1806,7 +1806,7 @@
 <span class="doccomment">/// This trait&#39;s methods are not designed for ergonomics. See</span>
 <span class="doccomment">/// [`AsyncConnection`](super::AsyncConnection) for a higher-level interface.</span>
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AsyncLowLevelConnection</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AsyncLowLevelConnection</span>: <span class="ident">HasSession</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="doccomment">/// Returns the schema for the database.</span>
     <span class="kw">fn</span> <span class="ident">schematic</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Schematic</span>;
 
