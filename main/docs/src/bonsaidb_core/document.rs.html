@@ -289,7 +289,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
     <span class="ident">collection</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">OwnedDocuments</span>},
     <span class="ident">header</span>::{<span class="ident">AnyHeader</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Emit</span>, <span class="ident">HasHeader</span>, <span class="ident">Header</span>},
-    <span class="ident">id</span>::{<span class="ident">AnyDocumentId</span>, <span class="ident">DocumentId</span>, <span class="ident">InvalidHexadecimal</span>},
+    <span class="ident">id</span>::{<span class="ident">DocumentId</span>, <span class="ident">InvalidHexadecimal</span>},
     <span class="ident">revision::Revision</span>,
 };
 <span class="doccomment">/// Contains a serialized document in the database.</span>
@@ -322,7 +322,7 @@
     <span class="kw">type</span> <span class="ident">Bytes</span>;
 
     <span class="doccomment">/// Returns the unique key for this document.</span>
-    <span class="kw">fn</span> <span class="ident">key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">DocumentId</span>;
     <span class="doccomment">/// Returns the header of this document.</span>
     <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">AnyHeader</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span>;
     <span class="doccomment">/// Sets the header to the new header.</span>
@@ -386,8 +386,8 @@
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">contents</span>.<span class="ident">to_vec</span>())
     }
 
-    <span class="kw">fn</span> <span class="ident">key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span> {
-        <span class="ident">AnyDocumentId::Serialized</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>)
+    <span class="kw">fn</span> <span class="ident">id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">DocumentId</span> {
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>
     }
 }
 
@@ -412,8 +412,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span> {
-        <span class="ident">AnyDocumentId::Serialized</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>)
+    <span class="kw">fn</span> <span class="ident">id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">DocumentId</span> {
+        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>
     }
 
     <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">AnyHeader</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span> {

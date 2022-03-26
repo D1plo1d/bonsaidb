@@ -3536,7 +3536,6 @@
 <span id="3534">3534</span>
 <span id="3535">3535</span>
 <span id="3536">3536</span>
-<span id="3537">3537</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -3561,8 +3560,7 @@
         <span class="ident">AccessPolicy</span>, <span class="ident">AsyncConnection</span>, <span class="ident">AsyncStorageConnection</span>, <span class="ident">Connection</span>, <span class="ident">StorageConnection</span>,
     },
     <span class="ident">document</span>::{
-        <span class="ident">AnyDocumentId</span>, <span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">DocumentId</span>, <span class="ident">Emit</span>,
-        <span class="ident">Header</span>, <span class="ident">KeyId</span>,
+        <span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">DocumentId</span>, <span class="ident">Emit</span>, <span class="ident">Header</span>, <span class="ident">KeyId</span>,
     },
     <span class="ident">keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">KeyValue</span>},
     <span class="ident">limits</span>::{<span class="ident">LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT</span>, <span class="ident">LIST_TRANSACTIONS_MAX_RESULTS</span>},
@@ -3609,8 +3607,8 @@
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_parent_id</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">parent_id</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">parent_id</span>.<span class="ident">into</span>().<span class="ident">to_primary_key</span>().<span class="ident">unwrap</span>());
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">with_parent_id</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">parent_id</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">parent_id</span>);
         <span class="self">self</span>
     }
 }

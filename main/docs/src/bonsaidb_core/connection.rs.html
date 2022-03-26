@@ -2970,6 +2970,50 @@
 <span id="2968">2968</span>
 <span id="2969">2969</span>
 <span id="2970">2970</span>
+<span id="2971">2971</span>
+<span id="2972">2972</span>
+<span id="2973">2973</span>
+<span id="2974">2974</span>
+<span id="2975">2975</span>
+<span id="2976">2976</span>
+<span id="2977">2977</span>
+<span id="2978">2978</span>
+<span id="2979">2979</span>
+<span id="2980">2980</span>
+<span id="2981">2981</span>
+<span id="2982">2982</span>
+<span id="2983">2983</span>
+<span id="2984">2984</span>
+<span id="2985">2985</span>
+<span id="2986">2986</span>
+<span id="2987">2987</span>
+<span id="2988">2988</span>
+<span id="2989">2989</span>
+<span id="2990">2990</span>
+<span id="2991">2991</span>
+<span id="2992">2992</span>
+<span id="2993">2993</span>
+<span id="2994">2994</span>
+<span id="2995">2995</span>
+<span id="2996">2996</span>
+<span id="2997">2997</span>
+<span id="2998">2998</span>
+<span id="2999">2999</span>
+<span id="3000">3000</span>
+<span id="3001">3001</span>
+<span id="3002">3002</span>
+<span id="3003">3003</span>
+<span id="3004">3004</span>
+<span id="3005">3005</span>
+<span id="3006">3006</span>
+<span id="3007">3007</span>
+<span id="3008">3008</span>
+<span id="3009">3009</span>
+<span id="3010">3010</span>
+<span id="3011">3011</span>
+<span id="3012">3012</span>
+<span id="3013">3013</span>
+<span id="3014">3014</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>};
@@ -2980,11 +3024,8 @@
 <span class="kw">use</span> <span class="ident">zeroize::Zeroize</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">document</span>::{
-        <span class="ident">AnyDocumentId</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Document</span>, <span class="ident">HasHeader</span>, <span class="ident">Header</span>,
-        <span class="ident">OwnedDocument</span>,
-    },
-    <span class="ident">key</span>::{<span class="ident">IntoPrefixRange</span>, <span class="ident">Key</span>},
+    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Document</span>, <span class="ident">HasHeader</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">key</span>::{<span class="ident">IntoPrefixRange</span>, <span class="ident">Key</span>, <span class="ident">KeyEncoding</span>},
     <span class="ident">permissions::Permissions</span>,
     <span class="ident">schema</span>::{
         <span class="self">self</span>,
@@ -3021,7 +3062,7 @@
     }
 
     <span class="doccomment">/// Accesses a [`schema::View`] from this connection.</span>
-    <span class="kw">fn</span> <span class="ident">view</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="self">self</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span>, <span class="ident">V</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">view</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="self">self</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span>, <span class="ident">V</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> {
         <span class="ident">View::new</span>(<span class="self">self</span>)
     }
 
@@ -3215,7 +3256,7 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">Cl::serialize</span>(<span class="ident">item</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>)
@@ -3282,7 +3323,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">overwrite</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Document</span><span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;mut</span> <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">bytes</span>()<span class="question-mark">?</span>;
-        <span class="ident">doc</span>.<span class="ident">set_collection_header</span>(<span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">overwrite</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">doc</span>.<span class="ident">key</span>(), <span class="ident">contents</span>)<span class="question-mark">?</span>)
+        <span class="ident">doc</span>.<span class="ident">set_collection_header</span>(<span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">overwrite</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">doc</span>.<span class="ident">id</span>(), <span class="ident">contents</span>)<span class="question-mark">?</span>)
     }
 
     <span class="doccomment">/// Retrieves a `Document&lt;Cl&gt;` with `id` from the connection.</span>
@@ -3304,7 +3345,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">PrimaryKey</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">id</span>)
     }
@@ -3331,7 +3372,7 @@
     <span class="kw">where</span>
         <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
         <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">get_multiple</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>)
     }
@@ -3356,15 +3397,12 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">ids</span>: <span class="ident">R</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">ids</span>: <span class="ident">R</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
-        <span class="ident">List::new</span>(
-            <span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>),
-            <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map</span>(<span class="ident">PrimaryKey::into</span>),
-        )
+        <span class="ident">List::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">ids</span>.<span class="ident">into</span>())
     }
 
     <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.</span>
@@ -3389,14 +3427,11 @@
     <span class="doccomment">///         .query()</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_with_prefix</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="ident">Cl::PrimaryKey</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_with_prefix</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="ident">Cl::PrimaryKey</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">Cl::PrimaryKey</span>: <span class="ident">IntoPrefixRange</span>,
     {
-        <span class="ident">List::new</span>(
-            <span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>),
-            <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>().<span class="ident">map</span>(<span class="ident">AnyDocumentId::Deserialized</span>),
-        )
+        <span class="ident">List::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>())
     }
 
     <span class="doccomment">/// Retrieves all documents.</span>
@@ -3413,7 +3448,7 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> {
         <span class="ident">List::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">Range::from</span>(..))
     }
 
@@ -3437,24 +3472,25 @@
 <span class="doccomment">/// Retrieves a list of documents from a collection. This structure also offers</span>
 <span class="doccomment">/// functions to customize the options for the operation.</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span>,
 {
     <span class="ident">collection</span>: <span class="ident">PossiblyOwned</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Collection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     <span class="ident">sort</span>: <span class="ident">Sort</span>,
     <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span>,
     <span class="ident">Cn</span>: <span class="ident">Connection</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
 {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">collection</span>: <span class="ident">PossiblyOwned</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Collection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">collection</span>,
@@ -3613,11 +3649,11 @@
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>: <span class="ident">schema::SerializedView</span>, <span class="ident">Key</span><span class="op">&gt;</span> {
     <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>,
 
     <span class="doccomment">/// Key filtering criteria.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// The view&#39;s data access policy. The default value is [`AccessPolicy::UpdateBefore`].</span>
     <span class="kw">pub</span> <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
@@ -3627,12 +3663,15 @@
 
     <span class="doccomment">/// The maximum number of results to return.</span>
     <span class="kw">pub</span> <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+
+    <span class="ident">_view</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">V</span>: <span class="ident">schema::SerializedView</span>,
     <span class="ident">Cn</span>: <span class="ident">Connection</span>,
+    <span class="ident">Key</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span>,
 {
     <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
@@ -3641,6 +3680,7 @@
             <span class="ident">access_policy</span>: <span class="ident">AccessPolicy::UpdateBefore</span>,
             <span class="ident">sort</span>: <span class="ident">Sort::Ascending</span>,
             <span class="ident">limit</span>: <span class="prelude-val">None</span>,
+            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
         }
     }
 
@@ -3658,9 +3698,15 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">V::Key</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Matches</span>(<span class="ident">key</span>));
-        <span class="self">self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span> {
+        <span class="ident">View</span> {
+            <span class="ident">connection</span>: <span class="self">self</span>.<span class="ident">connection</span>,
+            <span class="ident">key</span>: <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Matches</span>(<span class="ident">key</span>)),
+            <span class="ident">access_policy</span>: <span class="self">self</span>.<span class="ident">access_policy</span>,
+            <span class="ident">sort</span>: <span class="self">self</span>.<span class="ident">sort</span>,
+            <span class="ident">limit</span>: <span class="self">self</span>.<span class="ident">limit</span>,
+            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
+        }
     }
 
     <span class="doccomment">/// Filters for entries in the view with `keys`.</span>
@@ -3676,9 +3722,18 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_keys</span><span class="op">&lt;</span><span class="ident">IntoIter</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">keys</span>: <span class="ident">IntoIter</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Multiple</span>(<span class="ident">keys</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()));
-        <span class="self">self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_keys</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">IntoIter</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="self">self</span>,
+        <span class="ident">keys</span>: <span class="ident">IntoIter</span>,
+    ) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span> {
+        <span class="ident">View</span> {
+            <span class="ident">connection</span>: <span class="self">self</span>.<span class="ident">connection</span>,
+            <span class="ident">key</span>: <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Multiple</span>(<span class="ident">keys</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>())),
+            <span class="ident">access_policy</span>: <span class="self">self</span>.<span class="ident">access_policy</span>,
+            <span class="ident">sort</span>: <span class="self">self</span>.<span class="ident">sort</span>,
+            <span class="ident">limit</span>: <span class="self">self</span>.<span class="ident">limit</span>,
+            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
+        }
     }
 
     <span class="doccomment">/// Filters for entries in the view with the range `keys`.</span>
@@ -3695,9 +3750,15 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_range</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">range</span>: <span class="ident">R</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">range</span>.<span class="ident">into</span>()));
-        <span class="self">self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_range</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">range</span>: <span class="ident">R</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span> {
+        <span class="ident">View</span> {
+            <span class="ident">connection</span>: <span class="self">self</span>.<span class="ident">connection</span>,
+            <span class="ident">key</span>: <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">range</span>.<span class="ident">into</span>())),
+            <span class="ident">access_policy</span>: <span class="self">self</span>.<span class="ident">access_policy</span>,
+            <span class="ident">sort</span>: <span class="self">self</span>.<span class="ident">sort</span>,
+            <span class="ident">limit</span>: <span class="self">self</span>.<span class="ident">limit</span>,
+            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
+        }
     }
 
     <span class="doccomment">/// Filters for entries in the view with keys that begin with `prefix`.</span>
@@ -3723,12 +3784,18 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="ident">V::Key</span>) -&gt; <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span>(<span class="self">self</span>, <span class="ident">prefix</span>: <span class="ident">V::Key</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">V::Key</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">V::Key</span>: <span class="ident">IntoPrefixRange</span>,
     {
-        <span class="self">self</span>.<span class="ident">key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>()));
-        <span class="self">self</span>
+        <span class="ident">View</span> {
+            <span class="ident">connection</span>: <span class="self">self</span>.<span class="ident">connection</span>,
+            <span class="ident">key</span>: <span class="prelude-val">Some</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>())),
+            <span class="ident">access_policy</span>: <span class="self">self</span>.<span class="ident">access_policy</span>,
+            <span class="ident">sort</span>: <span class="self">self</span>.<span class="ident">sort</span>,
+            <span class="ident">limit</span>: <span class="self">self</span>.<span class="ident">limit</span>,
+            <span class="ident">_view</span>: <span class="ident">PhantomData</span>,
+        }
     }
 
     <span class="doccomment">/// Sets the access policy for queries.</span>
@@ -3822,7 +3889,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ViewMappings</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
-            .<span class="ident">query</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">sort</span>, <span class="self">self</span>.<span class="ident">limit</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
+            .<span class="ident">query</span>::<span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">sort</span>, <span class="self">self</span>.<span class="ident">limit</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
     }
 
     <span class="doccomment">/// Executes the query and retrieves the results with the associated [`Document`s](crate::document::OwnedDocument).</span>
@@ -3845,8 +3912,12 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query_with_docs</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">connection</span>
-            .<span class="ident">query_with_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">sort</span>, <span class="self">self</span>.<span class="ident">limit</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
+        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">query_with_docs</span>::<span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>(
+            <span class="self">self</span>.<span class="ident">key</span>,
+            <span class="self">self</span>.<span class="ident">sort</span>,
+            <span class="self">self</span>.<span class="ident">limit</span>,
+            <span class="self">self</span>.<span class="ident">access_policy</span>,
+        )
     }
 
     <span class="doccomment">/// Executes the query and retrieves the results with the associated [`CollectionDocument`s](crate::document::CollectionDocument).</span>
@@ -3875,7 +3946,7 @@
         <span class="ident">V::Collection</span>: <span class="ident">SerializedCollection</span>,
         <span class="op">&lt;</span><span class="ident">V::Collection</span> <span class="kw">as</span> <span class="ident">SerializedCollection</span><span class="op">&gt;</span><span class="ident">::Contents</span>: <span class="ident">std::fmt::Debug</span>,
     {
-        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">query_with_collection_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(
+        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">query_with_collection_docs</span>::<span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>(
             <span class="self">self</span>.<span class="ident">key</span>,
             <span class="self">self</span>.<span class="ident">sort</span>,
             <span class="self">self</span>.<span class="ident">limit</span>,
@@ -3896,7 +3967,8 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">V::Value</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">reduce</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
+        <span class="self">self</span>.<span class="ident">connection</span>
+            .<span class="ident">reduce</span>::<span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
     }
 
     <span class="doccomment">/// Executes a reduce over the results of the query, grouping by key.</span>
@@ -3917,7 +3989,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce_grouped</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GroupedReductions</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
-            .<span class="ident">reduce_grouped</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
+            .<span class="ident">reduce_grouped</span>::<span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
     }
 
     <span class="doccomment">/// Deletes all of the associated documents that match this view query.</span>
@@ -3932,7 +4004,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_docs</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
-            .<span class="ident">delete_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
+            .<span class="ident">delete_docs</span>::<span class="op">&lt;</span><span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">key</span>, <span class="self">self</span>.<span class="ident">access_policy</span>)
     }
 }
 
@@ -4169,7 +4241,7 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">Cl::serialize</span>(<span class="ident">item</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>).<span class="kw">await</span>
@@ -4247,7 +4319,7 @@
         <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">bytes</span>()<span class="question-mark">?</span>;
         <span class="ident">doc</span>.<span class="ident">set_collection_header</span>(
             <span class="self">self</span>.<span class="ident">connection</span>
-                .<span class="ident">overwrite</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">doc</span>.<span class="ident">key</span>(), <span class="ident">contents</span>)
+                .<span class="ident">overwrite</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">doc</span>.<span class="ident">id</span>(), <span class="ident">contents</span>)
                 .<span class="kw">await</span><span class="question-mark">?</span>,
         )
     }
@@ -4273,7 +4345,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">PrimaryKey</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">id</span>).<span class="kw">await</span>
     }
@@ -4306,7 +4378,7 @@
     <span class="kw">where</span>
         <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
         <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">get_multiple</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>).<span class="kw">await</span>
     }
@@ -4333,15 +4405,12 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">ids</span>: <span class="ident">R</span>) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">ids</span>: <span class="ident">R</span>) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
     {
-        <span class="ident">AsyncList::new</span>(
-            <span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>),
-            <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map</span>(<span class="ident">PrimaryKey::into</span>),
-        )
+        <span class="ident">AsyncList::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">ids</span>.<span class="ident">into</span>())
     }
 
     <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.</span>
@@ -4366,14 +4435,14 @@
     <span class="doccomment">///         .await</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_with_prefix</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="ident">Cl::PrimaryKey</span>) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_with_prefix</span>(
+        <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>,
+        <span class="ident">prefix</span>: <span class="ident">Cl::PrimaryKey</span>,
+    ) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">Cl::PrimaryKey</span>: <span class="ident">IntoPrefixRange</span>,
     {
-        <span class="ident">AsyncList::new</span>(
-            <span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>),
-            <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>().<span class="ident">map</span>(<span class="ident">AnyDocumentId::Deserialized</span>),
-        )
+        <span class="ident">AsyncList::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>())
     }
 
     <span class="doccomment">/// Retrieves all documents.</span>
@@ -4392,7 +4461,7 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">all</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> {
         <span class="ident">AsyncList::new</span>(<span class="ident">PossiblyOwned::Borrowed</span>(<span class="self">self</span>), <span class="ident">Range::from</span>(..))
     }
 
@@ -4415,12 +4484,12 @@
     }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">AsyncListBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">AsyncListBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span>,
 {
     <span class="ident">collection</span>: <span class="ident">PossiblyOwned</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">AsyncCollection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     <span class="ident">sort</span>: <span class="ident">Sort</span>,
     <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
 }
@@ -4441,32 +4510,33 @@
     }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">ListState</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">ListState</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span>,
 {
-    <span class="ident">Pending</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AsyncListBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>),
+    <span class="ident">Pending</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">AsyncListBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="ident">Executing</span>(<span class="ident">BoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>),
 }
 
 <span class="doccomment">/// Retrieves a list of documents from a collection, when awaited. This</span>
 <span class="doccomment">/// structure also offers functions to customize the options for the operation.</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span>,
 {
-    <span class="ident">state</span>: <span class="ident">ListState</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>,
+    <span class="ident">state</span>: <span class="ident">ListState</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span>,
     <span class="ident">Cn</span>: <span class="ident">AsyncConnection</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
 {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">collection</span>: <span class="ident">PossiblyOwned</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">AsyncCollection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">state</span>: <span class="ident">ListState::Pending</span>(<span class="prelude-val">Some</span>(<span class="ident">AsyncListBuilder</span> {
@@ -4478,7 +4548,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">builder</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">AsyncListBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">builder</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">AsyncListBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ListState::Pending</span>(<span class="prelude-val">Some</span>(<span class="ident">builder</span>)) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">state</span> {
             <span class="ident">builder</span>
         } <span class="kw">else</span> {
@@ -4572,11 +4642,13 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::type_repetition_in_bounds</span>)]</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cn</span>: <span class="ident">AsyncConnection</span>,
     <span class="ident">Cl</span>: <span class="ident">schema::Collection</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Unpin</span>,
+    <span class="ident">PrimaryKey</span>: <span class="ident">Unpin</span> <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
@@ -5048,9 +5120,13 @@
 }
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::use_self</span>)]</span> <span class="comment">// clippy is wrong, Self is different because of generic parameters</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Converts this key to a serialized format using the [`Key`] trait.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialized</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialized</span><span class="op">&lt;</span><span class="ident">ViewKey</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">ViewKey</span><span class="op">&gt;</span>,
+        <span class="ident">ViewKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+    {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Matches</span>(<span class="ident">key</span>) =&gt; <span class="ident">key</span>
                 .<span class="ident">as_ord_bytes</span>()
@@ -5236,9 +5312,13 @@
     );
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Serializes the range&#39;s contained values to big-endian bytes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>, <span class="ident">T::Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_ord_bytes</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>, <span class="ident">T::Error</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">T</span>: <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span><span class="op">&gt;</span>,
+        <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+    {
         <span class="prelude-val">Ok</span>(<span class="ident">Range</span> {
             <span class="ident">start</span>: <span class="self">self</span>.<span class="ident">start</span>.<span class="ident">as_ord_bytes</span>()<span class="question-mark">?</span>,
             <span class="ident">end</span>: <span class="self">self</span>.<span class="ident">end</span>.<span class="ident">as_ord_bytes</span>()<span class="question-mark">?</span>,
@@ -5251,7 +5331,9 @@
     <span class="ident">B</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Deserializes the range&#39;s contained values from big-endian bytes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Range</span> {
             <span class="ident">start</span>: <span class="self">self</span>.<span class="ident">start</span>.<span class="ident">deserialize</span>()<span class="question-mark">?</span>,
             <span class="ident">end</span>: <span class="self">self</span>.<span class="ident">start</span>.<span class="ident">deserialize</span>()<span class="question-mark">?</span>,
@@ -5289,9 +5371,13 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Serializes the contained value to big-endian bytes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>, <span class="ident">T::Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_ord_bytes</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>, <span class="ident">T::Error</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">T</span>: <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span><span class="op">&gt;</span>,
+        <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+    {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">Bound::Unbounded</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Unbounded</span>),
             <span class="ident">Bound::Included</span>(<span class="ident">value</span>) =&gt; {
@@ -5309,7 +5395,9 @@
     <span class="ident">B</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Deserializes the bound&#39;s contained value from big-endian bytes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">Bound::Unbounded</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Unbounded</span>),
             <span class="ident">Bound::Included</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Included</span>(<span class="ident">T::from_ord_bytes</span>(<span class="ident">value</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>)),

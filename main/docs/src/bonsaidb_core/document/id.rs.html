@@ -369,29 +369,8 @@
 <span id="367">367</span>
 <span id="368">368</span>
 <span id="369">369</span>
-<span id="370">370</span>
-<span id="371">371</span>
-<span id="372">372</span>
-<span id="373">373</span>
-<span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">borrow::Cow</span>,
     <span class="ident">cmp::Ordering</span>,
     <span class="ident">fmt</span>::{<span class="ident">Display</span>, <span class="ident">Write</span>},
     <span class="ident">hash::Hash</span>,
@@ -402,7 +381,7 @@
 <span class="kw">use</span> <span class="ident">actionable::Identifier</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::Visitor</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::key::Key</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::key</span>::{<span class="ident">Key</span>, <span class="ident">KeyEncoding</span>};
 
 <span class="doccomment">/// The serialized representation of a document&#39;s unique ID.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
@@ -663,7 +642,9 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX_LENGTH</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">63</span>;
 
     <span class="doccomment">/// Returns a new instance with `value` as the identifier..</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">value</span>: <span class="ident">PrimaryKey</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>, <span class="ident">PrimaryKeyRef</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="ident">value</span>: <span class="ident">PrimaryKeyRef</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">value</span>
             .<span class="ident">as_ord_bytes</span>()
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident"><span class="kw">crate</span>::Error::Serialization</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
@@ -739,47 +720,22 @@
     }
 }
 
-<span class="doccomment">/// A unique id for a document, either serialized or deserialized.</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// A serialized id.</span>
-    <span class="ident">Serialized</span>(<span class="ident">DocumentId</span>),
-    <span class="doccomment">/// A deserialized id.</span>
-    <span class="ident">Deserialized</span>(<span class="ident">PrimaryKey</span>),
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DocumentId</span> {
+    <span class="kw">fn</span> <span class="ident">from_ord_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;k</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="ident"><span class="self">Self</span>::try_from</span>(<span class="ident">bytes</span>)
+    }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DocumentId</span>
 <span class="kw">where</span>
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 {
-    <span class="doccomment">/// Converts this value to a document id.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_document_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DocumentId</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Serialized</span>(<span class="ident">id</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="kw-2">*</span><span class="ident">id</span>),
-            <span class="ident"><span class="self">Self</span>::Deserialized</span>(<span class="ident">key</span>) =&gt; <span class="ident">DocumentId::new</span>(<span class="ident">key</span>.<span class="ident">clone</span>()),
-        }
-    }
+    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
 
-    <span class="doccomment">/// Converts this value to the primary key type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_primary_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Serialized</span>(<span class="ident">id</span>) =&gt; <span class="ident">id</span>.<span class="ident">deserialize</span>::<span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>(),
-            <span class="ident"><span class="self">Self</span>::Deserialized</span>(<span class="ident">key</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">key</span>.<span class="ident">clone</span>()),
-        }
-    }
-}
+    <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
-{
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">key</span>: <span class="ident">PrimaryKey</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Deserialized</span>(<span class="ident">key</span>)
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">id</span>: <span class="ident">DocumentId</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Serialized</span>(<span class="ident">id</span>)
+    <span class="kw">fn</span> <span class="ident">as_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;k</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">Cow::Borrowed</span>(<span class="self">self</span>))
     }
 }
 </code></pre></div>
