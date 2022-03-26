@@ -468,6 +468,16 @@
 <span id="466">466</span>
 <span id="467">467</span>
 <span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections::HashMap</span>,
     <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
@@ -833,6 +843,10 @@
     <span class="doccomment">/// Sets [`Self::authenticated_permissions`](Self#structfield.authenticated_permissions) to `authenticated_permissions` and returns self.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">fn</span> <span class="ident">authenticated_permissions</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">authenticated_permissions</span>: <span class="ident">P</span>) -&gt; <span class="self">Self</span>;
+    <span class="doccomment">/// Sets [`StorageConfiguration::argon`](StorageConfiguration#structfield.argon) to `argon` and returns self.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">fn</span> <span class="ident">argon</span>(<span class="self">self</span>, <span class="ident">argon</span>: <span class="ident">ArgonConfiguration</span>) -&gt; <span class="self">Self</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">Builder</span> <span class="kw">for</span> <span class="ident">StorageConfiguration</span> {
@@ -902,6 +916,12 @@
         <span class="ident">authenticated_permissions</span>: <span class="ident">P</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">authenticated_permissions</span> <span class="op">=</span> <span class="ident">authenticated_permissions</span>.<span class="ident">into</span>();
+        <span class="self">self</span>
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">argon</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">argon</span>: <span class="ident">ArgonConfiguration</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">argon</span> <span class="op">=</span> <span class="ident">argon</span>;
         <span class="self">self</span>
     }
 }

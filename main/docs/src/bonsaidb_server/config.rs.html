@@ -247,6 +247,12 @@
 <span id="245">245</span>
 <span id="246">246</span>
 <span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">path::Path</span>, <span class="ident">sync::Arc</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
@@ -491,6 +497,12 @@
         <span class="ident">authenticated_permissions</span>: <span class="ident">P</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">authenticated_permissions</span> <span class="op">=</span> <span class="ident">authenticated_permissions</span>.<span class="ident">into</span>();
+        <span class="self">self</span>
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">argon</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">argon</span>: <span class="ident">bonsaidb_local::config::ArgonConfiguration</span>) -&gt; <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">argon</span> <span class="op">=</span> <span class="ident">argon</span>;
         <span class="self">self</span>
     }
 }
