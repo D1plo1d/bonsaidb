@@ -281,6 +281,12 @@
 <span id="279">279</span>
 <span id="280">280</span>
 <span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>, <span class="ident">ResourceName</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
@@ -373,6 +379,12 @@
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">user_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">user_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="string">&quot;user&quot;</span>).<span class="ident">and</span>(<span class="ident">user_id</span>)
+}
+
+<span class="doccomment">/// Creates a resource name for `role_id`.</span>
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">role_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">role_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="string">&quot;role&quot;</span>).<span class="ident">and</span>(<span class="ident">role_id</span>)
 }
 
 <span class="doccomment">/// Actions that can be permitted within BonsaiDb.</span>

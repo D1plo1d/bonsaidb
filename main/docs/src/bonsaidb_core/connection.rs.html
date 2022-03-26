@@ -3014,6 +3014,20 @@
 <span id="3012">3012</span>
 <span id="3013">3013</span>
 <span id="3014">3014</span>
+<span id="3015">3015</span>
+<span id="3016">3016</span>
+<span id="3017">3017</span>
+<span id="3018">3018</span>
+<span id="3019">3019</span>
+<span id="3020">3020</span>
+<span id="3021">3021</span>
+<span id="3022">3022</span>
+<span id="3023">3023</span>
+<span id="3024">3024</span>
+<span id="3025">3025</span>
+<span id="3026">3026</span>
+<span id="3027">3027</span>
+<span id="3028">3028</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>};
@@ -5986,7 +6000,13 @@
         <span class="doccomment">/// The username of the user.</span>
         <span class="ident">username</span>: <span class="ident">String</span>,
     },
-    <span class="comment">// for role assumption someday: Role{ id: u64, name: String } ,</span>
+    <span class="doccomment">/// A [`Role`](crate::admin::Role).</span>
+    <span class="ident">Role</span> {
+        <span class="doccomment">/// The unique ID of the role.</span>
+        <span class="ident">id</span>: <span class="ident">u64</span>,
+        <span class="doccomment">/// The name of the role.</span>
+        <span class="ident">name</span>: <span class="ident">String</span>,
+    },
 }
 
 <span class="kw">impl</span> <span class="ident">Eq</span> <span class="kw">for</span> <span class="ident">Identity</span> {}
@@ -5994,7 +6014,9 @@
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">Identity</span> {
     <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">match</span> (<span class="self">self</span>, <span class="ident">other</span>) {
-            (<span class="ident"><span class="self">Self</span>::User</span> { <span class="ident">id</span>: <span class="ident">l_id</span>, .. }, <span class="ident"><span class="self">Self</span>::User</span> { <span class="ident">id</span>: <span class="ident">r_id</span>, .. }) =&gt; <span class="ident">l_id</span> <span class="op">==</span> <span class="ident">r_id</span>,
+            (<span class="ident"><span class="self">Self</span>::User</span> { <span class="ident">id</span>: <span class="ident">l_id</span>, .. }, <span class="ident"><span class="self">Self</span>::User</span> { <span class="ident">id</span>: <span class="ident">r_id</span>, .. })
+            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Role</span> { <span class="ident">id</span>: <span class="ident">l_id</span>, .. }, <span class="ident"><span class="self">Self</span>::Role</span> { <span class="ident">id</span>: <span class="ident">r_id</span>, .. }) =&gt; <span class="ident">l_id</span> <span class="op">==</span> <span class="ident">r_id</span>,
+            <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
         }
     }
 }
@@ -6004,6 +6026,10 @@
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">Identity::User</span> { <span class="ident">id</span>, .. } =&gt; {
                 <span class="number">0_u8</span>.<span class="ident">hash</span>(<span class="ident">state</span>); <span class="comment">// &quot;Tag&quot; for the variant</span>
+                <span class="ident">id</span>.<span class="ident">hash</span>(<span class="ident">state</span>);
+            }
+            <span class="ident">Identity::Role</span> { <span class="ident">id</span>, .. } =&gt; {
+                <span class="number">1_u8</span>.<span class="ident">hash</span>(<span class="ident">state</span>); <span class="comment">// &quot;Tag&quot; for the variant</span>
                 <span class="ident">id</span>.<span class="ident">hash</span>(<span class="ident">state</span>);
             }
         }
@@ -6016,7 +6042,8 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span><span class="op">&gt;</span> {
     <span class="doccomment">/// A reference to a [`User`](crate::admin::User).</span>
     <span class="ident">User</span>(<span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span>, <span class="ident">u64</span><span class="op">&gt;</span>),
-    <span class="comment">// for role assumption someday: Role(NamedReference&lt;&#39;name, u64&gt;),</span>
+    <span class="doccomment">/// A reference to a [`Role`](crate::admin::Role).</span>
+    <span class="ident">Role</span>(<span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span>, <span class="ident">u64</span><span class="op">&gt;</span>),
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span><span class="op">&gt;</span> <span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span><span class="op">&gt;</span> {
@@ -6025,6 +6052,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_owned</span>(<span class="self">self</span>) -&gt; <span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">IdentityReference::User</span>(<span class="ident">user</span>) =&gt; <span class="ident">IdentityReference::User</span>(<span class="ident">user</span>.<span class="ident">into_owned</span>()),
+            <span class="ident">IdentityReference::Role</span>(<span class="ident">role</span>) =&gt; <span class="ident">IdentityReference::Role</span>(<span class="ident">role</span>.<span class="ident">into_owned</span>()),
         }
     }
 }
