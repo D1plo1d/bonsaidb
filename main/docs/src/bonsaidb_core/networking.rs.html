@@ -685,6 +685,19 @@
 <span id="683">683</span>
 <span id="684">684</span>
 <span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
@@ -862,6 +875,19 @@
 
     <span class="kw">fn</span> <span class="ident">name</span>() -&gt; <span class="ident">ApiName</span> {
         <span class="ident">ApiName::new</span>(<span class="string">&quot;bonsaidb&quot;</span>, <span class="string">&quot;AssumeIdentity&quot;</span>)
+    }
+}
+
+<span class="doccomment">/// Logs out from a session.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LogOutSession</span>(<span class="kw">pub</span> <span class="ident">SessionId</span>);
+
+<span class="kw">impl</span> <span class="ident">Api</span> <span class="kw">for</span> <span class="ident">LogOutSession</span> {
+    <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> ();
+    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
+
+    <span class="kw">fn</span> <span class="ident">name</span>() -&gt; <span class="ident">ApiName</span> {
+        <span class="ident">ApiName::new</span>(<span class="string">&quot;bonsaidb&quot;</span>, <span class="string">&quot;LogOutSession&quot;</span>)
     }
 }
 

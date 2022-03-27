@@ -895,6 +895,29 @@
 <span id="893">893</span>
 <span id="894">894</span>
 <span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::sync::atomic::AtomicBool</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -919,7 +942,8 @@
     <span class="ident">networking</span>::{
         <span class="ident">AlterUserPermissionGroupMembership</span>, <span class="ident">AlterUserRoleMembership</span>, <span class="ident">AssumeIdentity</span>,
         <span class="ident">CreateDatabase</span>, <span class="ident">CreateUser</span>, <span class="ident">DeleteDatabase</span>, <span class="ident">DeleteUser</span>, <span class="ident">ListAvailableSchemas</span>,
-        <span class="ident">ListDatabases</span>, <span class="ident">MessageReceived</span>, <span class="ident">Payload</span>, <span class="ident">UnregisterSubscriber</span>, <span class="ident">CURRENT_PROTOCOL_VERSION</span>,
+        <span class="ident">ListDatabases</span>, <span class="ident">LogOutSession</span>, <span class="ident">MessageReceived</span>, <span class="ident">Payload</span>, <span class="ident">UnregisterSubscriber</span>,
+        <span class="ident">CURRENT_PROTOCOL_VERSION</span>,
     },
     <span class="ident">permissions::Permissions</span>,
     <span class="ident">schema</span>::{<span class="ident">ApiName</span>, <span class="ident">Nameable</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>},
@@ -1108,6 +1132,17 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Client</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">data</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Data</span><span class="op">&gt;</span>,
     <span class="ident">session</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Session</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Client</span> {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+        <span class="kw">if</span> <span class="ident">Arc::strong_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">session</span>) <span class="op">==</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">session_id</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">session</span>.<span class="ident">id</span> {
+                <span class="comment">// Final reference to an authenticated session</span>
+                <span class="ident">drop</span>(<span class="self">self</span>.<span class="ident">invoke_api_request</span>(<span class="kw-2">&amp;</span><span class="ident">LogOutSession</span>(<span class="ident">session_id</span>)));
+            }
+        }
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">Client</span> {
@@ -1363,7 +1398,11 @@
         }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">ApiName</span>, <span class="ident">bytes</span>: <span class="ident">Bytes</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">send_request_without_confirmation</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">name</span>: <span class="ident">ApiName</span>,
+        <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
         <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">request_id</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering::SeqCst</span>);
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">request_sender</span>.<span class="ident">send</span>(<span class="ident">PendingRequest</span> {
@@ -1375,22 +1414,18 @@
             },
             <span class="ident">responder</span>: <span class="ident">result_sender</span>,
         })<span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(<span class="ident">result_receiver</span>)
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">ApiName</span>, <span class="ident">bytes</span>: <span class="ident">Bytes</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">result_receiver</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">send_request_without_confirmation</span>(<span class="ident">name</span>, <span class="ident">bytes</span>)<span class="question-mark">?</span>;
 
         <span class="ident">result_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span><span class="question-mark">?</span>
     }
 
     <span class="kw">fn</span> <span class="ident">send_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">ApiName</span>, <span class="ident">bytes</span>: <span class="ident">Bytes</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
-        <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">request_id</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering::SeqCst</span>);
-        <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">request_sender</span>.<span class="ident">send</span>(<span class="ident">PendingRequest</span> {
-            <span class="ident">request</span>: <span class="ident">Payload</span> {
-                <span class="ident">session_id</span>: <span class="self">self</span>.<span class="ident">session</span>.<span class="ident">id</span>,
-                <span class="ident">id</span>: <span class="prelude-val">Some</span>(<span class="ident">id</span>),
-                <span class="ident">name</span>,
-                <span class="ident">value</span>: <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>),
-            },
-            <span class="ident">responder</span>: <span class="ident">result_sender</span>,
-        })<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">result_receiver</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">send_request_without_confirmation</span>(<span class="ident">name</span>, <span class="ident">bytes</span>)<span class="question-mark">?</span>;
 
         <span class="ident">result_receiver</span>.<span class="ident">recv</span>()<span class="question-mark">?</span>
     }
@@ -1405,6 +1440,14 @@
         <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span>
             <span class="ident">pot::from_slice</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">Api::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>;
         <span class="ident">response</span>.<span class="ident">map_err</span>(<span class="ident">ApiError::Api</span>)
+    }
+
+    <span class="doccomment">/// Sends an api `request` without waiting for a result. The response from</span>
+    <span class="doccomment">/// the server will be ignored.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">invoke_api_request</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="ident">Api</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="ident">pot::to_vec</span>(<span class="ident">request</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>);
+        <span class="self">self</span>.<span class="ident">send_request_without_confirmation</span>(<span class="ident">Api::name</span>(), <span class="ident">request</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
     }
 
     <span class="doccomment">/// Sends an api `request`.</span>
@@ -1711,13 +1754,16 @@
     <span class="ident">custom_apis</span>: <span class="kw-2">&amp;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 ) {
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">payload_id</span>) <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span> {
-        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">outstanding_request</span>) <span class="op">=</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outstanding_requests</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">outstanding_requests</span>);
-            <span class="ident">outstanding_requests</span>
-                .<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">payload_id</span>)
-                .<span class="ident">expect</span>(<span class="string">&quot;missing responder&quot;</span>)
-        };
-        <span class="ident">drop</span>(<span class="ident">request</span>.<span class="ident">responder</span>.<span class="ident">send</span>(<span class="ident">payload</span>.<span class="ident">value</span>.<span class="ident">map_err</span>(<span class="ident">Error::from</span>)));
+            <span class="ident">outstanding_requests</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">payload_id</span>)
+        } {
+            <span class="ident">drop</span>(
+                <span class="ident">outstanding_request</span>
+                    .<span class="ident">responder</span>
+                    .<span class="ident">send</span>(<span class="ident">payload</span>.<span class="ident">value</span>.<span class="ident">map_err</span>(<span class="ident">Error::from</span>)),
+            );
+        }
     } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">custom_api_callback</span>), <span class="prelude-val">Ok</span>(<span class="ident">value</span>)) <span class="op">=</span> (
         <span class="ident">custom_apis</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>.<span class="ident">name</span>).<span class="ident">and_then</span>(<span class="ident">Option::as_ref</span>),
         <span class="ident">payload</span>.<span class="ident">value</span>,
