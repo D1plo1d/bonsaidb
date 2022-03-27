@@ -543,7 +543,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OwnedClient</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> {
     <span class="ident">client</span>: <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>,
+    <span class="ident">runtime</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">tokio::runtime::Handle</span><span class="op">&gt;</span>,
     <span class="ident">server</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
@@ -575,7 +575,7 @@
                     <span class="ident">client_data</span>: <span class="ident">Mutex::default</span>(),
                 }),
             },
-            <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle::current</span>(),
+            <span class="ident">runtime</span>: <span class="ident">Arc::new</span>(<span class="ident">tokio::runtime::Handle::current</span>()),
             <span class="ident">server</span>: <span class="prelude-val">Some</span>(<span class="ident">server</span>),
         }
     }

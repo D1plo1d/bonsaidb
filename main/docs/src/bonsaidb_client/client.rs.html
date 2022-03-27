@@ -1107,7 +1107,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Client</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">data</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Data</span><span class="op">&gt;</span>,
-    <span class="ident">session</span>: <span class="ident">Session</span>,
+    <span class="ident">session</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Session</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">Client</span> {
@@ -1275,7 +1275,7 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
                 <span class="ident">background_task_running</span>,
             }),
-            <span class="ident">session</span>: <span class="ident">Session::default</span>(),
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">Session::default</span>()),
         }
     }
 
@@ -1319,7 +1319,7 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
                 <span class="ident">background_task_running</span>,
             }),
-            <span class="ident">session</span>: <span class="ident">Session::default</span>(),
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">Session::default</span>()),
         }
     }
 
@@ -1584,7 +1584,7 @@
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clone</span>(),
-            <span class="ident">session</span>,
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">session</span>),
         })
     }
 
@@ -1597,7 +1597,7 @@
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clone</span>(),
-            <span class="ident">session</span>,
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">session</span>),
         })
     }
 

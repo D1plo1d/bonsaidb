@@ -2380,7 +2380,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_async_with_runtime</span>(<span class="self">self</span>, <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>) -&gt; <span class="ident"><span class="kw">crate</span>::AsyncDatabase</span> {
         <span class="ident"><span class="kw">crate</span>::AsyncDatabase</span> {
             <span class="ident">database</span>: <span class="self">self</span>,
-            <span class="ident">runtime</span>,
+            <span class="ident">runtime</span>: <span class="ident">Arc::new</span>(<span class="ident">runtime</span>),
         }
     }
 

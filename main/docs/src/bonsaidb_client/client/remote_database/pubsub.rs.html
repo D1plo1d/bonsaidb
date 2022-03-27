@@ -171,7 +171,7 @@
             <span class="ident">id</span>: <span class="ident">subscriber_id</span>,
             <span class="ident">receiver</span>: <span class="ident">Receiver::new</span>(<span class="ident">receiver</span>),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-            <span class="ident">tokio</span>: <span class="ident">tokio::runtime::Handle::try_current</span>().<span class="ident">ok</span>(),
+            <span class="ident">tokio</span>: <span class="ident">tokio::runtime::Handle::try_current</span>().<span class="ident">ok</span>().<span class="ident">map</span>(<span class="ident">Arc::new</span>),
         })
     }
 
@@ -215,7 +215,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">id</span>: <span class="ident">u64</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">receiver</span>: <span class="ident">Receiver</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">tokio</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">tokio::runtime::Handle</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">tokio</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">tokio::runtime::Handle</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>

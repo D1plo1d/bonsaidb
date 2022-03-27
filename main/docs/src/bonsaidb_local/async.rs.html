@@ -916,7 +916,11 @@
 <span id="914">914</span>
 <span id="915">915</span>
 <span id="916">916</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
+<span id="917">917</span>
+<span id="918">918</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
+
+<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_core::connection::Authentication</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
@@ -1050,7 +1054,7 @@
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncStorage</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">storage</span>: <span class="ident">Storage</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">runtime</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">tokio::runtime::Handle</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">AsyncStorage</span> {
@@ -1202,7 +1206,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncDatabase</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">database</span>: <span class="ident">Database</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">runtime</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">tokio::runtime::Handle</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">AsyncDatabase</span> {
