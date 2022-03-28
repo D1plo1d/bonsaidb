@@ -354,6 +354,18 @@
 <span id="352">352</span>
 <span id="353">353</span>
 <span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::DeserializeOwned</span>, <span class="ident">Serialize</span>};
@@ -405,7 +417,19 @@
 <span class="doccomment">/// A type alias for the result of `ViewSchema::reduce()`.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ReduceResult</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">V</span> <span class="kw">as</span> <span class="ident">View</span><span class="op">&gt;</span><span class="ident">::Value</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
 
-<span class="doccomment">/// A mechanism for accessing mapped and/or reduced data from a [`Collection`].</span>
+<span class="doccomment">/// An lazy index of mapped and/or reduced data from a [`Collection`].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A view provides an efficient way to query data within a collection. BonsaiDb</span>
+<span class="doccomment">/// indexes the associated [`View::Collection`] by calling</span>
+<span class="doccomment">/// [`CollectionViewSchema::map()`]/[`ViewSchema::map()`] every time a document</span>
+<span class="doccomment">/// is created or updated. The result [`Mappings`] form a sorted index that can</span>
+<span class="doccomment">/// be efficiently queried using the [`View::Key`] type.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A View behaves similarly to the standard library&#39;s BTreeMap with these</span>
+<span class="doccomment">/// types: `BTreeMap&lt;View::Key, Vec&lt;(Header, View::Value)&gt;&gt;`</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// For a deeper dive on Views, see [the section in our user&#39;s</span>
+<span class="doccomment">/// guide](https://dev.bonsaidb.io/main/guide/about/concepts/view.html).</span>
 <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;\n&quot;</span>]</span>
 <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;./view-overview.md&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">View</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {

@@ -1071,29 +1071,10 @@
 <span id="1069">1069</span>
 <span id="1070">1070</span>
 <span id="1071">1071</span>
-<span id="1072">1072</span>
-<span id="1073">1073</span>
-<span id="1074">1074</span>
-<span id="1075">1075</span>
-<span id="1076">1076</span>
-<span id="1077">1077</span>
-<span id="1078">1078</span>
-<span id="1079">1079</span>
-<span id="1080">1080</span>
-<span id="1081">1081</span>
-<span id="1082">1082</span>
-<span id="1083">1083</span>
-<span id="1084">1084</span>
-<span id="1085">1085</span>
-<span id="1086">1086</span>
-<span id="1087">1087</span>
-<span id="1088">1088</span>
-<span id="1089">1089</span>
-<span id="1090">1090</span>
-<span id="1091">1091</span>
-<span id="1092">1092</span>
-<span id="1093">1093</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
+</pre><pre class="rust"><code><span class="doccomment">/// [`Key`] implementations for time types.</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">time</span>;
+
+<span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">convert::Infallible</span>,
     <span class="ident">io</span>::{<span class="ident">ErrorKind</span>, <span class="ident">Write</span>},
@@ -1952,31 +1933,6 @@
         <span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">T::next_value</span>).<span class="ident">transpose</span>()
     }
 }
-
-<span class="comment">// impl&lt;&#39;a, T&gt; KeyEncoding&lt;&#39;a, Self&gt; for Option&lt;T&gt;</span>
-<span class="comment">// where</span>
-<span class="comment">//     T: KeyEncoding&lt;&#39;a, Self&gt;,</span>
-<span class="comment">// {</span>
-<span class="comment">//     type Error = T::Error;</span>
-
-<span class="comment">//     const LENGTH: Option&lt;usize&gt; = T::LENGTH;</span>
-
-<span class="comment">//     /// # Panics</span>
-<span class="comment">//     ///</span>
-<span class="comment">//     /// Panics if `T::into_big_endian_bytes` returns an empty `IVec`.</span>
-<span class="comment">//     // TODO consider removing this panic limitation by adding a single byte to</span>
-<span class="comment">//     // each key (at the end preferrably) so that we can distinguish between None</span>
-<span class="comment">//     // and a 0-byte type</span>
-<span class="comment">//     fn as_ord_bytes(&amp;&#39;a self) -&gt; Result&lt;Cow&lt;&#39;a, [u8]&gt;, Self::Error&gt; {</span>
-<span class="comment">//         if let Some(contents) = self {</span>
-<span class="comment">//             let contents = contents.as_ord_bytes()?;</span>
-<span class="comment">//             assert!(!contents.is_empty());</span>
-<span class="comment">//             Ok(contents)</span>
-<span class="comment">//         } else {</span>
-<span class="comment">//             Ok(Cow::default())</span>
-<span class="comment">//         }</span>
-<span class="comment">//     }</span>
-<span class="comment">// }</span>
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
