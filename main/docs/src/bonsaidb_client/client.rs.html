@@ -934,6 +934,9 @@
 <span id="932">932</span>
 <span id="933">933</span>
 <span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::sync::atomic::AtomicBool</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -1830,7 +1833,10 @@
             <span class="ident">generator</span>: <span class="ident">Box::new</span>(<span class="ident">ApiFutureBoxer</span>::<span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">Fut</span><span class="op">&gt;</span>(<span class="ident">Box::new</span>(<span class="ident">callback</span>))),
         }
     }
-    <span class="doccomment">/// Returns a new instance wrapping the provided function.</span>
+    <span class="doccomment">/// Returns a new instance wrapping the provided function, passing a clone</span>
+    <span class="doccomment">/// of `context` as the second parameter. This is just a convenience wrapper</span>
+    <span class="doccomment">/// around `new()` that produces more readable code when needing to access</span>
+    <span class="doccomment">/// external information inside of the callback.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with_context</span><span class="op">&lt;</span>
         <span class="ident">Context</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">Api::Response</span>, <span class="ident">Context</span>) -&gt; <span class="ident">Fut</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
