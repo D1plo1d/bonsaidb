@@ -81,12 +81,12 @@
 <span id="79">79</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Debug</span>, <span class="ident">sync::Arc</span>};
 
-<span class="kw">use</span> <span class="ident">async_lock::RwLock</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_utils</span>::{<span class="ident">fast_async_read</span>, <span class="ident">fast_async_write</span>};
 <span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
+<span class="kw">use</span> <span class="ident">parking_lot::RwLock</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::tasks</span>::{
     <span class="ident">handle</span>::{<span class="ident">Handle</span>, <span class="ident">Id</span>},
+    <span class="ident">traits::Executable</span>,
     <span class="ident">Job</span>, <span class="ident">Keyed</span>,
 };
 
@@ -112,8 +112,8 @@
     <span class="doccomment">/// Pushes a `job` into the queue. Pushing the same job definition twice</span>
     <span class="doccomment">/// will yield two tasks in the queue.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">enqueue</span><span class="op">&lt;</span><span class="ident">J</span>: <span class="ident">Job</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">job</span>: <span class="ident">J</span>) -&gt; <span class="ident">Handle</span><span class="op">&lt;</span><span class="ident">J::Output</span>, <span class="ident">J::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="macro">fast_async_write!</span>(<span class="self">self</span>.<span class="ident">jobs</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enqueue</span><span class="op">&lt;</span><span class="ident">J</span>: <span class="ident">Job</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">job</span>: <span class="ident">J</span>) -&gt; <span class="ident">Handle</span><span class="op">&lt;</span><span class="ident">J::Output</span>, <span class="ident">J::Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">jobs</span>.<span class="ident">write</span>();
         <span class="ident">jobs</span>.<span class="ident">enqueue</span>(<span class="ident">job</span>, <span class="prelude-val">None</span>, <span class="self">self</span>.<span class="ident">clone</span>())
     }
 
@@ -121,41 +121,41 @@
     <span class="doccomment">/// currently running. If another job is already running that matches, a</span>
     <span class="doccomment">/// clone of that [`Handle`] will be returned. When the job finishes, all</span>
     <span class="doccomment">/// [`Handle`] clones will be notified with a copy of the result.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">lookup_or_enqueue</span><span class="op">&lt;</span><span class="ident">J</span>: <span class="ident">Keyed</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lookup_or_enqueue</span><span class="op">&lt;</span><span class="ident">J</span>: <span class="ident">Keyed</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">job</span>: <span class="ident">J</span>,
     ) -&gt; <span class="ident">Handle</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">J</span> <span class="kw">as</span> <span class="ident">Job</span><span class="op">&gt;</span><span class="ident">::Output</span>, <span class="op">&lt;</span><span class="ident">J</span> <span class="kw">as</span> <span class="ident">Job</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="macro">fast_async_write!</span>(<span class="self">self</span>.<span class="ident">jobs</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">jobs</span>.<span class="ident">write</span>();
         <span class="ident">jobs</span>.<span class="ident">lookup_or_enqueue</span>(<span class="ident">job</span>, <span class="self">self</span>.<span class="ident">clone</span>())
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">job_completed</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>, <span class="ident">E</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(
+    <span class="kw">fn</span> <span class="ident">job_completed</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>, <span class="ident">E</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">Id</span>,
         <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Key</span><span class="op">&gt;</span>,
         <span class="ident">result</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
     ) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="macro">fast_async_write!</span>(<span class="self">self</span>.<span class="ident">jobs</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">jobs</span>.<span class="ident">write</span>();
         <span class="ident">jobs</span>.<span class="ident">job_completed</span>(<span class="ident">id</span>, <span class="ident">key</span>, <span class="ident">result</span>);
     }
 
     <span class="doccomment">/// Spawns a worker. In general, you shouldn&#39;t need to call this function</span>
     <span class="doccomment">/// directly.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">spawn_worker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">let</span> <span class="ident">manager</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-        <span class="ident">tokio::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-            <span class="ident">manager</span>.<span class="ident">execute_jobs</span>().<span class="kw">await</span>;
-        });
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute_jobs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let</span> <span class="ident">receiver</span> <span class="op">=</span> {
-            <span class="kw">let</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="macro">fast_async_read!</span>(<span class="self">self</span>.<span class="ident">jobs</span>);
+            <span class="kw">let</span> <span class="ident">jobs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">jobs</span>.<span class="ident">read</span>();
             <span class="ident">jobs</span>.<span class="ident">queue</span>()
         };
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">job</span>) <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span> {
-            <span class="ident">job</span>.<span class="ident">execute</span>().<span class="kw">await</span>;
-        }
+        <span class="ident">std::thread::Builder::new</span>()
+            .<span class="ident">name</span>(<span class="ident">String::from</span>(<span class="string">&quot;bonsaidb-tasks&quot;</span>))
+            .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">worker_thread</span>(<span class="kw-2">&amp;</span><span class="ident">receiver</span>))
+            .<span class="ident">unwrap</span>();
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">worker_thread</span>(<span class="ident">receiver</span>: <span class="kw-2">&amp;</span><span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Executable</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
+    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">job</span>) <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">recv</span>() {
+        <span class="ident">job</span>.<span class="ident">execute</span>();
     }
 }
 </code></pre></div>

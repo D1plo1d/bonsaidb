@@ -273,6 +273,20 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>, <span class="ident">ResourceName</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
@@ -326,7 +340,7 @@
 
 <span class="doccomment">/// Creates a resource name for `PubSub` `topic` within `database`.</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pubsub_topic_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pubsub_topic_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">database_resource_name</span>(<span class="ident">database</span>).<span class="ident">and</span>(<span class="string">&quot;pubsub&quot;</span>).<span class="ident">and</span>(<span class="ident">topic</span>)
 }
 
@@ -367,6 +381,12 @@
     <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="string">&quot;user&quot;</span>).<span class="ident">and</span>(<span class="ident">user_id</span>)
 }
 
+<span class="doccomment">/// Creates a resource name for `role_id`.</span>
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">role_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">role_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="string">&quot;role&quot;</span>).<span class="ident">and</span>(<span class="ident">role_id</span>)
+}
+
 <span class="doccomment">/// Actions that can be permitted within BonsaiDb.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BonsaiAction</span> {
@@ -400,6 +420,9 @@
     <span class="ident">SetPassword</span>,
     <span class="doccomment">/// Permits the ability to log in with a password.</span>
     <span class="ident">Authenticate</span>(<span class="ident">AuthenticationMethod</span>),
+    <span class="doccomment">/// Permits the ability to assume an identity without authenticating that</span>
+    <span class="doccomment">/// they are the identity in question.</span>
+    <span class="ident">AssumeIdentity</span>,
     <span class="doccomment">/// Permits [`StorageConnection::add_permission_group_to_user`](crate::connection::StorageConnection::add_permission_group_to_user) and [`StorageConnection::remove_permission_group_from_user`](crate::connection::StorageConnection::remove_permission_group_from_user).</span>
     <span class="ident">ModifyUserPermissionGroups</span>,
     <span class="doccomment">/// Permits .</span>
@@ -435,38 +458,43 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DocumentAction</span> {
     <span class="doccomment">/// Allows document retrieval through</span>
-    <span class="doccomment">/// [`Connection::get()`](crate::connection::Connection::get) and</span>
-    <span class="doccomment">/// [`Connection::get_multiple()`](crate::connection::Connection::get_multiple).</span>
+    <span class="doccomment">/// [`Connection::get()`](crate::connection::LowLevelConnection::get) and</span>
+    <span class="doccomment">/// [`Connection::get_multiple()`](crate::connection::LowLevelConnection::get_multiple).</span>
     <span class="doccomment">/// See [`document_resource_name()`] for the format of document resource</span>
     <span class="doccomment">/// names.</span>
     <span class="ident">Get</span>,
     <span class="doccomment">/// Allows listing documents through</span>
-    <span class="doccomment">/// [`Connection::list()`](crate::connection::Connection::list). See</span>
+    <span class="doccomment">/// [`Connection::list()`](crate::connection::LowLevelConnection::list). See</span>
     <span class="doccomment">/// [`collection_resource_name()`] for the format of collection resource</span>
     <span class="doccomment">/// names.</span>
     <span class="ident">List</span>,
+    <span class="doccomment">/// Allows listing documents through</span>
+    <span class="doccomment">/// [`Connection::list_headers()`](crate::connection::LowLevelConnection::list_headers). See</span>
+    <span class="doccomment">/// [`collection_resource_name()`] for the format of collection resource</span>
+    <span class="doccomment">/// names.</span>
+    <span class="ident">ListHeaders</span>,
     <span class="doccomment">/// Allows counting documents through</span>
-    <span class="doccomment">/// [`Connection::count()`](crate::connection::Connection::count). See</span>
+    <span class="doccomment">/// [`Connection::count()`](crate::connection::LowLevelConnection::count). See</span>
     <span class="doccomment">/// [`collection_resource_name()`] for the format of collection resource</span>
     <span class="doccomment">/// names.</span>
     <span class="ident">Count</span>,
     <span class="doccomment">/// Allows inserting a document through</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::Connection::apply_transaction).</span>
+    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
     <span class="doccomment">/// See [`collection_resource_name()`] for the format of collection resource</span>
     <span class="doccomment">/// names.</span>
     <span class="ident">Insert</span>,
     <span class="doccomment">/// Allows updating a document through</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::Connection::apply_transaction).</span>
+    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
     <span class="doccomment">/// See [`document_resource_name()`] for the format of document resource</span>
     <span class="doccomment">/// names.</span>
     <span class="ident">Update</span>,
     <span class="doccomment">/// Allows overwriting a document by id with</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::Connection::apply_transaction).</span>
+    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
     <span class="doccomment">/// No revision information will be checked. See</span>
     <span class="doccomment">/// [`document_resource_name()`] for the format of document resource names.</span>
     <span class="ident">Overwrite</span>,
     <span class="doccomment">/// Allows deleting a document through</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::Connection::apply_transaction).</span>
+    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
     <span class="doccomment">/// See [`document_resource_name()`] for the format of document resource</span>
     <span class="doccomment">/// names.</span>
     <span class="ident">Delete</span>,
@@ -476,15 +504,15 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ViewAction</span> {
     <span class="doccomment">/// Allows querying a view with</span>
-    <span class="doccomment">/// [`Connection::query()`](crate::connection::Connection::query). See</span>
+    <span class="doccomment">/// [`Connection::query()`](crate::connection::LowLevelConnection::query). See</span>
     <span class="doccomment">/// [`view_resource_name`] for the format of view resource names.</span>
     <span class="ident">Query</span>,
     <span class="doccomment">/// Allows reducing a view with</span>
-    <span class="doccomment">/// [`Connection::reduce()`](crate::connection::Connection::reduce). See</span>
+    <span class="doccomment">/// [`Connection::reduce()`](crate::connection::LowLevelConnection::reduce). See</span>
     <span class="doccomment">/// [`view_resource_name`] for the format of view resource names.</span>
     <span class="ident">Reduce</span>,
     <span class="doccomment">/// Allows deleting associated docs with</span>
-    <span class="doccomment">/// [`Connection::delete_docs()`](crate::connection::Connection::delete_docs).</span>
+    <span class="doccomment">/// [`Connection::delete_docs()`](crate::connection::LowLevelConnection::delete_docs).</span>
     <span class="doccomment">/// See [`view_resource_name`] for the format of view resource names.</span>
     <span class="ident">DeleteDocs</span>,
 }

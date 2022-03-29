@@ -44,6 +44,12 @@
 <span id="42">42</span>
 <span id="43">43</span>
 <span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">doc</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;.crate-docs.md&quot;</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;included-from-omnibus&quot;</span>), <span class="ident">doc</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../local-feature-flags.md&quot;</span>))]</span>
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -81,10 +87,16 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_core</span> <span class="kw">as</span> <span class="ident">core</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
-    <span class="ident">database</span>::{<span class="ident">pubsub::Subscriber</span>, <span class="ident">Database</span>},
+    <span class="ident">database</span>::{<span class="ident">pubsub::Subscriber</span>, <span class="ident">Database</span>, <span class="ident">DatabaseNonBlocking</span>},
     <span class="ident">error::Error</span>,
-    <span class="ident">storage</span>::{<span class="ident">BackupLocation</span>, <span class="ident">Storage</span>, <span class="ident">StorageId</span>},
+    <span class="ident">storage</span>::{<span class="ident">BackupLocation</span>, <span class="ident">Storage</span>, <span class="ident">StorageId</span>, <span class="ident">StorageNonBlocking</span>},
 };
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
+<span class="kw">mod</span> <span class="ident">r#async</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">r#async</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span>;

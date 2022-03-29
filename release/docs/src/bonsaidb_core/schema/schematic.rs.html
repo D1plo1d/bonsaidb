@@ -303,6 +303,12 @@
 <span id="301">301</span>
 <span id="302">302</span>
 <span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">any::TypeId</span>,
     <span class="ident">collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
@@ -400,8 +406,12 @@
         <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">collection</span>();
         <span class="kw">let</span> <span class="ident">unique</span> <span class="op">=</span> <span class="ident">instance</span>.<span class="ident">unique</span>();
         <span class="self">self</span>.<span class="ident">views</span>.<span class="ident">insert</span>(<span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(), <span class="ident">Box::new</span>(<span class="ident">instance</span>));
-        <span class="comment">// TODO check for name collision</span>
+
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">views_by_name</span>.<span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>) {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::ViewAlreadyRegistered</span>(<span class="ident">name</span>));
+        }
         <span class="self">self</span>.<span class="ident">views_by_name</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>());
+
         <span class="kw">if</span> <span class="ident">unique</span> {
             <span class="kw">let</span> <span class="ident">unique_views</span> <span class="op">=</span> <span class="self">self</span>
                 .<span class="ident">unique_views_by_collection</span>
@@ -420,13 +430,13 @@
 
     <span class="doccomment">/// Returns `true` if this schema contains the collection `C`.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Collection</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_collection</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Collection</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">collections_by_type_id</span>.<span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>())
     }
 
     <span class="doccomment">/// Returns `true` if this schema contains the collection `C`.</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_collection_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_collection_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">contained_collections</span>.<span class="ident">contains</span>(<span class="ident">collection</span>)
     }
 
@@ -437,26 +447,28 @@
         <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
         <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DocumentId</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">generator</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">collection_id_generators</span>.<span class="ident">get</span>(<span class="ident">collection</span>) {
-            <span class="ident">generator</span>.<span class="ident">next_id</span>(<span class="ident">id</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::CollectionNotFound</span>)
-        }
+        <span class="kw">let</span> <span class="ident">generator</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">collection_id_generators</span>
+            .<span class="ident">get</span>(<span class="ident">collection</span>)
+            .<span class="ident">ok_or</span>(<span class="ident">Error::CollectionNotFound</span>)<span class="question-mark">?</span>;
+        <span class="ident">generator</span>.<span class="ident">next_id</span>(<span class="ident">id</span>)
     }
 
     <span class="doccomment">/// Looks up a [`view::Serialized`] by name.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">view_by_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="kw">dyn</span> <span class="ident">view::Serialized</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">view_by_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="kw">dyn</span> <span class="ident">view::Serialized</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">views_by_name</span>
             .<span class="ident">get</span>(<span class="ident">name</span>)
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">type_id</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">views</span>.<span class="ident">get</span>(<span class="ident">type_id</span>))
             .<span class="ident">map</span>(<span class="ident">AsRef::as_ref</span>)
+            .<span class="ident">ok_or</span>(<span class="ident">Error::ViewNotFound</span>)
     }
 
     <span class="doccomment">/// Looks up a [`view::Serialized`] through the the type `V`.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">view</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">View</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="kw">dyn</span> <span class="ident">view::Serialized</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">views</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>()).<span class="ident">map</span>(<span class="ident">AsRef::as_ref</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">view</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">View</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="kw">dyn</span> <span class="ident">view::Serialized</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">views</span>
+            .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>())
+            .<span class="ident">map</span>(<span class="ident">AsRef::as_ref</span>)
+            .<span class="ident">ok_or</span>(<span class="ident">Error::ViewNotFound</span>)
     }
 
     <span class="doccomment">/// Iterates over all registered views.</span>

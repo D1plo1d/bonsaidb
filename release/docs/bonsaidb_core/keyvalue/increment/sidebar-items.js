@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","Executes [`Command::Set`] when awaited. Also offers methods to customize the options for the operation."]]});
+initSidebarItems({"struct":[["AsyncBuilder","Executes a [`Command::Increment`] or [`Command::Decrement`] key-value operation when awaited."],["Builder","Executes a [`Command::Increment`] or [`Command::Decrement`] key-value operation."]]});

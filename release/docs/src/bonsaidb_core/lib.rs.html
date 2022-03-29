@@ -271,6 +271,14 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Core functionality and types for BonsaiDb.</span>
 
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -296,9 +304,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">admin</span>;
 <span class="doccomment">/// Types for interacting with BonsaiDb.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">connection</span>;
-<span class="doccomment">/// Types for interacting with `Document`s.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">document</span>;
-<span class="doccomment">/// Limits used within BonsaiDb.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">limits</span>;
 <span class="doccomment">/// Types for defining database schema.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">schema</span>;
@@ -309,12 +315,11 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">keyvalue</span>;
 
 <span class="doccomment">/// Traits for tailoring a server.</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">custom_api</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">api</span>;
 
 <span class="doccomment">/// Key trait and related types.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">key</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;networking&quot;</span>)]</span>
 <span class="doccomment">/// Types for implementing the BonsaiDb network protocol.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">networking</span>;
 
@@ -337,7 +342,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">InvalidHexadecimal</span>},
     <span class="ident">key::NextValueError</span>,
-    <span class="ident">schema::InsertError</span>,
+    <span class="ident">schema</span>::{<span class="ident">ApiName</span>, <span class="ident">InsertError</span>},
 };
 
 <span class="doccomment">/// an enumeration of errors that this crate can produce</span>
@@ -367,6 +372,10 @@
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;schema &#39;{0}&#39; is not registered&quot;</span>)]</span>
     <span class="ident">SchemaNotRegistered</span>(<span class="ident">SchemaName</span>),
 
+    <span class="doccomment">/// The [`ViewName`] returned has already been registered.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;view &#39;{0}&#39; was already registered&quot;</span>)]</span>
+    <span class="ident">ViewAlreadyRegistered</span>(<span class="ident">ViewName</span>),
+
     <span class="doccomment">/// An invalid database name was specified. See</span>
     <span class="doccomment">/// [`StorageConnection::create_database()`](connection::StorageConnection::create_database)</span>
     <span class="doccomment">/// for database name requirements.</span>
@@ -376,6 +385,18 @@
     <span class="doccomment">/// The database name given was not found.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;database &#39;{0}&#39; was not found&quot;</span>)]</span>
     <span class="ident">DatabaseNotFound</span>(<span class="ident">String</span>),
+
+    <span class="doccomment">/// The view was not found.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;view was not found&quot;</span>)]</span>
+    <span class="ident">ViewNotFound</span>,
+
+    <span class="doccomment">/// The collection was not found.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;collection was not found&quot;</span>)]</span>
+    <span class="ident">CollectionNotFound</span>,
+
+    <span class="doccomment">/// The api invoked was not found.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;api &#39;{0}&#39; was not found&quot;</span>)]</span>
+    <span class="ident">ApiNotFound</span>(<span class="ident">ApiName</span>),
 
     <span class="doccomment">/// The database name already exists.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a database with name &#39;{0}&#39; already exists&quot;</span>)]</span>
@@ -403,7 +424,6 @@
     <span class="ident">Websocket</span>(<span class="ident">String</span>),
 
     <span class="doccomment">/// An error occurred from networking.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;networking&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a networking error occurred: &#39;{0}&#39;&quot;</span>)]</span>
     <span class="ident">Networking</span>(<span class="ident">networking::Error</span>),
 
@@ -418,10 +438,6 @@
     <span class="doccomment">/// An error occurred inside of the client.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;an io error in the client: &#39;{0}&#39;&quot;</span>)]</span>
     <span class="ident">Client</span>(<span class="ident">String</span>),
-
-    <span class="doccomment">/// An attempt to use a `Collection` with a `Database` that it wasn&#39;t defined within.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;attempted to access a collection not registered with this schema&quot;</span>)]</span>
-    <span class="ident">CollectionNotFound</span>,
 
     <span class="doccomment">/// A `Collection` being added already exists. This can be caused by a collection name not being unique.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;attempted to define a collection that already has been defined&quot;</span>)]</span>

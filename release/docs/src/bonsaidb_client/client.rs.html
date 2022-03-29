@@ -898,13 +898,32 @@
 <span id="896">896</span>
 <span id="897">897</span>
 <span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
 </pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::sync::atomic::AtomicBool</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">any::TypeId</span>,
     <span class="ident">collections::HashMap</span>,
     <span class="ident">fmt::Debug</span>,
-    <span class="ident">marker::PhantomData</span>,
     <span class="ident">ops::Deref</span>,
     <span class="ident">sync</span>::{
         <span class="ident">atomic</span>::{<span class="ident">AtomicU32</span>, <span class="ident">Ordering</span>},
@@ -912,56 +931,63 @@
     },
 };
 
-<span class="kw">use</span> <span class="ident">async_lock::Mutex</span>;
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::connection</span>::{<span class="ident">Authenticated</span>, <span class="ident">Authentication</span>};
+<span class="kw">use</span> <span class="ident">bonsaidb_core::connection::Authentication</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">connection</span>::{<span class="ident">Database</span>, <span class="ident">StorageConnection</span>},
-    <span class="ident">custom_api</span>::{<span class="ident">CustomApi</span>, <span class="ident">CustomApiResult</span>},
+    <span class="ident">admin</span>::{<span class="ident">Admin</span>, <span class="ident">ADMIN_DATABASE_NAME</span>},
+    <span class="ident">api</span>::{<span class="self">self</span>, <span class="ident">Api</span>},
+    <span class="ident">arc_bytes</span>::{<span class="ident">serde::Bytes</span>, <span class="ident">OwnedBytes</span>},
+    <span class="ident">connection</span>::{<span class="ident">AsyncStorageConnection</span>, <span class="ident">Database</span>, <span class="ident">HasSession</span>, <span class="ident">IdentityReference</span>, <span class="ident">Session</span>},
     <span class="ident">networking</span>::{
-        <span class="self">self</span>, <span class="ident">Payload</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">ServerRequest</span>, <span class="ident">ServerResponse</span>, <span class="ident">CURRENT_PROTOCOL_VERSION</span>,
+        <span class="ident">AlterUserPermissionGroupMembership</span>, <span class="ident">AlterUserRoleMembership</span>, <span class="ident">AssumeIdentity</span>,
+        <span class="ident">CreateDatabase</span>, <span class="ident">CreateUser</span>, <span class="ident">DeleteDatabase</span>, <span class="ident">DeleteUser</span>, <span class="ident">ListAvailableSchemas</span>,
+        <span class="ident">ListDatabases</span>, <span class="ident">LogOutSession</span>, <span class="ident">MessageReceived</span>, <span class="ident">Payload</span>, <span class="ident">UnregisterSubscriber</span>,
+        <span class="ident">CURRENT_PROTOCOL_VERSION</span>,
     },
     <span class="ident">permissions::Permissions</span>,
-    <span class="ident">schema</span>::{<span class="ident">Nameable</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>},
+    <span class="ident">schema</span>::{<span class="ident">ApiName</span>, <span class="ident">Nameable</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>},
 };
 <span class="kw">use</span> <span class="ident">bonsaidb_utils::fast_async_lock</span>;
-<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
 <span class="kw">use</span> <span class="ident">flume::Sender</span>;
+<span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">future::BoxFuture</span>, <span class="ident">Future</span>, <span class="ident">FutureExt</span>};
+<span class="kw">use</span> <span class="ident">parking_lot::Mutex</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident">tokio::task::JoinHandle</span>;
+<span class="kw">use</span> <span class="ident">tokio</span>::{<span class="ident">runtime::Handle</span>, <span class="ident">task::JoinHandle</span>};
 <span class="kw">use</span> <span class="ident">url::Url</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::remote_database</span>::{<span class="ident">RemoteDatabase</span>, <span class="ident">RemoteSubscriber</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::Error</span>, <span class="ident">Builder</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::Error</span>, <span class="ident">ApiError</span>, <span class="ident">Builder</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
 <span class="kw">mod</span> <span class="ident">quic_worker</span>;
 <span class="kw">mod</span> <span class="ident">remote_database</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+<span class="kw">mod</span> <span class="ident">sync</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>, <span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>)))]</span>
 <span class="kw">mod</span> <span class="ident">tungstenite_worker</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
 <span class="kw">mod</span> <span class="ident">wasm_websocket_worker</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SubscriberMap</span>(<span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SubscriberMap</span>(<span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span> <span class="ident">SubscriberMap</span> {
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="self">self</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">lock</span>();
         <span class="ident">data</span>.<span class="ident">clear</span>();
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">SubscriberMap</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 }
 
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{<span class="ident">circulate::Message</span>, <span class="ident">networking::DatabaseRequest</span>};
+<span class="kw">use</span> <span class="ident">bonsaidb_core::circulate::Message</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>, <span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>)))]</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">WebSocketError</span> <span class="op">=</span> <span class="ident">tokio_tungstenite::tungstenite::Error</span>;
@@ -983,9 +1009,7 @@
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// # use bonsaidb_client::{Client, fabruic::Certificate, url::Url};</span>
 <span class="doccomment">/// # async fn test_fn() -&gt; anyhow::Result&lt;()&gt; {</span>
-<span class="doccomment">/// let client = Client::build(Url::parse(&quot;bonsaidb://my-server.com&quot;)?)</span>
-<span class="doccomment">///     .finish()</span>
-<span class="doccomment">///     .await?;</span>
+<span class="doccomment">/// let client = Client::build(Url::parse(&quot;bonsaidb://my-server.com&quot;)?).finish()?;</span>
 <span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
@@ -1003,8 +1027,7 @@
 <span class="doccomment">///     Certificate::from_der(std::fs::read(&quot;mydb.bonsaidb/pinned-certificate.der&quot;)?)?;</span>
 <span class="doccomment">/// let client = Client::build(Url::parse(&quot;bonsaidb://localhost&quot;)?)</span>
 <span class="doccomment">///     .with_certificate(certificate)</span>
-<span class="doccomment">///     .finish()</span>
-<span class="doccomment">///     .await?;</span>
+<span class="doccomment">///     .finish()?;</span>
 <span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
@@ -1022,9 +1045,7 @@
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// # use bonsaidb_client::{Client, fabruic::Certificate, url::Url};</span>
 <span class="doccomment">/// # async fn test_fn() -&gt; anyhow::Result&lt;()&gt; {</span>
-<span class="doccomment">/// let client = Client::build(Url::parse(&quot;ws://localhost&quot;)?)</span>
-<span class="doccomment">///     .finish()</span>
-<span class="doccomment">///     .await?;</span>
+<span class="doccomment">/// let client = Client::build(Url::parse(&quot;ws://localhost&quot;)?).finish()?;</span>
 <span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
@@ -1034,49 +1055,44 @@
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// # use bonsaidb_client::{Client, fabruic::Certificate, url::Url};</span>
 <span class="doccomment">/// # async fn test_fn() -&gt; anyhow::Result&lt;()&gt; {</span>
-<span class="doccomment">/// let client = Client::build(Url::parse(&quot;wss://my-server.com&quot;)?)</span>
-<span class="doccomment">///     .finish()</span>
-<span class="doccomment">///     .await?;</span>
+<span class="doccomment">/// let client = Client::build(Url::parse(&quot;wss://my-server.com&quot;)?).finish()?;</span>
 <span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ## Using a `CustomApi`</span>
+<span class="doccomment">/// ## Using a `Api`</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Our user guide has a [section on creating and using a</span>
-<span class="doccomment">/// CustomApi](https://dev.bonsaidb.io/release/guide/about/access-models/custom-api-server.html).</span>
+<span class="doccomment">/// Our user guide has a [section on creating and</span>
+<span class="doccomment">/// using](https://dev.bonsaidb.io/release/guide/about/access-models/custom-api-server.html)</span>
+<span class="doccomment">/// an [`Api`](api::Api).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
 <span class="doccomment">/// # use bonsaidb_client::{Client, fabruic::Certificate, url::Url};</span>
 <span class="doccomment">/// // `bonsaidb_core` is re-exported to `bonsaidb::core` or `bonsaidb_client::core`.</span>
-<span class="doccomment">/// use bonsaidb_core::custom_api::{CustomApi, Infallible};</span>
+<span class="doccomment">/// use bonsaidb_core::{</span>
+<span class="doccomment">///     api::{Api, Infallible},</span>
+<span class="doccomment">///     schema::{ApiName, Qualified},</span>
+<span class="doccomment">/// };</span>
 <span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// #[derive(Serialize, Deserialize, Debug)]</span>
-<span class="doccomment">/// pub enum Request {</span>
-<span class="doccomment">///     Ping,</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// pub struct Ping;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// #[derive(Serialize, Deserialize, Clone, Debug)]</span>
-<span class="doccomment">/// pub enum Response {</span>
-<span class="doccomment">///     Pong,</span>
-<span class="doccomment">/// }</span>
+<span class="doccomment">/// pub struct Pong;</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug)]</span>
-<span class="doccomment">/// pub enum MyApi {}</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl CustomApi for MyApi {</span>
-<span class="doccomment">///     type Request = Request;</span>
-<span class="doccomment">///     type Response = Response;</span>
+<span class="doccomment">/// impl Api for Ping {</span>
+<span class="doccomment">///     type Response = Pong;</span>
 <span class="doccomment">///     type Error = Infallible;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     fn name() -&gt; ApiName {</span>
+<span class="doccomment">///         ApiName::private(&quot;ping&quot;)</span>
+<span class="doccomment">///     }</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # async fn test_fn() -&gt; anyhow::Result&lt;()&gt; {</span>
-<span class="doccomment">/// let client = Client::build(Url::parse(&quot;bonsaidb://localhost&quot;)?)</span>
-<span class="doccomment">///     .with_custom_api::&lt;MyApi&gt;()</span>
-<span class="doccomment">///     .finish()</span>
-<span class="doccomment">///     .await?;</span>
-<span class="doccomment">/// let Response::Pong = client.send_api_request(Request::Ping).await?;</span>
+<span class="doccomment">/// let client = Client::build(Url::parse(&quot;bonsaidb://localhost&quot;)?).finish()?;</span>
+<span class="doccomment">/// let Pong = client.send_api_request_async(&amp;Ping).await?;</span>
 <span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
@@ -1084,59 +1100,62 @@
 <span class="doccomment">/// ### Receiving out-of-band messages from the server</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If the server sends a message that isn&#39;t in response to a request, the</span>
-<span class="doccomment">/// client will invoke it&#39;s [custom api</span>
-<span class="doccomment">/// callback](Builder::with_custom_api_callback):</span>
+<span class="doccomment">/// client will invoke it&#39;s [api callback](Builder::with_api_callback):</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # use bonsaidb_client::{Client, fabruic::Certificate, url::Url};</span>
+<span class="doccomment">/// # use bonsaidb_client::{Client, ApiCallback, fabruic::Certificate, url::Url};</span>
 <span class="doccomment">/// # // `bonsaidb_core` is re-exported to `bonsaidb::core` or `bonsaidb_client::core`.</span>
-<span class="doccomment">/// # use bonsaidb_core::custom_api::{CustomApi, Infallible};</span>
+<span class="doccomment">/// # use bonsaidb_core::{api::{Api, Infallible}, schema::{ApiName, Qualified}};</span>
 <span class="doccomment">/// # use serde::{Serialize, Deserialize};</span>
 <span class="doccomment">/// # #[derive(Serialize, Deserialize, Debug)]</span>
-<span class="doccomment">/// # pub enum Request {</span>
-<span class="doccomment">/// #     Ping</span>
-<span class="doccomment">/// # }</span>
+<span class="doccomment">/// # pub struct Ping;</span>
 <span class="doccomment">/// # #[derive(Serialize, Deserialize, Clone, Debug)]</span>
-<span class="doccomment">/// # pub enum Response {</span>
-<span class="doccomment">/// #     Pong</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// # #[derive(Debug)]</span>
-<span class="doccomment">/// # pub enum MyApi {}</span>
-<span class="doccomment">/// # impl CustomApi for MyApi {</span>
-<span class="doccomment">/// #     type Request = Request;</span>
-<span class="doccomment">/// #     type Response = Response;</span>
+<span class="doccomment">/// # pub struct Pong;</span>
+<span class="doccomment">/// # impl Api for Ping {</span>
+<span class="doccomment">/// #     type Response = Pong;</span>
 <span class="doccomment">/// #     type Error = Infallible;</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// #     fn name() -&gt; ApiName {</span>
+<span class="doccomment">/// #         ApiName::private(&quot;ping&quot;)</span>
+<span class="doccomment">/// #     }</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// # async fn test_fn() -&gt; anyhow::Result&lt;()&gt; {</span>
 <span class="doccomment">/// let client = Client::build(Url::parse(&quot;bonsaidb://localhost&quot;)?)</span>
-<span class="doccomment">///     .with_custom_api_callback::&lt;MyApi, _&gt;(|result: Result&lt;Response, Infallible&gt;| {</span>
-<span class="doccomment">///         let Response::Pong = result.unwrap();</span>
-<span class="doccomment">///     })</span>
-<span class="doccomment">///     .finish()</span>
-<span class="doccomment">///     .await?;</span>
+<span class="doccomment">///     .with_api_callback(ApiCallback::&lt;Ping&gt;::new(|result: Pong| async move {</span>
+<span class="doccomment">///         println!(&quot;Received out-of-band Pong&quot;);</span>
+<span class="doccomment">///     }))</span>
+<span class="doccomment">///     .finish()?;</span>
 <span class="doccomment">/// # Ok(())</span>
 <span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Client</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">CustomApi</span> <span class="op">=</span> ()<span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">data</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Client</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">data</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Data</span><span class="op">&gt;</span>,
+    <span class="ident">session</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Session</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">Client</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">A</span>: <span class="ident">CustomApi</span>,
-{
+<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Client</span> {
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+        <span class="kw">if</span> <span class="ident">Arc::strong_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">session</span>) <span class="op">==</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">session_id</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">session</span>.<span class="ident">id</span> {
+                <span class="comment">// Final reference to an authenticated session</span>
+                <span class="ident">drop</span>(<span class="self">self</span>.<span class="ident">invoke_api_request</span>(<span class="kw-2">&amp;</span><span class="ident">LogOutSession</span>(<span class="ident">session_id</span>)));
+            }
+        }
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">Client</span> {
     <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident">Arc::ptr_eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">data</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">CustomApi</span><span class="op">&gt;</span> {
-    <span class="ident">request_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">PendingRequest</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Data</span> {
+    <span class="ident">request_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">PendingRequest</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-    <span class="ident">_worker</span>: <span class="ident">CancellableHandle</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">A::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">_worker</span>: <span class="ident">CancellableHandle</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">effective_permissions</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">schemas</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">TypeId</span>, <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Schematic</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">request_id</span>: <span class="ident">AtomicU32</span>,
@@ -1145,14 +1164,14 @@
     <span class="ident">background_task_running</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicBool</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">Client</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">Client</span> {
     <span class="doccomment">/// Returns a builder for a new client connecting to `url`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">url</span>: <span class="ident">Url</span>) -&gt; <span class="ident">Builder</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">url</span>: <span class="ident">Url</span>) -&gt; <span class="ident">Builder</span> {
         <span class="ident">Builder::new</span>(<span class="ident">url</span>)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">CustomApi</span><span class="op">&gt;</span> <span class="ident">Client</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">Client</span> {
     <span class="doccomment">/// Initialize a client connecting to `url`. This client can be shared by</span>
     <span class="doccomment">/// cloning it. All requests are done asynchronously over the same</span>
     <span class="doccomment">/// connection.</span>
@@ -1167,15 +1186,16 @@
     <span class="doccomment">/// to recover and reconnect, each component of the apps built can adopt a</span>
     <span class="doccomment">/// &quot;retry-to-recover&quot; design, or &quot;abort-and-fail&quot; depending on how critical</span>
     <span class="doccomment">/// the database is to operation.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">url</span>: <span class="ident">Url</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">A::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">url</span>: <span class="ident">Url</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident"><span class="self">Self</span>::new_from_parts</span>(
             <span class="ident">url</span>,
             <span class="ident">CURRENT_PROTOCOL_VERSION</span>,
+            <span class="ident">HashMap::default</span>(),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
             <span class="prelude-val">None</span>,
-            <span class="prelude-val">None</span>,
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+            <span class="ident">Handle::try_current</span>().<span class="ident">ok</span>(),
         )
-        .<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Initialize a client connecting to `url` with `certificate` being used to</span>
@@ -1193,24 +1213,56 @@
     <span class="doccomment">/// to recover and reconnect, each component of the apps built can adopt a</span>
     <span class="doccomment">/// &quot;retry-to-recover&quot; design, or &quot;abort-and-fail&quot; depending on how critical</span>
     <span class="doccomment">/// the database is to operation.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">new_from_parts</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_from_parts</span>(
         <span class="ident">url</span>: <span class="ident">Url</span>,
         <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-        <span class="ident">custom_api_callback</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="kw-2">mut</span> <span class="ident">custom_apis</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span> <span class="ident">certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">fabruic::Certificate</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">A::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span> <span class="ident">tokio</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Handle</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="ident">SubscriberMap::default</span>();
+        <span class="kw">let</span> <span class="ident">callback_subscribers</span> <span class="op">=</span> <span class="ident">subscribers</span>.<span class="ident">clone</span>();
+        <span class="ident">custom_apis</span>.<span class="ident">insert</span>(
+            <span class="ident">MessageReceived::name</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">Arc::new</span>(<span class="ident">ApiCallback</span>::<span class="op">&lt;</span><span class="ident">MessageReceived</span><span class="op">&gt;</span><span class="ident">::new</span>(
+                <span class="kw">move</span> <span class="op">|</span><span class="ident">message</span>: <span class="ident">MessageReceived</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">callback_subscribers</span> <span class="op">=</span> <span class="ident">callback_subscribers</span>.<span class="ident">clone</span>();
+                    <span class="kw">async</span> <span class="kw">move</span> {
+                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="ident">callback_subscribers</span>.<span class="ident">lock</span>();
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sender</span>) <span class="op">=</span> <span class="ident">subscribers</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">message</span>.<span class="ident">subscriber_id</span>) {
+                            <span class="kw">if</span> <span class="ident">sender</span>
+                                .<span class="ident">send</span>(<span class="ident">bonsaidb_core::circulate::Message</span> {
+                                    <span class="ident">topic</span>: <span class="ident">OwnedBytes::from</span>(<span class="ident">message</span>.<span class="ident">topic</span>.<span class="ident">into_vec</span>()),
+                                    <span class="ident">payload</span>: <span class="ident">OwnedBytes::from</span>(<span class="ident">message</span>.<span class="ident">payload</span>.<span class="ident">into_vec</span>()),
+                                })
+                                .<span class="ident">is_err</span>()
+                            {
+                                <span class="ident">subscribers</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">message</span>.<span class="ident">subscriber_id</span>);
+                            }
+                        }
+                    }
+                },
+            ))),
+        );
         <span class="kw">match</span> <span class="ident">url</span>.<span class="ident">scheme</span>() {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
             <span class="string">&quot;bonsaidb&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::new_bonsai_client</span>(
                 <span class="ident">url</span>,
                 <span class="ident">protocol_version</span>,
                 <span class="ident">certificate</span>,
-                <span class="ident">custom_api_callback</span>,
+                <span class="ident">custom_apis</span>,
+                <span class="ident">tokio</span>,
+                <span class="ident">subscribers</span>,
             )),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
-            <span class="string">&quot;wss&quot;</span> <span class="op">|</span> <span class="string">&quot;ws&quot;</span> =&gt; {
-                <span class="ident"><span class="self">Self</span>::new_websocket_client</span>(<span class="ident">url</span>, <span class="ident">protocol_version</span>, <span class="ident">custom_api_callback</span>).<span class="kw">await</span>
-            }
+            <span class="string">&quot;wss&quot;</span> <span class="op">|</span> <span class="string">&quot;ws&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::new_websocket_client</span>(
+                <span class="ident">url</span>,
+                <span class="ident">protocol_version</span>,
+                <span class="ident">custom_apis</span>,
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+                <span class="ident">tokio</span>,
+                <span class="ident">subscribers</span>,
+            )),
             <span class="ident">other</span> =&gt; {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidUrl</span>(<span class="macro">format!</span>(<span class="string">&quot;unsupported scheme {}&quot;</span>, <span class="ident">other</span>)));
             }
@@ -1222,19 +1274,23 @@
         <span class="ident">url</span>: <span class="ident">Url</span>,
         <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
         <span class="ident">certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">fabruic::Certificate</span><span class="op">&gt;</span>,
-        <span class="ident">custom_api_callback</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">custom_apis</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">tokio</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Handle</span><span class="op">&gt;</span>,
+        <span class="ident">subscribers</span>: <span class="ident">SubscriberMap</span>,
     ) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> (<span class="ident">request_sender</span>, <span class="ident">request_receiver</span>) <span class="op">=</span> <span class="ident">flume::unbounded</span>();
 
-        <span class="kw">let</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="ident">SubscriberMap::default</span>();
-        <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">tokio::task::spawn</span>(<span class="ident">quic_worker::reconnecting_client_loop</span>(
-            <span class="ident">url</span>,
-            <span class="ident">protocol_version</span>,
-            <span class="ident">certificate</span>,
-            <span class="ident">request_receiver</span>,
-            <span class="ident">custom_api_callback</span>,
-            <span class="ident">subscribers</span>.<span class="ident">clone</span>(),
-        ));
+        <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">sync::spawn_client</span>(
+            <span class="ident">quic_worker::reconnecting_client_loop</span>(
+                <span class="ident">url</span>,
+                <span class="ident">protocol_version</span>,
+                <span class="ident">certificate</span>,
+                <span class="ident">request_receiver</span>,
+                <span class="ident">Arc::new</span>(<span class="ident">custom_apis</span>),
+                <span class="ident">subscribers</span>.<span class="ident">clone</span>(),
+            ),
+            <span class="ident">tokio</span>,
+        );
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
         <span class="kw">let</span> <span class="ident">background_task_running</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">AtomicBool::new</span>(<span class="bool-val">true</span>));
@@ -1254,31 +1310,35 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
                 <span class="ident">background_task_running</span>,
             }),
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">Session::default</span>()),
         }
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>, <span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>)))]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">new_websocket_client</span>(
+    <span class="kw">fn</span> <span class="ident">new_websocket_client</span>(
         <span class="ident">url</span>: <span class="ident">Url</span>,
         <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-        <span class="ident">custom_api_callback</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">A::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="ident">custom_apis</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">tokio</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Handle</span><span class="op">&gt;</span>,
+        <span class="ident">subscribers</span>: <span class="ident">SubscriberMap</span>,
+    ) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> (<span class="ident">request_sender</span>, <span class="ident">request_receiver</span>) <span class="op">=</span> <span class="ident">flume::unbounded</span>();
 
-        <span class="kw">let</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="ident">SubscriberMap::default</span>();
-
-        <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">tokio::task::spawn</span>(<span class="ident">tungstenite_worker::reconnecting_client_loop</span>(
-            <span class="ident">url</span>,
-            <span class="ident">protocol_version</span>,
-            <span class="ident">request_receiver</span>,
-            <span class="ident">custom_api_callback</span>,
-            <span class="ident">subscribers</span>.<span class="ident">clone</span>(),
-        ));
+        <span class="kw">let</span> <span class="ident">worker</span> <span class="op">=</span> <span class="ident">sync::spawn_client</span>(
+            <span class="ident">tungstenite_worker::reconnecting_client_loop</span>(
+                <span class="ident">url</span>,
+                <span class="ident">protocol_version</span>,
+                <span class="ident">request_receiver</span>,
+                <span class="ident">Arc::new</span>(<span class="ident">custom_apis</span>),
+                <span class="ident">subscribers</span>.<span class="ident">clone</span>(),
+            ),
+            <span class="ident">tokio</span>,
+        );
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
         <span class="kw">let</span> <span class="ident">background_task_running</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">AtomicBool::new</span>(<span class="bool-val">true</span>));
 
-        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
             <span class="ident">data</span>: <span class="ident">Arc::new</span>(<span class="ident">Data</span> {
                 <span class="ident">request_sender</span>,
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
@@ -1294,33 +1354,31 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
                 <span class="ident">background_task_running</span>,
             }),
-        };
-
-        <span class="prelude-val">Ok</span>(<span class="ident">client</span>)
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">Session::default</span>()),
+        }
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">new_websocket_client</span>(
+    <span class="kw">fn</span> <span class="ident">new_websocket_client</span>(
         <span class="ident">url</span>: <span class="ident">Url</span>,
         <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-        <span class="ident">custom_api_callback</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">A::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="ident">custom_apis</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">subscribers</span>: <span class="ident">SubscriberMap</span>,
+    ) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> (<span class="ident">request_sender</span>, <span class="ident">request_receiver</span>) <span class="op">=</span> <span class="ident">flume::unbounded</span>();
-
-        <span class="kw">let</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="ident">SubscriberMap::default</span>();
 
         <span class="ident">wasm_websocket_worker::spawn_client</span>(
             <span class="ident">Arc::new</span>(<span class="ident">url</span>),
             <span class="ident">protocol_version</span>,
             <span class="ident">request_receiver</span>,
-            <span class="ident">custom_api_callback</span>.<span class="ident">clone</span>(),
+            <span class="ident">Arc::new</span>(<span class="ident">custom_apis</span>),
             <span class="ident">subscribers</span>.<span class="ident">clone</span>(),
         );
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
         <span class="kw">let</span> <span class="ident">background_task_running</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">AtomicBool::new</span>(<span class="bool-val">true</span>));
 
-        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
             <span class="ident">data</span>: <span class="ident">Arc::new</span>(<span class="ident">Data</span> {
                 <span class="ident">request_sender</span>,
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
@@ -1336,47 +1394,79 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
                 <span class="ident">background_task_running</span>,
             }),
-        };
-
-        <span class="prelude-val">Ok</span>(<span class="ident">client</span>)
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">Session::default</span>()),
+        }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request</span>(
+    <span class="kw">fn</span> <span class="ident">send_request_without_confirmation</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">request</span>: <span class="ident">Request</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">CustomApi</span><span class="op">&gt;</span><span class="ident">::Request</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">A::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="ident">name</span>: <span class="ident">ApiName</span>,
+        <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
         <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">request_id</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering::SeqCst</span>);
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">request_sender</span>.<span class="ident">send</span>(<span class="ident">PendingRequest</span> {
             <span class="ident">request</span>: <span class="ident">Payload</span> {
+                <span class="ident">session_id</span>: <span class="self">self</span>.<span class="ident">session</span>.<span class="ident">id</span>,
                 <span class="ident">id</span>: <span class="prelude-val">Some</span>(<span class="ident">id</span>),
-                <span class="ident">wrapped</span>: <span class="ident">request</span>,
+                <span class="ident">name</span>,
+                <span class="ident">value</span>: <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>),
             },
-            <span class="ident">responder</span>: <span class="ident">result_sender</span>.<span class="ident">clone</span>(),
-            <span class="ident">_phantom</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">responder</span>: <span class="ident">result_sender</span>,
         })<span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(<span class="ident">result_receiver</span>)
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_request_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">ApiName</span>, <span class="ident">bytes</span>: <span class="ident">Bytes</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">result_receiver</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">send_request_without_confirmation</span>(<span class="ident">name</span>, <span class="ident">bytes</span>)<span class="question-mark">?</span>;
 
         <span class="ident">result_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span><span class="question-mark">?</span>
     }
 
+    <span class="kw">fn</span> <span class="ident">send_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">ApiName</span>, <span class="ident">bytes</span>: <span class="ident">Bytes</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">result_receiver</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">send_request_without_confirmation</span>(<span class="ident">name</span>, <span class="ident">bytes</span>)<span class="question-mark">?</span>;
+
+        <span class="ident">result_receiver</span>.<span class="ident">recv</span>()<span class="question-mark">?</span>
+    }
+
     <span class="doccomment">/// Sends an api `request`.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_api_request</span>(
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">send_api_request_async</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">request</span>: <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">CustomApi</span><span class="op">&gt;</span><span class="ident">::Request</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">A::Response</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="ident">A::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">send_request</span>(<span class="ident">Request::Api</span>(<span class="ident">request</span>)).<span class="kw">await</span><span class="question-mark">?</span> {
-            <span class="ident">Response::Api</span>(<span class="ident">response</span>) =&gt; <span class="ident">response</span>.<span class="ident">map_err</span>(<span class="ident">Error::Api</span>),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">err</span>)),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::Network</span>(<span class="ident">networking::Error::UnexpectedResponse</span>(
-                <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>),
-            ))),
-        }
+        <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="ident">Api</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">ApiError</span><span class="op">&lt;</span><span class="ident">Api::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="ident">pot::to_vec</span>(<span class="ident">request</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">send_request_async</span>(<span class="ident">Api::name</span>(), <span class="ident">request</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span>
+            <span class="ident">pot::from_slice</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">Api::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>;
+        <span class="ident">response</span>.<span class="ident">map_err</span>(<span class="ident">ApiError::Api</span>)
+    }
+
+    <span class="doccomment">/// Sends an api `request` without waiting for a result. The response from</span>
+    <span class="doccomment">/// the server will be ignored.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">invoke_api_request</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="ident">Api</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="ident">pot::to_vec</span>(<span class="ident">request</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>);
+        <span class="self">self</span>.<span class="ident">send_request_without_confirmation</span>(<span class="ident">Api::name</span>(), <span class="ident">request</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+    }
+
+    <span class="doccomment">/// Sends an api `request`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_api_request</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="ident">Api</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">ApiError</span><span class="op">&lt;</span><span class="ident">Api::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="ident">pot::to_vec</span>(<span class="ident">request</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>);
+        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">send_request</span>(<span class="ident">Api::name</span>(), <span class="ident">request</span>)<span class="question-mark">?</span>;
+
+        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span>
+            <span class="ident">pot::from_slice</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">Api::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>;
+        <span class="ident">response</span>.<span class="ident">map_err</span>(<span class="ident">ApiError::Api</span>)
     }
 
     <span class="doccomment">/// Returns the current effective permissions for the client. Returns None</span>
     <span class="doccomment">/// if unauthenticated.</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">effective_permissions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">effective_permissions</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">effective_permissions</span>);
+        <span class="kw">let</span> <span class="ident">effective_permissions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">effective_permissions</span>.<span class="ident">lock</span>();
         <span class="ident">effective_permissions</span>.<span class="ident">clone</span>()
     }
 
@@ -1387,57 +1477,38 @@
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">background_task_running</span>.<span class="ident">clone</span>()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">register_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u64</span>, <span class="ident">sender</span>: <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">subscribers</span>);
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">register_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u64</span>, <span class="ident">sender</span>: <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">subscribers</span>.<span class="ident">lock</span>();
         <span class="ident">subscribers</span>.<span class="ident">insert</span>(<span class="ident">id</span>, <span class="ident">sender</span>);
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unregister_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">database</span>: <span class="ident">String</span>, <span class="ident">id</span>: <span class="ident">u64</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">unregister_subscriber_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">database</span>: <span class="ident">String</span>, <span class="ident">id</span>: <span class="ident">u64</span>) {
         <span class="ident">drop</span>(
-            <span class="self">self</span>.<span class="ident">send_request</span>(<span class="ident">Request::Database</span> {
+            <span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">UnregisterSubscriber</span> {
                 <span class="ident">database</span>,
-                <span class="ident">request</span>: <span class="ident">DatabaseRequest::UnregisterSubscriber</span> { <span class="ident">subscriber_id</span>: <span class="ident">id</span> },
+                <span class="ident">subscriber_id</span>: <span class="ident">id</span>,
             })
             .<span class="kw">await</span>,
         );
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">subscribers</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">subscribers</span>.<span class="ident">lock</span>();
         <span class="ident">subscribers</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>);
     }
-}
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">CustomApi</span><span class="op">&gt;</span> <span class="ident">StorageConnection</span> <span class="kw">for</span> <span class="ident">Client</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Database</span> <span class="op">=</span> <span class="ident">RemoteDatabase</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>;
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_database_with_schema</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">schema</span>: <span class="ident">SchemaName</span>,
-        <span class="ident">only_if_needed</span>: <span class="ident">bool</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::CreateDatabase</span> {
-                <span class="ident">database</span>: <span class="ident">Database</span> {
-                    <span class="ident">name</span>: <span class="ident">name</span>.<span class="ident">to_string</span>(),
-                    <span class="ident">schema</span>,
-                },
-                <span class="ident">only_if_needed</span>,
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::DatabaseCreated</span> { .. }) =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">unregister_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">database</span>: <span class="ident">String</span>, <span class="ident">id</span>: <span class="ident">u64</span>) {
+        <span class="ident">drop</span>(<span class="self">self</span>.<span class="ident">send_api_request</span>(<span class="kw-2">&amp;</span><span class="ident">UnregisterSubscriber</span> {
+            <span class="ident">database</span>,
+            <span class="ident">subscriber_id</span>: <span class="ident">id</span>,
+        }));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">subscribers</span>.<span class="ident">lock</span>();
+        <span class="ident">subscribers</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>);
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">database</span><span class="op">&lt;</span><span class="ident">DB</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(
+    <span class="kw">fn</span> <span class="ident">database</span><span class="op">&lt;</span><span class="ident">DB</span>: <span class="ident">bonsaidb_core::schema::Schema</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Database</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">schemas</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">schemas</span>);
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RemoteDatabase</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">schemas</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">schemas</span>.<span class="ident">lock</span>();
         <span class="kw">let</span> <span class="ident">type_id</span> <span class="op">=</span> <span class="ident">TypeId::of</span>::<span class="op">&lt;</span><span class="ident">DB</span><span class="op">&gt;</span>();
         <span class="kw">let</span> <span class="ident">schematic</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">schematic</span>) <span class="op">=</span> <span class="ident">schemas</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">type_id</span>) {
             <span class="ident">schematic</span>.<span class="ident">clone</span>()
@@ -1452,79 +1523,80 @@
             <span class="ident">schematic</span>,
         ))
     }
+}
+
+<span class="kw">impl</span> <span class="ident">HasSession</span> <span class="kw">for</span> <span class="ident">Client</span> {
+    <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">session</span>)
+    }
+}
+
+<span class="attribute">#[<span class="ident">async_trait</span>]</span>
+<span class="kw">impl</span> <span class="ident">AsyncStorageConnection</span> <span class="kw">for</span> <span class="ident">Client</span> {
+    <span class="kw">type</span> <span class="ident">Database</span> <span class="op">=</span> <span class="ident">RemoteDatabase</span>;
+    <span class="kw">type</span> <span class="ident">Authenticated</span> <span class="op">=</span> <span class="self">Self</span>;
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">admin</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Database</span> {
+        <span class="self">self</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">Admin</span><span class="op">&gt;</span>(<span class="ident">ADMIN_DATABASE_NAME</span>).<span class="ident">unwrap</span>()
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_database_with_schema</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">schema</span>: <span class="ident">SchemaName</span>,
+        <span class="ident">only_if_needed</span>: <span class="ident">bool</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">CreateDatabase</span> {
+            <span class="ident">database</span>: <span class="ident">Database</span> {
+                <span class="ident">name</span>: <span class="ident">name</span>.<span class="ident">to_string</span>(),
+                <span class="ident">schema</span>,
+            },
+            <span class="ident">only_if_needed</span>,
+        })
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">database</span><span class="op">&lt;</span><span class="ident">DB</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Database</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">DB</span><span class="op">&gt;</span>(<span class="ident">name</span>)
+    }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_database</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::DeleteDatabase</span> {
-                <span class="ident">name</span>: <span class="ident">name</span>.<span class="ident">to_string</span>(),
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::DatabaseDeleted</span> { .. }) =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+        <span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">DeleteDatabase</span> {
+            <span class="ident">name</span>: <span class="ident">name</span>.<span class="ident">to_string</span>(),
+        })
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_databases</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Database</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::ListDatabases</span>))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::Databases</span>(<span class="ident">databases</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">databases</span>),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">ListDatabases</span>).<span class="kw">await</span><span class="question-mark">?</span>)
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_available_schemas</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SchemaName</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::ListAvailableSchemas</span>))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::AvailableSchemas</span>(<span class="ident">schemas</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">schemas</span>),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">ListAvailableSchemas</span>).<span class="kw">await</span><span class="question-mark">?</span>)
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_user</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">username</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::CreateUser</span> {
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>
+            .<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">CreateUser</span> {
                 <span class="ident">username</span>: <span class="ident">username</span>.<span class="ident">to_string</span>(),
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::UserCreated</span> { <span class="ident">id</span> }) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">id</span>),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+            })
+            .<span class="kw">await</span><span class="question-mark">?</span>)
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_user</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::DeleteUser</span> {
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>
+            .<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">DeleteUser</span> {
                 <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+            })
+            .<span class="kw">await</span><span class="question-mark">?</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
@@ -1533,19 +1605,12 @@
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">password</span>: <span class="ident">bonsaidb_core::connection::SensitiveString</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::SetUserPassword</span> {
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>
+            .<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">bonsaidb_core::networking::SetUserPassword</span> {
                 <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
                 <span class="ident">password</span>,
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+            })
+            .<span class="kw">await</span><span class="question-mark">?</span>)
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
@@ -1553,20 +1618,30 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">authentication</span>: <span class="ident">Authentication</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::Authenticate</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">session</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">bonsaidb_core::networking::Authenticate</span> {
                 <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
                 <span class="ident">authentication</span>,
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Server</span>(<span class="ident">ServerResponse::Authenticated</span>(<span class="ident">response</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">response</span>),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+            })
+            .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
+            <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clone</span>(),
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">session</span>),
+        })
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">assume_identity</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">identity</span>: <span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">session</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">AssumeIdentity</span>(<span class="ident">identity</span>.<span class="ident">into_owned</span>()))
+            .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
+            <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clone</span>(),
+            <span class="ident">session</span>: <span class="ident">Arc::new</span>(<span class="ident">session</span>),
+        })
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">add_permission_group_to_user</span><span class="op">&lt;</span>
@@ -1579,22 +1654,13 @@
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">permission_group</span>: <span class="ident">G</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(
-                <span class="ident">ServerRequest::AlterUserPermissionGroupMembership</span> {
-                    <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                    <span class="ident">group</span>: <span class="ident">permission_group</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                    <span class="ident">should_be_member</span>: <span class="bool-val">true</span>,
-                },
-            ))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+        <span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">AlterUserPermissionGroupMembership</span> {
+            <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">group</span>: <span class="ident">permission_group</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">should_be_member</span>: <span class="bool-val">true</span>,
+        })
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">remove_permission_group_from_user</span><span class="op">&lt;</span>
@@ -1607,22 +1673,13 @@
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">permission_group</span>: <span class="ident">G</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(
-                <span class="ident">ServerRequest::AlterUserPermissionGroupMembership</span> {
-                    <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                    <span class="ident">group</span>: <span class="ident">permission_group</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                    <span class="ident">should_be_member</span>: <span class="bool-val">false</span>,
-                },
-            ))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+        <span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">AlterUserPermissionGroupMembership</span> {
+            <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">group</span>: <span class="ident">permission_group</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">should_be_member</span>: <span class="bool-val">false</span>,
+        })
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">add_role_to_user</span><span class="op">&lt;</span>
@@ -1635,20 +1692,13 @@
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">role</span>: <span class="ident">G</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::AlterUserRoleMembership</span> {
-                <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                <span class="ident">role</span>: <span class="ident">role</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                <span class="ident">should_be_member</span>: <span class="bool-val">true</span>,
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+        <span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">AlterUserRoleMembership</span> {
+            <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">role</span>: <span class="ident">role</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">should_be_member</span>: <span class="bool-val">true</span>,
+        })
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">remove_role_from_user</span><span class="op">&lt;</span>
@@ -1661,33 +1711,24 @@
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">role</span>: <span class="ident">G</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>
-            .<span class="ident">send_request</span>(<span class="ident">Request::Server</span>(<span class="ident">ServerRequest::AlterUserRoleMembership</span> {
-                <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                <span class="ident">role</span>: <span class="ident">role</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
-                <span class="ident">should_be_member</span>: <span class="bool-val">false</span>,
-            }))
-            .<span class="kw">await</span><span class="question-mark">?</span>
-        {
-            <span class="ident">Response::Ok</span> =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="ident">Response::Error</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="ident">other</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">bonsaidb_core::Error::Networking</span>(
-                <span class="ident">networking::Error::UnexpectedResponse</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">other</span>)),
-            )),
-        }
+        <span class="self">self</span>.<span class="ident">send_api_request_async</span>(<span class="kw-2">&amp;</span><span class="ident">AlterUserRoleMembership</span> {
+            <span class="ident">user</span>: <span class="ident">user</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">role</span>: <span class="ident">role</span>.<span class="ident">name</span>()<span class="question-mark">?</span>.<span class="ident">into_owned</span>(),
+            <span class="ident">should_be_member</span>: <span class="bool-val">false</span>,
+        })
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">type</span> <span class="ident">OutstandingRequestMap</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">PendingRequest</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-<span class="kw">type</span> <span class="ident">OutstandingRequestMapHandle</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">OutstandingRequestMap</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-<span class="kw">type</span> <span class="ident">PendingRequestResponder</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span> <span class="op">=</span>
-    <span class="ident">Sender</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">Api</span> <span class="kw">as</span> <span class="ident">CustomApi</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="kw">type</span> <span class="ident">OutstandingRequestMap</span> <span class="op">=</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">PendingRequest</span><span class="op">&gt;</span>;
+<span class="kw">type</span> <span class="ident">OutstandingRequestMapHandle</span> <span class="op">=</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">async_lock::Mutex</span><span class="op">&lt;</span><span class="ident">OutstandingRequestMap</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="kw">type</span> <span class="ident">PendingRequestResponder</span> <span class="op">=</span> <span class="ident">Sender</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PendingRequest</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">CustomApi</span><span class="op">&gt;</span> {
-    <span class="ident">request</span>: <span class="ident">Payload</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&lt;</span><span class="ident">Api::Request</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">responder</span>: <span class="ident">PendingRequestResponder</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span>,
-    <span class="ident">_phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PendingRequest</span> {
+    <span class="ident">request</span>: <span class="ident">Payload</span>,
+    <span class="ident">responder</span>: <span class="ident">PendingRequestResponder</span>,
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
@@ -1707,94 +1748,93 @@
     }
 }
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">process_response_payload</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">CustomApi</span><span class="op">&gt;</span>(
-    <span class="ident">payload</span>: <span class="ident">Payload</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">outstanding_requests</span>: <span class="kw-2">&amp;</span><span class="ident">OutstandingRequestMapHandle</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>,
-    <span class="ident">custom_api_callback</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">subscribers</span>: <span class="kw-2">&amp;</span><span class="ident">SubscriberMap</span>,
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">process_response_payload</span>(
+    <span class="ident">payload</span>: <span class="ident">Payload</span>,
+    <span class="ident">outstanding_requests</span>: <span class="kw-2">&amp;</span><span class="ident">OutstandingRequestMapHandle</span>,
+    <span class="ident">custom_apis</span>: <span class="kw-2">&amp;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 ) {
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">payload_id</span>) <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Response::Api</span>(<span class="ident">response</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">payload</span>.<span class="ident">wrapped</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">custom_api_callback</span>) <span class="op">=</span> <span class="ident">custom_api_callback</span> {
-                <span class="ident">custom_api_callback</span>
-                    .<span class="ident">request_response_received</span>(<span class="ident">response</span>)
-                    .<span class="kw">await</span>;
-            }
-        }
-
-        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">outstanding_request</span>) <span class="op">=</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outstanding_requests</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">outstanding_requests</span>);
-            <span class="ident">outstanding_requests</span>
-                .<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">payload_id</span>)
-                .<span class="ident">expect</span>(<span class="string">&quot;missing responder&quot;</span>)
-        };
-        <span class="ident">drop</span>(<span class="ident">request</span>.<span class="ident">responder</span>.<span class="ident">send</span>(<span class="prelude-val">Ok</span>(<span class="ident">payload</span>.<span class="ident">wrapped</span>)));
+            <span class="ident">outstanding_requests</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">payload_id</span>)
+        } {
+            <span class="ident">drop</span>(
+                <span class="ident">outstanding_request</span>
+                    .<span class="ident">responder</span>
+                    .<span class="ident">send</span>(<span class="ident">payload</span>.<span class="ident">value</span>.<span class="ident">map_err</span>(<span class="ident">Error::from</span>)),
+            );
+        }
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">custom_api_callback</span>), <span class="prelude-val">Ok</span>(<span class="ident">value</span>)) <span class="op">=</span> (
+        <span class="ident">custom_apis</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>.<span class="ident">name</span>).<span class="ident">and_then</span>(<span class="ident">Option::as_ref</span>),
+        <span class="ident">payload</span>.<span class="ident">value</span>,
+    ) {
+        <span class="comment">// if let Some(custom_api_callback) = custom_api_callback {</span>
+        <span class="ident">custom_api_callback</span>.<span class="ident">response_received</span>(<span class="ident">value</span>).<span class="kw">await</span>;
+        <span class="comment">// }</span>
     } <span class="kw">else</span> {
-        <span class="kw">match</span> <span class="ident">payload</span>.<span class="ident">wrapped</span> {
-            <span class="ident">Response::Api</span>(<span class="ident">response</span>) =&gt; {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">custom_api_callback</span>) <span class="op">=</span> <span class="ident">custom_api_callback</span> {
-                    <span class="ident">custom_api_callback</span>.<span class="ident">response_received</span>(<span class="ident">response</span>).<span class="kw">await</span>;
-                }
-            }
-            <span class="ident">Response::Database</span>(<span class="ident">bonsaidb_core::networking::DatabaseResponse::MessageReceived</span> {
-                <span class="ident">subscriber_id</span>,
-                <span class="ident">topic</span>,
-                <span class="ident">payload</span>,
-            }) =&gt; {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">subscribers</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">subscribers</span>);
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sender</span>) <span class="op">=</span> <span class="ident">subscribers</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_id</span>) {
-                    <span class="kw">if</span> <span class="ident">sender</span>
-                        .<span class="ident">send</span>(<span class="ident">std::sync::Arc::new</span>(<span class="ident">bonsaidb_core::circulate::Message</span> {
-                            <span class="ident">topic</span>,
-                            <span class="ident">payload</span>: <span class="ident">payload</span>.<span class="ident">into_vec</span>(),
-                        }))
-                        .<span class="ident">is_err</span>()
-                    {
-                        <span class="ident">subscribers</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_id</span>);
-                    }
-                }
-            }
-            <span class="kw">_</span> =&gt; {
-                <span class="macro">log::error!</span>(<span class="string">&quot;unexpected adhoc response&quot;</span>);
-            }
+        <span class="macro">log::warn!</span>(<span class="string">&quot;unexpected api response received ({})&quot;</span>, <span class="ident">payload</span>.<span class="ident">name</span>);
+    }
+}
+
+<span class="kw">trait</span> <span class="ident">ApiWrapper</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
+    <span class="kw">fn</span> <span class="ident">invoke</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="ident">Response</span>) -&gt; <span class="ident">BoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, ()<span class="op">&gt;</span>;
+}
+
+<span class="doccomment">/// A callback that is invoked when an [`Api::Response`](Api::Response)</span>
+<span class="doccomment">/// value is received out-of-band (not in reply to a request).</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ApiCallback</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span> {
+    <span class="ident">generator</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ApiWrapper</span><span class="op">&lt;</span><span class="ident">Api::Response</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+}
+
+<span class="doccomment">/// The trait bounds required for the function wrapped in a [`ApiCallback`].</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ApiCallbackFn</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">F</span><span class="op">&gt;</span>: <span class="ident">Fn</span>(<span class="ident">Request</span>) -&gt; <span class="ident">F</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Request</span>, <span class="ident">F</span><span class="op">&gt;</span> <span class="ident">ApiCallbackFn</span><span class="op">&lt;</span><span class="ident">Request</span>, <span class="ident">F</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">Fn</span>(<span class="ident">Request</span>) -&gt; <span class="ident">F</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>
+{}
+
+<span class="kw">struct</span> <span class="ident">ApiFutureBoxer</span><span class="op">&lt;</span><span class="ident">Response</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>, <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> ()<span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ApiCallbackFn</span><span class="op">&lt;</span><span class="ident">Response</span>, <span class="ident">F</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+);
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Response</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>, <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> ()<span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">ApiWrapper</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span>
+    <span class="kw">for</span> <span class="ident">ApiFutureBoxer</span><span class="op">&lt;</span><span class="ident">Response</span>, <span class="ident">F</span><span class="op">&gt;</span>
+{
+    <span class="kw">fn</span> <span class="ident">invoke</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="ident">Response</span>) -&gt; <span class="ident">BoxFuture</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, ()<span class="op">&gt;</span> {
+        (<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)(<span class="ident">response</span>).<span class="ident">boxed</span>()
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span> <span class="ident">ApiCallback</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Returns a new instance wrapping the provided function.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span>
+        <span class="ident">F</span>: <span class="ident">ApiCallbackFn</span><span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">Fut</span><span class="op">&gt;</span>,
+        <span class="ident">Fut</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> ()<span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="op">&gt;</span>(
+        <span class="ident">callback</span>: <span class="ident">F</span>,
+    ) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">generator</span>: <span class="ident">Box::new</span>(<span class="ident">ApiFutureBoxer</span>::<span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">Fut</span><span class="op">&gt;</span>(<span class="ident">Box::new</span>(<span class="ident">callback</span>))),
         }
     }
 }
 
-<span class="doccomment">/// A handler of [`CustomApi`] responses.</span>
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">CustomApi</span><span class="op">&gt;</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AnyApiCallback</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
     <span class="doccomment">/// An out-of-band `response` was received. This happens when the server</span>
     <span class="doccomment">/// sends a response that isn&#39;t in response to a request.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">response_received</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>);
-
-    <span class="doccomment">/// A response was received. Unlike in `response_received` this response</span>
-    <span class="doccomment">/// will be returned to the original requestor. This is invoked before the</span>
-    <span class="doccomment">/// requestor recives the response.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">request_response_received</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>) {
-        <span class="comment">// This is provided in case you&#39;d like to see a response always, even if</span>
-        <span class="comment">// it is also being handled by the code that made the request.</span>
-    }
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">response_received</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="ident">Bytes</span>);
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">F</span>
-<span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-    <span class="ident">T</span>: <span class="ident">CustomApi</span>,
-{
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">response_received</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
-        <span class="self">self</span>(<span class="ident">response</span>);
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span> <span class="ident">AnyApiCallback</span> <span class="kw">for</span> <span class="ident">ApiCallback</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">response_received</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="ident">Bytes</span>) {
+        <span class="kw">match</span> <span class="ident">pot::from_slice</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Api::Response</span>, <span class="ident">Api::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>) {
+            <span class="prelude-val">Ok</span>(<span class="ident">response</span>) =&gt; <span class="self">self</span>.<span class="ident">generator</span>.<span class="ident">invoke</span>(<span class="ident">response</span>.<span class="ident">unwrap</span>()).<span class="kw">await</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
+                <span class="macro">log::error!</span>(<span class="string">&quot;error deserializing api: {err}&quot;</span>);
+            }
+        }
     }
-}
-
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">CustomApiCallback</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> ()
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">CustomApi</span>,
-{
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">response_received</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_response</span>: <span class="ident">CustomApiResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {}
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_client" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0 (9d1b2106e 2022-02-23)" ></div>

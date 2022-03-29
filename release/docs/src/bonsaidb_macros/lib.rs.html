@@ -543,8 +543,8 @@
     };
 
     <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">map_or_else</span>(
-        <span class="op">|</span><span class="op">|</span> <span class="macro">quote!</span>(#<span class="ident">core::schema::CollectionName::private</span>(#<span class="ident">name</span>)),
-        <span class="op">|</span><span class="ident">authority</span><span class="op">|</span> <span class="macro">quote!</span>(#<span class="ident">core::schema::CollectionName::new</span>(#<span class="ident">authority</span>, #<span class="ident">name</span>)),
+        <span class="op">|</span><span class="op">|</span> <span class="macro">quote!</span>(<span class="op">&lt;</span>#<span class="ident">core::schema::CollectionName</span> <span class="kw">as</span> #<span class="ident">core::schema::Qualified</span><span class="op">&gt;</span><span class="ident">::private</span>(#<span class="ident">name</span>)),
+        <span class="op">|</span><span class="ident">authority</span><span class="op">|</span> <span class="macro">quote!</span>(<span class="op">&lt;</span>#<span class="ident">core::schema::CollectionName</span> <span class="kw">as</span> #<span class="ident">core::schema::Qualified</span><span class="op">&gt;</span><span class="ident">::new</span>(#<span class="ident">authority</span>, #<span class="ident">name</span>)),
     );
 
     <span class="kw">let</span> <span class="ident">encryption</span> <span class="op">=</span> <span class="ident">encryption_key</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">encryption_key</span><span class="op">|</span> {
@@ -721,8 +721,8 @@
     <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="ident">ty_generics</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="ident">generics</span>.<span class="ident">split_for_impl</span>();
 
     <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">authority</span>.<span class="ident">map_or_else</span>(
-        <span class="op">|</span><span class="op">|</span> <span class="macro">quote!</span>(#<span class="ident">core::schema::SchemaName::private</span>(#<span class="ident">name</span>)),
-        <span class="op">|</span><span class="ident">authority</span><span class="op">|</span> <span class="macro">quote!</span>(#<span class="ident">core::schema::SchemaName::new</span>(#<span class="ident">authority</span>, #<span class="ident">name</span>)),
+        <span class="op">|</span><span class="op">|</span> <span class="macro">quote!</span>(<span class="op">&lt;</span>#<span class="ident">core::schema::SchemaName</span> <span class="kw">as</span> #<span class="ident">core::schema::Qualified</span><span class="op">&gt;</span><span class="ident">::private</span>(#<span class="ident">name</span>)),
+        <span class="op">|</span><span class="ident">authority</span><span class="op">|</span> <span class="macro">quote!</span>(<span class="op">&lt;</span>#<span class="ident">core::schema::SchemaName</span> <span class="kw">as</span> #<span class="ident">core::schema::Qualified</span><span class="op">&gt;</span><span class="ident">::new</span>(#<span class="ident">authority</span>, #<span class="ident">name</span>)),
     );
 
     <span class="macro">quote!</span> {

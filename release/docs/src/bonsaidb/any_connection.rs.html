@@ -412,16 +412,117 @@
 <span id="410">410</span>
 <span id="411">411</span>
 <span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bonsaidb_client</span>::{<span class="ident">Client</span>, <span class="ident">RemoteDatabase</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::connection</span>::{<span class="ident">Authenticated</span>, <span class="ident">Authentication</span>};
+<span class="kw">use</span> <span class="ident">bonsaidb_core::connection::Authentication</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
+    <span class="ident">arc_bytes::serde::Bytes</span>,
     <span class="ident">async_trait::async_trait</span>,
-    <span class="ident">connection</span>::{<span class="self">self</span>, <span class="ident">AccessPolicy</span>, <span class="ident">Connection</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Sort</span>, <span class="ident">StorageConnection</span>},
-    <span class="ident">document</span>::{<span class="ident">AnyDocumentId</span>, <span class="ident">OwnedDocument</span>},
+    <span class="ident">connection</span>::{
+        <span class="self">self</span>, <span class="ident">AccessPolicy</span>, <span class="ident">AsyncConnection</span>, <span class="ident">AsyncLowLevelConnection</span>, <span class="ident">AsyncStorageConnection</span>,
+        <span class="ident">HasSession</span>, <span class="ident">IdentityReference</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Session</span>, <span class="ident">Sort</span>,
+    },
+    <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">schema</span>::{
-        <span class="ident">view::map::MappedDocuments</span>, <span class="ident">Collection</span>, <span class="ident">Map</span>, <span class="ident">MappedValue</span>, <span class="ident">Nameable</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>,
-        <span class="ident">SerializedView</span>,
+        <span class="self">self</span>, <span class="ident">view::map::MappedSerializedValue</span>, <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">Nameable</span>, <span class="ident">Schema</span>,
+        <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>, <span class="ident">ViewName</span>,
     },
     <span class="ident">transaction</span>::{<span class="ident">Executed</span>, <span class="ident">OperationResult</span>, <span class="ident">Transaction</span>},
 };
@@ -432,12 +533,29 @@
     <span class="doccomment">/// A local server.</span>
     <span class="ident">Local</span>(<span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>),
     <span class="doccomment">/// A server accessed with a [`Client`].</span>
-    <span class="ident">Networked</span>(<span class="ident">Client</span><span class="op">&lt;</span><span class="ident">B::CustomApi</span><span class="op">&gt;</span>),
+    <span class="ident">Networked</span>(<span class="ident">Client</span>),
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">HasSession</span> <span class="kw">for</span> <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">session</span>(),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">session</span>(),
+        }
+    }
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">StorageConnection</span> <span class="kw">for</span> <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncStorageConnection</span> <span class="kw">for</span> <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Database</span> <span class="op">=</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Authenticated</span> <span class="op">=</span> <span class="self">Self</span>;
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">admin</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Database</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">AnyDatabase::Local</span>(<span class="ident">server</span>.<span class="ident">admin</span>().<span class="kw">await</span>),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">AnyDatabase::Networked</span>(<span class="ident">client</span>.<span class="ident">admin</span>().<span class="kw">await</span>),
+        }
+    }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">database</span><span class="op">&lt;</span><span class="ident">DB</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -527,10 +645,26 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">user</span>: <span class="ident">U</span>,
         <span class="ident">authentication</span>: <span class="ident">Authentication</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">authenticate</span>(<span class="ident">user</span>, <span class="ident">authentication</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">authenticate</span>(<span class="ident">user</span>, <span class="ident">authentication</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>
+                .<span class="ident">authenticate</span>(<span class="ident">user</span>, <span class="ident">authentication</span>)
+                .<span class="kw">await</span>
+                .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::Local</span>),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>
+                .<span class="ident">authenticate</span>(<span class="ident">user</span>, <span class="ident">authentication</span>)
+                .<span class="kw">await</span>
+                .<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::Networked</span>),
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">assume_identity</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">identity</span>: <span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">assume_identity</span>(<span class="ident">identity</span>).<span class="kw">await</span>.<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::Local</span>),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">assume_identity</span>(<span class="ident">identity</span>).<span class="kw">await</span>.<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::Networked</span>),
         }
     }
 
@@ -621,166 +755,33 @@
     <span class="doccomment">/// A local database.</span>
     <span class="ident">Local</span>(<span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>),
     <span class="doccomment">/// A networked database accessed with a [`Client`].</span>
-    <span class="ident">Networked</span>(<span class="ident">RemoteDatabase</span><span class="op">&lt;</span><span class="ident">B::CustomApi</span><span class="op">&gt;</span>),
+    <span class="ident">Networked</span>(<span class="ident">RemoteDatabase</span>),
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">HasSession</span> <span class="kw">for</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">session</span>(),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">session</span>(),
+        }
+    }
 }
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Connection</span> <span class="kw">for</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">C</span>: <span class="ident">Collection</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">id</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">id</span>).<span class="kw">await</span>,
-        }
-    }
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncConnection</span> <span class="kw">for</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Storage</span> <span class="op">=</span> <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>;
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">PrimaryKey</span>, <span class="ident">DocumentIds</span>, <span class="ident">I</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">ids</span>: <span class="ident">DocumentIds</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">C</span>: <span class="ident">Collection</span>,
-        <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-    {
+    <span class="kw">fn</span> <span class="ident">storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Storage</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">get_multiple</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">get_multiple</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>).<span class="kw">await</span>,
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">R</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">ids</span>: <span class="ident">R</span>,
-        <span class="ident">order</span>: <span class="ident">Sort</span>,
-        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">C</span>: <span class="ident">Collection</span>,
-        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">list</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">list</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>).<span class="kw">await</span>,
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">count</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">R</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ids</span>: <span class="ident">R</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">C</span>: <span class="ident">Collection</span>,
-        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-        <span class="ident">PrimaryKey</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">AnyDocumentId</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">count</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">count</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">ids</span>).<span class="kw">await</span>,
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">order</span>: <span class="ident">Sort</span>,
-        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&lt;</span><span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">query</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">query</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_with_docs</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">order</span>: <span class="ident">Sort</span>,
-        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MappedDocuments</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
-                <span class="ident">server</span>
-                    .<span class="ident">query_with_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
-                    .<span class="kw">await</span>
-            }
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; {
-                <span class="ident">client</span>
-                    .<span class="ident">query_with_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
-                    .<span class="kw">await</span>
-            }
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">V::Value</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">reduce</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">reduce</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce_grouped</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedValue</span><span class="op">&lt;</span><span class="ident">V::Key</span>, <span class="ident">V::Value</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">reduce_grouped</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">reduce_grouped</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_docs</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">SerializedView</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
-    {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">delete_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">delete_docs</span>::<span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
-        }
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">apply_transaction</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">transaction</span>: <span class="ident">Transaction</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OperationResult</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">apply_transaction</span>(<span class="ident">transaction</span>).<span class="kw">await</span>,
-            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">apply_transaction</span>(<span class="ident">transaction</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">AnyServerConnection::Local</span>(<span class="ident">server</span>.<span class="ident">storage</span>()),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">AnyServerConnection::Networked</span>(<span class="ident">client</span>.<span class="ident">storage</span>()),
         }
     }
 
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_executed_transactions</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">starting_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">result_limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+        <span class="ident">result_limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Executed</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
@@ -821,6 +822,199 @@
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">compact_key_value_store</span>().<span class="kw">await</span>,
             <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">compact_key_value_store</span>().<span class="kw">await</span>,
+        }
+    }
+}
+
+<span class="attribute">#[<span class="ident">async_trait</span>]</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncLowLevelConnection</span> <span class="kw">for</span> <span class="ident">AnyDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">schematic</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Schematic</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">schematic</span>(),
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">schematic</span>(),
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">apply_transaction</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">transaction</span>: <span class="ident">Transaction</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OperationResult</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">apply_transaction</span>(<span class="ident">transaction</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">apply_transaction</span>(<span class="ident">transaction</span>).<span class="kw">await</span>,
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_from_collection</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">id</span>: <span class="ident">DocumentId</span>,
+        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">get_from_collection</span>(<span class="ident">id</span>, <span class="ident">collection</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">get_from_collection</span>(<span class="ident">id</span>, <span class="ident">collection</span>).<span class="kw">await</span>,
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_from_collection</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
+                <span class="ident">server</span>
+                    .<span class="ident">list_from_collection</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">collection</span>)
+                    .<span class="kw">await</span>
+            }
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; {
+                <span class="ident">client</span>
+                    .<span class="ident">list_from_collection</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">collection</span>)
+                    .<span class="kw">await</span>
+            }
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_headers_from_collection</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
+                <span class="ident">server</span>
+                    .<span class="ident">list_headers_from_collection</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">collection</span>)
+                    .<span class="kw">await</span>
+            }
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; {
+                <span class="ident">client</span>
+                    .<span class="ident">list_headers_from_collection</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">collection</span>)
+                    .<span class="kw">await</span>
+            }
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">count_from_collection</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
+        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">count_from_collection</span>(<span class="ident">ids</span>, <span class="ident">collection</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">count_from_collection</span>(<span class="ident">ids</span>, <span class="ident">collection</span>).<span class="kw">await</span>,
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple_from_collection</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">DocumentId</span>],
+        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">get_multiple_from_collection</span>(<span class="ident">ids</span>, <span class="ident">collection</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">get_multiple_from_collection</span>(<span class="ident">ids</span>, <span class="ident">collection</span>).<span class="kw">await</span>,
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact_collection_by_name</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">compact_collection_by_name</span>(<span class="ident">collection</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">compact_collection_by_name</span>(<span class="ident">collection</span>).<span class="kw">await</span>,
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_by_name</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">schema::view::map::Serialized</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
+                <span class="ident">server</span>
+                    .<span class="ident">query_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
+                    .<span class="kw">await</span>
+            }
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; {
+                <span class="ident">client</span>
+                    .<span class="ident">query_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
+                    .<span class="kw">await</span>
+            }
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_by_name_with_docs</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">order</span>: <span class="ident">Sort</span>,
+        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">schema::view::map::MappedSerializedDocuments</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
+                <span class="ident">server</span>
+                    .<span class="ident">query_by_name_with_docs</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
+                    .<span class="kw">await</span>
+            }
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; {
+                <span class="ident">client</span>
+                    .<span class="ident">query_by_name_with_docs</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
+                    .<span class="kw">await</span>
+            }
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce_by_name</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">reduce_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">reduce_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce_grouped_by_name</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedSerializedValue</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; {
+                <span class="ident">server</span>
+                    .<span class="ident">reduce_grouped_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>)
+                    .<span class="kw">await</span>
+            }
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; {
+                <span class="ident">client</span>
+                    .<span class="ident">reduce_grouped_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>)
+                    .<span class="kw">await</span>
+            }
+        }
+    }
+
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_docs_by_name</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
+        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Local</span>(<span class="ident">server</span>) =&gt; <span class="ident">server</span>.<span class="ident">delete_docs_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
+            <span class="ident"><span class="self">Self</span>::Networked</span>(<span class="ident">client</span>) =&gt; <span class="ident">client</span>.<span class="ident">delete_docs_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>,
         }
     }
 }
