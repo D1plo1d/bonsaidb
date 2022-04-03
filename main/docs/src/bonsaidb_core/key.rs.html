@@ -1117,21 +1117,132 @@
 <span id="1115">1115</span>
 <span id="1116">1116</span>
 <span id="1117">1117</span>
+<span id="1118">1118</span>
+<span id="1119">1119</span>
+<span id="1120">1120</span>
+<span id="1121">1121</span>
+<span id="1122">1122</span>
+<span id="1123">1123</span>
+<span id="1124">1124</span>
+<span id="1125">1125</span>
+<span id="1126">1126</span>
+<span id="1127">1127</span>
+<span id="1128">1128</span>
+<span id="1129">1129</span>
+<span id="1130">1130</span>
+<span id="1131">1131</span>
+<span id="1132">1132</span>
+<span id="1133">1133</span>
+<span id="1134">1134</span>
+<span id="1135">1135</span>
+<span id="1136">1136</span>
+<span id="1137">1137</span>
+<span id="1138">1138</span>
+<span id="1139">1139</span>
+<span id="1140">1140</span>
+<span id="1141">1141</span>
+<span id="1142">1142</span>
+<span id="1143">1143</span>
+<span id="1144">1144</span>
+<span id="1145">1145</span>
+<span id="1146">1146</span>
+<span id="1147">1147</span>
+<span id="1148">1148</span>
+<span id="1149">1149</span>
+<span id="1150">1150</span>
+<span id="1151">1151</span>
+<span id="1152">1152</span>
+<span id="1153">1153</span>
+<span id="1154">1154</span>
+<span id="1155">1155</span>
+<span id="1156">1156</span>
+<span id="1157">1157</span>
+<span id="1158">1158</span>
+<span id="1159">1159</span>
+<span id="1160">1160</span>
+<span id="1161">1161</span>
+<span id="1162">1162</span>
+<span id="1163">1163</span>
+<span id="1164">1164</span>
+<span id="1165">1165</span>
+<span id="1166">1166</span>
+<span id="1167">1167</span>
+<span id="1168">1168</span>
+<span id="1169">1169</span>
+<span id="1170">1170</span>
+<span id="1171">1171</span>
+<span id="1172">1172</span>
+<span id="1173">1173</span>
+<span id="1174">1174</span>
+<span id="1175">1175</span>
+<span id="1176">1176</span>
+<span id="1177">1177</span>
+<span id="1178">1178</span>
+<span id="1179">1179</span>
+<span id="1180">1180</span>
+<span id="1181">1181</span>
+<span id="1182">1182</span>
+<span id="1183">1183</span>
+<span id="1184">1184</span>
+<span id="1185">1185</span>
+<span id="1186">1186</span>
+<span id="1187">1187</span>
+<span id="1188">1188</span>
+<span id="1189">1189</span>
+<span id="1190">1190</span>
+<span id="1191">1191</span>
+<span id="1192">1192</span>
+<span id="1193">1193</span>
+<span id="1194">1194</span>
+<span id="1195">1195</span>
+<span id="1196">1196</span>
+<span id="1197">1197</span>
+<span id="1198">1198</span>
+<span id="1199">1199</span>
+<span id="1200">1200</span>
+<span id="1201">1201</span>
+<span id="1202">1202</span>
+<span id="1203">1203</span>
+<span id="1204">1204</span>
+<span id="1205">1205</span>
+<span id="1206">1206</span>
+<span id="1207">1207</span>
+<span id="1208">1208</span>
+<span id="1209">1209</span>
+<span id="1210">1210</span>
+<span id="1211">1211</span>
+<span id="1212">1212</span>
+<span id="1213">1213</span>
+<span id="1214">1214</span>
+<span id="1215">1215</span>
+<span id="1216">1216</span>
+<span id="1217">1217</span>
+<span id="1218">1218</span>
+<span id="1219">1219</span>
+<span id="1220">1220</span>
+<span id="1221">1221</span>
+<span id="1222">1222</span>
+<span id="1223">1223</span>
+<span id="1224">1224</span>
+<span id="1225">1225</span>
+<span id="1226">1226</span>
+<span id="1227">1227</span>
+<span id="1228">1228</span>
+<span id="1229">1229</span>
 </pre><pre class="rust"><code><span class="doccomment">/// [`Key`] implementations for time types.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">time</span>;
 
+<span class="kw">mod</span> <span class="ident">deprecated</span>;
+
 <span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">borrow::Cow</span>,
-    <span class="ident">convert::Infallible</span>,
-    <span class="ident">io</span>::{<span class="ident">ErrorKind</span>, <span class="ident">Write</span>},
-    <span class="ident">num::TryFromIntError</span>,
-    <span class="ident">string::FromUtf8Error</span>,
+    <span class="ident">borrow::Cow</span>, <span class="ident">convert::Infallible</span>, <span class="ident">io::ErrorKind</span>, <span class="ident">num::TryFromIntError</span>, <span class="ident">string::FromUtf8Error</span>,
 };
 
 <span class="kw">use</span> <span class="ident">arc_bytes</span>::{
     <span class="ident">serde</span>::{<span class="ident">Bytes</span>, <span class="ident">CowBytes</span>},
     <span class="ident">ArcBytes</span>,
 };
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">deprecated</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">num_traits</span>::{<span class="ident">FromPrimitive</span>, <span class="ident">ToPrimitive</span>};
 <span class="kw">use</span> <span class="ident">ordered_varint</span>::{<span class="ident">Signed</span>, <span class="ident">Unsigned</span>, <span class="ident">Variable</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
@@ -1620,15 +1731,11 @@
             $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),<span class="op">+</span>
         {
             <span class="kw">fn</span> <span class="ident">from_ord_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-                $(<span class="kw">let</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">varname</span>, <span class="ident">bytes</span>) <span class="op">=</span> <span class="ident">decode_composite_field</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span><span class="op">&gt;</span>(<span class="ident">bytes</span>)<span class="question-mark">?</span>;)<span class="op">+</span>
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="ident">CompositeKeyDecoder::new</span>(<span class="ident">bytes</span>);
+                $(<span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">varname</span> <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">decode</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;)<span class="op">+</span>
+                <span class="ident">decoder</span>.<span class="ident">finish</span>()<span class="question-mark">?</span>;
 
-                <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">is_empty</span>() {
                     <span class="prelude-val">Ok</span>(($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">varname</span>),<span class="op">+</span>,))
-                } <span class="kw">else</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">CompositeKeyError::new</span>(<span class="ident">std::io::Error::from</span>(
-                        <span class="ident">ErrorKind::InvalidData</span>,
-                    )))
-                }
             }
         }
 
@@ -1644,11 +1751,11 @@
             };
 
             <span class="kw">fn</span> <span class="ident">as_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoder</span> <span class="op">=</span> <span class="ident">CompositeKeyEncoder::default</span>();
 
-                $(<span class="ident">encode_composite_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">index</span>, <span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>)<span class="question-mark">?</span>;)<span class="op">+</span>
+                $(<span class="ident">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">index</span>)<span class="question-mark">?</span>;)<span class="op">+</span>
 
-                <span class="prelude-val">Ok</span>(<span class="ident">Cow::Owned</span>(<span class="ident">bytes</span>))
+                <span class="prelude-val">Ok</span>(<span class="ident">Cow::Owned</span>(<span class="ident">encoder</span>.<span class="ident">finish</span>()))
             }
         }
     };
@@ -1693,76 +1800,223 @@
     (<span class="number">7</span>, <span class="ident">t8</span>, <span class="ident">T8</span>)
 );
 
-<span class="doccomment">/// Encodes a value using the `Key` trait in such a way that multiple values can</span>
-<span class="doccomment">/// still be ordered at the byte level when chained together.</span>
+<span class="doccomment">/// Encodes multiple [`KeyEncoding`] implementors into a single byte buffer,</span>
+<span class="doccomment">/// preserving the ordering guarantees necessary for [`Key`].</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # use bonsaidb_core::key::{encode_composite_field, decode_composite_field};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let value1 = String::from(&quot;hello&quot;);</span>
-<span class="doccomment">/// let value2 = 42_u32;</span>
-<span class="doccomment">/// let mut key_bytes = Vec::new();</span>
-<span class="doccomment">/// encode_composite_field(&amp;value1, &amp;mut key_bytes).unwrap();</span>
-<span class="doccomment">/// encode_composite_field(&amp;value2, &amp;mut key_bytes).unwrap();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let (decoded_string, remaining_bytes) = decode_composite_field::&lt;String&gt;(&amp;key_bytes).unwrap();</span>
-<span class="doccomment">/// assert_eq!(decoded_string, value1);</span>
-<span class="doccomment">/// let (decoded_u32, remaining_bytes) = decode_composite_field::&lt;u32&gt;(&amp;remaining_bytes).unwrap();</span>
-<span class="doccomment">/// assert_eq!(decoded_u32, value2);</span>
-<span class="doccomment">/// assert!(remaining_bytes.is_empty());</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_composite_field</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">Bytes</span>: <span class="ident">Write</span><span class="op">&gt;</span>(
-    <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>,
-    <span class="ident">bytes</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Bytes</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">t2</span> <span class="op">=</span> <span class="ident">T::as_ord_bytes</span>(<span class="ident">value</span>).<span class="ident">map_err</span>(<span class="ident">CompositeKeyError::new</span>)<span class="question-mark">?</span>;
-    <span class="kw">if</span> <span class="ident">T::LENGTH</span>.<span class="ident">is_none</span>() {
-        (<span class="ident">t2</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u64</span>)
-            .<span class="ident">encode_variable</span>(<span class="ident">bytes</span>)
-            .<span class="ident">map_err</span>(<span class="ident">CompositeKeyError::new</span>)<span class="question-mark">?</span>;
-    }
-    <span class="ident">bytes</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">t2</span>)<span class="question-mark">?</span>;
-    <span class="prelude-val">Ok</span>(())
+<span class="doccomment">/// The produced bytes can be decoded using [`CompositeKeyDecoder`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CompositeKeyEncoder</span> {
+    <span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="ident">encoded_lengths</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>,
+    <span class="ident">allow_null_bytes</span>: <span class="ident">bool</span>,
 }
 
-<span class="doccomment">/// Decodes a value previously encoded using [`encode_composite_field()`].</span>
-<span class="doccomment">/// The result is a tuple with the first element being the decoded value, and</span>
-<span class="doccomment">/// the second element is the remainig byte slice.</span>
+<span class="kw">impl</span> <span class="ident">CompositeKeyEncoder</span> {
+    <span class="doccomment">/// Prevents checking for null bytes in variable length fields. [`Key`]</span>
+    <span class="doccomment">/// types that have a fixed width have no edge cases with null bytes. See</span>
+    <span class="doccomment">/// [`CompositeKeyFieldContainsNullByte`] for an explanation and example of</span>
+    <span class="doccomment">/// the edge case introduced when allowing null bytes to be encoded.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">allow_null_bytes_in_variable_fields</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+        <span class="self">self</span>.<span class="ident">allow_null_bytes</span> <span class="op">=</span> <span class="bool-val">true</span>;
+    }
+
+    <span class="doccomment">/// Encodes a single [`KeyEncoding`] implementing value.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # use bonsaidb_core::key::{CompositeKeyEncoder, CompositeKeyDecoder};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let value1 = String::from(&quot;hello&quot;);</span>
+    <span class="doccomment">/// let value2 = 42_u32;</span>
+    <span class="doccomment">/// let mut encoder = CompositeKeyEncoder::default();</span>
+    <span class="doccomment">/// encoder.encode(&amp;value1).unwrap();</span>
+    <span class="doccomment">/// encoder.encode(&amp;value2).unwrap();</span>
+    <span class="doccomment">/// let encoded = encoder.finish();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let mut decoder = CompositeKeyDecoder::new(&amp;encoded);</span>
+    <span class="doccomment">/// let decoded_string = decoder.decode::&lt;String&gt;().unwrap();</span>
+    <span class="doccomment">/// assert_eq!(decoded_string, value1);</span>
+    <span class="doccomment">/// let decoded_u32 = decoder.decode::&lt;u32&gt;().unwrap();</span>
+    <span class="doccomment">/// assert_eq!(decoded_u32, value2);</span>
+    <span class="doccomment">/// decoder.finish().expect(&quot;trailing bytes&quot;);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">T</span>: <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="ident">T::as_ord_bytes</span>(<span class="ident">value</span>).<span class="ident">map_err</span>(<span class="ident">CompositeKeyError::new</span>)<span class="question-mark">?</span>;
+        <span class="kw">if</span> <span class="ident">T::LENGTH</span>.<span class="ident">is_none</span>() {
+            <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">allow_null_bytes</span> <span class="op">&amp;&amp;</span> <span class="ident">encoded</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">b</span> <span class="op">==</span> <span class="number">0</span>) {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">CompositeKeyError::new</span>(<span class="ident">std::io::Error::new</span>(
+                    <span class="ident">ErrorKind::InvalidData</span>,
+                    <span class="ident">CompositeKeyFieldContainsNullByte</span>,
+                )));
+            }
+            <span class="kw">let</span> <span class="ident">encoded_length</span> <span class="op">=</span> <span class="ident">u16::try_from</span>(<span class="ident">encoded</span>.<span class="ident">len</span>())<span class="question-mark">?</span>;
+            <span class="self">self</span>.<span class="ident">encoded_lengths</span>.<span class="ident">push</span>(<span class="ident">encoded_length</span>);
+        }
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">encoded</span>);
+        <span class="kw">if</span> <span class="ident">T::LENGTH</span>.<span class="ident">is_none</span>() {
+            <span class="comment">// With variable length data, we need the key to have a delimiter to</span>
+            <span class="comment">// ensure that &quot;a&quot; sorts before &quot;aa&quot;.</span>
+            <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">push</span>(<span class="number">0</span>);
+        }
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="doccomment">/// Finishes encoding the field and returns the encoded bytes.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span> <span class="comment">// All unreachable</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">reserve_exact</span>(<span class="self">self</span>.<span class="ident">encoded_lengths</span>.<span class="ident">len</span>() <span class="op">*</span> <span class="number">2</span>);
+        <span class="kw">for</span> <span class="ident">length</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">encoded_lengths</span> {
+            <span class="kw">match</span> <span class="ident">length</span> {
+                <span class="number">0</span>..<span class="op">=</span><span class="number">0x7F</span> =&gt; {
+                    <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">push</span>(<span class="ident">u8::try_from</span>(<span class="ident">length</span>).<span class="ident">unwrap</span>());
+                }
+                <span class="number">0x80</span>..<span class="op">=</span><span class="number">0x3FFF</span> =&gt; {
+                    <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">push</span>(<span class="ident">u8::try_from</span>(<span class="ident">length</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">7</span>).<span class="ident">unwrap</span>());
+                    <span class="self">self</span>.<span class="ident">bytes</span>
+                        .<span class="ident">push</span>(<span class="ident">u8::try_from</span>((<span class="ident">length</span> <span class="op">&amp;</span> <span class="number">0x7F</span>) <span class="op">|</span> <span class="number">0x80</span>).<span class="ident">unwrap</span>());
+                }
+                <span class="number">0x4000</span>.. =&gt; {
+                    <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">push</span>(<span class="ident">u8::try_from</span>(<span class="ident">length</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">14</span>).<span class="ident">unwrap</span>());
+                    <span class="self">self</span>.<span class="ident">bytes</span>
+                        .<span class="ident">push</span>(<span class="ident">u8::try_from</span>(((<span class="ident">length</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">7</span>) <span class="op">&amp;</span> <span class="number">0x7F</span>) <span class="op">|</span> <span class="number">0x80</span>).<span class="ident">unwrap</span>());
+                    <span class="self">self</span>.<span class="ident">bytes</span>
+                        .<span class="ident">push</span>(<span class="ident">u8::try_from</span>((<span class="ident">length</span> <span class="op">&amp;</span> <span class="number">0x7F</span>) <span class="op">|</span> <span class="number">0x80</span>).<span class="ident">unwrap</span>());
+                }
+            }
+        }
+        <span class="self">self</span>.<span class="ident">bytes</span>
+    }
+}
+
+<span class="doccomment">/// Null bytes in variable fields encoded with [`CompositeKeyEncoder`] can cause</span>
+<span class="doccomment">/// sort order to misbehave.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # use bonsaidb_core::key::{encode_composite_field, decode_composite_field};</span>
+<span class="doccomment">/// Consider these tuples:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let value1 = String::from(&quot;hello&quot;);</span>
-<span class="doccomment">/// let value2 = 42_u32;</span>
-<span class="doccomment">/// let mut key_bytes = Vec::new();</span>
-<span class="doccomment">/// encode_composite_field(&amp;value1, &amp;mut key_bytes).unwrap();</span>
-<span class="doccomment">/// encode_composite_field(&amp;value2, &amp;mut key_bytes).unwrap();</span>
+<span class="doccomment">/// | Tuple          | Encoded          |</span>
+<span class="doccomment">/// |----------------|------------------|</span>
+<span class="doccomment">/// | `(&quot;a&quot;, &quot;b&quot;)`   | `9700 9800 0101` |</span>
+<span class="doccomment">/// | `(&quot;a\0&quot;, &quot;a&quot;)` | `9700 9700 0101` |</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let (decoded_string, remaining_bytes) = decode_composite_field::&lt;String&gt;(&amp;key_bytes).unwrap();</span>
-<span class="doccomment">/// assert_eq!(decoded_string, value1);</span>
-<span class="doccomment">/// let (decoded_u32, remaining_bytes) = decode_composite_field::&lt;u32&gt;(&amp;remaining_bytes).unwrap();</span>
-<span class="doccomment">/// assert_eq!(decoded_u32, value2);</span>
-<span class="doccomment">/// assert!(remaining_bytes.is_empty());</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decode_composite_field</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-    <span class="kw-2">mut</span> <span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>],
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]), <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">length</span>) <span class="op">=</span> <span class="ident">T::LENGTH</span> {
-        <span class="ident">length</span>
-    } <span class="kw">else</span> {
-        <span class="ident">usize::try_from</span>(<span class="ident">u64::decode_variable</span>(<span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>
-    };
-    <span class="kw">let</span> (<span class="ident">t2</span>, <span class="ident">remaining</span>) <span class="op">=</span> <span class="ident">bytes</span>.<span class="ident">split_at</span>(<span class="ident">length</span>);
-    <span class="prelude-val">Ok</span>((
-        <span class="ident">T::from_ord_bytes</span>(<span class="ident">t2</span>).<span class="ident">map_err</span>(<span class="ident">CompositeKeyError::new</span>)<span class="question-mark">?</span>,
-        <span class="ident">remaining</span>,
-    ))
+<span class="doccomment">/// The encoded bytes, when compared, will produce a different sort result than</span>
+<span class="doccomment">/// when comparing the tuples.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// By default, [`CompositeKeyEncoder`] checks for null bytes and returns an</span>
+<span class="doccomment">/// error when a null byte is found. See</span>
+<span class="doccomment">/// [`CompositeKeyEncoder::allow_null_bytes_in_variable_fields()`] if you wish</span>
+<span class="doccomment">/// to allow null bytes despite this edge case.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a variable length field contained a null byte.&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CompositeKeyFieldContainsNullByte</span>;
+
+<span class="doccomment">/// Decodes multiple [`Key`] values from a byte slice previously encoded with</span>
+<span class="doccomment">/// [`CompositeKeyEncoder`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CompositeKeyDecoder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>],
+    <span class="ident">offset</span>: <span class="ident">usize</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">CompositeKeyDecoder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Returns a new decoder for `bytes`.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> { <span class="ident">bytes</span>, <span class="ident">offset</span>: <span class="number">0</span> }
+    }
+
+    <span class="doccomment">/// Decodes a value previously encoded using [`CompositeKeyEncoder`]. Calls</span>
+    <span class="doccomment">/// to decode must be made in the same order as the values were encoded in.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # use bonsaidb_core::key::{CompositeKeyEncoder, CompositeKeyDecoder};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let value1 = String::from(&quot;hello&quot;);</span>
+    <span class="doccomment">/// let value2 = 42_u32;</span>
+    <span class="doccomment">/// let mut encoder = CompositeKeyEncoder::default();</span>
+    <span class="doccomment">/// encoder.encode(&amp;value1).unwrap();</span>
+    <span class="doccomment">/// encoder.encode(&amp;value2).unwrap();</span>
+    <span class="doccomment">/// let encoded = encoder.finish();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let mut decoder = CompositeKeyDecoder::new(&amp;encoded);</span>
+    <span class="doccomment">/// let decoded_string = decoder.decode::&lt;String&gt;().unwrap();</span>
+    <span class="doccomment">/// assert_eq!(decoded_string, value1);</span>
+    <span class="doccomment">/// let decoded_u32 = decoder.decode::&lt;u32&gt;().unwrap();</span>
+    <span class="doccomment">/// assert_eq!(decoded_u32, value2);</span>
+    <span class="doccomment">/// decoder.finish().expect(&quot;trailing bytes&quot;);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decode</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">length</span>) <span class="op">=</span> <span class="ident">T::LENGTH</span> {
+            <span class="ident">length</span>
+        } <span class="kw">else</span> {
+            <span class="comment">// Read a variable-encoded length from the tail of the bytes.</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">length</span> <span class="op">=</span> <span class="number">0</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes_read</span> <span class="op">=</span> <span class="number">0</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found_end</span> <span class="op">=</span> <span class="bool-val">false</span>;
+            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">tail</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">last</span>() {
+                <span class="ident">length</span> <span class="op">|</span><span class="op">=</span> <span class="ident">usize::from</span>(<span class="ident">tail</span> <span class="op">&amp;</span> <span class="number">0x7F</span>) <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="ident">bytes_read</span> <span class="op">*</span> <span class="number">7</span>);
+                <span class="ident">bytes_read</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="self">self</span>.<span class="ident">bytes</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>[..<span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>];
+                <span class="kw">if</span> <span class="ident">tail</span> <span class="op">&amp;</span> <span class="number">0x80</span> <span class="op">==</span> <span class="number">0</span> {
+                    <span class="ident">found_end</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                    <span class="kw">break</span>;
+                }
+            }
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">found_end</span> {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">CompositeKeyError::new</span>(<span class="ident">std::io::Error::from</span>(
+                    <span class="ident">ErrorKind::UnexpectedEof</span>,
+                )));
+            }
+            <span class="ident">length</span>
+        };
+        <span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">offset</span> <span class="op">+</span> <span class="ident">length</span>;
+        <span class="kw">if</span> <span class="ident">end</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">len</span>() {
+            <span class="kw">let</span> <span class="ident">decoded</span> <span class="op">=</span>
+                <span class="ident">T::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>[<span class="self">self</span>.<span class="ident">offset</span>..<span class="ident">end</span>]).<span class="ident">map_err</span>(<span class="ident">CompositeKeyError::new</span>)<span class="question-mark">?</span>;
+            <span class="self">self</span>.<span class="ident">offset</span> <span class="op">=</span> <span class="ident">end</span>;
+            <span class="kw">if</span> <span class="ident">T::LENGTH</span>.<span class="ident">is_none</span>() {
+                <span class="comment">// Variable fields always have an extra null byte to delimit the data</span>
+                <span class="self">self</span>.<span class="ident">offset</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            }
+            <span class="prelude-val">Ok</span>(<span class="ident">decoded</span>)
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">CompositeKeyError::new</span>(<span class="ident">std::io::Error::from</span>(
+                <span class="ident">ErrorKind::UnexpectedEof</span>,
+            )))
+        }
+    }
+
+    <span class="doccomment">/// Verifies the underlying byte slice has been fully consumed.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">CompositeKeyError</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">offset</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">len</span>() {
+            <span class="prelude-val">Ok</span>(())
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">CompositeKeyError::new</span>(<span class="ident">std::io::Error::from</span>(
+                <span class="ident">ErrorKind::InvalidData</span>,
+            )))
+        }
+    }
+}
+
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">composite_key_null_check_test</span>() {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoder</span> <span class="op">=</span> <span class="ident">CompositeKeyEncoder::default</span>();
+    <span class="ident">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="macro">vec!</span>[<span class="number">0_u8</span>]).<span class="ident">unwrap_err</span>();
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoder</span> <span class="op">=</span> <span class="ident">CompositeKeyEncoder::default</span>();
+    <span class="ident">encoder</span>.<span class="ident">allow_null_bytes_in_variable_fields</span>();
+    <span class="ident">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="macro">vec!</span>[<span class="number">0_u8</span>]).<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">encoder</span>.<span class="ident">finish</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">decoder</span> <span class="op">=</span> <span class="ident">CompositeKeyDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+    <span class="kw">let</span> <span class="ident">decoded_value</span> <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">decode</span>::<span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>();
+    <span class="macro">assert_eq!</span>(<span class="ident">decoded_value</span>.<span class="ident">as_ref</span>(), <span class="kw-2">&amp;</span>[<span class="number">0</span>]);
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::cognitive_complexity</span>)]</span> <span class="comment">// There&#39;s no way to please clippy with this</span>
 <span class="kw">fn</span> <span class="ident">composite_key_tests</span>() {
-    <span class="macro">assert!</span>((<span class="number">0_u32</span>, <span class="number">0_u32</span>).<span class="ident">as_ord_bytes</span>().<span class="ident">unwrap</span>() <span class="op">&lt;</span> (<span class="number">1_u32</span>, <span class="number">0_u32</span>).<span class="ident">as_ord_bytes</span>().<span class="ident">unwrap</span>());
     <span class="doccomment">/// This test generates various combinations of every tuple type supported.</span>
     <span class="doccomment">/// Each test calls this function, which builds a second Vec containing all</span>
     <span class="doccomment">/// of the encoded key values. Next, both the original vec and the encoded</span>
@@ -1772,14 +2026,19 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The macros just make it less verbose to create the nested loops which</span>
     <span class="doccomment">/// create the tuples.</span>
-    <span class="kw">fn</span> <span class="ident">verify_key_ordering</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">std::fmt::Debug</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">cases</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">verify_key_ordering</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">std::fmt::Debug</span><span class="op">&gt;</span>(
+        <span class="kw-2">mut</span> <span class="ident">cases</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">already_ordered</span>: <span class="ident">bool</span>,
+    ) {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoded</span> <span class="op">=</span> {
             <span class="ident">cases</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">tuple</span><span class="op">|</span> <span class="ident">tuple</span>.<span class="ident">as_ord_bytes</span>().<span class="ident">unwrap</span>().<span class="ident">to_vec</span>())
                 .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>()
         };
-        <span class="ident">cases</span>.<span class="ident">sort</span>();
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">already_ordered</span> {
+            <span class="ident">cases</span>.<span class="ident">sort</span>();
+        }
         <span class="ident">encoded</span>.<span class="ident">sort</span>();
         <span class="macro">println!</span>(<span class="string">&quot;Tested {} entries&quot;</span>, <span class="ident">cases</span>.<span class="ident">len</span>());
         <span class="kw">let</span> <span class="ident">decoded</span> <span class="op">=</span> <span class="ident">encoded</span>
@@ -1789,12 +2048,35 @@
         <span class="macro">assert_eq!</span>(<span class="ident">cases</span>, <span class="ident">decoded</span>);
     }
 
+    <span class="comment">// Simple mixed-length tests</span>
+    <span class="kw">let</span> <span class="ident">a2</span> <span class="op">=</span> (<span class="ident">String::from</span>(<span class="string">&quot;a&quot;</span>), <span class="number">2_u8</span>);
+    <span class="kw">let</span> <span class="ident">aa1</span> <span class="op">=</span> (<span class="ident">String::from</span>(<span class="string">&quot;aa&quot;</span>), <span class="number">1_u8</span>);
+    <span class="kw">let</span> <span class="ident">aa2</span> <span class="op">=</span> (<span class="ident">String::from</span>(<span class="string">&quot;aa&quot;</span>), <span class="number">2_u8</span>);
+    <span class="kw">let</span> <span class="ident">b1</span> <span class="op">=</span> (<span class="ident">String::from</span>(<span class="string">&quot;b&quot;</span>), <span class="number">1_u8</span>);
+    <span class="kw">let</span> <span class="ident">b2</span> <span class="op">=</span> (<span class="ident">String::from</span>(<span class="string">&quot;b&quot;</span>), <span class="number">2_u8</span>);
+    <span class="ident">verify_key_ordering</span>(<span class="macro">vec!</span>[<span class="ident">a2</span>.<span class="ident">clone</span>(), <span class="ident">aa1</span>.<span class="ident">clone</span>()], <span class="bool-val">true</span>);
+    <span class="ident">verify_key_ordering</span>(<span class="macro">vec!</span>[<span class="ident">a2</span>, <span class="ident">aa1</span>, <span class="ident">aa2</span>, <span class="ident">b1</span>, <span class="ident">b2</span>], <span class="bool-val">true</span>);
+
+    <span class="comment">// Two byte length (0x80)</span>
+    <span class="ident">verify_key_ordering</span>(
+        <span class="macro">vec!</span>[(<span class="macro">vec!</span>[<span class="number">1</span>; <span class="number">128</span>], <span class="macro">vec!</span>[<span class="number">2</span>; <span class="number">128</span>]), (<span class="macro">vec!</span>[<span class="number">1</span>; <span class="number">128</span>], <span class="macro">vec!</span>[<span class="number">2</span>; <span class="number">128</span>])],
+        <span class="bool-val">true</span>,
+    );
+    <span class="comment">// Three byte length (0x80)</span>
+    <span class="ident">verify_key_ordering</span>(
+        <span class="macro">vec!</span>[
+            (<span class="macro">vec!</span>[<span class="number">1</span>; <span class="number">16384</span>], <span class="macro">vec!</span>[<span class="number">1</span>; <span class="number">16384</span>]),
+            (<span class="macro">vec!</span>[<span class="number">1</span>; <span class="number">16384</span>], <span class="macro">vec!</span>[<span class="number">2</span>; <span class="number">16384</span>]),
+        ],
+        <span class="bool-val">true</span>,
+    );
+
     <span class="kw">let</span> <span class="ident">values</span> <span class="op">=</span> [<span class="number">0_u16</span>, <span class="number">0xFF00</span>, <span class="number">0x0FF0</span>, <span class="number">0xFF</span>];
     <span class="macro">macro_rules!</span> <span class="ident">test_enum_variations</span> {
         ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ident</span>:<span class="ident">ident</span>),<span class="op">+</span>) =&gt; {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cases</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
             <span class="macro">test_enum_variations!</span>(<span class="kw">for</span> <span class="ident">cases</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ident</span>),<span class="op">+</span>; $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ident</span>),<span class="op">+</span>);
-            <span class="ident">verify_key_ordering</span>(<span class="ident">cases</span>);
+            <span class="ident">verify_key_ordering</span>(<span class="ident">cases</span>, <span class="bool-val">false</span>);
         };
         (<span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cases</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">first</span>:<span class="ident">ident</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ident</span>:<span class="ident">ident</span>),<span class="op">+</span>; $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">variable</span>:<span class="ident">ident</span>),<span class="op">+</span>) =&gt; {
             <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">first</span> <span class="kw">in</span> <span class="ident">values</span> {
@@ -1941,7 +2223,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span><span class="op">&gt;</span>,
-    <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+    <span class="ident">K</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">T::Error</span>;
 
@@ -1954,64 +2236,6 @@
             <span class="prelude-val">Ok</span>(<span class="ident">Cow::Owned</span>(<span class="ident">contents</span>))
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">Cow::Borrowed</span>(<span class="string">b&quot;\0&quot;</span>))
-        }
-    }
-}
-
-<span class="doccomment">/// A type that preserves the original implementation of [`Key`] for</span>
-<span class="doccomment">/// `Option&lt;T&gt;`. This should not be used in new code and will be removed in a</span>
-<span class="doccomment">/// future version.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">deprecated</span> <span class="op">=</span> <span class="string">&quot;this type should not be used in new code and should only be used in transitionary code.&quot;</span>]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LegacyOptionKey</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
-
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">LegacyOptionKey</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
-    <span class="self">Self</span>: <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span>,
-{
-    <span class="kw">fn</span> <span class="ident">from_ord_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">is_empty</span>() {
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="prelude-val">None</span>))
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="prelude-val">Some</span>(<span class="ident">T::from_ord_bytes</span>(<span class="ident">bytes</span>)<span class="question-mark">?</span>)))
-        }
-    }
-
-    <span class="kw">fn</span> <span class="ident">first_value</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">NextValueError</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span>(<span class="prelude-val">Some</span>(<span class="ident">T::first_value</span>()<span class="question-mark">?</span>)))
-    }
-
-    <span class="kw">fn</span> <span class="ident">next_value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">NextValueError</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">T::next_value</span>).<span class="ident">transpose</span>().<span class="ident">map</span>(<span class="self">Self</span>)
-    }
-}
-
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">LegacyOptionKey</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">LegacyOptionKey</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span><span class="op">&gt;</span>,
-    <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
-{
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">T::Error</span>;
-
-    <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">T::LENGTH</span>;
-
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Panics if `T::into_big_endian_bytes` returns an empty `IVec`.</span>
-    <span class="comment">// TODO consider removing this panic limitation by adding a single byte to</span>
-    <span class="comment">// each key (at the end preferrably) so that we can distinguish between None</span>
-    <span class="comment">// and a 0-byte type</span>
-    <span class="kw">fn</span> <span class="ident">as_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">contents</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span> {
-            <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">contents</span>.<span class="ident">as_ord_bytes</span>()<span class="question-mark">?</span>;
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">contents</span>.<span class="ident">is_empty</span>());
-            <span class="prelude-val">Ok</span>(<span class="ident">contents</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">Cow::default</span>())
         }
     }
 }
@@ -2165,17 +2389,17 @@
 
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
     {
-        <span class="kw">let</span> <span class="ident">some_string</span> <span class="op">=</span> <span class="ident">LegacyOptionKey</span>(<span class="prelude-val">Some</span>(<span class="string">&quot;hello&quot;</span>)).<span class="ident">as_ord_bytes</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">none_string</span> <span class="op">=</span> <span class="ident">LegacyOptionKey</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>(<span class="prelude-val">None</span>).<span class="ident">as_ord_bytes</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">some_string</span> <span class="op">=</span> <span class="ident">OptionKeyV1</span>(<span class="prelude-val">Some</span>(<span class="string">&quot;hello&quot;</span>)).<span class="ident">as_ord_bytes</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">none_string</span> <span class="op">=</span> <span class="ident">OptionKeyV1</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>(<span class="prelude-val">None</span>).<span class="ident">as_ord_bytes</span>()<span class="question-mark">?</span>;
         <span class="macro">assert_eq!</span>(
-            <span class="ident">LegacyOptionKey</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="ident">::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">some_string</span>)
+            <span class="ident">OptionKeyV1</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="ident">::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">some_string</span>)
                 .<span class="ident">unwrap</span>()
                 .<span class="number">0</span>
                 .<span class="ident">as_deref</span>(),
             <span class="prelude-val">Some</span>(<span class="string">&quot;hello&quot;</span>)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">LegacyOptionKey</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="ident">::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">none_string</span>)
+            <span class="ident">OptionKeyV1</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="ident">::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">none_string</span>)
                 .<span class="ident">unwrap</span>()
                 .<span class="number">0</span>,
             <span class="prelude-val">None</span>
