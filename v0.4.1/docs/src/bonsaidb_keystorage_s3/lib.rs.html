@@ -349,6 +349,16 @@
 <span id="347">347</span>
 <span id="348">348</span>
 <span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
 </pre><pre class="rust"><code><span class="doccomment">//! [`VaultKeyStorage`] using S3-compatible storage.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This is the recommended method for securing your BonsaiDb database. There</span>
@@ -410,7 +420,7 @@
     <span class="ident">StorageId</span>,
 };
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">http</span>;
-<span class="kw">use</span> <span class="ident">tokio::runtime</span>::{<span class="ident">Handle</span>, <span class="ident">Runtime</span>};
+<span class="kw">use</span> <span class="ident">tokio::runtime</span>::{<span class="self">self</span>, <span class="ident">Handle</span>, <span class="ident">Runtime</span>};
 
 <span class="doccomment">/// S3-compatible [`VaultKeyStorage`] implementor.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>)]</span>
@@ -437,7 +447,17 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Tokio</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident">Handle::try_current</span>().<span class="ident">map_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::Runtime</span>(<span class="ident">Runtime::new</span>().<span class="ident">unwrap</span>()), <span class="ident"><span class="self">Self</span>::Handle</span>)
+        <span class="ident">Handle::try_current</span>().<span class="ident">map_or_else</span>(
+            <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
+                <span class="ident"><span class="self">Self</span>::Runtime</span>(
+                    <span class="ident">runtime::Builder::new_current_thread</span>()
+                        .<span class="ident">enable_all</span>()
+                        .<span class="ident">build</span>()
+                        .<span class="ident">unwrap</span>(),
+                )
+            },
+            <span class="ident"><span class="self">Self</span>::Handle</span>,
+        )
     }
 }
 
