@@ -3015,18 +3015,6 @@
 <span id="3013">3013</span>
 <span id="3014">3014</span>
 <span id="3015">3015</span>
-<span id="3016">3016</span>
-<span id="3017">3017</span>
-<span id="3018">3018</span>
-<span id="3019">3019</span>
-<span id="3020">3020</span>
-<span id="3021">3021</span>
-<span id="3022">3022</span>
-<span id="3023">3023</span>
-<span id="3024">3024</span>
-<span id="3025">3025</span>
-<span id="3026">3026</span>
-<span id="3027">3027</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>};
@@ -3237,10 +3225,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push_bytes</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">contents</span>: <span class="ident">B</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
-    {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-ty">Option</span>::<span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="ident">::None</span>, <span class="ident">contents</span>)
     }
@@ -3292,10 +3277,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">Cl::PrimaryKey</span>,
         <span class="ident">contents</span>: <span class="ident">B</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
-    {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>)
     }
 
@@ -4218,10 +4200,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">push_bytes</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">contents</span>: <span class="ident">B</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
-    {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>
             .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-ty">Option</span>::<span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span><span class="ident">::None</span>, <span class="ident">contents</span>)
             .<span class="kw">await</span>
@@ -4282,10 +4261,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">id</span>: <span class="ident">Cl::PrimaryKey</span>,
         <span class="ident">contents</span>: <span class="ident">B</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">Cl</span>: <span class="ident">schema::SerializedCollection</span>,
-    {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">connection</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Cl</span>, <span class="kw">_</span>, <span class="ident">B</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">id</span>), <span class="ident">contents</span>).<span class="kw">await</span>
     }
 
