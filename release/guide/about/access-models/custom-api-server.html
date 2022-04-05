@@ -182,6 +182,7 @@ pub struct Counter(pub u64);
 </code></pre>
 <p>To implement the server, we must define a <a href="https://dev.bonsaidb.io/release/docs/bonsaidb/server/api/trait.Handler.html"><code>Handler</code></a>, which is invoked each time the <code>Api</code> type is received by the server.</p>
 <pre><code class="language-rust noplayground no_run">impl Backend for ExampleBackend {
+    type Error = Infallible;
     type ClientData = ();
 }
 
