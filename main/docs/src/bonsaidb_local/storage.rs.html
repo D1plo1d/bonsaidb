@@ -2116,11 +2116,11 @@
         <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StorageLock</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">id_path</span> <span class="op">=</span> {
-            <span class="kw">let</span> <span class="ident">storage_id</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">join</span>(<span class="string">&quot;storage-id&quot;</span>);
+            <span class="kw">let</span> <span class="ident">storage_id</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">join</span>(<span class="string">&quot;server-id&quot;</span>);
             <span class="kw">if</span> <span class="ident">storage_id</span>.<span class="ident">exists</span>() {
                 <span class="ident">storage_id</span>
             } <span class="kw">else</span> {
-                <span class="ident">path</span>.<span class="ident">join</span>(<span class="string">&quot;server-id&quot;</span>)
+                <span class="ident">path</span>.<span class="ident">join</span>(<span class="string">&quot;storage-id&quot;</span>)
             }
         };
 
@@ -3444,7 +3444,7 @@
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">LockData</span> {
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="ident">drop</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">unlock</span>())
+        <span class="ident">drop</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">unlock</span>());
     }
 }
 </code></pre></div>

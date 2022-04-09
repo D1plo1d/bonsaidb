@@ -74,65 +74,67 @@ See the <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/READM
 <p>Our user’s guide is early in development, but is available at: <a href="https://dev.bonsaidb.io/main/guide/">https://dev.bonsaidb.io/main/guide/</a></p>
 <h3 id="minimum-supported-rust-version-msrv"><a href="#minimum-supported-rust-version-msrv">Minimum Supported Rust Version (MSRV)</a></h3>
 <p>While this project is alpha, we are actively adopting the current version of
-Rust. The current minimum version is <code>1.58</code>, and we plan on updating the MSRV to
-implement <a href="https://github.com/khonsulabs/bonsaidb/issues/178">namespaced
-Features</a> as soon as the
-feature is released.</p>
+Rust. The current minimum version is <code>1.60</code>.</p>
 <h3 id="feature-flags"><a href="#feature-flags">Feature Flags</a></h3>
 <p>No feature flags are enabled by default in the <code>bonsaidb</code> crate. This is
 because in most Rust executables, you will only need a subset of the
 functionality. If you’d prefer to enable everything, you can use the <code>full</code>
 feature:</p>
 <div class="example-wrap"><pre class="language-toml"><code>[dependencies]
-bonsaidb = { version = &quot;*&quot;, default-features = false, features = &quot;full&quot; }</code></pre></div>
+bonsaidb = { version = &quot;*&quot;, features = &quot;full&quot; }</code></pre></div>
 <ul>
 <li><code>full</code>: Enables <code>local-full</code>, <code>server-full</code>, and <code>client-full</code>.</li>
 <li><code>cli</code>: Enables the <code>bonsaidb</code> executable.</li>
 <li><code>password-hashing</code>: Enables the ability to use password authentication using
 Argon2 via <code>AnyConnection</code>.</li>
 </ul>
+<p>All other feature flags, listed below, affect each crate individually, but can
+be safely combined.</p>
 <h4 id="local-databases-only"><a href="#local-databases-only">Local databases only</a></h4><div class="example-wrap"><pre class="language-toml"><code>[dependencies]
-bonsaidb = { version = &quot;*&quot;, default-features = false, features = &quot;local-full&quot; }</code></pre></div>
+bonsaidb = { version = &quot;*&quot;, features = &quot;local-full&quot; }</code></pre></div>
+<p>All Cargo features that affect local databases:</p>
 <ul>
 <li><code>local-full</code>: Enables all the flags below</li>
 <li><code>local</code>: Enables the <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/local/"><code>local</code></a> module, which re-exports the crate
 <code>bonsaidb-local</code>.</li>
-<li><code>local-async</code>: Enables async support with Tokio.</li>
-<li><code>local-cli</code>: Enables the <code>clap</code> structures for embedding database
+<li><code>async</code>: Enables async support with Tokio.</li>
+<li><code>cli</code>: Enables the <code>clap</code> structures for embedding database
 management commands into your own command-line interface.</li>
-<li><code>local-compression</code>: Enables support for compressed storage using lz4.</li>
-<li><code>local-encryption</code>: Enables at-rest encryption.</li>
-<li><code>local-instrument</code>: Enables instrumenting with <code>tracing</code>.</li>
-<li><code>local-password-hashing</code>: Enables the ability to use password authentication
+<li><code>compression</code>: Enables support for compressed storage using lz4.</li>
+<li><code>encryption</code>: Enables at-rest encryption.</li>
+<li><code>instrument</code>: Enables instrumenting with <code>tracing</code>.</li>
+<li><code>password-hashing</code>: Enables the ability to use password authentication
 using Argon2.</li>
 </ul>
 <h4 id="bonsaidb-server"><a href="#bonsaidb-server">BonsaiDb server</a></h4><div class="example-wrap"><pre class="language-toml"><code>[dependencies]
-bonsaidb = { version = &quot;*&quot;, default-features = false, features = &quot;server-full&quot; }</code></pre></div>
+bonsaidb = { version = &quot;*&quot;, features = &quot;server-full&quot; }</code></pre></div>
+<p>All Cargo features that affect networked servers:</p>
 <ul>
 <li><code>server-full</code>: Enables all the flags below,</li>
 <li><code>server</code>: Enables the <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/server/"><code>server</code></a> module, which re-exports the crate
 <code>bonsaidb-server</code>.</li>
-<li><code>server-acme</code>: Enables automtic certificate acquisition through ACME/LetsEncrypt.</li>
-<li><code>server-cli</code>: Enables the <code>cli</code> module.</li>
-<li><code>server-compression</code>: Enables support for compressed storage using lz4.</li>
-<li><code>server-encryption</code>: Enables at-rest encryption.</li>
-<li><code>server-hyper</code>: Enables convenience functions for upgrading websockets using <code>hyper</code>.</li>
-<li><code>server-instrument</code>: Enables instrumenting with <code>tracing</code>.</li>
-<li><code>server-pem</code>: Enables the ability to install a certificate using the PEM format.</li>
-<li><code>server-websockets</code>: Enables <code>WebSocket</code> support.</li>
-<li><code>server-password-hashing</code>: Enables the ability to use password authentication
+<li><code>acme</code>: Enables automtic certificate acquisition through ACME/LetsEncrypt.</li>
+<li><code>cli</code>: Enables the <code>cli</code> module.</li>
+<li><code>compression</code>: Enables support for compressed storage using lz4.</li>
+<li><code>encryption</code>: Enables at-rest encryption.</li>
+<li><code>hyper</code>: Enables convenience functions for upgrading websockets using <code>hyper</code>.</li>
+<li><code>instrument</code>: Enables instrumenting with <code>tracing</code>.</li>
+<li><code>pem</code>: Enables the ability to install a certificate using the PEM format.</li>
+<li><code>websockets</code>: Enables <code>WebSocket</code> support.</li>
+<li><code>password-hashing</code>: Enables the ability to use password authentication
 using Argon2.</li>
 </ul>
 <h4 id="client-for-accessing-a-bonsaidb-server"><a href="#client-for-accessing-a-bonsaidb-server">Client for accessing a BonsaiDb server</a></h4><div class="example-wrap"><pre class="language-toml"><code>[dependencies]
-bonsaidb = { version = &quot;*&quot;, default-features = false, features = &quot;client-full&quot; }</code></pre></div>
+bonsaidb = { version = &quot;*&quot;, features = &quot;client-full&quot; }</code></pre></div>
+<p>All Cargo features that affect networked clients:</p>
 <ul>
-<li><code>client-full</code>: Enables <code>client</code>, <code>client-trusted-dns</code>, <code>client-websockets</code>, and <code>client-password-hashing</code>.</li>
+<li><code>client-full</code>: Enables all flags below.</li>
 <li><code>client</code>: Enables the <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/client/"><code>client</code></a> module, which re-exports the crate
 <code>bonsaidb-client</code>.</li>
-<li><code>client-trusted-dns</code>: Enables using trust-dns for DNS resolution. If not
+<li><code>trusted-dns</code>: Enables using trust-dns for DNS resolution. If not
 enabled, all DNS resolution is done with the OS’s default name resolver.</li>
-<li><code>client-websockets</code>: Enables <code>WebSocket</code> support for <code>bonsaidb-client</code>.</li>
-<li><code>client-password-hashing</code>: Enables the ability to use password authentication
+<li><code>websockets</code>: Enables <code>WebSocket</code> support for <code>bonsaidb-client</code>.</li>
+<li><code>password-hashing</code>: Enables the ability to use password authentication
 using Argon2.</li>
 </ul>
 <h3 id="developing-bonsaidb"><a href="#developing-bonsaidb">Developing BonsaiDb</a></h3><h4 id="writing-unit-tests"><a href="#writing-unit-tests">Writing Unit Tests</a></h4>
