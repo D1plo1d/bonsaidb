@@ -192,19 +192,29 @@ value as a primary key.</p>
 type</a>. If you're using the derive macro, the type can be specified
 using the <code>primary_key</code> parameter as in <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-local/examples/primary-keys.rs">this example</a>:</p>
 <pre><code class="language-rust noplayground no_run">#[derive(Debug, Serialize, Deserialize, Collection, Eq, PartialEq)]
-#[collection(name = &quot;multi-key&quot;, primary_key = (u32, u64))]
-struct MultiKey {
+#[collection(name = &quot;multi-key&quot;, primary_key = AssociatedProfileKey)]
+struct AssociatedProfileData {
     value: String,
+}
+
+#[derive(Key, Debug, Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
+struct AssociatedProfileKey {
+    pub user_id: u32,
+    pub data_id: u64,
 }
 </code></pre>
 <p>If no <code>primary_key</code> is specified in the derive, <code>u64</code> will be used.</p>
 <p>Inserting and accessing the collection can be done using the newly defined
 primary key type:</p>
-<pre><code class="language-rust noplayground no_run">    let inserted = MultiKey {
+<pre><code class="language-rust noplayground no_run">    let key = AssociatedProfileKey {
+        user_id: user.header.id,
+        data_id: 64,
+    };
+    let inserted = AssociatedProfileData {
         value: String::from(&quot;hello&quot;),
     }
-    .insert_into((42, 64), &amp;db)?;
-    let retrieved = MultiKey::get((42, 64), &amp;db)?.expect(&quot;document not found&quot;);
+    .insert_into(key, &amp;db)?;
+    let retrieved = AssociatedProfileData::get(&amp;key, &amp;db)?.expect(&quot;document not found&quot;);
     assert_eq!(inserted, retrieved);
 </code></pre>
 <h3 id="natural-ids"><a class="header" href="#natural-ids">Natural Ids</a></h3>
