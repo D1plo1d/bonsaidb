@@ -1234,6 +1234,62 @@
 <span id="1229">1229</span>
 <span id="1230">1230</span>
 <span id="1231">1231</span>
+<span id="1232">1232</span>
+<span id="1233">1233</span>
+<span id="1234">1234</span>
+<span id="1235">1235</span>
+<span id="1236">1236</span>
+<span id="1237">1237</span>
+<span id="1238">1238</span>
+<span id="1239">1239</span>
+<span id="1240">1240</span>
+<span id="1241">1241</span>
+<span id="1242">1242</span>
+<span id="1243">1243</span>
+<span id="1244">1244</span>
+<span id="1245">1245</span>
+<span id="1246">1246</span>
+<span id="1247">1247</span>
+<span id="1248">1248</span>
+<span id="1249">1249</span>
+<span id="1250">1250</span>
+<span id="1251">1251</span>
+<span id="1252">1252</span>
+<span id="1253">1253</span>
+<span id="1254">1254</span>
+<span id="1255">1255</span>
+<span id="1256">1256</span>
+<span id="1257">1257</span>
+<span id="1258">1258</span>
+<span id="1259">1259</span>
+<span id="1260">1260</span>
+<span id="1261">1261</span>
+<span id="1262">1262</span>
+<span id="1263">1263</span>
+<span id="1264">1264</span>
+<span id="1265">1265</span>
+<span id="1266">1266</span>
+<span id="1267">1267</span>
+<span id="1268">1268</span>
+<span id="1269">1269</span>
+<span id="1270">1270</span>
+<span id="1271">1271</span>
+<span id="1272">1272</span>
+<span id="1273">1273</span>
+<span id="1274">1274</span>
+<span id="1275">1275</span>
+<span id="1276">1276</span>
+<span id="1277">1277</span>
+<span id="1278">1278</span>
+<span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
+<span id="1284">1284</span>
+<span id="1285">1285</span>
+<span id="1286">1286</span>
+<span id="1287">1287</span>
 </pre><pre class="rust"><code><span class="doccomment">/// [`Key`] implementations for time types.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">time</span>;
 
@@ -1247,14 +1303,13 @@
     <span class="ident">serde</span>::{<span class="ident">Bytes</span>, <span class="ident">CowBytes</span>},
     <span class="ident">ArcBytes</span>,
 };
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_macros::Key</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">deprecated</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">num_traits</span>::{<span class="ident">FromPrimitive</span>, <span class="ident">ToPrimitive</span>};
 <span class="kw">use</span> <span class="ident">ordered_varint</span>::{<span class="ident">Signed</span>, <span class="ident">Unsigned</span>, <span class="ident">Variable</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">connection::Range</span>, <span class="ident">AnyError</span>};
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_macros::Key</span>;
 
 <span class="doccomment">/// A trait that enables a type to convert itself into a `memcmp`-compatible</span>
 <span class="doccomment">/// sequence of bytes.</span>
@@ -1278,6 +1333,63 @@
 
 <span class="doccomment">/// A trait that enables a type to convert itself into a `memcmp`-compatible</span>
 <span class="doccomment">/// sequence of bytes.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Deriving this trait</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This trait can be derived on structs and enums whose members all implement</span>
+<span class="doccomment">/// `Key`. It is important to note that the order of individual fields and enum</span>
+<span class="doccomment">/// variants is important, so special care must be taken when updating enums and</span>
+<span class="doccomment">/// structs when trying to preserve backwards compatibility with existing data.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use bonsaidb_core::key::Key;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// #[derive(Key, Clone, Debug)]</span>
+<span class="doccomment">/// # #[key(core = bonsaidb_core)]</span>
+<span class="doccomment">/// struct CompositeKey {</span>
+<span class="doccomment">///     user_id: u64,</span>
+<span class="doccomment">///     task_id: u32,</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Each field or enum variant is encoded and decoded in the order in which it</span>
+<span class="doccomment">/// appears in the source code. The implementation uses [`CompositeKeyEncoder`]</span>
+<span class="doccomment">/// and [`CompositeKeyDecoder`] to encode each field.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ## `allow_null_bytes`</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The derive macro offers an argument `allow_null_bytes`, which defaults to</span>
+<span class="doccomment">/// false. Null bytes can cause problematic sort behavior when multiple</span>
+<span class="doccomment">/// variable-length encoded fields are encoded as a composite key. Consider this</span>
+<span class="doccomment">/// example:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use bonsaidb_core::key::Key;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// #[derive(Key, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]</span>
+<span class="doccomment">/// #[key(allow_null_bytes = true)]</span>
+<span class="doccomment">/// # #[key(core = bonsaidb_core)]</span>
+<span class="doccomment">/// struct CompositeKey {</span>
+<span class="doccomment">///     a: String,</span>
+<span class="doccomment">///     b: String,</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// With this structure, we can cause sorting misbehaviors using this data set:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// | `a`      | `b`   | Encoded Bytes         |</span>
+<span class="doccomment">/// |----------|-------|-----------------------|</span>
+<span class="doccomment">/// | `&quot;a&quot;`    | `&quot;c&quot;` | `6100 6300 0101`      |</span>
+<span class="doccomment">/// | `&quot;a\0b&quot;` | `&quot;a&quot;` | `6100 6200 610003 01` |</span>
+<span class="doccomment">/// | `&quot;b&quot;`    | `&quot;a&quot;` | `6200 6100 0101`      |</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// In this table, `a` and `b` are ordered as `CompositeKey` would be ordered</span>
+<span class="doccomment">/// when compared using `Ord`. However, the order of the encoded bytes does not</span>
+<span class="doccomment">/// match. Without specifying `allow_null_bytes = true`, [`CompositeKeyEncoder`]</span>
+<span class="doccomment">/// will return an error when a null byte is encountered.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This null-byte edge case only applies to variable length [`Key`]s</span>
+<span class="doccomment">/// ([`KeyEncoding::LENGTH`] is `None`).</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>: <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="self">Self</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">std::fmt::Debug</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
     <span class="doccomment">/// Deserialize a sequence of bytes previously encoded with</span>
     <span class="doccomment">/// [`KeyEncoding::as_ord_bytes`].</span>
