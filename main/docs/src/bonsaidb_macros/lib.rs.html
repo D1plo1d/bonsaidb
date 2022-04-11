@@ -592,6 +592,73 @@
 <span id="587">587</span>
 <span id="588">588</span>
 <span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Macros BonsaiDb.</span>
 
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -613,9 +680,9 @@
 <span class="kw">use</span> <span class="ident">quote::ToTokens</span>;
 <span class="kw">use</span> <span class="ident">quote_use</span>::{<span class="ident">format_ident_namespaced</span> <span class="kw">as</span> <span class="ident">format_ident</span>, <span class="ident">quote_use</span> <span class="kw">as</span> <span class="ident">quote</span>};
 <span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">parse_macro_input</span>, <span class="ident">parse_quote</span>, <span class="ident">punctuated::Punctuated</span>, <span class="ident">token::Paren</span>, <span class="ident">DataEnum</span>, <span class="ident">DataStruct</span>,
-    <span class="ident">DeriveInput</span>, <span class="ident">Expr</span>, <span class="ident">Field</span>, <span class="ident">Fields</span>, <span class="ident">FieldsNamed</span>, <span class="ident">FieldsUnnamed</span>, <span class="ident">Ident</span>, <span class="ident">Index</span>, <span class="ident">LitStr</span>, <span class="ident">Path</span>,
-    <span class="ident">Token</span>, <span class="ident">Type</span>, <span class="ident">TypeTuple</span>, <span class="ident">Variant</span>,
+    <span class="ident">parse_macro_input</span>, <span class="ident">parse_quote</span>, <span class="ident">punctuated::Punctuated</span>, <span class="ident">token::Paren</span>, <span class="ident">Data</span>, <span class="ident">DataEnum</span>,
+    <span class="ident">DataStruct</span>, <span class="ident">DeriveInput</span>, <span class="ident">Expr</span>, <span class="ident">Field</span>, <span class="ident">Fields</span>, <span class="ident">FieldsNamed</span>, <span class="ident">FieldsUnnamed</span>, <span class="ident">Ident</span>, <span class="ident">Index</span>, <span class="ident">LitStr</span>,
+    <span class="ident">Path</span>, <span class="ident">Token</span>, <span class="ident">Type</span>, <span class="ident">TypePath</span>, <span class="ident">TypeTuple</span>, <span class="ident">Variant</span>,
 };
 
 <span class="kw">fn</span> <span class="ident">core_path</span>() -&gt; <span class="ident">Path</span> {
@@ -964,16 +1031,19 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Attribute</span>)]</span>
 <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">ident</span> <span class="op">=</span> <span class="string">&quot;key&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">invalid_field</span> <span class="op">=</span> <span class="string">r#&quot;Only `core = bonsaidb::core` is supported&quot;#</span>)]</span>
+<span class="attribute">#[<span class="ident">attribute</span>(
+    <span class="ident">invalid_field</span> <span class="op">=</span> <span class="string">r#&quot;Only `allow_null_bytes`, `enum_repr = NumberType` and `core = bonsaidb::core` is supported&quot;#</span>
+)]</span>
 <span class="kw">struct</span> <span class="ident">KeyAttribute</span> {
     <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">r#&quot;Specify the the path to `core` like so: `core = bosaidb::core`&quot;#</span>)]</span>
     <span class="ident">core</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>,
     <span class="ident">allow_null_bytes</span>: <span class="ident">bool</span>,
+    <span class="ident">enum_repr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>,
 }
 
 <span class="doccomment">/// Derives the `bonsaidb::core::key::Key` trait.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// `#[key(core = bonsaidb::core]`, `core` is optional</span>
+<span class="doccomment">/// `#[key(allow_null_bytes, enum_repr = u8, core = bonsaidb::core)]`, all parameters are optional</span>
 <span class="attribute">#[<span class="ident">proc_macro_error</span>]</span>
 <span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">Key</span>, <span class="ident">attributes</span>(<span class="ident">key</span>))]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">key_derive</span>(<span class="ident">input</span>: <span class="ident">proc_macro::TokenStream</span>) -&gt; <span class="ident">proc_macro::TokenStream</span> {
@@ -985,10 +1055,48 @@
         ..
     } <span class="op">=</span> <span class="macro">parse_macro_input!</span>(<span class="ident">input</span> <span class="kw">as</span> <span class="ident">DeriveInput</span>);
 
+    <span class="comment">// Only relevant if it is an enum, get&#39;s the representation to use for the variant key</span>
+    <span class="kw">let</span> <span class="ident">repr</span> <span class="op">=</span> <span class="ident">attrs</span>.<span class="ident">iter</span>().<span class="ident">find_map</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> {
+        <span class="ident">attr</span>.<span class="ident">path</span>
+            .<span class="ident">is_ident</span>(<span class="string">&quot;repr&quot;</span>)
+            .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">attr</span>.<span class="ident">parse_args</span>::<span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&gt;</span>().<span class="ident">ok</span>())
+            .<span class="ident">flatten</span>()
+            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">ident</span><span class="op">|</span> {
+                <span class="macro">matches!</span>(
+                    <span class="ident">ident</span>.<span class="ident">to_string</span>().<span class="ident">as_ref</span>(),
+                    <span class="string">&quot;u8&quot;</span> <span class="op">|</span> <span class="string">&quot;u16&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;u32&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;u64&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;u128&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;usize&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;i8&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;i16&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;i32&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;i64&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;i128&quot;</span>
+                        <span class="op">|</span> <span class="string">&quot;isize&quot;</span>
+                )
+                .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ident</span>)
+            })
+    });
+
     <span class="kw">let</span> <span class="ident">KeyAttribute</span> {
         <span class="ident">core</span>,
         <span class="ident">allow_null_bytes</span>,
+        <span class="ident">enum_repr</span>,
     } <span class="op">=</span> <span class="ident">KeyAttribute::from_attributes</span>(<span class="ident">attrs</span>).<span class="ident">unwrap_or_abort</span>();
+
+    <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">data</span>, <span class="ident">Data::Struct</span>(<span class="kw">_</span>)) <span class="op">&amp;&amp;</span> <span class="ident">enum_repr</span>.<span class="ident">is_some</span>() {
+        <span class="comment">// TODO better span when attribute-derive supports that</span>
+        <span class="macro">abort!</span>(<span class="ident">enum_repr</span>, <span class="string">&quot;`enum_repr` is only usable with enums&quot;</span>)
+    } 
+
+    <span class="kw">let</span> <span class="ident">repr</span>: <span class="ident">Type</span> <span class="op">=</span> <span class="ident">enum_repr</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+        <span class="ident">Type::Path</span>(<span class="ident">TypePath</span> {
+            <span class="ident">qself</span>: <span class="prelude-val">None</span>,
+            <span class="ident">path</span>: <span class="ident">repr</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">format_ident!</span>(<span class="string">&quot;isize&quot;</span>)).<span class="ident">into</span>(),
+        })
+    });
 
     <span class="kw">let</span> <span class="ident">allow_null_bytes</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">allow_null_bytes</span> {
         <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">allow_null_bytes_in_variable_fields</span>();)
@@ -1005,132 +1113,158 @@
     <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="kw">_</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="ident">generics</span>.<span class="ident">split_for_impl</span>();
 
     <span class="kw">let</span> (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>): (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">data</span> {
-        <span class="ident">syn::Data::Struct</span>(<span class="ident">DataStruct</span> {
-            <span class="ident">fields</span>: <span class="ident">Fields::Named</span>(<span class="ident">FieldsNamed</span> { <span class="ident">named</span>, .. }),
-            ..
-        }) =&gt; {
-            <span class="kw">let</span> (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>): (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>) <span class="op">=</span> <span class="ident">named</span>
-                .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">Field</span> { <span class="ident">ident</span>, .. }<span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">ident</span>.<span class="ident">expect</span>(<span class="string">&quot;named fields have idents&quot;</span>);
-                    (
-                        <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.#<span class="ident">ident</span>)<span class="question-mark">?</span>;),
-                        <span class="macro">quote!</span>(#<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
-                    )
-                })
-                .<span class="ident">unzip</span>();
-            (<span class="ident">encode_fields</span>, <span class="macro">quote!</span>( <span class="self">Self</span> { #<span class="ident">decode_fields</span> }))
+        <span class="ident">syn::Data::Struct</span>(<span class="ident">DataStruct</span> { <span class="ident">fields</span>, .. }) =&gt; {
+            <span class="kw">let</span> (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">fields</span> {
+                <span class="ident">Fields::Named</span>(<span class="ident">FieldsNamed</span> { <span class="ident">named</span>, .. }) =&gt; {
+                    <span class="kw">let</span> (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>): (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>) <span class="op">=</span> <span class="ident">named</span>
+                        .<span class="ident">into_iter</span>()
+                        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">Field</span> { <span class="ident">ident</span>, .. }<span class="op">|</span> {
+                            <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">ident</span>.<span class="ident">expect</span>(<span class="string">&quot;named fields have idents&quot;</span>);
+                            (
+                                <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.#<span class="ident">ident</span>)<span class="question-mark">?</span>;),
+                                <span class="macro">quote!</span>(#<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
+                            )
+                        })
+                        .<span class="ident">unzip</span>();
+                    (<span class="ident">encode_fields</span>, <span class="macro">quote!</span>( <span class="self">Self</span> { #<span class="ident">decode_fields</span> }))
+                }
+                <span class="ident">Fields::Unnamed</span>(<span class="ident">FieldsUnnamed</span> { <span class="ident">unnamed</span>, .. }) =&gt; {
+                    <span class="kw">let</span> (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>): (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>) <span class="op">=</span> <span class="ident">unnamed</span>
+                        .<span class="ident">into_iter</span>()
+                        .<span class="ident">enumerate</span>()
+                        .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">idx</span>, <span class="kw">_</span>)<span class="op">|</span> {
+                            <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="ident">Index::from</span>(<span class="ident">idx</span>);
+                            (
+                                <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.#<span class="ident">idx</span>)<span class="question-mark">?</span>;),
+                                <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
+                            )
+                        })
+                        .<span class="ident">unzip</span>();
+                    (<span class="ident">encode_fields</span>, <span class="macro">quote!</span>(<span class="self">Self</span>(#<span class="ident">decode_fields</span>)))
+                }
+                <span class="ident">Fields::Unit</span> =&gt; <span class="macro">abort_call_site!</span>(<span class="string">&quot;unit structs are not supported&quot;</span>),
+            };
+            (<span class="ident">encode_fields</span>, <span class="macro">quote!</span>(<span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">self_</span> <span class="op">=</span> #<span class="ident">decode_fields</span>;))
         }
-
-        <span class="ident">syn::Data::Struct</span>(<span class="ident">DataStruct</span> {
-            <span class="ident">fields</span>: <span class="ident">Fields::Unnamed</span>(<span class="ident">FieldsUnnamed</span> { <span class="ident">unnamed</span>, .. }),
-            ..
-        }) =&gt; {
-            <span class="kw">let</span> (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>): (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>) <span class="op">=</span> <span class="ident">unnamed</span>
-                .<span class="ident">into_iter</span>()
-                .<span class="ident">enumerate</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">idx</span>, <span class="kw">_</span>)<span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="ident">Index::from</span>(<span class="ident">idx</span>);
-                    (
-                        <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.#<span class="ident">idx</span>)<span class="question-mark">?</span>;),
-                        <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
-                    )
-                })
-                .<span class="ident">unzip</span>();
-            (<span class="ident">encode_fields</span>, <span class="macro">quote!</span>(<span class="self">Self</span>(#<span class="ident">decode_fields</span>)))
-        }
-        <span class="ident">syn::Data::Struct</span>(<span class="ident">DataStruct</span> {
-            <span class="ident">fields</span>: <span class="ident">Fields::Unit</span>,
-            ..
-        }) =&gt; <span class="macro">abort_call_site!</span>(<span class="string">&quot;unit structs are not supported&quot;</span>),
         <span class="ident">syn::Data::Enum</span>(<span class="ident">DataEnum</span> { <span class="ident">variants</span>, .. }) =&gt; {
-            <span class="kw">let</span> (<span class="ident">encode_variants</span>, <span class="ident">decode_variants</span>): (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>) <span class="op">=</span> <span class="ident">variants</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_ident</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+            <span class="kw">let</span> (<span class="ident">consts</span>, (<span class="ident">encode_variants</span>, <span class="ident">decode_variants</span>)): (
+                <span class="ident">TokenStream</span>,
+                (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>),
+            ) <span class="op">=</span> <span class="ident">variants</span>
                 .<span class="ident">into_iter</span>()
                 .<span class="ident">enumerate</span>()
-                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">idx</span>, <span class="ident">Variant</span> { <span class="ident">fields</span>, <span class="ident">ident</span>, .. })<span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="ident">idx</span> <span class="kw">as</span> <span class="ident">u64</span>;
-                    <span class="kw">match</span> <span class="ident">fields</span> {
-                        <span class="ident">Fields::Named</span>(<span class="ident">FieldsNamed</span> { <span class="ident">named</span>, .. }) =&gt; {
-                            <span class="kw">let</span> (<span class="ident">idents</span>, (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>)): (
-                                <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="macro">Token!</span>[,]<span class="op">&gt;</span>,
-                                (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>),
-                            ) <span class="op">=</span> <span class="ident">named</span>
-                                .<span class="ident">into_iter</span>()
-                                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">Field</span> { <span class="ident">ident</span>, .. }<span class="op">|</span> {
-                                    <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">ident</span>.<span class="ident">expect</span>(<span class="string">&quot;named fields have idents&quot;</span>);
+                .<span class="ident">map</span>(
+                    <span class="op">|</span>(
+                        <span class="ident">idx</span>,
+                        <span class="ident">Variant</span> {
+                            <span class="ident">fields</span>,
+                            <span class="ident">ident</span>,
+                            <span class="ident">discriminant</span>,
+                            ..
+                        },
+                    )<span class="op">|</span> {
+                        <span class="kw">let</span> <span class="ident">discriminant</span> <span class="op">=</span> <span class="ident">discriminant</span>.<span class="ident">map_or_else</span>(
+                            <span class="op">|</span><span class="op">|</span> {
+                                <span class="ident">prev_ident</span>
+                                    .<span class="ident">as_ref</span>()
+                                    .<span class="ident">map_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">quote!</span>(<span class="number">0</span>), <span class="op">|</span><span class="ident">ident</span><span class="op">|</span> <span class="macro">quote!</span>(#<span class="ident">ident</span> <span class="op">+</span> <span class="number">1</span>))
+                            },
+                            <span class="op">|</span>(<span class="kw">_</span>, <span class="ident">expr</span>)<span class="op">|</span> <span class="ident">expr</span>.<span class="ident">to_token_stream</span>(),
+                        );
+
+                        <span class="kw">let</span> <span class="ident">const_ident</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;$discriminant{idx}&quot;</span>);
+                        <span class="kw">let</span> <span class="ident">const_</span> <span class="op">=</span> <span class="macro">quote!</span>(<span class="kw">const</span> #<span class="ident">const_ident</span>: #<span class="ident">repr</span> <span class="op">=</span> #<span class="ident">discriminant</span>;);
+
+                        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> (
+                            <span class="ident">const_</span>,
+                            <span class="kw">match</span> <span class="ident">fields</span> {
+                                <span class="ident">Fields::Named</span>(<span class="ident">FieldsNamed</span> { <span class="ident">named</span>, .. }) =&gt; {
+                                    <span class="kw">let</span> (<span class="ident">idents</span>, (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>)): (
+                                        <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="macro">Token!</span>[,]<span class="op">&gt;</span>,
+                                        (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>),
+                                    ) <span class="op">=</span> <span class="ident">named</span>
+                                        .<span class="ident">into_iter</span>()
+                                        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">Field</span> { <span class="ident">ident</span>, .. }<span class="op">|</span> {
+                                            <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">ident</span>.<span class="ident">expect</span>(<span class="string">&quot;named fields have idents&quot;</span>);
+                                            (
+                                                <span class="ident">ident</span>.<span class="ident">clone</span>(),
+                                                (
+                                                    <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(#<span class="ident">ident</span>)<span class="question-mark">?</span>;),
+                                                    <span class="macro">quote!</span>(#<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
+                                                ),
+                                            )
+                                        })
+                                        .<span class="ident">unzip</span>();
                                     (
-                                        <span class="ident">ident</span>.<span class="ident">clone</span>(),
-                                        (
-                                            <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(#<span class="ident">ident</span>)<span class="question-mark">?</span>;),
-                                            <span class="macro">quote!</span>(#<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
-                                        ),
+                                        <span class="macro">quote!</span> {
+                                            <span class="self">Self</span>::#<span class="ident">ident</span>{#<span class="ident">idents</span>} =&gt; {
+                                                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span>#<span class="ident">const_ident</span>)<span class="question-mark">?</span>;
+                                                #<span class="ident">encode_fields</span>
+                                            },
+                                        },
+                                        <span class="macro">quote!</span> {
+                                            #<span class="ident">const_ident</span> =&gt; <span class="self">Self</span>::#<span class="ident">ident</span>{#<span class="ident">decode_fields</span>},
+                                        },
                                     )
-                                })
-                                .<span class="ident">unzip</span>();
-                            (
-                                <span class="macro">quote!</span> {
-                                    <span class="self">Self</span>::#<span class="ident">ident</span>{#<span class="ident">idents</span>} =&gt; {
-                                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span>#<span class="ident">idx</span>)<span class="question-mark">?</span>;
-                                        #<span class="ident">encode_fields</span>
-                                    },
-                                },
-                                <span class="macro">quote!</span> {
-                                    #<span class="ident">idx</span> =&gt; <span class="self">Self</span>::#<span class="ident">ident</span>{#<span class="ident">decode_fields</span>},
-                                },
-                            )
-                        }
-                        <span class="ident">Fields::Unnamed</span>(<span class="ident">FieldsUnnamed</span> { <span class="ident">unnamed</span>, .. }) =&gt; {
-                            <span class="kw">let</span> (<span class="ident">idents</span>, (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>)): (
-                                <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="macro">Token!</span>[,]<span class="op">&gt;</span>,
-                                (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>),
-                            ) <span class="op">=</span> <span class="ident">unnamed</span>
-                                .<span class="ident">into_iter</span>()
-                                .<span class="ident">enumerate</span>()
-                                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">idx</span>, <span class="kw">_</span>)<span class="op">|</span> {
-                                    <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;$field_{idx}&quot;</span>);
+                                }
+                                <span class="ident">Fields::Unnamed</span>(<span class="ident">FieldsUnnamed</span> { <span class="ident">unnamed</span>, .. }) =&gt; {
+                                    <span class="kw">let</span> (<span class="ident">idents</span>, (<span class="ident">encode_fields</span>, <span class="ident">decode_fields</span>)): (
+                                        <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="macro">Token!</span>[,]<span class="op">&gt;</span>,
+                                        (<span class="ident">TokenStream</span>, <span class="ident">TokenStream</span>),
+                                    ) <span class="op">=</span> <span class="ident">unnamed</span>
+                                        .<span class="ident">into_iter</span>()
+                                        .<span class="ident">enumerate</span>()
+                                        .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">idx</span>, <span class="kw">_</span>)<span class="op">|</span> {
+                                            <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;$field_{idx}&quot;</span>);
+                                            (
+                                                <span class="ident">ident</span>.<span class="ident">clone</span>(),
+                                                (
+                                                    <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(#<span class="ident">ident</span>)<span class="question-mark">?</span>;),
+                                                    <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
+                                                ),
+                                            )
+                                        })
+                                        .<span class="ident">unzip</span>();
                                     (
-                                        <span class="ident">ident</span>.<span class="ident">clone</span>(),
-                                        (
-                                            <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(#<span class="ident">ident</span>)<span class="question-mark">?</span>;),
-                                            <span class="macro">quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>,),
-                                        ),
+                                        <span class="macro">quote!</span> {
+                                            <span class="self">Self</span>::#<span class="ident">ident</span>(#<span class="ident">idents</span>) =&gt; {
+                                                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span>#<span class="ident">const_ident</span>)<span class="question-mark">?</span>;
+                                                #<span class="ident">encode_fields</span>
+                                            },
+                                        },
+                                        <span class="macro">quote!</span> {
+                                            #<span class="ident">const_ident</span> =&gt; <span class="self">Self</span>::#<span class="ident">ident</span>(#<span class="ident">decode_fields</span>),
+                                        },
                                     )
-                                })
-                                .<span class="ident">unzip</span>();
-                            (
-                                <span class="macro">quote!</span> {
-                                    <span class="self">Self</span>::#<span class="ident">ident</span>(#<span class="ident">idents</span>) =&gt; {
-                                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span>#<span class="ident">idx</span>)<span class="question-mark">?</span>;
-                                        #<span class="ident">encode_fields</span>
-                                    },
-                                },
-                                <span class="macro">quote!</span> {
-                                    #<span class="ident">idx</span> =&gt; <span class="self">Self</span>::#<span class="ident">ident</span>(#<span class="ident">decode_fields</span>),
-                                },
-                            )
-                        }
-                        <span class="ident">Fields::Unit</span> =&gt; (
-                            <span class="macro">quote!</span>(<span class="self">Self</span>::#<span class="ident">ident</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span>#<span class="ident">idx</span>)<span class="question-mark">?</span>,),
-                            <span class="macro">quote!</span>(#<span class="ident">idx</span> =&gt; <span class="self">Self</span>::#<span class="ident">ident</span>,),
-                        ),
-                    }
-                })
+                                }
+                                <span class="ident">Fields::Unit</span> =&gt; (
+                                    <span class="macro">quote!</span>(<span class="self">Self</span>::#<span class="ident">ident</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">encoder</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span>#<span class="ident">const_ident</span>)<span class="question-mark">?</span>,),
+                                    <span class="macro">quote!</span>(#<span class="ident">const_ident</span> =&gt; <span class="self">Self</span>::#<span class="ident">ident</span>,),
+                                ),
+                            },
+                        );
+                        <span class="ident">prev_ident</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">const_ident</span>);
+                        <span class="ident">ret</span>
+                    },
+                )
                 .<span class="ident">unzip</span>();
             (
                 <span class="macro">quote!</span> {
+                    #<span class="ident">consts</span>
                     <span class="kw">match</span> <span class="self">self</span>{
                         #<span class="ident">encode_variants</span>
                     }
                 },
                 <span class="macro">quote!</span> {
                     <span class="kw">use</span> <span class="ident">std::io</span>::{<span class="self">self</span>, <span class="ident">ErrorKind</span>};
-
-                    <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>()<span class="question-mark">?</span> {
+                    #<span class="ident">consts</span>
+                    <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">self_</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">decode</span>::<span class="op">&lt;</span>#<span class="ident">repr</span><span class="op">&gt;</span>()<span class="question-mark">?</span> {
                         #<span class="ident">decode_variants</span>
                         <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(#<span class="ident">core::key::CompositeKeyError::from</span>(<span class="ident">io::Error::from</span>(
                                 <span class="ident">ErrorKind::InvalidData</span>,
                         )))
-                    }
+                    };
                 },
             )
         }
@@ -1147,7 +1281,7 @@
 
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span> <span class="op">=</span> #<span class="ident">core::key::CompositeKeyDecoder::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">bytes</span>);
 
-                <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">self_</span> <span class="op">=</span> #<span class="ident">decode_fields</span>;
+                #<span class="ident">decode_fields</span>
 
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">decoder</span>.<span class="ident">finish</span>()<span class="question-mark">?</span>;
 
