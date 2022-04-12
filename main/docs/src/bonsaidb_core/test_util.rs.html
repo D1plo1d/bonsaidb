@@ -3716,6 +3716,97 @@
 <span id="3711">3711</span>
 <span id="3712">3712</span>
 <span id="3713">3713</span>
+<span id="3714">3714</span>
+<span id="3715">3715</span>
+<span id="3716">3716</span>
+<span id="3717">3717</span>
+<span id="3718">3718</span>
+<span id="3719">3719</span>
+<span id="3720">3720</span>
+<span id="3721">3721</span>
+<span id="3722">3722</span>
+<span id="3723">3723</span>
+<span id="3724">3724</span>
+<span id="3725">3725</span>
+<span id="3726">3726</span>
+<span id="3727">3727</span>
+<span id="3728">3728</span>
+<span id="3729">3729</span>
+<span id="3730">3730</span>
+<span id="3731">3731</span>
+<span id="3732">3732</span>
+<span id="3733">3733</span>
+<span id="3734">3734</span>
+<span id="3735">3735</span>
+<span id="3736">3736</span>
+<span id="3737">3737</span>
+<span id="3738">3738</span>
+<span id="3739">3739</span>
+<span id="3740">3740</span>
+<span id="3741">3741</span>
+<span id="3742">3742</span>
+<span id="3743">3743</span>
+<span id="3744">3744</span>
+<span id="3745">3745</span>
+<span id="3746">3746</span>
+<span id="3747">3747</span>
+<span id="3748">3748</span>
+<span id="3749">3749</span>
+<span id="3750">3750</span>
+<span id="3751">3751</span>
+<span id="3752">3752</span>
+<span id="3753">3753</span>
+<span id="3754">3754</span>
+<span id="3755">3755</span>
+<span id="3756">3756</span>
+<span id="3757">3757</span>
+<span id="3758">3758</span>
+<span id="3759">3759</span>
+<span id="3760">3760</span>
+<span id="3761">3761</span>
+<span id="3762">3762</span>
+<span id="3763">3763</span>
+<span id="3764">3764</span>
+<span id="3765">3765</span>
+<span id="3766">3766</span>
+<span id="3767">3767</span>
+<span id="3768">3768</span>
+<span id="3769">3769</span>
+<span id="3770">3770</span>
+<span id="3771">3771</span>
+<span id="3772">3772</span>
+<span id="3773">3773</span>
+<span id="3774">3774</span>
+<span id="3775">3775</span>
+<span id="3776">3776</span>
+<span id="3777">3777</span>
+<span id="3778">3778</span>
+<span id="3779">3779</span>
+<span id="3780">3780</span>
+<span id="3781">3781</span>
+<span id="3782">3782</span>
+<span id="3783">3783</span>
+<span id="3784">3784</span>
+<span id="3785">3785</span>
+<span id="3786">3786</span>
+<span id="3787">3787</span>
+<span id="3788">3788</span>
+<span id="3789">3789</span>
+<span id="3790">3790</span>
+<span id="3791">3791</span>
+<span id="3792">3792</span>
+<span id="3793">3793</span>
+<span id="3794">3794</span>
+<span id="3795">3795</span>
+<span id="3796">3796</span>
+<span id="3797">3797</span>
+<span id="3798">3798</span>
+<span id="3799">3799</span>
+<span id="3800">3800</span>
+<span id="3801">3801</span>
+<span id="3802">3802</span>
+<span id="3803">3803</span>
+<span id="3804">3804</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -4159,6 +4250,7 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HarnessTest</span> {
     <span class="ident">ServerConnectionTests</span> <span class="op">=</span> <span class="number">1</span>,
     <span class="ident">StoreRetrieveUpdate</span>,
+    <span class="ident">Overwrite</span>,
     <span class="ident">NotFound</span>,
     <span class="ident">Conflict</span>,
     <span class="ident">BadUpdate</span>,
@@ -4242,6 +4334,14 @@
                     <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::StoreRetrieveUpdate</span>).<span class="kw">await</span><span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::store_retrieve_update_delete_tests</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="ident">harness</span>.<span class="ident">shutdown</span>().<span class="kw">await</span>
+            }
+
+            <span class="attribute">#[<span class="ident">tokio::test</span>]</span>
+            <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">overwrite</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+                <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::Overwrite</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::overwrite_tests</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
                 <span class="ident">harness</span>.<span class="ident">shutdown</span>().<span class="kw">await</span>
             }
 
@@ -4449,6 +4549,14 @@
                 <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::StoreRetrieveUpdate</span>)<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>()<span class="question-mark">?</span>;
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::blocking_store_retrieve_update_delete_tests</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>)<span class="question-mark">?</span>;
+                <span class="ident">harness</span>.<span class="ident">shutdown</span>()
+            }
+
+            <span class="attribute">#[<span class="ident">test</span>]</span>
+            <span class="kw">fn</span> <span class="ident">overwrite</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+                <span class="kw">let</span> <span class="ident">harness</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">harness::new</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::HarnessTest::Overwrite</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">harness</span>.<span class="ident">connect</span>()<span class="question-mark">?</span>;
+                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::test_util::blocking_overwrite_tests</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>)<span class="question-mark">?</span>;
                 <span class="ident">harness</span>.<span class="ident">shutdown</span>()
             }
 
@@ -4706,17 +4814,11 @@
 
     <span class="comment">// Test that inserting a document with the same ID results in a conflict:</span>
     <span class="kw">let</span> <span class="ident">conflict_err</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
+        .<span class="ident">with_parent_id</span>(<span class="ident">document_42</span>.<span class="ident">id</span>)
         .<span class="ident">insert_into_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap_err</span>();
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">conflict_err</span>.<span class="ident">error</span>, <span class="ident">Error::DocumentConflict</span>(..)));
-
-    <span class="comment">// Test that overwriting works</span>
-    <span class="kw">let</span> <span class="ident">overwritten</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
-        .<span class="ident">overwrite_into_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
-        .<span class="kw">await</span>
-        .<span class="ident">unwrap</span>();
-    <span class="macro">assert!</span>(<span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span> <span class="op">&gt;</span> <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span>);
 
     <span class="comment">// Test bulk insert</span>
     <span class="kw">let</span> <span class="ident">docs</span> <span class="op">=</span> <span class="ident">Basic::push_all_async</span>([<span class="ident">Basic::new</span>(<span class="string">&quot;44&quot;</span>), <span class="ident">Basic::new</span>(<span class="string">&quot;45&quot;</span>)], <span class="ident">db</span>)
@@ -4805,14 +4907,94 @@
     <span class="kw">let</span> <span class="ident">conflict_err</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="ident">unwrap_err</span>();
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">conflict_err</span>.<span class="ident">error</span>, <span class="ident">Error::DocumentConflict</span>(..)));
 
-    <span class="comment">// Test that overwriting works</span>
-    <span class="kw">let</span> <span class="ident">overwritten</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">overwrite_into</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="ident">unwrap</span>();
-    <span class="macro">assert!</span>(<span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span> <span class="op">&gt;</span> <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span>);
-
     <span class="comment">// Test bulk insert</span>
     <span class="kw">let</span> <span class="ident">docs</span> <span class="op">=</span> <span class="ident">Basic::push_all</span>([<span class="ident">Basic::new</span>(<span class="string">&quot;44&quot;</span>), <span class="ident">Basic::new</span>(<span class="string">&quot;45&quot;</span>)], <span class="ident">db</span>).<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">docs</span>[<span class="number">0</span>].<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;44&quot;</span>);
     <span class="macro">assert_eq!</span>(<span class="ident">docs</span>[<span class="number">1</span>].<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;45&quot;</span>);
+
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">overwrite_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="comment">// Test Connection::insert with a specified id</span>
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>
+        .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">document_42</span>.<span class="ident">id</span>, <span class="number">42</span>);
+    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into_async</span>(<span class="number">43</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="number">43</span>);
+
+    <span class="comment">// Test that overwriting works</span>
+    <span class="kw">let</span> <span class="ident">overwritten</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
+        .<span class="ident">with_parent_id</span>(<span class="ident">document_42</span>.<span class="ident">id</span>)
+        .<span class="ident">overwrite_into_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="kw">await</span>
+        .<span class="ident">unwrap</span>();
+    <span class="macro">assert!</span>(<span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span> <span class="op">&gt;</span> <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span>);
+    <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
+        .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
+        .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
+        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_42</span>.<span class="ident">id</span>))
+        .<span class="ident">query</span>()
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">children</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">revision</span>, <span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>);
+
+    <span class="comment">// Verify that unique/eager views are updated when overwriting into a non-existant key</span>
+    <span class="kw">let</span> <span class="ident">insert_via_overwrite</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;1000&quot;</span>)
+        .<span class="ident">with_parent_id</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>)
+        .<span class="ident">overwrite_into_async</span>(<span class="number">1_000</span>, <span class="ident">db</span>)
+        .<span class="kw">await</span>
+        .<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
+        .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
+        .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
+        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>))
+        .<span class="ident">query</span>()
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">children</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">revision</span>,
+        <span class="ident">insert_via_overwrite</span>.<span class="ident">header</span>.<span class="ident">revision</span>
+    );
+
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blocking_overwrite_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="comment">// Test Connection::insert with a specified id</span>
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())<span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">document_42</span>.<span class="ident">id</span>, <span class="number">42</span>);
+    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="number">43</span>, <span class="ident">db</span>)<span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="number">43</span>);
+
+    <span class="comment">// Test that overwriting works</span>
+    <span class="kw">let</span> <span class="ident">overwritten</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
+        .<span class="ident">with_parent_id</span>(<span class="ident">document_42</span>.<span class="ident">id</span>)
+        .<span class="ident">overwrite_into</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="ident">unwrap</span>();
+    <span class="macro">assert!</span>(<span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span> <span class="op">&gt;</span> <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span>);
+    <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
+        .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
+        .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
+        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_42</span>.<span class="ident">id</span>))
+        .<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">children</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">revision</span>, <span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>);
+
+    <span class="comment">// Verify that unique/eager views are updated when overwriting into a non-existant key</span>
+    <span class="kw">let</span> <span class="ident">insert_via_overwrite</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;1000&quot;</span>)
+        .<span class="ident">with_parent_id</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>)
+        .<span class="ident">overwrite_into</span>(<span class="number">1_000</span>, <span class="ident">db</span>)
+        .<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
+        .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
+        .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
+        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>))
+        .<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">children</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">revision</span>,
+        <span class="ident">insert_via_overwrite</span>.<span class="ident">header</span>.<span class="ident">revision</span>
+    );
 
     <span class="prelude-val">Ok</span>(())
 }
