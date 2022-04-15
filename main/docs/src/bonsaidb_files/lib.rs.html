@@ -253,6 +253,12 @@
 <span id="248">248</span>
 <span id="249">249</span>
 <span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Large file storage support for BonsaiDb.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This crate provides support for storing large files in</span>
@@ -299,7 +305,7 @@
     <span class="ident">clippy::module_name_repetitions</span>,
 )]</span>
 
-<span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">bonsaidb_core::async_trait::async_trait</span>;
@@ -310,6 +316,7 @@
     <span class="ident">schema</span>::{<span class="ident">CollectionName</span>, <span class="ident">InsertError</span>, <span class="ident">Qualified</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>},
 };
 <span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::DeserializeOwned</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">mod</span> <span class="ident">schema</span>;
 
@@ -321,6 +328,10 @@
 <span class="doccomment">/// A configuration for a set of [stored files](direct::File).</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>, <span class="ident">async_trait</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">FileConfig</span>: <span class="ident">Sized</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
+    <span class="doccomment">/// The type of the `metadata` stored in [`File`](direct::File). If you do</span>
+    <span class="doccomment">/// not need to store metadata, you can set this type to `()`.</span>
+    <span class="kw">type</span> <span class="ident">Metadata</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">DeserializeOwned</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Clone</span>;
+
     <span class="doccomment">/// The maximum size for each write to an underlying file. The file will be</span>
     <span class="doccomment">/// stored by breaking the data written into chunks no larger than</span>
     <span class="doccomment">/// `BLOCK_SIZE`.</span>
@@ -445,6 +456,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BonsaiFiles</span>;
 
 <span class="kw">impl</span> <span class="ident">FileConfig</span> <span class="kw">for</span> <span class="ident">BonsaiFiles</span> {
+    <span class="kw">type</span> <span class="ident">Metadata</span> <span class="op">=</span> ();
     <span class="kw">const</span> <span class="ident">BLOCK_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">65_536</span>;
 
     <span class="kw">fn</span> <span class="ident">files_name</span>() -&gt; <span class="ident">CollectionName</span> {
