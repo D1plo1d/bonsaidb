@@ -659,6 +659,17 @@
 <span id="654">654</span>
 <span id="655">655</span>
 <span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Macros BonsaiDb.</span>
 
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -969,7 +980,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Attribute</span>)]</span>
 <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">ident</span> <span class="op">=</span> <span class="string">&quot;schema&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">attribute</span>(
-    <span class="ident">invalid_field</span> <span class="op">=</span> <span class="string">r#&quot;Only `name = &quot;name&quot;`, `authority = &quot;authority&quot;`, `collections = [SomeCollection, AnotherCollection]` and `core = bonsaidb::core` are supported attributes&quot;#</span>
+    <span class="ident">invalid_field</span> <span class="op">=</span> <span class="string">r#&quot;Only `name = &quot;name&quot;`, `authority = &quot;authority&quot;`, `collections = [SomeCollection, AnotherCollection]`, `include = [OtherSchema]`, and `core = bonsaidb::core` are supported attributes&quot;#</span>
 )]</span>
 <span class="kw">struct</span> <span class="ident">SchemaAttribute</span> {
     <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">missing</span> <span class="op">=</span> <span class="string">r#&quot;You need to specify the schema name via `#[schema(name = &quot;name&quot;)]`&quot;#</span>)]</span>
@@ -980,6 +991,11 @@
         <span class="ident">expected</span> <span class="op">=</span> <span class="string">r#&quot;Specify the `collections` like so: `collections = [SomeCollection, AnotherCollection]`&quot;#</span>
     )]</span>
     <span class="ident">collections</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">default</span>)]</span>
+    <span class="attribute">#[<span class="ident">attribute</span>(
+        <span class="ident">expected</span> <span class="op">=</span> <span class="string">r#&quot;Specify other Schemas as plugins like so: `include = [SomeSchema, AnotherSchema]`&quot;#</span>
+    )]</span>
+    <span class="ident">include</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">attribute</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">r#&quot;Specify the the path to `core` like so: `core = bosaidb::core`&quot;#</span>)]</span>
     <span class="ident">core</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>,
 }
@@ -1001,6 +1017,7 @@
         <span class="ident">name</span>,
         <span class="ident">authority</span>,
         <span class="ident">collections</span>,
+        <span class="ident">include</span>,
         <span class="ident">core</span>,
     } <span class="op">=</span> <span class="ident">SchemaAttribute::from_attributes</span>(<span class="ident">attrs</span>).<span class="ident">unwrap_or_abort</span>();
 
@@ -1012,6 +1029,8 @@
         <span class="op">|</span><span class="ident">authority</span><span class="op">|</span> <span class="macro">quote!</span>(<span class="op">&lt;</span>#<span class="ident">core::schema::SchemaName</span> <span class="kw">as</span> #<span class="ident">core::schema::Qualified</span><span class="op">&gt;</span><span class="ident">::new</span>(#<span class="ident">authority</span>, #<span class="ident">name</span>)),
     );
 
+    <span class="comment">// For some reason, quote! does not like #include.</span>
+    <span class="kw">let</span> <span class="ident">plugins</span> <span class="op">=</span> <span class="ident">include</span>;
     <span class="macro">quote!</span> {
         <span class="kw">impl</span> #<span class="ident">impl_generics</span> #<span class="ident">core::schema::Schema</span> <span class="kw">for</span> #<span class="ident">ident</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
             <span class="kw">fn</span> <span class="ident">schema_name</span>() -&gt; #<span class="ident">core::schema::SchemaName</span> {
@@ -1022,6 +1041,9 @@
                 <span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> #<span class="ident">core::schema::Schematic</span>
             ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), #<span class="ident">core::Error</span><span class="op">&gt;</span> {
                 #( <span class="ident">schema</span>.<span class="ident">define_collection</span>::<span class="op">&lt;</span>#<span class="ident">collections</span><span class="op">&gt;</span>()<span class="question-mark">?</span>; )<span class="op">*</span>
+
+                #( <span class="op">&lt;</span>#<span class="ident">plugins</span> <span class="kw">as</span> #<span class="ident">core::schema::Schema</span><span class="op">&gt;</span><span class="ident">::define_collections</span>(<span class="ident">schema</span>)<span class="question-mark">?</span>; )<span class="op">*</span>
+
                 <span class="prelude-val">Ok</span>(())
             }
         }

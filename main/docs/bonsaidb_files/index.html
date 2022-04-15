@@ -33,9 +33,11 @@ them.</p>
     <span class="comment">// Create a database for our files. If you would like to use these</span>
     <span class="comment">// collections in an existing datasbase/schema, `BonsaiFiles` exposes a</span>
     <span class="comment">// function `define_collections()` which can be called from your</span>
-    <span class="comment">// `Schema::define_collections()` implementation. The Schema derive macro</span>
-    <span class="comment">// does not yet have a way to allow an external register function to be</span>
-    <span class="comment">// used.</span>
+    <span class="comment">// `Schema::define_collections()` implementation.</span>
+    <span class="comment">//</span>
+    <span class="comment">// Or, if you&#39;re using the Schema derive macro, you can add a parameter</span>
+    <span class="comment">// `include = [FilesSchema&lt;BonsaiFiles&gt;]` to use BonsaiFiles within your</span>
+    <span class="comment">// existing schema.</span>
     <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">Database::open</span>::<span class="op">&lt;</span><span class="ident">FilesSchema</span><span class="op">&lt;</span><span class="ident">BonsaiFiles</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">StorageConfiguration::new</span>(
         <span class="string">&quot;basic-files.bonsaidb&quot;</span>,
     ))<span class="question-mark">?</span>;
@@ -116,9 +118,11 @@ them.</p>
     <span class="comment">// Create a database for our files. If you would like to use these</span>
     <span class="comment">// collections in an existing datasbase/schema, `BonsaiFiles` exposes a</span>
     <span class="comment">// function `define_collections()` which can be called from your</span>
-    <span class="comment">// `Schema::define_collections()` implementation. The Schema derive macro</span>
-    <span class="comment">// does not yet have a way to allow an external register function to be</span>
-    <span class="comment">// used.</span>
+    <span class="comment">// `Schema::define_collections()` implementation.</span>
+    <span class="comment">//</span>
+    <span class="comment">// Or, if you&#39;re using the Schema derive macro, you can add a parameter</span>
+    <span class="comment">// `include = [FilesSchema&lt;BonsaiFiles&gt;]` to use BonsaiFiles within your</span>
+    <span class="comment">// existing schema.</span>
     <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">AsyncDatabase::open</span>::<span class="op">&lt;</span><span class="ident">FilesSchema</span><span class="op">&lt;</span><span class="ident">BonsaiFiles</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">StorageConfiguration::new</span>(
         <span class="string">&quot;basic-files.bonsaidb&quot;</span>,
     ))
