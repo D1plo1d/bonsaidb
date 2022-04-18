@@ -162,26 +162,28 @@ both produce Ordering::Less.</p>
 using a network byte order for numerical types, and for non-numerical types, the
 bytes need to be stored in binary-sortable order.</p>
 <p>Here is how BonsaiDb implements Key for <code>EnumKey</code>:</p>
-<pre><code class="language-rust noplayground no_run">impl&lt;'a, T&gt; Key&lt;'a&gt; for T
+<pre><code class="language-rust noplayground no_run">impl&lt;'a, T&gt; Key&lt;'a&gt; for EnumKey&lt;T&gt;
 where
-    T: EnumKey,
+    T: ToPrimitive + FromPrimitive + Clone + Eq + Ord + std::fmt::Debug + Send + Sync,
 {
     fn from_ord_bytes(bytes: &amp;'a [u8]) -&gt; Result&lt;Self, Self::Error&gt; {
         let primitive = u64::decode_variable(bytes)?;
-        Self::from_u64(primitive)
+        T::from_u64(primitive)
+            .map(Self)
             .ok_or_else(|| std::io::Error::new(ErrorKind::InvalidData, UnknownEnumVariant))
     }
 }
 
-impl&lt;'a, T&gt; KeyEncoding&lt;'a, Self&gt; for T
+impl&lt;'a, T&gt; KeyEncoding&lt;'a, Self&gt; for EnumKey&lt;T&gt;
 where
-    T: EnumKey,
+    T: ToPrimitive + FromPrimitive + Clone + Eq + Ord + std::fmt::Debug + Send + Sync,
 {
     type Error = std::io::Error;
     const LENGTH: Option&lt;usize&gt; = None;
 
     fn as_ord_bytes(&amp;'a self) -&gt; Result&lt;Cow&lt;'a, [u8]&gt;, Self::Error&gt; {
         let integer = self
+            .0
             .to_u64()
             .map(Unsigned::from)
             .ok_or_else(|| std::io::Error::new(ErrorKind::InvalidData, IncorrectByteLength))?;

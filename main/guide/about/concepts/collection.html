@@ -186,7 +186,7 @@ primary key type:</p>
     let inserted = AssociatedProfileData {
         value: String::from(&quot;hello&quot;),
     }
-    .insert_into(key, &amp;db)?;
+    .insert_into(&amp;key, &amp;db)?;
     let retrieved = AssociatedProfileData::get(&amp;key, &amp;db)?.expect(&quot;document not found&quot;);
     assert_eq!(inserted, retrieved);
 </code></pre>
@@ -217,7 +217,7 @@ assigned by calling <code>natural_id()</code>:</p>
         name: String::from(&quot;ecton&quot;),
     }
     .push_into(&amp;db)?;
-    let retrieved_from_database = UserProfile::get(42, &amp;db)?.expect(&quot;document not found&quot;);
+    let retrieved_from_database = UserProfile::get(&amp;42, &amp;db)?.expect(&quot;document not found&quot;);
     assert_eq!(user, retrieved_from_database);
 </code></pre>
 <h3 id="custom-primary-keys"><a class="header" href="#custom-primary-keys">Custom Primary Keys</a></h3>
