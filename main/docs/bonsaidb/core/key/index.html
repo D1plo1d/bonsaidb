@@ -15,6 +15,13 @@ preserving the ordering guarantees necessary for <a href="trait.Key.html" title=
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.CompositeKeyError.html" title="bonsaidb::core::key::CompositeKeyError struct">CompositeKeyError</a></div><div class="item-right docblock-short"><p>An error occurred inside of one of the composite key fields.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.CompositeKeyFieldContainsNullByte.html" title="bonsaidb::core::key::CompositeKeyFieldContainsNullByte struct">CompositeKeyFieldContainsNullByte</a></div><div class="item-right docblock-short"><p>Null bytes in variable fields encoded with <a href="struct.CompositeKeyEncoder.html" title="CompositeKeyEncoder"><code>CompositeKeyEncoder</code></a> can cause
 sort order to misbehave.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.EnumKey.html" title="bonsaidb::core::key::EnumKey struct">EnumKey</a></div><div class="item-right docblock-short"><p>Adds <code>Key</code> support to an enum. Requires implementing
+<a href="num_traits::ToPrimitive"><code>ToPrimitive</code></a> and
+<a href="num_traits::FromPrimitive"><code>FromPrimitive</code></a>, or using a crate like
+<a href="https://crates.io/crates/num-derive">num-derive</a> to do it automatically.
+Take care when using enums as keys: if the order changes or if the meaning
+of existing numerical values changes, make sure to update any related views’
+version number to ensure the values are re-evaluated.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.IncorrectByteLength.html" title="bonsaidb::core::key::IncorrectByteLength struct">IncorrectByteLength</a></div><div class="item-right docblock-short"><p>An error that indicates an unexpected number of bytes were present.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.OptionKeyV1.html" title="bonsaidb::core::key::OptionKeyV1 struct">OptionKeyV1</a><span class="stab deprecated" title="">Deprecated</span></div><div class="item-right docblock-short"><p>A type that preserves the original implementation of <a href="trait.Key.html" title="Key"><code>Key</code></a> for
 <code>Option&lt;T&gt;</code>. This should not be used in new code and will be removed in a
@@ -28,14 +35,7 @@ about why this implementation should be avoided.</p>
 </div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.NextValueError.html" title="bonsaidb::core::key::NextValueError enum">NextValueError</a></div><div class="item-right docblock-short"><p>The error types for <a href="trait.Key.html#method.next_value" title="Key::next_value()"><code>Key::next_value()</code></a>.</p>
 </div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.EnumKey.html" title="bonsaidb::core::key::EnumKey trait">EnumKey</a></div><div class="item-right docblock-short"><p>Adds <code>Key</code> support to an enum. Requires implementing
-<a href="num_traits::ToPrimitive"><code>ToPrimitive</code></a> and
-<a href="num_traits::FromPrimitive"><code>FromPrimitive</code></a>, or using a crate like
-<a href="https://crates.io/crates/num-derive">num-derive</a> to do it automatically.
-Take care when using enums as keys: if the order changes or if the meaning
-of existing numerical values changes, make sure to update any related views’
-version number to ensure the values are re-evaluated.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.IntoPrefixRange.html" title="bonsaidb::core::key::IntoPrefixRange trait">IntoPrefixRange</a></div><div class="item-right docblock-short"><p>A type that can be used as a prefix range in range-based queries.</p>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.IntoPrefixRange.html" title="bonsaidb::core::key::IntoPrefixRange trait">IntoPrefixRange</a></div><div class="item-right docblock-short"><p>A type that can be used as a prefix range in range-based queries.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Key.html" title="bonsaidb::core::key::Key trait">Key</a></div><div class="item-right docblock-short"><p>A trait that enables a type to convert itself into a <code>memcmp</code>-compatible
 sequence of bytes.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.KeyEncoding.html" title="bonsaidb::core::key::KeyEncoding trait">KeyEncoding</a></div><div class="item-right docblock-short"><p>A trait that enables a type to convert itself into a <code>memcmp</code>-compatible

@@ -2121,7 +2121,36 @@
 <span id="2116">2116</span>
 <span id="2117">2117</span>
 <span id="2118">2118</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">task::Poll</span>};
+<span id="2119">2119</span>
+<span id="2120">2120</span>
+<span id="2121">2121</span>
+<span id="2122">2122</span>
+<span id="2123">2123</span>
+<span id="2124">2124</span>
+<span id="2125">2125</span>
+<span id="2126">2126</span>
+<span id="2127">2127</span>
+<span id="2128">2128</span>
+<span id="2129">2129</span>
+<span id="2130">2130</span>
+<span id="2131">2131</span>
+<span id="2132">2132</span>
+<span id="2133">2133</span>
+<span id="2134">2134</span>
+<span id="2135">2135</span>
+<span id="2136">2136</span>
+<span id="2137">2137</span>
+<span id="2138">2138</span>
+<span id="2139">2139</span>
+<span id="2140">2140</span>
+<span id="2141">2141</span>
+<span id="2142">2142</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
+    <span class="ident">fmt::Debug</span>,
+    <span class="ident">marker::PhantomData</span>,
+    <span class="ident">task::Poll</span>,
+};
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">future::BoxFuture</span>, <span class="ident">ready</span>, <span class="ident">Future</span>, <span class="ident">FutureExt</span>};
@@ -2130,7 +2159,7 @@
 <span class="kw">use</span> <span class="ident">transmog_pot::Pot</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection</span>::{<span class="self">self</span>, <span class="ident">AsyncConnection</span>, <span class="ident">Connection</span>, <span class="ident">Range</span>},
+    <span class="ident">connection</span>::{<span class="self">self</span>, <span class="ident">AsyncConnection</span>, <span class="ident">Connection</span>, <span class="ident">RangeRef</span>},
     <span class="ident">document</span>::{
         <span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">Document</span>, <span class="ident">DocumentId</span>, <span class="ident">Header</span>,
         <span class="ident">KeyId</span>, <span class="ident">OwnedDocument</span>, <span class="ident">OwnedDocuments</span>, <span class="ident">Revision</span>,
@@ -2331,7 +2360,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The result of [`KeyEncoding::as_ord_bytes()`] must be less than or equal</span>
     <span class="doccomment">/// to [`DocumentId::MAX_LENGTH`]. This is currently 63 bytes.</span>
-    <span class="kw">type</span> <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Ord</span>;
 
     <span class="doccomment">/// The unique name of this collection. Each collection must be uniquely</span>
     <span class="doccomment">/// named within the [`Schema`](crate::schema::Schema) it is registered</span>
@@ -2429,7 +2458,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// if let Some(doc) = MyCollection::get(42, &amp;db)? {</span>
+    <span class="doccomment">/// if let Some(doc) = MyCollection::get(&amp;42, &amp;db)? {</span>
     <span class="doccomment">///     println!(</span>
     <span class="doccomment">///         &quot;Retrieved revision {} with deserialized contents: {:?}&quot;,</span>
     <span class="doccomment">///         doc.header.revision, doc.contents</span>
@@ -2439,7 +2468,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -2458,7 +2487,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// if let Some(doc) = MyCollection::get_async(42, &amp;db).await? {</span>
+    <span class="doccomment">/// if let Some(doc) = MyCollection::get_async(&amp;42, &amp;db).await? {</span>
     <span class="doccomment">///     println!(</span>
     <span class="doccomment">///         &quot;Retrieved revision {} with deserialized contents: {:?}&quot;,</span>
     <span class="doccomment">///         doc.header.revision, doc.contents</span>
@@ -2469,7 +2498,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_async</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -2488,7 +2517,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// for doc in MyCollection::get_multiple([42, 43], &amp;db)? {</span>
+    <span class="doccomment">/// for doc in MyCollection::get_multiple(&amp;[42, 43], &amp;db)? {</span>
     <span class="doccomment">///     println!(</span>
     <span class="doccomment">///         &quot;Retrieved #{} with deserialized contents: {:?}&quot;,</span>
     <span class="doccomment">///         doc.header.id, doc.contents</span>
@@ -2497,15 +2526,15 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">get_multiple</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">DocumentIds</span>, <span class="ident">PrimaryKey</span>, <span class="ident">I</span><span class="op">&gt;</span>(
+    <span class="kw">fn</span> <span class="ident">get_multiple</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident">C</span>, <span class="ident">DocumentIds</span>, <span class="ident">PrimaryKey</span>, <span class="ident">I</span><span class="op">&gt;</span>(
         <span class="ident">ids</span>: <span class="ident">DocumentIds</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">C</span>: <span class="ident">Connection</span>,
-        <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>,
+        <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;id</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;id</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;id</span>,
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="ident">connection</span>
@@ -2522,7 +2551,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// for doc in MyCollection::get_multiple_async([42, 43], &amp;db).await? {</span>
+    <span class="doccomment">/// for doc in MyCollection::get_multiple_async(&amp;[42, 43], &amp;db).await? {</span>
     <span class="doccomment">///     println!(</span>
     <span class="doccomment">///         &quot;Retrieved #{} with deserialized contents: {:?}&quot;,</span>
     <span class="doccomment">///         doc.header.id, doc.contents</span>
@@ -2532,15 +2561,15 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple_async</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">DocumentIds</span>, <span class="ident">PrimaryKey</span>, <span class="ident">I</span><span class="op">&gt;</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple_async</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident">C</span>, <span class="ident">DocumentIds</span>, <span class="ident">PrimaryKey</span>, <span class="ident">I</span><span class="op">&gt;</span>(
         <span class="ident">ids</span>: <span class="ident">DocumentIds</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">C</span>: <span class="ident">AsyncConnection</span>,
-        <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>,
+        <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;id</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;id</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;id</span>,
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="ident">connection</span>
@@ -2569,16 +2598,17 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">PrimaryKey</span>, <span class="ident">C</span><span class="op">&gt;</span>(<span class="ident">ids</span>: <span class="ident">R</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="ident">C</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident">R</span>, <span class="ident">PrimaryKey</span>, <span class="ident">C</span><span class="op">&gt;</span>(<span class="ident">ids</span>: <span class="ident">R</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;id</span> <span class="ident">C</span>) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">C</span>: <span class="ident">Connection</span>,
-        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="lifetime">&#39;id</span>,
+        <span class="ident"><span class="self">Self</span>::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="ident">List</span>(<span class="ident">connection::List::new</span>(
-            <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
-            <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map</span>(<span class="ident">PrimaryKey::into</span>),
+            <span class="ident">connection::MaybeOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
+            <span class="ident">ids</span>.<span class="ident">into</span>(),
         ))
     }
 
@@ -2603,16 +2633,20 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">list_async</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">PrimaryKey</span>, <span class="ident">C</span><span class="op">&gt;</span>(<span class="ident">ids</span>: <span class="ident">R</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="ident">C</span>) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">list_async</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident">R</span>, <span class="ident">PrimaryKey</span>, <span class="ident">C</span><span class="op">&gt;</span>(
+        <span class="ident">ids</span>: <span class="ident">R</span>,
+        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;id</span> <span class="ident">C</span>,
+    ) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Range</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;id</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">C</span>: <span class="ident">AsyncConnection</span>,
-        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>,
+        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="lifetime">&#39;id</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+        <span class="ident"><span class="self">Self</span>::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="ident">AsyncList</span>(<span class="ident">connection::AsyncList::new</span>(
-            <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
-            <span class="ident">ids</span>.<span class="ident">into</span>().<span class="ident">map</span>(<span class="ident">PrimaryKey::into</span>),
+            <span class="ident">connection::MaybeOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
+            <span class="ident">ids</span>.<span class="ident">into</span>(),
         ))
     }
 
@@ -2635,21 +2669,25 @@
     <span class="doccomment">/// async fn starts_with_a&lt;C: Connection&gt;(</span>
     <span class="doccomment">///     db: &amp;C,</span>
     <span class="doccomment">/// ) -&gt; Result&lt;Vec&lt;CollectionDocument&lt;MyCollection&gt;&gt;, Error&gt; {</span>
-    <span class="doccomment">///     MyCollection::list_with_prefix(String::from(&quot;a&quot;), db).query()</span>
+    <span class="doccomment">///     MyCollection::list_with_prefix(&quot;a&quot;, db).query()</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">list_with_prefix</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>(
-        <span class="ident">prefix</span>: <span class="ident"><span class="self">Self</span>::PrimaryKey</span>,
-        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="ident">C</span>,
-    ) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">list_with_prefix</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">PrimaryKey</span>, <span class="ident">C</span><span class="op">&gt;</span>(
+        <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PrimaryKey</span>,
+        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">C</span>,
+    ) -&gt; <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">C</span>: <span class="ident">Connection</span>,
         <span class="self">Self</span>: <span class="ident">Sized</span>,
-        <span class="ident"><span class="self">Self</span>::PrimaryKey</span>: <span class="ident">IntoPrefixRange</span>,
+        <span class="ident">PrimaryKey</span>: <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>
+            <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>
+            <span class="op">+</span> <span class="ident">PartialEq</span>
+            <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+        <span class="ident"><span class="self">Self</span>::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="ident">List</span>(<span class="ident">connection::List::new</span>(
-            <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
-            <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>(),
+            <span class="ident">connection::MaybeOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
+            <span class="ident">prefix</span>.<span class="ident">to_prefix_range</span>(),
         ))
     }
 
@@ -2672,21 +2710,25 @@
     <span class="doccomment">/// async fn starts_with_a&lt;C: AsyncConnection&gt;(</span>
     <span class="doccomment">///     db: &amp;C,</span>
     <span class="doccomment">/// ) -&gt; Result&lt;Vec&lt;CollectionDocument&lt;MyCollection&gt;&gt;, Error&gt; {</span>
-    <span class="doccomment">///     MyCollection::list_with_prefix_async(String::from(&quot;a&quot;), db).await</span>
+    <span class="doccomment">///     MyCollection::list_with_prefix_async(&quot;a&quot;, db).await</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">list_with_prefix_async</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>(
-        <span class="ident">prefix</span>: <span class="ident"><span class="self">Self</span>::PrimaryKey</span>,
-        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="ident">C</span>,
-    ) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">list_with_prefix_async</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">PrimaryKey</span>, <span class="ident">C</span><span class="op">&gt;</span>(
+        <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PrimaryKey</span>,
+        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">C</span>,
+    ) -&gt; <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>, <span class="self">Self</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">C</span>: <span class="ident">AsyncConnection</span>,
         <span class="self">Self</span>: <span class="ident">Sized</span>,
-        <span class="ident"><span class="self">Self</span>::PrimaryKey</span>: <span class="ident">IntoPrefixRange</span>,
+        <span class="ident">PrimaryKey</span>: <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>
+            <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident"><span class="self">Self</span>::PrimaryKey</span><span class="op">&gt;</span>
+            <span class="op">+</span> <span class="ident">PartialEq</span>
+            <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+        <span class="ident"><span class="self">Self</span>::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     {
         <span class="ident">AsyncList</span>(<span class="ident">connection::AsyncList::new</span>(
-            <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
-            <span class="ident">prefix</span>.<span class="ident">into_prefix_range</span>(),
+            <span class="ident">connection::MaybeOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
+            <span class="ident">prefix</span>.<span class="ident">to_prefix_range</span>(),
         ))
     }
 
@@ -2712,8 +2754,8 @@
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="ident">List</span>(<span class="ident">connection::List::new</span>(
-            <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
-            <span class="ident">Range::from</span>(..),
+            <span class="ident">connection::MaybeOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
+            <span class="ident">RangeRef::from</span>(..),
         ))
     }
 
@@ -2739,8 +2781,8 @@
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="ident">AsyncList</span>(<span class="ident">connection::AsyncList::new</span>(
-            <span class="ident">connection::PossiblyOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
-            <span class="ident">Range::from</span>(..),
+            <span class="ident">connection::MaybeOwned::Owned</span>(<span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()),
+            <span class="ident">RangeRef::from</span>(..),
         ))
     }
 
@@ -3041,7 +3083,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// let document = MyCollection::insert(42, MyCollection::default(), &amp;db)?;</span>
+    <span class="doccomment">/// let document = MyCollection::insert(&amp;42, MyCollection::default(), &amp;db)?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
     <span class="doccomment">///     &quot;Inserted {:?} with revision {}&quot;,</span>
@@ -3051,7 +3093,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">insert</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">Cn</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">contents</span>: <span class="ident"><span class="self">Self</span>::Contents</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Contents</span><span class="op">&gt;</span><span class="op">&gt;</span>
@@ -3075,7 +3117,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// let document = MyCollection::insert_async(42, MyCollection::default(), &amp;db).await?;</span>
+    <span class="doccomment">/// let document = MyCollection::insert_async(&amp;42, MyCollection::default(), &amp;db).await?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
     <span class="doccomment">///     &quot;Inserted {:?} with revision {}&quot;,</span>
@@ -3086,7 +3128,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">insert_async</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">Cn</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">contents</span>: <span class="ident"><span class="self">Self</span>::Contents</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Contents</span><span class="op">&gt;</span><span class="op">&gt;</span>
@@ -3110,7 +3152,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// let document = MyCollection::default().insert_into(42, &amp;db)?;</span>
+    <span class="doccomment">/// let document = MyCollection::default().insert_into(&amp;42, &amp;db)?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
     <span class="doccomment">///     &quot;Inserted {:?} with revision {}&quot;,</span>
@@ -3121,7 +3163,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">insert_into</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">Cn</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -3140,7 +3182,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// let document = MyCollection::default().insert_into_async(42, &amp;db).await?;</span>
+    <span class="doccomment">/// let document = MyCollection::default().insert_into_async(&amp;42, &amp;db).await?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
     <span class="doccomment">///     &quot;Inserted {:?} with revision {}&quot;,</span>
@@ -3152,7 +3194,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">insert_into_async</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">Cn</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -3170,7 +3212,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// let document = MyCollection::overwrite(42, MyCollection::default(), &amp;db)?;</span>
+    <span class="doccomment">/// let document = MyCollection::overwrite(&amp;42, MyCollection::default(), &amp;db)?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
     <span class="doccomment">///     &quot;Overwrote {:?} with revision {}&quot;,</span>
@@ -3180,7 +3222,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">overwrite</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">Cn</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">contents</span>: <span class="ident"><span class="self">Self</span>::Contents</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Contents</span><span class="op">&gt;</span><span class="op">&gt;</span>
@@ -3207,7 +3249,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// let document = MyCollection::overwrite_async(42, MyCollection::default(), &amp;db).await?;</span>
+    <span class="doccomment">/// let document = MyCollection::overwrite_async(&amp;42, MyCollection::default(), &amp;db).await?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
     <span class="doccomment">///     &quot;Overwrote {:?} with revision {}&quot;,</span>
@@ -3218,7 +3260,7 @@
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">overwrite_async</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span>, <span class="ident">Cn</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">contents</span>: <span class="ident"><span class="self">Self</span>::Contents</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Contents</span><span class="op">&gt;</span><span class="op">&gt;</span>
@@ -3245,7 +3287,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// let document = MyCollection::default().overwrite_into(42, &amp;db)?;</span>
+    <span class="doccomment">/// let document = MyCollection::default().overwrite_into(&amp;42, &amp;db)?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
     <span class="doccomment">///     &quot;Overwrote {:?} with revision {}&quot;,</span>
@@ -3256,7 +3298,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">overwrite_into</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">Connection</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -3275,7 +3317,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// let document = MyCollection::default()</span>
-    <span class="doccomment">///     .overwrite_into_async(42, &amp;db)</span>
+    <span class="doccomment">///     .overwrite_into_async(&amp;42, &amp;db)</span>
     <span class="doccomment">///     .await?;</span>
     <span class="doccomment">/// assert_eq!(document.header.id, 42);</span>
     <span class="doccomment">/// println!(</span>
@@ -3288,7 +3330,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">overwrite_into_async</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">AsyncConnection</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
-        <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
+        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">PrimaryKey</span>,
         <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">InsertError</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -3488,11 +3530,11 @@
         <span class="self">Self</span>: <span class="ident">SerializedCollection</span> <span class="op">+</span> <span class="ident">Sized</span>,
     {
         <span class="kw">match</span> <span class="ident">name</span>.<span class="ident">name</span>()<span class="question-mark">?</span> {
-            <span class="ident">NamedReference::Id</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">id</span>),
-            <span class="ident">NamedReference::Key</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">id</span>),
+            <span class="ident">NamedReference::Id</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>),
+            <span class="ident">NamedReference::Key</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>),
             <span class="ident">NamedReference::Name</span>(<span class="ident">name</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">connection</span>
                 .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::ByNameView</span><span class="op">&gt;</span>()
-                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>().<span class="ident">to_owned</span>())
+                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>())
                 .<span class="ident">query_with_docs</span>()<span class="question-mark">?</span>
                 .<span class="ident">documents</span>
                 .<span class="ident">into_iter</span>()
@@ -3516,11 +3558,11 @@
         <span class="self">Self</span>: <span class="ident">SerializedCollection</span> <span class="op">+</span> <span class="ident">Sized</span>,
     {
         <span class="kw">match</span> <span class="ident">name</span>.<span class="ident">name</span>()<span class="question-mark">?</span> {
-            <span class="ident">NamedReference::Id</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">id</span>).<span class="kw">await</span>,
-            <span class="ident">NamedReference::Key</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">id</span>).<span class="kw">await</span>,
+            <span class="ident">NamedReference::Id</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>).<span class="kw">await</span>,
+            <span class="ident">NamedReference::Key</span>(<span class="ident">id</span>) =&gt; <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>).<span class="kw">await</span>,
             <span class="ident">NamedReference::Name</span>(<span class="ident">name</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">connection</span>
                 .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::ByNameView</span><span class="op">&gt;</span>()
-                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>().<span class="ident">to_owned</span>())
+                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>())
                 .<span class="ident">query_with_docs</span>()
                 .<span class="kw">await</span><span class="question-mark">?</span>
                 .<span class="ident">documents</span>
@@ -3599,7 +3641,7 @@
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
 
     <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;c</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="ident">DocumentId::new</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">clone</span>()).<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::Id</span>)
+        <span class="ident">DocumentId::new</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>).<span class="ident">map</span>(<span class="ident"><span class="self">Self</span>::Id</span>)
     }
 }
 
@@ -3667,7 +3709,7 @@
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Name</span>(<span class="ident">name</span>) =&gt; <span class="ident">connection</span>
                 .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">Col::ByNameView</span><span class="op">&gt;</span>()
-                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>().<span class="ident">to_owned</span>())
+                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>())
                 .<span class="ident">query</span>()<span class="question-mark">?</span>
                 .<span class="ident">into_iter</span>()
                 .<span class="ident">next</span>()
@@ -3687,7 +3729,7 @@
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Name</span>(<span class="ident">name</span>) =&gt; <span class="ident">connection</span>
                 .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">Col::ByNameView</span><span class="op">&gt;</span>()
-                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>().<span class="ident">to_owned</span>())
+                .<span class="ident">with_key</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>())
                 .<span class="ident">query</span>()
                 .<span class="kw">await</span><span class="question-mark">?</span>
                 .<span class="ident">into_iter</span>()
@@ -4063,13 +4105,16 @@
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(<span class="ident">connection::List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>)
 <span class="kw">where</span>
-    <span class="ident">Cl</span>: <span class="ident">Collection</span>;
+    <span class="ident">Cl</span>: <span class="ident">Collection</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+    <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>;
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">List</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">SerializedCollection</span>,
     <span class="ident">Cn</span>: <span class="ident">Connection</span>,
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
+    <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Lists documents by id in ascending order.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
@@ -4146,13 +4191,16 @@
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>(<span class="ident">connection::AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>)
 <span class="kw">where</span>
-    <span class="ident">Cl</span>: <span class="ident">Collection</span>;
+    <span class="ident">Cl</span>: <span class="ident">Collection</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+    <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>;
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">Collection</span>,
     <span class="ident">Cn</span>: <span class="ident">AsyncConnection</span>,
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+    <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Lists documents by id in ascending order.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
@@ -4225,9 +4273,9 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">AsyncList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">Cl</span>: <span class="ident">SerializedCollection</span> <span class="op">+</span> <span class="ident">Unpin</span>,
-    <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Unpin</span>,
     <span class="ident">Cn</span>: <span class="ident">AsyncConnection</span>,
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
+    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
+    <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 

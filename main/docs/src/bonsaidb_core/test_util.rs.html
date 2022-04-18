@@ -3753,60 +3753,6 @@
 <span id="3748">3748</span>
 <span id="3749">3749</span>
 <span id="3750">3750</span>
-<span id="3751">3751</span>
-<span id="3752">3752</span>
-<span id="3753">3753</span>
-<span id="3754">3754</span>
-<span id="3755">3755</span>
-<span id="3756">3756</span>
-<span id="3757">3757</span>
-<span id="3758">3758</span>
-<span id="3759">3759</span>
-<span id="3760">3760</span>
-<span id="3761">3761</span>
-<span id="3762">3762</span>
-<span id="3763">3763</span>
-<span id="3764">3764</span>
-<span id="3765">3765</span>
-<span id="3766">3766</span>
-<span id="3767">3767</span>
-<span id="3768">3768</span>
-<span id="3769">3769</span>
-<span id="3770">3770</span>
-<span id="3771">3771</span>
-<span id="3772">3772</span>
-<span id="3773">3773</span>
-<span id="3774">3774</span>
-<span id="3775">3775</span>
-<span id="3776">3776</span>
-<span id="3777">3777</span>
-<span id="3778">3778</span>
-<span id="3779">3779</span>
-<span id="3780">3780</span>
-<span id="3781">3781</span>
-<span id="3782">3782</span>
-<span id="3783">3783</span>
-<span id="3784">3784</span>
-<span id="3785">3785</span>
-<span id="3786">3786</span>
-<span id="3787">3787</span>
-<span id="3788">3788</span>
-<span id="3789">3789</span>
-<span id="3790">3790</span>
-<span id="3791">3791</span>
-<span id="3792">3792</span>
-<span id="3793">3793</span>
-<span id="3794">3794</span>
-<span id="3795">3795</span>
-<span id="3796">3796</span>
-<span id="3797">3797</span>
-<span id="3798">3798</span>
-<span id="3799">3799</span>
-<span id="3800">3800</span>
-<span id="3801">3801</span>
-<span id="3802">3802</span>
-<span id="3803">3803</span>
-<span id="3804">3804</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -4741,7 +4687,7 @@
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)
         .<span class="kw">await</span><span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
@@ -4758,7 +4704,7 @@
 
     <span class="comment">// Check the value in the database to ensure it has the new document</span>
     <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)
         .<span class="kw">await</span><span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="macro">assert_eq!</span>(<span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>, <span class="ident">value</span>);
@@ -4781,7 +4727,7 @@
     }
 
     <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">delete</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="macro">assert!</span>(<span class="ident">collection</span>.<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(<span class="ident">collection</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">is_none</span>());
     <span class="kw">let</span> <span class="ident">transactions</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">list_executed_transactions</span>(<span class="prelude-val">Some</span>(<span class="ident">transactions</span>.<span class="ident">last</span>().<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">id</span> <span class="op">+</span> <span class="number">1</span>), <span class="prelude-val">None</span>)
         .<span class="kw">await</span><span class="question-mark">?</span>;
@@ -4800,22 +4746,22 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">original_value</span>.<span class="ident">clone</span>().<span class="ident">push_into_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">category</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;updated&quot;</span>));
     <span class="ident">doc</span>.<span class="ident">update_async</span>(<span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">reloaded</span> <span class="op">=</span> <span class="ident">Basic::get_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">reloaded</span> <span class="op">=</span> <span class="ident">Basic::get_async</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>, <span class="ident">reloaded</span>.<span class="ident">contents</span>);
 
     <span class="comment">// Test Connection::insert with a specified id</span>
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>
-        .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())
+        .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_42</span>.<span class="ident">id</span>, <span class="number">42</span>);
-    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into_async</span>(<span class="number">43</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into_async</span>(<span class="kw-2">&amp;</span><span class="number">43</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="number">43</span>);
 
     <span class="comment">// Test that inserting a document with the same ID results in a conflict:</span>
     <span class="kw">let</span> <span class="ident">conflict_err</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
         .<span class="ident">with_parent_id</span>(<span class="ident">document_42</span>.<span class="ident">id</span>)
-        .<span class="ident">insert_into_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="ident">insert_into_async</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap_err</span>();
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">conflict_err</span>.<span class="ident">error</span>, <span class="ident">Error::DocumentConflict</span>(..)));
@@ -4837,7 +4783,7 @@
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">original_value</span>, <span class="ident">value</span>);
@@ -4853,7 +4799,7 @@
 
     <span class="comment">// Check the value in the database to ensure it has the new document</span>
     <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="macro">assert_eq!</span>(<span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>, <span class="ident">value</span>);
 
@@ -4875,7 +4821,7 @@
     }
 
     <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">delete</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
-    <span class="macro">assert!</span>(<span class="ident">collection</span>.<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>.<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(<span class="ident">collection</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>.<span class="ident">is_none</span>());
     <span class="kw">let</span> <span class="ident">transactions</span> <span class="op">=</span>
         <span class="ident">db</span>.<span class="ident">list_executed_transactions</span>(<span class="prelude-val">Some</span>(<span class="ident">transactions</span>.<span class="ident">last</span>().<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">id</span> <span class="op">+</span> <span class="number">1</span>), <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">transactions</span>.<span class="ident">len</span>(), <span class="number">1</span>);
@@ -4893,18 +4839,20 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">original_value</span>.<span class="ident">push_into</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">category</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;updated&quot;</span>));
     <span class="ident">doc</span>.<span class="ident">update</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">reloaded</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">reloaded</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>, <span class="ident">reloaded</span>.<span class="ident">contents</span>);
 
     <span class="comment">// Test Connection::insert with a specified id</span>
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_42</span>.<span class="ident">id</span>, <span class="number">42</span>);
-    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="number">43</span>, <span class="ident">db</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="kw-2">&amp;</span><span class="number">43</span>, <span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="number">43</span>);
 
     <span class="comment">// Test that inserting a document with the same ID results in a conflict:</span>
-    <span class="kw">let</span> <span class="ident">conflict_err</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="ident">unwrap_err</span>();
+    <span class="kw">let</span> <span class="ident">conflict_err</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
+        .<span class="ident">insert_into</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="ident">unwrap_err</span>();
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">conflict_err</span>.<span class="ident">error</span>, <span class="ident">Error::DocumentConflict</span>(..)));
 
     <span class="comment">// Test bulk insert</span>
@@ -4917,25 +4865,25 @@
 
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">overwrite_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// Test Connection::insert with a specified id</span>
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>
-        .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())
+        .<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_42</span>.<span class="ident">id</span>, <span class="number">42</span>);
-    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into_async</span>(<span class="number">43</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into_async</span>(<span class="kw-2">&amp;</span><span class="number">43</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="number">43</span>);
 
     <span class="comment">// Test that overwriting works</span>
     <span class="kw">let</span> <span class="ident">overwritten</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
         .<span class="ident">with_parent_id</span>(<span class="ident">document_42</span>.<span class="ident">id</span>)
-        .<span class="ident">overwrite_into_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="ident">overwrite_into_async</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
     <span class="macro">assert!</span>(<span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span> <span class="op">&gt;</span> <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span>);
     <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_42</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">document_42</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">children</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">revision</span>, <span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>);
@@ -4943,13 +4891,13 @@
     <span class="comment">// Verify that unique/eager views are updated when overwriting into a non-existant key</span>
     <span class="kw">let</span> <span class="ident">insert_via_overwrite</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;1000&quot;</span>)
         .<span class="ident">with_parent_id</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>)
-        .<span class="ident">overwrite_into_async</span>(<span class="number">1_000</span>, <span class="ident">db</span>)
+        .<span class="ident">overwrite_into_async</span>(<span class="kw-2">&amp;</span><span class="number">1_000</span>, <span class="ident">db</span>)
         .<span class="kw">await</span>
         .<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(
@@ -4962,34 +4910,34 @@
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blocking_overwrite_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// Test Connection::insert with a specified id</span>
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;42&quot;</span>))<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_42</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">insert</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>), <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>())<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_42</span>.<span class="ident">id</span>, <span class="number">42</span>);
-    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="number">43</span>, <span class="ident">db</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">document_43</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>).<span class="ident">insert_into</span>(<span class="kw-2">&amp;</span><span class="number">43</span>, <span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="number">43</span>);
 
     <span class="comment">// Test that overwriting works</span>
     <span class="kw">let</span> <span class="ident">overwritten</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;43&quot;</span>)
         .<span class="ident">with_parent_id</span>(<span class="ident">document_42</span>.<span class="ident">id</span>)
-        .<span class="ident">overwrite_into</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
+        .<span class="ident">overwrite_into</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)
         .<span class="ident">unwrap</span>();
     <span class="macro">assert!</span>(<span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span> <span class="op">&gt;</span> <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">revision</span>.<span class="ident">id</span>);
     <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_42</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">document_42</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">children</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">revision</span>, <span class="ident">overwritten</span>.<span class="ident">header</span>.<span class="ident">revision</span>);
 
     <span class="comment">// Verify that unique/eager views are updated when overwriting into a non-existant key</span>
     <span class="kw">let</span> <span class="ident">insert_via_overwrite</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;1000&quot;</span>)
         .<span class="ident">with_parent_id</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>)
-        .<span class="ident">overwrite_into</span>(<span class="number">1_000</span>, <span class="ident">db</span>)
+        .<span class="ident">overwrite_into</span>(<span class="kw-2">&amp;</span><span class="number">1_000</span>, <span class="ident">db</span>)
         .<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentIdEager</span><span class="op">&gt;</span>()
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">document_43</span>.<span class="ident">header</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(
         <span class="ident">children</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">revision</span>,
@@ -5000,7 +4948,7 @@
 }
 
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">not_found_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="number">1</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="number">1</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">is_none</span>());
 
     <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">last_transaction_id</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">is_none</span>());
 
@@ -5008,7 +4956,7 @@
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blocking_not_found_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="number">1</span>)<span class="question-mark">?</span>.<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="number">1</span>)<span class="question-mark">?</span>.<span class="ident">is_none</span>());
 
     <span class="macro">assert!</span>(<span class="ident">db</span>.<span class="ident">last_transaction_id</span>()<span class="question-mark">?</span>.<span class="ident">is_none</span>());
 
@@ -5021,7 +4969,7 @@
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)
         .<span class="kw">await</span><span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
@@ -5051,7 +4999,7 @@
     })
     .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;modify worked&quot;</span>);
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">Basic::get_async</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">Basic::get_async</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;modify worked&quot;</span>);
 
     <span class="prelude-val">Ok</span>(())
@@ -5063,7 +5011,7 @@
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
     <span class="ident">value</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;updated_value&quot;</span>);
@@ -5090,14 +5038,14 @@
         <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;modify worked&quot;</span>);
     })<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;modify worked&quot;</span>);
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">db</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">value</span>, <span class="string">&quot;modify worked&quot;</span>);
 
     <span class="prelude-val">Ok</span>(())
 }
 
 <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">bad_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::default</span>())<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::default</span>())<span class="question-mark">?</span>;
     <span class="kw">match</span> <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>).<span class="kw">await</span> {
         <span class="prelude-val">Err</span>(<span class="ident">Error::DocumentNotFound</span>(<span class="ident">collection</span>, <span class="ident">id</span>)) =&gt; {
             <span class="macro">assert_eq!</span>(<span class="ident">collection</span>, <span class="ident">Basic::collection_name</span>());
@@ -5109,7 +5057,7 @@
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">blocking_bad_update_tests</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::default</span>())<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::default</span>())<span class="question-mark">?</span>;
     <span class="kw">match</span> <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>) {
         <span class="prelude-val">Err</span>(<span class="ident">Error::DocumentNotFound</span>(<span class="ident">collection</span>, <span class="ident">id</span>)) =&gt; {
             <span class="macro">assert_eq!</span>(<span class="ident">collection</span>, <span class="ident">Basic::collection_name</span>());
@@ -5126,7 +5074,7 @@
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)
         .<span class="kw">await</span><span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -5142,7 +5090,7 @@
     <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">original_value</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">collection</span>
-        .<span class="ident">get</span>(<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>
         .<span class="ident">expect</span>(<span class="string">&quot;couldn&#39;t retrieve stored item&quot;</span>);
     <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>)<span class="question-mark">?</span>;
 
@@ -5159,10 +5107,10 @@
     <span class="kw">let</span> <span class="ident">doc2_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;second_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">doc2</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">doc2_value</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::get_multiple_async</span>([<span class="ident">doc1</span>.<span class="ident">id</span>, <span class="ident">doc2</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::get_multiple_async</span>([<span class="kw-2">&amp;</span><span class="ident">doc1</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">doc2</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">both_docs</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
-    <span class="kw">let</span> <span class="ident">out_of_order</span> <span class="op">=</span> <span class="ident">Basic::get_multiple_async</span>([<span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">doc1</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">out_of_order</span> <span class="op">=</span> <span class="ident">Basic::get_multiple_async</span>([<span class="kw-2">&amp;</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">doc1</span>.<span class="ident">id</span>], <span class="ident">db</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">out_of_order</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
     <span class="comment">// The order of get_multiple isn&#39;t guaranteed, so these two checks are done</span>
@@ -5189,10 +5137,10 @@
     <span class="kw">let</span> <span class="ident">doc2_value</span> <span class="op">=</span> <span class="ident">Basic::new</span>(<span class="string">&quot;second_value&quot;</span>);
     <span class="kw">let</span> <span class="ident">doc2</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">doc2_value</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::get_multiple</span>([<span class="ident">doc1</span>.<span class="ident">id</span>, <span class="ident">doc2</span>.<span class="ident">id</span>], <span class="ident">db</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">both_docs</span> <span class="op">=</span> <span class="ident">Basic::get_multiple</span>([<span class="kw-2">&amp;</span><span class="ident">doc1</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">doc2</span>.<span class="ident">id</span>], <span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">both_docs</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
-    <span class="kw">let</span> <span class="ident">out_of_order</span> <span class="op">=</span> <span class="ident">Basic::get_multiple</span>([<span class="ident">doc2</span>.<span class="ident">id</span>, <span class="ident">doc1</span>.<span class="ident">id</span>], <span class="ident">db</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">out_of_order</span> <span class="op">=</span> <span class="ident">Basic::get_multiple</span>([<span class="kw-2">&amp;</span><span class="ident">doc2</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">doc1</span>.<span class="ident">id</span>], <span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">out_of_order</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
     <span class="comment">// The order of get_multiple isn&#39;t guaranteed, so these two checks are done</span>
@@ -5411,7 +5359,7 @@
 
     <span class="comment">// Positive flow, check id, as well as id + header.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">Transaction::new</span>();
-    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>);
+    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>);
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_is_current</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>);
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::insert_serialized</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(
         <span class="prelude-val">None</span>,
@@ -5424,12 +5372,12 @@
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_is_current</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="ident">initial_header</span>,
     )<span class="question-mark">?</span>);
-    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>)<span class="question-mark">?</span>);
+    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>)<span class="question-mark">?</span>);
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">tx</span>.<span class="ident">apply_async</span>(<span class="ident">db</span>).<span class="kw">await</span>.<span class="ident">unwrap_err</span>();
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">result</span>, <span class="ident">Error::DocumentConflict</span>(<span class="kw">_</span>, <span class="kw">_</span>)));
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">Transaction::new</span>();
-    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>)<span class="question-mark">?</span>);
+    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>)<span class="question-mark">?</span>);
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_is_current</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="ident">initial_header</span>,
     )<span class="question-mark">?</span>);
@@ -5447,7 +5395,7 @@
 
     <span class="comment">// Positive flow, check id, as well as id + header.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">Transaction::new</span>();
-    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>);
+    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>)<span class="question-mark">?</span>);
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_is_current</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>);
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::insert_serialized</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(
         <span class="prelude-val">None</span>,
@@ -5460,12 +5408,12 @@
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_is_current</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="ident">initial_header</span>,
     )<span class="question-mark">?</span>);
-    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>)<span class="question-mark">?</span>);
+    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>)<span class="question-mark">?</span>);
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">tx</span>.<span class="ident">apply</span>(<span class="ident">db</span>).<span class="ident">unwrap_err</span>();
     <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="ident">result</span>, <span class="ident">Error::DocumentConflict</span>(<span class="kw">_</span>, <span class="kw">_</span>)));
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">Transaction::new</span>();
-    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="number">42</span>)<span class="question-mark">?</span>);
+    <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">42</span>)<span class="question-mark">?</span>);
     <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_is_current</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="ident">initial_header</span>,
     )<span class="question-mark">?</span>);
@@ -5495,14 +5443,14 @@
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">query_with_collection_docs</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
@@ -5510,14 +5458,14 @@
 
     <span class="kw">let</span> <span class="ident">b_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
     <span class="kw">let</span> <span class="ident">a_and_b_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_keys</span>([<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>), <span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)])
+        .<span class="ident">with_keys</span>([<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>), <span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)])
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_and_b_children</span>.<span class="ident">len</span>(), <span class="number">3</span>);
@@ -5525,7 +5473,7 @@
     <span class="comment">// Test out of order keys</span>
     <span class="kw">let</span> <span class="ident">a_and_b_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_keys</span>([<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>), <span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)])
+        .<span class="ident">with_keys</span>([<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>), <span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)])
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_and_b_children</span>.<span class="ident">len</span>(), <span class="number">3</span>);
@@ -5558,13 +5506,13 @@
     <span class="comment">// Test deleting</span>
     <span class="kw">let</span> <span class="ident">deleted_count</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
         .<span class="ident">delete_docs</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u64</span>, <span class="ident">deleted_count</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">len</span>(),
@@ -5586,29 +5534,29 @@
     <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;B.1&quot;</span>).<span class="ident">with_parent_id</span>(<span class="ident">b</span>.<span class="ident">id</span>).<span class="ident">with_category</span>(<span class="string">&quot;Beta&quot;</span>))<span class="question-mark">?</span>;
     <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;B.2&quot;</span>).<span class="ident">with_parent_id</span>(<span class="ident">b</span>.<span class="ident">id</span>).<span class="ident">with_category</span>(<span class="string">&quot;beta&quot;</span>))<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">query_with_collection_docs</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">get</span>(<span class="number">0</span>).<span class="ident">unwrap</span>().<span class="ident">document</span>.<span class="ident">header</span>, <span class="ident">a_child</span>);
 
-    <span class="kw">let</span> <span class="ident">b_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">b_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
     <span class="kw">let</span> <span class="ident">a_and_b_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_keys</span>([<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>), <span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)])
+        .<span class="ident">with_keys</span>(<span class="kw-2">&amp;</span>[<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>), <span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)])
         .<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_and_b_children</span>.<span class="ident">len</span>(), <span class="number">3</span>);
 
     <span class="comment">// Test out of order keys</span>
     <span class="kw">let</span> <span class="ident">a_and_b_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_keys</span>([<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>), <span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)])
+        .<span class="ident">with_keys</span>(<span class="kw-2">&amp;</span>[<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>), <span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)])
         .<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_and_b_children</span>.<span class="ident">len</span>(), <span class="number">3</span>);
 
@@ -5638,12 +5586,12 @@
     <span class="comment">// Test deleting</span>
     <span class="kw">let</span> <span class="ident">deleted_count</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
         .<span class="ident">delete_docs</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u64</span>, <span class="ident">deleted_count</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
             .<span class="ident">query</span>()<span class="question-mark">?</span>
             .<span class="ident">len</span>(),
         <span class="number">0</span>
@@ -5699,14 +5647,14 @@
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
     <span class="comment">// The reduce function of `BasicByParentId` acts as a &quot;count&quot; of records.</span>
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">reduce</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>,
         <span class="number">0</span>
@@ -5715,14 +5663,14 @@
     <span class="comment">// Verify the eager view is available without any updates</span>
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
             .<span class="ident">reduce</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>,
@@ -5740,13 +5688,13 @@
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">reduce</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>,
         <span class="number">1</span>
@@ -5759,7 +5707,7 @@
     );
 
     <span class="comment">// Test updating the record and the view being updated appropriately</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">a_child</span>.<span class="ident">id</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">a_child</span>.<span class="ident">id</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">basic</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
     <span class="ident">basic</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">None</span>;
     <span class="ident">Basic::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>, <span class="ident">basic</span>)<span class="question-mark">?</span>;
@@ -5767,13 +5715,13 @@
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">reduce</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>,
         <span class="number">0</span>
@@ -5808,24 +5756,26 @@
     <span class="kw">let</span> <span class="ident">collection</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>();
     <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;A&quot;</span>))<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
     <span class="comment">// The reduce function of `BasicByParentId` acts as a &quot;count&quot; of records.</span>
     <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">reduce</span>()<span class="question-mark">?</span>,
+        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">reduce</span>()<span class="question-mark">?</span>,
         <span class="number">0</span>
     );
 
     <span class="comment">// Verify the eager view is available without any updates</span>
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
         .<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
             .<span class="ident">reduce</span>()<span class="question-mark">?</span>,
         <span class="number">0</span>
@@ -5838,10 +5788,12 @@
             .<span class="ident">with_category</span>(<span class="string">&quot;Alpha&quot;</span>),
     )<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
     <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">reduce</span>()<span class="question-mark">?</span>,
+        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">reduce</span>()<span class="question-mark">?</span>,
         <span class="number">1</span>
     );
 
@@ -5852,16 +5804,18 @@
     );
 
     <span class="comment">// Test updating the record and the view being updated appropriately</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">a_child</span>.<span class="ident">id</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">a_child</span>.<span class="ident">id</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">basic</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
     <span class="ident">basic</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">None</span>;
     <span class="ident">Basic::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>, <span class="ident">basic</span>)<span class="question-mark">?</span>;
     <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
     <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">reduce</span>()<span class="question-mark">?</span>,
+        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">reduce</span>()<span class="question-mark">?</span>,
         <span class="number">0</span>
     );
     <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">reduce</span>()<span class="question-mark">?</span>, <span class="number">2</span>);
@@ -5906,7 +5860,7 @@
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;green&quot;</span>))
+            .<span class="ident">with_key</span>(<span class="string">&quot;green&quot;</span>)
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">len</span>(),
@@ -5914,17 +5868,13 @@
     );
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>))
-            .<span class="ident">query</span>()
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
+        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;red&quot;</span>).<span class="ident">query</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">len</span>(),
         <span class="number">1</span>
     );
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>))
+            .<span class="ident">with_key</span>(<span class="string">&quot;blue&quot;</span>)
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">len</span>(),
@@ -5937,7 +5887,7 @@
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;green&quot;</span>))
+            .<span class="ident">with_key</span>(<span class="string">&quot;green&quot;</span>)
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">len</span>(),
@@ -5945,17 +5895,13 @@
     );
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>))
-            .<span class="ident">query</span>()
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
+        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;red&quot;</span>).<span class="ident">query</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">len</span>(),
         <span class="number">1</span>
     );
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>))
+            .<span class="ident">with_key</span>(<span class="string">&quot;blue&quot;</span>)
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">len</span>(),
@@ -5966,7 +5912,7 @@
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;green&quot;</span>))
+            .<span class="ident">with_key</span>(<span class="string">&quot;green&quot;</span>)
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">len</span>(),
@@ -5974,17 +5920,13 @@
     );
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>))
-            .<span class="ident">query</span>()
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
+        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;red&quot;</span>).<span class="ident">query</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">len</span>(),
         <span class="number">1</span>
     );
 
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>))
+            .<span class="ident">with_key</span>(<span class="string">&quot;blue&quot;</span>)
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>
             .<span class="ident">len</span>(),
@@ -6006,83 +5948,29 @@
 
     <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">4</span>);
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;green&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">2</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;green&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">1</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;red&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">1</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;blue&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
     <span class="comment">// Change tags</span>
     <span class="ident">a</span>.<span class="ident">contents</span>.<span class="ident">tags</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>), <span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>)];
     <span class="ident">a</span>.<span class="ident">update</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;green&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">1</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;green&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">1</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;red&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">2</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;blue&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">2</span>);
     <span class="ident">b</span>.<span class="ident">contents</span>.<span class="ident">tags</span>.<span class="ident">clear</span>();
     <span class="ident">b</span>.<span class="ident">update</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;green&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">0</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;green&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">0</span>);
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;red&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">1</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;red&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
-    <span class="macro">assert_eq!</span>(
-        <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="ident">String::from</span>(<span class="string">&quot;blue&quot;</span>))
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">len</span>(),
-        <span class="number">1</span>
-    );
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByTag</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="string">&quot;blue&quot;</span>).<span class="ident">query</span>()<span class="question-mark">?</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
     <span class="prelude-val">Ok</span>(())
 }
@@ -6103,7 +5991,7 @@
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
@@ -6115,7 +6003,7 @@
     <span class="comment">// updated after returning</span>
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::UpdateAfter</span>)
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
@@ -6128,7 +6016,7 @@
         <span class="comment">// Now, the view should contain the entry.</span>
         <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
             .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
             .<span class="ident">query</span>()
             .<span class="kw">await</span><span class="question-mark">?</span>;
@@ -6153,7 +6041,7 @@
 
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
         .<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
@@ -6164,7 +6052,7 @@
     <span class="comment">// updated after returning</span>
     <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
         .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::UpdateAfter</span>)
         .<span class="ident">query</span>()<span class="question-mark">?</span>;
     <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
@@ -6176,7 +6064,7 @@
         <span class="comment">// Now, the view should contain the entry.</span>
         <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
             .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">with_access_policy</span>(<span class="ident">AccessPolicy::NoUpdate</span>)
             .<span class="ident">query</span>()<span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="ident">a_children</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> {
@@ -6206,7 +6094,11 @@
     }
 
     <span class="kw">let</span> <span class="ident">second_doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Unique</span><span class="op">&gt;</span>().<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Unique::new</span>(<span class="string">&quot;2&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">second_doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Unique</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">second_doc</span>.<span class="ident">id</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">second_doc</span> <span class="op">=</span> <span class="ident">db</span>
+        .<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Unique</span><span class="op">&gt;</span>()
+        .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">second_doc</span>.<span class="ident">id</span>)
+        .<span class="kw">await</span><span class="question-mark">?</span>
+        .<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">Unique::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">second_doc</span>)<span class="question-mark">?</span>;
     <span class="ident">contents</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;1&quot;</span>);
     <span class="ident">Unique::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">second_doc</span>, <span class="ident">contents</span>)<span class="question-mark">?</span>;
@@ -6246,7 +6138,7 @@
     }
 
     <span class="kw">let</span> <span class="ident">second_doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Unique</span><span class="op">&gt;</span>().<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Unique::new</span>(<span class="string">&quot;2&quot;</span>))<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">second_doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Unique</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="ident">second_doc</span>.<span class="ident">id</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">second_doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Unique</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">second_doc</span>.<span class="ident">id</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">Unique::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">second_doc</span>)<span class="question-mark">?</span>;
     <span class="ident">contents</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;1&quot;</span>);
     <span class="ident">Unique::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">second_doc</span>, <span class="ident">contents</span>)<span class="question-mark">?</span>;
@@ -6373,7 +6265,7 @@
     <span class="kw">let</span> <span class="ident">user_id</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">create_user</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="comment">// Test the default created user state.</span>
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
@@ -6400,7 +6292,7 @@
 
     <span class="comment">// Test the results</span>
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
@@ -6430,7 +6322,7 @@
         .<span class="ident">unwrap</span>();
     <span class="ident">server</span>.<span class="ident">remove_role_from_user</span>(<span class="ident">user_id</span>, <span class="kw-2">&amp;</span><span class="ident">role</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>)
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get_async</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>)
             .<span class="kw">await</span>
             .<span class="ident">unwrap</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
@@ -6448,7 +6340,7 @@
     <span class="ident">server</span>.<span class="ident">delete_user</span>(<span class="ident">user_id</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="comment">// Test if user is removed.</span>
 
-    <span class="macro">assert!</span>(<span class="ident">User::get_async</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(<span class="ident">User::get_async</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>().<span class="ident">is_none</span>());
 
     <span class="prelude-val">Ok</span>(())
 }
@@ -6462,7 +6354,7 @@
     <span class="kw">let</span> <span class="ident">user_id</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">create_user</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>)<span class="question-mark">?</span>;
     <span class="comment">// Test the default created user state.</span>
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">username</span>, <span class="ident">username</span>);
         <span class="macro">assert!</span>(<span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">groups</span>.<span class="ident">is_empty</span>());
         <span class="macro">assert!</span>(<span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">roles</span>.<span class="ident">is_empty</span>());
@@ -6483,7 +6375,7 @@
 
     <span class="comment">// Test the results</span>
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">groups</span>, <span class="macro">vec!</span>[<span class="ident">group</span>.<span class="ident">header</span>.<span class="ident">id</span>]);
         <span class="macro">assert_eq!</span>(<span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">roles</span>, <span class="macro">vec!</span>[<span class="ident">role</span>.<span class="ident">header</span>.<span class="ident">id</span>]);
     }
@@ -6507,7 +6399,7 @@
         .<span class="ident">unwrap</span>();
     <span class="ident">server</span>.<span class="ident">remove_role_from_user</span>(<span class="ident">user_id</span>, <span class="kw-2">&amp;</span><span class="ident">role</span>).<span class="ident">unwrap</span>();
     {
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">User::get</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">expect</span>(<span class="string">&quot;user not found&quot;</span>);
         <span class="macro">assert!</span>(<span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">groups</span>.<span class="ident">is_empty</span>());
         <span class="macro">assert!</span>(<span class="ident">user</span>.<span class="ident">contents</span>.<span class="ident">roles</span>.<span class="ident">is_empty</span>());
     }
@@ -6520,7 +6412,7 @@
     <span class="ident">server</span>.<span class="ident">delete_user</span>(<span class="ident">user_id</span>)<span class="question-mark">?</span>;
     <span class="comment">// Test if user is removed.</span>
 
-    <span class="macro">assert!</span>(<span class="ident">User::get</span>(<span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(<span class="ident">User::get</span>(<span class="kw-2">&amp;</span><span class="ident">user_id</span>, <span class="ident">admin</span>).<span class="ident">unwrap</span>().<span class="ident">is_none</span>());
 
     <span class="prelude-val">Ok</span>(())
 }

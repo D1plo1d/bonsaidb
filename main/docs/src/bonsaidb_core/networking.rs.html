@@ -701,6 +701,7 @@
 <span id="696">696</span>
 <span id="697">697</span>
 <span id="698">698</span>
+<span id="699">699</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
@@ -708,7 +709,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">api::Api</span>,
     <span class="ident">connection</span>::{
-        <span class="ident">AccessPolicy</span>, <span class="ident">Database</span>, <span class="ident">IdentityReference</span>, <span class="ident">QueryKey</span>, <span class="ident">Range</span>, <span class="ident">Session</span>, <span class="ident">SessionId</span>, <span class="ident">Sort</span>,
+        <span class="ident">AccessPolicy</span>, <span class="ident">Database</span>, <span class="ident">IdentityReference</span>, <span class="ident">Range</span>, <span class="ident">SerializedQueryKey</span>, <span class="ident">Session</span>, <span class="ident">SessionId</span>,
+        <span class="ident">Sort</span>,
     },
     <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
     <span class="ident">keyvalue</span>::{<span class="ident">KeyOperation</span>, <span class="ident">Output</span>},
@@ -1043,7 +1045,7 @@
     <span class="doccomment">/// The name of the view.</span>
     <span class="kw">pub</span> <span class="ident">view</span>: <span class="ident">ViewName</span>,
     <span class="doccomment">/// The filter for the view.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The order for the query into the view.</span>
     <span class="kw">pub</span> <span class="ident">order</span>: <span class="ident">Sort</span>,
     <span class="doccomment">/// The maximum number of results to return.</span>
@@ -1082,7 +1084,7 @@
     <span class="doccomment">/// The name of the view.</span>
     <span class="kw">pub</span> <span class="ident">view</span>: <span class="ident">ViewName</span>,
     <span class="doccomment">/// The filter for the view.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The access policy for the query.</span>
     <span class="kw">pub</span> <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
 }
@@ -1117,7 +1119,7 @@
     <span class="doccomment">/// The name of the view.</span>
     <span class="kw">pub</span> <span class="ident">view</span>: <span class="ident">ViewName</span>,
     <span class="doccomment">/// The filter for the view.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The access policy for the query.</span>
     <span class="kw">pub</span> <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
 }

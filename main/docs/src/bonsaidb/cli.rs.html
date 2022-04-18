@@ -246,7 +246,7 @@
                     <span class="macro">anyhow::bail!</span>(<span class="string">&quot;server url provided for local-only command.&quot;</span>)
                 }
 
-                <span class="ident">server</span>.<span class="ident">execute</span>(<span class="ident">cli</span>.<span class="ident">configuration</span>().<span class="kw">await</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="ident">server</span>.<span class="ident">execute_on</span>(<span class="ident">cli</span>.<span class="ident">open_server</span>().<span class="kw">await</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             }
             <span class="ident">other</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">server_url</span>) <span class="op">=</span> <span class="ident">server_url</span> {

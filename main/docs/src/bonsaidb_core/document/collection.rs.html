@@ -351,7 +351,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// if let Some(mut document) = MyCollection::get(42, &amp;db)? {</span>
+    <span class="doccomment">/// if let Some(mut document) = MyCollection::get(&amp;42, &amp;db)? {</span>
     <span class="doccomment">///     // modify the document</span>
     <span class="doccomment">///     document.update(&amp;db)?;</span>
     <span class="doccomment">///     println!(&quot;Updated revision: {:?}&quot;, document.header.revision);</span>
@@ -376,7 +376,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// if let Some(mut document) = MyCollection::get_async(42, &amp;db).await? {</span>
+    <span class="doccomment">/// if let Some(mut document) = MyCollection::get_async(&amp;42, &amp;db).await? {</span>
     <span class="doccomment">///     // modify the document</span>
     <span class="doccomment">///     document.update_async(&amp;db).await?;</span>
     <span class="doccomment">///     println!(&quot;Updated revision: {:?}&quot;, document.header.revision);</span>
@@ -426,12 +426,12 @@
                 <span class="ident">is_first_loop</span> <span class="op">=</span> <span class="bool-val">false</span>;
             } <span class="kw">else</span> {
                 <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span>
-                    <span class="ident">C::get</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">clone</span>(), <span class="ident">connection</span>)<span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(
-                        <span class="op">|</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">DocumentId::new</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">clone</span>()) {
+                    <span class="ident">C::get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">connection</span>)<span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+                        <span class="kw">match</span> <span class="ident">DocumentId::new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>) {
                             <span class="prelude-val">Ok</span>(<span class="ident">id</span>) =&gt; <span class="ident">Error::DocumentNotFound</span>(<span class="ident">C::collection_name</span>(), <span class="ident">Box::new</span>(<span class="ident">id</span>)),
                             <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
-                        },
-                    )<span class="question-mark">?</span>;
+                        }
+                    })<span class="question-mark">?</span>;
             }
             <span class="ident">modifier</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>);
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">update</span>(<span class="ident">connection</span>) {
@@ -468,9 +468,9 @@
             <span class="kw">if</span> <span class="ident">is_first_loop</span> {
                 <span class="ident">is_first_loop</span> <span class="op">=</span> <span class="bool-val">false</span>;
             } <span class="kw">else</span> {
-                <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">C::get_async</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">clone</span>(), <span class="ident">connection</span>)
+                <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">C::get_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">connection</span>)
                     .<span class="kw">await</span><span class="question-mark">?</span>
-                    .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">DocumentId::new</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">clone</span>()) {
+                    .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">DocumentId::new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>) {
                         <span class="prelude-val">Ok</span>(<span class="ident">id</span>) =&gt; <span class="ident">Error::DocumentNotFound</span>(<span class="ident">C::collection_name</span>(), <span class="ident">Box::new</span>(<span class="ident">id</span>)),
                         <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
                     })<span class="question-mark">?</span>;
@@ -490,7 +490,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// if let Some(document) = MyCollection::get(42, &amp;db)? {</span>
+    <span class="doccomment">/// if let Some(document) = MyCollection::get(&amp;42, &amp;db)? {</span>
     <span class="doccomment">///     document.delete(&amp;db)?;</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
@@ -510,7 +510,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// if let Some(document) = MyCollection::get_async(42, &amp;db).await? {</span>
+    <span class="doccomment">/// if let Some(document) = MyCollection::get_async(&amp;42, &amp;db).await? {</span>
     <span class="doccomment">///     document.delete_async(&amp;db).await?;</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
