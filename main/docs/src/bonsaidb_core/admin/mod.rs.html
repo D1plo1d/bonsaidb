@@ -23,8 +23,15 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::Schema</span>;
 
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">authentication_token</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">database</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
@@ -34,11 +41,14 @@
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">user</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{<span class="ident">database::Database</span>, <span class="ident">group::PermissionGroup</span>, <span class="ident">role::Role</span>, <span class="ident">user::User</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
+    <span class="ident">authentication_token::AuthenticationToken</span>, <span class="ident">database::Database</span>, <span class="ident">group::PermissionGroup</span>,
+    <span class="ident">role::Role</span>, <span class="ident">user::User</span>,
+};
 
 <span class="doccomment">/// The BonsaiDb administration schema.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Schema</span>)]</span>
-<span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;bonsaidb-admin&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">collections</span> <span class="op">=</span> [<span class="ident">Database</span>, <span class="ident">PermissionGroup</span>, <span class="ident">Role</span>, <span class="ident">User</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
+<span class="attribute">#[<span class="ident">schema</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;bonsaidb-admin&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">collections</span> <span class="op">=</span> [<span class="ident">Database</span>, <span class="ident">PermissionGroup</span>, <span class="ident">Role</span>, <span class="ident">User</span>, <span class="ident">AuthenticationToken</span>]</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Admin</span>;
 
 <span class="doccomment">/// The name of the admin database.</span>

@@ -2145,6 +2145,19 @@
 <span id="2140">2140</span>
 <span id="2141">2141</span>
 <span id="2142">2142</span>
+<span id="2143">2143</span>
+<span id="2144">2144</span>
+<span id="2145">2145</span>
+<span id="2146">2146</span>
+<span id="2147">2147</span>
+<span id="2148">2148</span>
+<span id="2149">2149</span>
+<span id="2150">2150</span>
+<span id="2151">2151</span>
+<span id="2152">2152</span>
+<span id="2153">2153</span>
+<span id="2154">2154</span>
+<span id="2155">2155</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">fmt::Debug</span>,
@@ -3601,6 +3614,19 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span> <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">name</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span> <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">Id</span>: <span class="ident">Clone</span>,
+{
+    <span class="kw">fn</span> <span class="ident">name</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">NamedReference::Name</span>(<span class="ident">name</span>) =&gt; <span class="ident">NamedReference::Name</span>(<span class="ident">name</span>.<span class="ident">clone</span>()),
+            <span class="ident">NamedReference::Id</span>(<span class="ident">id</span>) =&gt; <span class="ident">NamedReference::Id</span>(<span class="ident">id</span>.<span class="ident">clone</span>()),
+            <span class="ident">NamedReference::Key</span>(<span class="ident">key</span>) =&gt; <span class="ident">NamedReference::Key</span>(<span class="ident">key</span>.<span class="ident">clone</span>()),
+        })
     }
 }
 

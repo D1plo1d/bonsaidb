@@ -700,8 +700,6 @@
 <span id="695">695</span>
 <span id="696">696</span>
 <span id="697">697</span>
-<span id="698">698</span>
-<span id="699">699</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
 <span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
@@ -850,17 +848,15 @@
     }
 }
 
-<span class="doccomment">/// Authenticate as a user.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+<span class="doccomment">/// Authenticate the current connection.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>))]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Authenticate</span> {
-    <span class="doccomment">/// The username or id of the user.</span>
-    <span class="kw">pub</span> <span class="ident">user</span>: <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">u64</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The method of authentication.</span>
     <span class="kw">pub</span> <span class="ident">authentication</span>: <span class="ident"><span class="kw">crate</span>::connection::Authentication</span>,
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>))]</span>
 <span class="kw">impl</span> <span class="ident">Api</span> <span class="kw">for</span> <span class="ident">Authenticate</span> {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Session</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;

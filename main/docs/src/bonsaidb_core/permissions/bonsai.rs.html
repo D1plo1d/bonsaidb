@@ -290,10 +290,13 @@
 <span id="285">285</span>
 <span id="286">286</span>
 <span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>, <span class="ident">ResourceName</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">connection::AuthenticationMethod</span>,
     <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">KeyId</span>},
     <span class="ident">schema</span>::{<span class="ident">CollectionName</span>, <span class="ident">ViewName</span>},
 };
@@ -390,6 +393,14 @@
     <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="string">&quot;role&quot;</span>).<span class="ident">and</span>(<span class="ident">role_id</span>)
 }
 
+<span class="doccomment">/// Creates a resource name for `token_id`.</span>
+<span class="attribute">#[<span class="ident">must_use</span>]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">authentication_token_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">token_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">bonsaidb_resource_name</span>()
+        .<span class="ident">and</span>(<span class="string">&quot;authentication-token&quot;</span>)
+        .<span class="ident">and</span>(<span class="ident">token_id</span>)
+}
+
 <span class="doccomment">/// Actions that can be permitted within BonsaiDb.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BonsaiAction</span> {
@@ -431,13 +442,6 @@
     <span class="doccomment">/// Permits .</span>
     <span class="doccomment">/// Permits [`StorageConnection::add_role_to_user`](crate::connection::StorageConnection::add_role_to_user) and [`StorageConnection::remove_role_from_user`](crate::connection::StorageConnection::remove_role_from_user).</span>
     <span class="ident">ModifyUserRoles</span>,
-}
-
-<span class="doccomment">/// Methods for user authentication.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AuthenticationMethod</span> {
-    <span class="doccomment">/// Authenticate the user using password hashing (Argon2).</span>
-    <span class="ident">PasswordHash</span>,
 }
 
 <span class="doccomment">/// Actions that operate on a specific database.</span>

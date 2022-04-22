@@ -67,7 +67,7 @@ See the <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/READM
 <span class="ident">Shape</span> { <span class="ident">sides</span>: <span class="number">3</span> }.<span class="ident">push_into</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>)<span class="question-mark">?</span>;</code></pre></div>
 <p>And query data using the Map-Reduce-powered view:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">let</span> <span class="ident">triangles</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ShapesByNumberOfSides</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="number">3</span>).<span class="ident">query</span>()<span class="question-mark">?</span>;
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">let</span> <span class="ident">triangles</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ShapesByNumberOfSides</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="number">3</span>).<span class="ident">query</span>()<span class="question-mark">?</span>;
 <span class="macro">println!</span>(<span class="string">&quot;Number of triangles: {}&quot;</span>, <span class="ident">triangles</span>.<span class="ident">len</span>());</code></pre></div>
 <p>You can review the <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-local/examples/view-examples.rs">full example in the repository</a>, or see all available examples <a href="https://github.com/khonsulabs/bonsaidb/blob/main/examples/README.md">in the examples README</a>.</p>
 <h3 id="users-guide"><a href="#users-guide">User’s Guide</a></h3>
@@ -87,6 +87,8 @@ bonsaidb = { version = &quot;*&quot;, features = &quot;full&quot; }</code></pre>
 <li><code>cli</code>: Enables the <code>bonsaidb</code> executable.</li>
 <li><code>password-hashing</code>: Enables the ability to use password authentication using
 Argon2 via <code>AnyConnection</code>.</li>
+<li><code>token-authentication</code>: Enables the ability to authenticate using
+authentication tokens, which are similar to API keys.</li>
 </ul>
 <p>All other feature flags, listed below, affect each crate individually, but can
 be safely combined.</p>
@@ -105,6 +107,8 @@ management commands into your own command-line interface.</li>
 <li><code>instrument</code>: Enables instrumenting with <code>tracing</code>.</li>
 <li><code>password-hashing</code>: Enables the ability to use password authentication
 using Argon2.</li>
+<li><code>token-authentication</code>: Enables the ability to authenticate using
+authentication tokens, which are similar to API keys.</li>
 </ul>
 <h4 id="bonsaidb-server"><a href="#bonsaidb-server">BonsaiDb server</a></h4><div class="example-wrap"><pre class="language-toml"><code>[dependencies]
 bonsaidb = { version = &quot;*&quot;, features = &quot;server-full&quot; }</code></pre></div>
@@ -123,6 +127,8 @@ bonsaidb = { version = &quot;*&quot;, features = &quot;server-full&quot; }</code
 <li><code>websockets</code>: Enables <code>WebSocket</code> support.</li>
 <li><code>password-hashing</code>: Enables the ability to use password authentication
 using Argon2.</li>
+<li><code>token-authentication</code>: Enables the ability to authenticate using
+authentication tokens, which are similar to API keys.</li>
 </ul>
 <h4 id="client-for-accessing-a-bonsaidb-server"><a href="#client-for-accessing-a-bonsaidb-server">Client for accessing a BonsaiDb server</a></h4><div class="example-wrap"><pre class="language-toml"><code>[dependencies]
 bonsaidb = { version = &quot;*&quot;, features = &quot;client-full&quot; }</code></pre></div>
@@ -136,6 +142,8 @@ enabled, all DNS resolution is done with the OS’s default name resolver.</li>
 <li><code>websockets</code>: Enables <code>WebSocket</code> support for <code>bonsaidb-client</code>.</li>
 <li><code>password-hashing</code>: Enables the ability to use password authentication
 using Argon2.</li>
+<li><code>token-authentication</code>: Enables the ability to authenticate using
+authentication tokens, which are similar to API keys.</li>
 </ul>
 <h3 id="developing-bonsaidb"><a href="#developing-bonsaidb">Developing BonsaiDb</a></h3><h4 id="writing-unit-tests"><a href="#writing-unit-tests">Writing Unit Tests</a></h4>
 <p>Unless there is a good reason not to, every feature in BonsaiDb should have

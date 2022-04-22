@@ -1278,6 +1278,48 @@
 <span id="1273">1273</span>
 <span id="1274">1274</span>
 <span id="1275">1275</span>
+<span id="1276">1276</span>
+<span id="1277">1277</span>
+<span id="1278">1278</span>
+<span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
+<span id="1284">1284</span>
+<span id="1285">1285</span>
+<span id="1286">1286</span>
+<span id="1287">1287</span>
+<span id="1288">1288</span>
+<span id="1289">1289</span>
+<span id="1290">1290</span>
+<span id="1291">1291</span>
+<span id="1292">1292</span>
+<span id="1293">1293</span>
+<span id="1294">1294</span>
+<span id="1295">1295</span>
+<span id="1296">1296</span>
+<span id="1297">1297</span>
+<span id="1298">1298</span>
+<span id="1299">1299</span>
+<span id="1300">1300</span>
+<span id="1301">1301</span>
+<span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
+<span id="1307">1307</span>
+<span id="1308">1308</span>
+<span id="1309">1309</span>
+<span id="1310">1310</span>
+<span id="1311">1311</span>
+<span id="1312">1312</span>
+<span id="1313">1313</span>
+<span id="1314">1314</span>
+<span id="1315">1315</span>
+<span id="1316">1316</span>
+<span id="1317">1317</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Cow</span>,
     <span class="ident">fmt::Debug</span>,
@@ -1285,6 +1327,7 @@
 };
 
 <span class="kw">use</span> <span class="ident">ordered_varint::Variable</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::key</span>::{
     <span class="ident">time::limited</span>::{<span class="ident">BonsaiEpoch</span>, <span class="ident">UnixEpoch</span>},
@@ -1369,7 +1412,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeltaNotRepresentable</span>;
 
 <span class="doccomment">/// Errors that can arise from parsing times serialized with [`Key`].</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TimeError</span> {
     <span class="doccomment">/// An error that indicates that the stored timestamp is unable to be converted</span>
     <span class="doccomment">/// to the destination type without losing data.</span>
@@ -1397,6 +1440,7 @@
     <span class="kw">use</span> <span class="ident">std</span>::{
         <span class="ident">borrow::Cow</span>,
         <span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Write</span>},
+        <span class="ident">hash::Hash</span>,
         <span class="ident">marker::PhantomData</span>,
         <span class="ident">str::FromStr</span>,
         <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>, <span class="ident">UNIX_EPOCH</span>},
@@ -1427,7 +1471,7 @@
     <span class="doccomment">/// - [`Nanoseconds`]</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Other resolutions can be used by implementing [`TimeResolution`].</span>
-    <span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+    <span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Hash</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LimitedResolutionDuration</span><span class="op">&lt;</span><span class="ident">Resolution</span>: <span class="ident">TimeResolution</span><span class="op">&gt;</span> {
         <span class="ident">representation</span>: <span class="ident">Resolution::Representation</span>,
         <span class="ident">_resolution</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Resolution</span><span class="op">&gt;</span>,
@@ -1440,6 +1484,7 @@
             <span class="op">+</span> <span class="ident">Serialize</span>
             <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>
             <span class="op">+</span> <span class="ident">Display</span>
+            <span class="op">+</span> <span class="ident">Hash</span>
             <span class="op">+</span> <span class="ident">Eq</span>
             <span class="op">+</span> <span class="ident">PartialEq</span>
             <span class="op">+</span> <span class="ident">Ord</span>
@@ -1988,7 +2033,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// - [`UnixEpoch`]</span>
     <span class="doccomment">/// - [`BonsaiEpoch`]</span>
-    <span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+    <span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Hash</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LimitedResolutionTimestamp</span><span class="op">&lt;</span><span class="ident">Resolution</span>: <span class="ident">TimeResolution</span>, <span class="ident">Epoch</span>: <span class="ident">TimeEpoch</span><span class="op">&gt;</span>(
         <span class="ident">LimitedResolutionDuration</span><span class="op">&lt;</span><span class="ident">Resolution</span><span class="op">&gt;</span>,
         <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Epoch</span><span class="op">&gt;</span>,
@@ -2049,17 +2094,25 @@
             <span class="ident"><span class="self">Self</span>::try_from</span>(<span class="ident">SystemTime::now</span>()).<span class="ident">expect</span>(<span class="string">&quot;now should always be representable&quot;</span>)
         }
 
-        <span class="doccomment">/// Returns the [`Duration`] since January 1, 1970 00:00:00 UTC for this</span>
-        <span class="doccomment">/// timestamp.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration_since_unix_epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Duration</span>, <span class="ident">TimeError</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">relative_offset</span> <span class="op">=</span> <span class="ident">Resolution::repr_to_duration</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">representation</span>)<span class="question-mark">?</span>;
-            <span class="kw">match</span> <span class="ident">relative_offset</span> {
-                <span class="ident">SignedDuration::Positive</span>(<span class="ident">offset</span>) =&gt; <span class="ident">Epoch::epoch_offset</span>()
-                    .<span class="ident">checked_add</span>(<span class="ident">offset</span>)
-                    .<span class="ident">ok_or</span>(<span class="ident">TimeError::DeltaNotRepresentable</span>),
-                <span class="ident">SignedDuration::Negative</span>(<span class="ident">offset</span>) =&gt; <span class="ident">Epoch::epoch_offset</span>()
-                    .<span class="ident">checked_sub</span>(<span class="ident">offset</span>)
-                    .<span class="ident">ok_or</span>(<span class="ident">TimeError::DeltaNotRepresentable</span>),
+        <span class="doccomment">/// Returns the duration since another timestamp. This returns None if</span>
+        <span class="doccomment">/// `other` is before `self`,</span>
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration_since</span>(
+            <span class="kw-2">&amp;</span><span class="self">self</span>,
+            <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="kw">impl</span> <span class="ident">AnyTimestamp</span>,
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>, <span class="ident">TimeError</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">self_delta</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">duration_since_unix_epoch</span>()<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">other_delta</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">duration_since_unix_epoch</span>()<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(<span class="ident">self_delta</span>.<span class="ident">checked_sub</span>(<span class="ident">other_delta</span>))
+        }
+
+        <span class="doccomment">/// Returns the absolute duration between `self` and `other`.</span>
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration_between</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="kw">impl</span> <span class="ident">AnyTimestamp</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Duration</span>, <span class="ident">TimeError</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">self_delta</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">duration_since_unix_epoch</span>()<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">other_delta</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">duration_since_unix_epoch</span>()<span class="question-mark">?</span>;
+            <span class="kw">if</span> <span class="ident">self_delta</span> <span class="op">&lt;</span> <span class="ident">other_delta</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">other_delta</span> <span class="op">-</span> <span class="ident">self_delta</span>)
+            } <span class="kw">else</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">self_delta</span> <span class="op">-</span> <span class="ident">other_delta</span>)
             }
         }
 
@@ -2117,6 +2170,37 @@
             } <span class="kw">else</span> {
                 <span class="comment">// No subsecond</span>
                 <span class="prelude-val">Ok</span>(())
+            }
+        }
+    }
+
+    <span class="doccomment">/// A timestamp that can report it sduration since the Unix Epoch.</span>
+    <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AnyTimestamp</span> {
+        <span class="doccomment">/// Returns the [`Duration`] since January 1, 1970 00:00:00 UTC for this</span>
+        <span class="doccomment">/// timestamp.</span>
+        <span class="kw">fn</span> <span class="ident">duration_since_unix_epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Duration</span>, <span class="ident">TimeError</span><span class="op">&gt;</span>;
+    }
+
+    <span class="kw">impl</span> <span class="ident">AnyTimestamp</span> <span class="kw">for</span> <span class="ident">SystemTime</span> {
+        <span class="kw">fn</span> <span class="ident">duration_since_unix_epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Duration</span>, <span class="ident">TimeError</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">duration_since</span>(<span class="ident">UNIX_EPOCH</span>).<span class="ident">unwrap</span>())
+        }
+    }
+
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Resolution</span>, <span class="ident">Epoch</span><span class="op">&gt;</span> <span class="ident">AnyTimestamp</span> <span class="kw">for</span> <span class="ident">LimitedResolutionTimestamp</span><span class="op">&lt;</span><span class="ident">Resolution</span>, <span class="ident">Epoch</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">Resolution</span>: <span class="ident">TimeResolution</span>,
+        <span class="ident">Epoch</span>: <span class="ident">TimeEpoch</span>,
+    {
+        <span class="kw">fn</span> <span class="ident">duration_since_unix_epoch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Duration</span>, <span class="ident">TimeError</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">relative_offset</span> <span class="op">=</span> <span class="ident">Resolution::repr_to_duration</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">representation</span>)<span class="question-mark">?</span>;
+            <span class="kw">match</span> <span class="ident">relative_offset</span> {
+                <span class="ident">SignedDuration::Positive</span>(<span class="ident">offset</span>) =&gt; <span class="ident">Epoch::epoch_offset</span>()
+                    .<span class="ident">checked_add</span>(<span class="ident">offset</span>)
+                    .<span class="ident">ok_or</span>(<span class="ident">TimeError::DeltaNotRepresentable</span>),
+                <span class="ident">SignedDuration::Negative</span>(<span class="ident">offset</span>) =&gt; <span class="ident">Epoch::epoch_offset</span>()
+                    .<span class="ident">checked_sub</span>(<span class="ident">offset</span>)
+                    .<span class="ident">ok_or</span>(<span class="ident">TimeError::DeltaNotRepresentable</span>),
             }
         }
     }
