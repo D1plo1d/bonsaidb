@@ -42,11 +42,13 @@
 <span id="37">37</span>
 <span id="38">38</span>
 <span id="39">39</span>
+<span id="40">40</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::ApiName</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_macros::Api</span>;
 
 <span class="doccomment">/// An API request type.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Api</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
