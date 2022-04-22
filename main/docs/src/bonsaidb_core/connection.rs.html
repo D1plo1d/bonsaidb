@@ -3850,6 +3850,8 @@
 <span id="3845">3845</span>
 <span id="3846">3846</span>
 <span id="3847">3847</span>
+<span id="3848">3848</span>
+<span id="3849">3849</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Borrow</span>, <span class="ident">convert::Infallible</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">ops::Deref</span>, <span class="ident">string::FromUtf8Error</span>,
     <span class="ident">sync::Arc</span>,
@@ -7494,13 +7496,15 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TokenChallengeAlgorithm</span> {
     <span class="doccomment">/// Authenticate tokens using [`blake3`](https://crates.io/crates/blake3).</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The initial request requires a hash of [`TimestampAsNanoseconds::now()`]</span>
+    <span class="doccomment">/// The initial request requires a hash of</span>
+    <span class="doccomment">/// [`TimestampAsNanoseconds::now()`](crate::key::time::TimestampAsNanoseconds::now)</span>
     <span class="doccomment">/// to be performed using [`blake3::keyed_hash()`]. The key is derived using</span>
     <span class="doccomment">/// [`blake3::derive_key()`] using a context formatted like this: `bonsaidb</span>
     <span class="doccomment">/// {now} token-authentication`. The `now` value should be timestamp&#39;s</span>
-    <span class="doccomment">/// nanoseconds relative to [`BonsaiEpoch`](crate::key::time::BonsaiEpoch),</span>
-    <span class="doccomment">/// and the hash&#39;s contents should be the 8-byte big-endian representation</span>
-    <span class="doccomment">/// of the nanoseconds as an i64.</span>
+    <span class="doccomment">/// nanoseconds relative to</span>
+    <span class="doccomment">/// [`BonsaiEpoch`](crate::key::time::limited::BonsaiEpoch), and the hash&#39;s</span>
+    <span class="doccomment">/// contents should be the 8-byte big-endian representation of the</span>
+    <span class="doccomment">/// nanoseconds as an i64.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The storage will verify that the timestamp is within a reasonable delta</span>
     <span class="doccomment">/// of the server&#39;s current time, and it will verify the private token was</span>
@@ -7518,7 +7522,7 @@
     <span class="doccomment">/// using [`blake3::derive_key()`] using a context formatted like this:</span>
     <span class="doccomment">/// `bonsaidb {server_timestamp} token-challenge`. The `server_timestamp`</span>
     <span class="doccomment">/// value should be timestamp&#39;s nanoseconds relative to</span>
-    <span class="doccomment">/// [`BonsaiEpoch`](crate::key::time::BonsaiEpoch).</span>
+    <span class="doccomment">/// [`BonsaiEpoch`](crate::key::time::limited::BonsaiEpoch).</span>
     <span class="ident">Blake3</span>,
 }
 
