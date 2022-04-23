@@ -909,15 +909,6 @@
 <span id="904">904</span>
 <span id="905">905</span>
 <span id="906">906</span>
-<span id="907">907</span>
-<span id="908">908</span>
-<span id="909">909</span>
-<span id="910">910</span>
-<span id="911">911</span>
-<span id="912">912</span>
-<span id="913">913</span>
-<span id="914">914</span>
-<span id="915">915</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
 
 <span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
@@ -1518,10 +1509,6 @@
         }
     }
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(
-        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>,
-        <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">starting_id</span>, <span class="ident">result_limit</span>))
-    )]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_executed_transactions</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">starting_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
@@ -1538,7 +1525,6 @@
             .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>
     }
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">last_transaction_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>
             .<span class="ident">database</span>
@@ -1547,7 +1533,6 @@
             .<span class="ident">current_transaction_id</span>())
     }
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="self">self</span>.<span class="ident">runtime</span>
@@ -1556,7 +1541,6 @@
             .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>
     }
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact_collection</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="self">self</span>.<span class="ident">runtime</span>
@@ -1565,7 +1549,6 @@
             .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)<span class="question-mark">?</span>
     }
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>)]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact_key_value_store</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
         <span class="self">self</span>.<span class="ident">runtime</span>
@@ -1637,7 +1620,6 @@
 
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
 <span class="kw">impl</span> <span class="ident">AsyncLowLevelConnection</span> <span class="kw">for</span> <span class="ident">AsyncDatabase</span> {
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">skip</span>(<span class="ident">transaction</span>)))]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">apply_transaction</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">transaction</span>: <span class="ident">Transaction</span>,
