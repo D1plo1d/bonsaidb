@@ -435,7 +435,7 @@
             <span class="ident">ArgonParams::Timed</span>(<span class="ident">config</span>) =&gt; {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">params_builder</span> <span class="op">=</span> <span class="ident">ParamsBuilder::new</span>();
                 <span class="kw">let</span> <span class="ident">params</span> <span class="op">=</span> <span class="ident">params_builder</span>
-                    .<span class="ident">m_cost</span>(<span class="ident">config</span>.<span class="ident">ram_per_hasher</span>)<span class="question-mark">?</span>
+                    .<span class="ident">m_cost</span>(<span class="ident">config</span>.<span class="ident">ram_per_hasher</span> <span class="op">/</span> <span class="number">1_024</span>)<span class="question-mark">?</span>
                     .<span class="ident">p_cost</span>(<span class="ident">config</span>.<span class="ident">lanes</span>)<span class="question-mark">?</span>
                     .<span class="ident">data</span>(<span class="kw-2">&amp;</span><span class="number">0_u64</span>.<span class="ident">to_be_bytes</span>())<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">salt</span> <span class="op">=</span> <span class="ident">SaltString::generate</span>(<span class="ident">rng</span>);
