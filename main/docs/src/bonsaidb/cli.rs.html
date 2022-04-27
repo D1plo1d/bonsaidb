@@ -200,29 +200,71 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
 </pre><pre class="rust"><code><span class="doccomment">//! BonsaiDb command line tools.</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::OsString</span>, <span class="ident">fmt::Debug</span>, <span class="ident">path::PathBuf</span>};
 
 <span class="kw">use</span> <span class="ident">bonsaidb_client</span>::{<span class="ident">fabruic::Certificate</span>, <span class="ident">Client</span>};
 <span class="kw">use</span> <span class="ident">bonsaidb_core::async_trait::async_trait</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>))]</span>
+<span class="kw">use</span> <span class="ident">bonsaidb_core::connection::AsyncStorageConnection</span>;
+<span class="kw">use</span> <span class="ident">bonsaidb_local::cli::admin</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_server</span>::{<span class="ident">Backend</span>, <span class="ident">CustomServer</span>, <span class="ident">NoBackend</span>, <span class="ident">ServerConfiguration</span>};
 <span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">Parser</span>, <span class="ident">Subcommand</span>};
 <span class="kw">use</span> <span class="ident">url::Url</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::AnyServerConnection</span>;
 
-<span class="kw">mod</span> <span class="ident">admin</span>;
-
 <span class="doccomment">/// All available command line commands.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Subcommand</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">Cli</span>: <span class="ident">CommandLine</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Executes an admin command.</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
-    <span class="ident">Admin</span>(<span class="ident">admin::Command</span>),
     <span class="doccomment">/// Execute a BonsaiDb server command.</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
     <span class="ident">Server</span>(<span class="ident">bonsaidb_server::cli::Command</span><span class="op">&lt;</span><span class="ident">Cli::Backend</span><span class="op">&gt;</span>),
+    <span class="doccomment">/// Executes an administrative command.</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
+    <span class="ident">Admin</span>(<span class="ident">admin::Command</span>),
     <span class="doccomment">/// An external command.</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
     <span class="ident">External</span>(<span class="ident">Cli::Subcommand</span>),
@@ -238,6 +280,8 @@
         <span class="self">self</span>,
         <span class="ident">server_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span>,
         <span class="ident">pinned_certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Certificate</span><span class="op">&gt;</span>,
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span> <span class="ident">username</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span> <span class="ident">token_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
         <span class="kw-2">mut</span> <span class="ident">cli</span>: <span class="ident">Cli</span>,
     ) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
@@ -261,11 +305,30 @@
                 } <span class="kw">else</span> {
                     <span class="ident">AnyServerConnection::Local</span>(<span class="ident">cli</span>.<span class="ident">open_server</span>().<span class="kw">await</span><span class="question-mark">?</span>)
                 };
+
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+                <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">username</span>) <span class="op">=</span> <span class="ident">username</span> {
+                    <span class="kw">let</span> <span class="ident">password</span> <span class="op">=</span> <span class="ident">bonsaidb_local::cli::read_password_from_stdin</span>(<span class="bool-val">false</span>)<span class="question-mark">?</span>;
+                    <span class="ident">connection</span>
+                        .<span class="ident">authenticate_with_password</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>, <span class="ident">password</span>)
+                        .<span class="kw">await</span><span class="question-mark">?</span>
+                } <span class="kw">else</span> {
+                    <span class="ident">connection</span>
+                };
+
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span>
+                <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">token_id</span>) <span class="op">=</span> <span class="ident">token_id</span> {
+                    <span class="kw">let</span> <span class="ident">token</span> <span class="op">=</span> <span class="ident">bonsaidb_core::connection::SensitiveString</span>(<span class="ident">std::env::var</span>(
+                        <span class="string">&quot;BONSAIDB_TOKEN_SECRET&quot;</span>,
+                    )<span class="question-mark">?</span>);
+                    <span class="ident">connection</span>.<span class="ident">authenticate_with_token</span>(<span class="ident">token_id</span>, <span class="kw-2">&amp;</span><span class="ident">token</span>).<span class="kw">await</span><span class="question-mark">?</span>
+                } <span class="kw">else</span> {
+                    <span class="ident">connection</span>
+                };
+
                 <span class="kw">match</span> <span class="ident">other</span> {
-                    <span class="ident">Command::Admin</span>(<span class="ident">admin</span>) =&gt; <span class="ident">admin</span>.<span class="ident">execute</span>(<span class="ident">connection</span>).<span class="kw">await</span><span class="question-mark">?</span>,
-                    <span class="ident">Command::External</span>(<span class="ident">external</span>) =&gt; {
-                        <span class="ident">cli</span>.<span class="ident">execute</span>(<span class="ident">external</span>, <span class="ident">connection</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-                    }
+                    <span class="ident">Command::Admin</span>(<span class="ident">admin</span>) =&gt; <span class="ident">admin</span>.<span class="ident">execute_async</span>(<span class="kw-2">&amp;</span><span class="ident">connection</span>).<span class="kw">await</span><span class="question-mark">?</span>,
+                    <span class="ident">Command::External</span>(<span class="ident">external</span>) =&gt; <span class="ident">cli</span>.<span class="ident">execute</span>(<span class="ident">external</span>, <span class="ident">connection</span>).<span class="kw">await</span><span class="question-mark">?</span>,
                     <span class="ident">Command::Server</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
                 }
             }
@@ -283,6 +346,17 @@
     <span class="doccomment">/// A pinned certificate to use when connecting to `url`.</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;c&#39;</span>, <span class="ident">long</span>)]</span>
     <span class="kw">pub</span> <span class="ident">pinned_certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// A token ID to authenticate as before executing the command. Use</span>
+    <span class="doccomment">/// environment variable `BONSAIDB_TOKEN_SECRET` to provide the</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span> <span class="op">=</span> <span class="string">&quot;token&quot;</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;t&#39;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">token_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// A user to authenticate as before executing the command. The password</span>
+    <span class="doccomment">/// will be prompted for over stdin. When writing a script for headless</span>
+    <span class="doccomment">/// automation, token authentication should be preferred.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span> <span class="op">=</span> <span class="string">&quot;username&quot;</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;u&#39;</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">username</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The command to execute on the connection specified.</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
     <span class="kw">pub</span> <span class="ident">command</span>: <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">Cli</span><span class="op">&gt;</span>,
@@ -298,7 +372,15 @@
             <span class="prelude-val">None</span>
         };
         <span class="self">self</span>.<span class="ident">command</span>
-            .<span class="ident">execute</span>(<span class="self">self</span>.<span class="ident">url</span>, <span class="ident">pinned_certificate</span>, <span class="ident">cli</span>)
+            .<span class="ident">execute</span>(
+                <span class="self">self</span>.<span class="ident">url</span>,
+                <span class="ident">pinned_certificate</span>,
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
+                <span class="self">self</span>.<span class="ident">username</span>,
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span>
+                <span class="self">self</span>.<span class="ident">token_id</span>,
+                <span class="ident">cli</span>,
+            )
             .<span class="kw">await</span>
     }
 }

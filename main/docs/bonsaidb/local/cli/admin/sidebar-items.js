@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Command","An administrative command-line command."],["UserCommand","A command operating on `User`s."]]});
