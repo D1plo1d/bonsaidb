@@ -499,7 +499,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                26
+                27
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">    fn files_name() -&gt; CollectionName {</pre>
@@ -512,7 +512,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                26
+                27
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">        CollectionName::private(&quot;processed-files&quot;)</pre>
@@ -525,7 +525,7 @@
             </div>
             <div
                 class="column is-1 is-narrow p-0 has-text-centered has-text-success-light has-background-success">
-                26
+                27
             </div>
             <div class="column has-background-success-light p-0">
                 <pre class="has-background-success-light py-0 px-2">    }</pre>
@@ -684,7 +684,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    cleanup_old_job(database.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">    cleanup_old_job(&amp;database)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -801,7 +801,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">        .create(database.clone())?;</pre>
+                <pre class="has-background-success-light py-0 px-2">        .create(&amp;database)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -827,7 +827,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    process_file(&quot;&#x2F;job1&quot;, database)?;</pre>
+                <pre class="has-background-success-light py-0 px-2">    process_file(&quot;&#x2F;job1&quot;, &amp;database)?;</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -918,7 +918,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    database: Database,</pre>
+                <pre class="has-background-success-light py-0 px-2">    database: &amp;Database,</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -944,7 +944,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    let input_file = BonsaiFiles::load(path, database.clone())?.expect(&quot;Input file not found&quot;);</pre>
+                <pre class="has-background-success-light py-0 px-2">    let input_file = BonsaiFiles::load(path, database)?.expect(&quot;Input file not found&quot;);</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1191,7 +1191,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">fn cleanup_old_job&lt;Database: Connection + Clone&gt;(database: Database) -&gt; anyhow::Result&lt;()&gt; {</pre>
+                <pre class="has-background-success-light py-0 px-2">fn cleanup_old_job&lt;Database: Connection + Clone&gt;(database: &amp;Database) -&gt; anyhow::Result&lt;()&gt; {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1204,7 +1204,7 @@
                 1
             </div>
             <div class="column has-background-success-light p-0">
-                <pre class="has-background-success-light py-0 px-2">    if let Some(file) = BonsaiFiles::load(&quot;&#x2F;job1&quot;, database.clone())? {</pre>
+                <pre class="has-background-success-light py-0 px-2">    if let Some(file) = BonsaiFiles::load(&quot;&#x2F;job1&quot;, database)? {</pre>
             </div>
         </div><div class="columns p-0 m-0">
             <div
@@ -1313,7 +1313,7 @@
         </div></div>
         <footer class="footer">
             <div class="content has-text-centered">
-                <p class="heading">Date: 2022-04-27 17:07</p>
+                <p class="heading">Date: 2022-04-27 17:26</p>
             </div>
         </footer>
     </body>
