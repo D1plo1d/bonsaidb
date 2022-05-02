@@ -3867,6 +3867,34 @@
 <span id="3862">3862</span>
 <span id="3863">3863</span>
 <span id="3864">3864</span>
+<span id="3865">3865</span>
+<span id="3866">3866</span>
+<span id="3867">3867</span>
+<span id="3868">3868</span>
+<span id="3869">3869</span>
+<span id="3870">3870</span>
+<span id="3871">3871</span>
+<span id="3872">3872</span>
+<span id="3873">3873</span>
+<span id="3874">3874</span>
+<span id="3875">3875</span>
+<span id="3876">3876</span>
+<span id="3877">3877</span>
+<span id="3878">3878</span>
+<span id="3879">3879</span>
+<span id="3880">3880</span>
+<span id="3881">3881</span>
+<span id="3882">3882</span>
+<span id="3883">3883</span>
+<span id="3884">3884</span>
+<span id="3885">3885</span>
+<span id="3886">3886</span>
+<span id="3887">3887</span>
+<span id="3888">3888</span>
+<span id="3889">3889</span>
+<span id="3890">3890</span>
+<span id="3891">3891</span>
+<span id="3892">3892</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">std</span>::{
@@ -5866,18 +5894,20 @@
     );
 
     <span class="comment">// Test updating the record and the view being updated appropriately</span>
+    <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;B&quot;</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">a_child</span>.<span class="ident">id</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">basic</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
-    <span class="ident">basic</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+    <span class="ident">basic</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>);
     <span class="ident">Basic::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>, <span class="ident">basic</span>)<span class="question-mark">?</span>;
     <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>
+    <span class="kw">let</span> <span class="ident">b_children</span> <span class="op">=</span> <span class="ident">db</span>
         .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
-        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
         .<span class="ident">query</span>()
         .<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>[<span class="number">0</span>].<span class="ident">source</span>, <span class="ident">doc</span>.<span class="ident">header</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
             .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
@@ -5885,18 +5915,32 @@
             .<span class="kw">await</span><span class="question-mark">?</span>,
         <span class="number">0</span>
     );
-    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">reduce</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="number">2</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">reduce</span>().<span class="kw">await</span><span class="question-mark">?</span>, <span class="number">3</span>);
+
+    <span class="comment">// Update the record, but don&#39;t change its mapping. Ensure the source&#39;s</span>
+    <span class="comment">// header is updated.</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">basic</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
+    <span class="ident">basic</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;new value&quot;</span>);
+    <span class="ident">Basic::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>, <span class="ident">basic</span>)<span class="question-mark">?</span>;
+    <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">b_children</span> <span class="op">=</span> <span class="ident">db</span>
+        .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
+        .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>))
+        .<span class="ident">query</span>()
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>[<span class="number">0</span>].<span class="ident">source</span>, <span class="ident">doc</span>.<span class="ident">header</span>);
 
     <span class="comment">// Test deleting a record and ensuring it goes away</span>
     <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">delete</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">all_entries</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">query</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="macro">assert_eq!</span>(<span class="ident">all_entries</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">all_entries</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
     <span class="comment">// Verify reduce_grouped matches our expectations.</span>
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">reduce_grouped</span>().<span class="kw">await</span><span class="question-mark">?</span>,
-        <span class="macro">vec!</span>[<span class="ident">MappedValue::new</span>(<span class="prelude-val">None</span>, <span class="number">1</span>,),]
+        <span class="macro">vec!</span>[<span class="ident">MappedValue::new</span>(<span class="prelude-val">None</span>, <span class="number">2</span>,),]
     );
 
     <span class="comment">// Remove the final document, which has a parent id of None. We&#39;ll add a new</span>
@@ -5963,32 +6007,44 @@
     );
 
     <span class="comment">// Test updating the record and the view being updated appropriately</span>
+    <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">collection</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Basic::new</span>(<span class="string">&quot;B&quot;</span>))<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">a_child</span>.<span class="ident">id</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">basic</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
-    <span class="ident">basic</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+    <span class="ident">basic</span>.<span class="ident">parent_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>);
     <span class="ident">Basic::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>, <span class="ident">basic</span>)<span class="question-mark">?</span>;
     <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">a_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
-    <span class="macro">assert_eq!</span>(<span class="ident">a_children</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+    <span class="kw">let</span> <span class="ident">b_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>[<span class="number">0</span>].<span class="ident">source</span>, <span class="ident">doc</span>.<span class="ident">header</span>);
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>()
             .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">a</span>.<span class="ident">id</span>))
             .<span class="ident">reduce</span>()<span class="question-mark">?</span>,
         <span class="number">0</span>
     );
-    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">reduce</span>()<span class="question-mark">?</span>, <span class="number">2</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">reduce</span>()<span class="question-mark">?</span>, <span class="number">3</span>);
+
+    <span class="comment">// Update the record, but don&#39;t change its mapping. Ensure the source&#39;s</span>
+    <span class="comment">// header is updated.</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">basic</span> <span class="op">=</span> <span class="ident">Basic::document_contents</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
+    <span class="ident">basic</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;new value&quot;</span>);
+    <span class="ident">Basic::set_document_contents</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>, <span class="ident">basic</span>)<span class="question-mark">?</span>;
+    <span class="ident">db</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">b_children</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">b</span>.<span class="ident">id</span>)).<span class="ident">query</span>()<span class="question-mark">?</span>;
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">b_children</span>[<span class="number">0</span>].<span class="ident">source</span>, <span class="ident">doc</span>.<span class="ident">header</span>);
 
     <span class="comment">// Test deleting a record and ensuring it goes away</span>
     <span class="ident">db</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">Basic</span><span class="op">&gt;</span>().<span class="ident">delete</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">all_entries</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">query</span>()<span class="question-mark">?</span>;
-    <span class="macro">assert_eq!</span>(<span class="ident">all_entries</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">all_entries</span>.<span class="ident">len</span>(), <span class="number">2</span>);
 
     <span class="comment">// Verify reduce_grouped matches our expectations.</span>
     <span class="macro">assert_eq!</span>(
         <span class="ident">db</span>.<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">BasicByParentId</span><span class="op">&gt;</span>().<span class="ident">reduce_grouped</span>()<span class="question-mark">?</span>,
-        <span class="macro">vec!</span>[<span class="ident">MappedValue::new</span>(<span class="prelude-val">None</span>, <span class="number">1</span>,),]
+        <span class="macro">vec!</span>[<span class="ident">MappedValue::new</span>(<span class="prelude-val">None</span>, <span class="number">2</span>,),]
     );
 
     <span class="comment">// Remove the final document, which has a parent id of None. We&#39;ll add a new</span>
