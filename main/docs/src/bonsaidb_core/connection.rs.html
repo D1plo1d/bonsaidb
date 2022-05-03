@@ -3880,6 +3880,7 @@
 <span id="3875">3875</span>
 <span id="3876">3876</span>
 <span id="3877">3877</span>
+<span id="3878">3878</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Borrow</span>,
     <span class="ident">convert::Infallible</span>,
@@ -3935,7 +3936,7 @@
     }
 
     <span class="doccomment">/// Accesses a [`schema::View`] from this connection.</span>
-    <span class="kw">fn</span> <span class="ident">view</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="self">self</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;static</span>, <span class="self">Self</span>, <span class="ident">V</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">view</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="self">self</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span>, <span class="ident">V</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> {
         <span class="ident">View::new</span>(<span class="self">self</span>)
     }
 
@@ -4533,7 +4534,7 @@
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;k</span>, <span class="ident">Cn</span>, <span class="ident">V</span>: <span class="ident">schema::SerializedView</span>, <span class="ident">Key</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>: <span class="ident">schema::SerializedView</span>, <span class="ident">Key</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span>,
     <span class="ident">Key</span>: <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
@@ -4541,7 +4542,7 @@
     <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>,
 
     <span class="doccomment">/// Key filtering criteria.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span>, <span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V::Key</span>, <span class="ident">Key</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// The view&#39;s data access policy. The default value is [`AccessPolicy::UpdateBefore`].</span>
     <span class="kw">pub</span> <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
@@ -4555,7 +4556,7 @@
     <span class="ident">_view</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;key</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;key</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span> <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">Key</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span>,
     <span class="ident">V</span>: <span class="ident">schema::SerializedView</span>,
@@ -4580,17 +4581,14 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().with_key(&amp;42).query()? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db).with_key(&amp;42).query()? {</span>
     <span class="doccomment">///     assert_eq!(mapping.key, 42);</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span><span class="op">&lt;</span><span class="lifetime">&#39;newkey</span>, <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="self">self</span>,
-        <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;newkey</span> <span class="ident">K</span>,
-    ) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;newkey</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">K</span>: <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
@@ -4612,19 +4610,19 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().with_keys(&amp;[42, 43]).query()? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db).with_keys(&amp;[42, 43]).query()? {</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_keys</span><span class="op">&lt;</span><span class="lifetime">&#39;newkey</span>, <span class="ident">K</span>, <span class="ident">IntoIter</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;newkey</span> <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_keys</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">IntoIter</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">keys</span>: <span class="ident">IntoIter</span>,
-    ) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;newkey</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
+    ) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
-        <span class="ident">K</span>: <span class="ident">PartialEq</span>,
+        <span class="ident">K</span>: <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
     {
         <span class="ident">View</span> {
             <span class="ident">connection</span>: <span class="self">self</span>.<span class="ident">connection</span>,
@@ -4645,16 +4643,16 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().with_key_range(42..).query()? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db).with_key_range(42..).query()? {</span>
     <span class="doccomment">///     assert!(mapping.key &gt;= 42);</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_range</span><span class="op">&lt;</span><span class="lifetime">&#39;newkey</span>, <span class="ident">K</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">range</span>: <span class="ident">R</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;newkey</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_range</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">range</span>: <span class="ident">R</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;newkey</span>, <span class="ident">V::Key</span>, <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V::Key</span>, <span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">K</span>: <span class="ident">PartialEq</span>,
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
     {
@@ -4680,19 +4678,19 @@
     <span class="doccomment">/// struct ByName;</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ByName&gt;().with_key_prefix(&quot;a&quot;).query()? {</span>
+    <span class="doccomment">/// for mapping in ByName::entries(&amp;db).with_key_prefix(&quot;a&quot;).query()? {</span>
     <span class="doccomment">///     assert!(mapping.key.starts_with(&quot;a&quot;));</span>
     <span class="doccomment">///     println!(&quot;{} in document {:?}&quot;, mapping.key, mapping.source);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span><span class="op">&lt;</span><span class="lifetime">&#39;newkey</span>, <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
-        <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;newkey</span> <span class="ident">K</span>,
-    ) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;newkey</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
+        <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>,
+    ) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">K</span>: <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;newkey</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span>,
+        <span class="ident">K</span>: <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span>,
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
     {
         <span class="ident">View</span> {
@@ -4712,8 +4710,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db)</span>
     <span class="doccomment">///     .with_access_policy(AccessPolicy::UpdateAfter)</span>
     <span class="doccomment">///     .query()?</span>
     <span class="doccomment">/// {</span>
@@ -4740,7 +4737,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().ascending().query()? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db).ascending().query()? {</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
@@ -4763,7 +4760,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().descending().query()? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db).descending().query()? {</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
@@ -4781,7 +4778,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// let mappings = db.view::&lt;ScoresByRank&gt;().limit(10).query()?;</span>
+    <span class="doccomment">/// let mappings = ScoresByRank::entries(&amp;db).limit(10).query()?;</span>
     <span class="doccomment">/// assert!(mappings.len() &lt;= 10);</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
@@ -4798,7 +4795,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().query()? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db).query()? {</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
@@ -4815,8 +4812,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// for mapping in &amp;db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in &amp;ScoresByRank::entries(&amp;db)</span>
     <span class="doccomment">///     .with_key_range(42..=44)</span>
     <span class="doccomment">///     .query_with_docs()?</span>
     <span class="doccomment">/// {</span>
@@ -4843,8 +4839,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// for mapping in &amp;db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in &amp;ScoresByRank::entries(&amp;db)</span>
     <span class="doccomment">///     .with_key_range(42..=44)</span>
     <span class="doccomment">///     .query_with_collection_docs()?</span>
     <span class="doccomment">/// {</span>
@@ -4878,7 +4873,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// let score = db.view::&lt;ScoresByRank&gt;().reduce()?;</span>
+    <span class="doccomment">/// let score = ScoresByRank::entries(&amp;db).reduce()?;</span>
     <span class="doccomment">/// println!(&quot;Average score: {:3}&quot;, score);</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
@@ -4895,7 +4890,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().reduce_grouped()? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries(&amp;db).reduce_grouped()? {</span>
     <span class="doccomment">///     println!(</span>
     <span class="doccomment">///         &quot;Rank {} has an average score of {:3}&quot;,</span>
     <span class="doccomment">///         mapping.key, mapping.value</span>
@@ -4915,7 +4910,7 @@
     <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
     <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// db.view::&lt;ScoresByRank&gt;().delete_docs()?;</span>
+    <span class="doccomment">/// ScoresByRank::entries(&amp;db).delete_docs()?;</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
@@ -4955,7 +4950,7 @@
         <span class="ident">AsyncCollection::new</span>(<span class="self">self</span>)
     }
 
-    <span class="doccomment">/// Initializes [`View`] for [`schema::View`] `V`.</span>
+    <span class="doccomment">/// Accesses a [`schema::View`] from this connection.</span>
     <span class="kw">fn</span> <span class="ident">view</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">schema::SerializedView</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;_</span> <span class="self">self</span>) -&gt; <span class="ident">AsyncView</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="self">Self</span>, <span class="ident">V</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> {
         <span class="ident">AsyncView::new</span>(<span class="self">self</span>)
     }
@@ -5773,7 +5768,11 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().with_key(&amp;42).query().await? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db)</span>
+    <span class="doccomment">///     .with_key(&amp;42)</span>
+    <span class="doccomment">///     .query()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
     <span class="doccomment">///     assert_eq!(mapping.key, 42);</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
@@ -5804,8 +5803,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db)</span>
     <span class="doccomment">///     .with_keys(&amp;[42, 43])</span>
     <span class="doccomment">///     .query()</span>
     <span class="doccomment">///     .await?</span>
@@ -5821,7 +5819,7 @@
         <span class="ident">keys</span>: <span class="ident">IntoIter</span>,
     ) -&gt; <span class="ident">AsyncView</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">K</span>: <span class="ident">PartialEq</span>,
+        <span class="ident">K</span>: <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
     {
         <span class="ident">AsyncView</span> {
@@ -5844,8 +5842,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db)</span>
     <span class="doccomment">///     .with_key_range(42..)</span>
     <span class="doccomment">///     .query()</span>
     <span class="doccomment">///     .await?</span>
@@ -5888,7 +5885,11 @@
     <span class="doccomment">/// struct ByName;</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ByName&gt;().with_key_prefix(&quot;a&quot;).query().await? {</span>
+    <span class="doccomment">/// for mapping in ByName::entries_async(&amp;db)</span>
+    <span class="doccomment">///     .with_key_prefix(&quot;a&quot;)</span>
+    <span class="doccomment">///     .query()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
     <span class="doccomment">///     assert!(mapping.key.starts_with(&quot;a&quot;));</span>
     <span class="doccomment">///     println!(&quot;{} in document {:?}&quot;, mapping.key, mapping.source);</span>
     <span class="doccomment">/// }</span>
@@ -5922,8 +5923,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db)</span>
     <span class="doccomment">///     .with_access_policy(AccessPolicy::UpdateAfter)</span>
     <span class="doccomment">///     .query()</span>
     <span class="doccomment">///     .await?</span>
@@ -5953,7 +5953,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().ascending().query().await? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db).ascending().query().await? {</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
@@ -5978,7 +5978,11 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().descending().query().await? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db)</span>
+    <span class="doccomment">///     .descending()</span>
+    <span class="doccomment">///     .query()</span>
+    <span class="doccomment">///     .await?</span>
+    <span class="doccomment">/// {</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
@@ -5998,7 +6002,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// let mappings = db.view::&lt;ScoresByRank&gt;().limit(10).query().await?;</span>
+    <span class="doccomment">/// let mappings = ScoresByRank::entries_async(&amp;db).limit(10).query().await?;</span>
     <span class="doccomment">/// assert!(mappings.len() &lt;= 10);</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # })</span>
@@ -6017,7 +6021,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().query().await? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db).query().await? {</span>
     <span class="doccomment">///     println!(&quot;Rank {} has a score of {:3}&quot;, mapping.key, mapping.value);</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// # Ok(())</span>
@@ -6037,8 +6041,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// for mapping in &amp;db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in &amp;ScoresByRank::entries_async(&amp;db)</span>
     <span class="doccomment">///     .with_key_range(42..=44)</span>
     <span class="doccomment">///     .query_with_docs()</span>
     <span class="doccomment">///     .await?</span>
@@ -6065,8 +6068,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// for mapping in &amp;db</span>
-    <span class="doccomment">///     .view::&lt;ScoresByRank&gt;()</span>
+    <span class="doccomment">/// for mapping in &amp;ScoresByRank::entries_async(&amp;db)</span>
     <span class="doccomment">///     .with_key_range(42..=44)</span>
     <span class="doccomment">///     .query_with_collection_docs()</span>
     <span class="doccomment">///     .await?</span>
@@ -6100,7 +6102,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// let score = db.view::&lt;ScoresByRank&gt;().reduce().await?;</span>
+    <span class="doccomment">/// let score = ScoresByRank::entries_async(&amp;db).reduce().await?;</span>
     <span class="doccomment">/// println!(&quot;Average score: {:3}&quot;, score);</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # })</span>
@@ -6120,7 +6122,7 @@
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
     <span class="doccomment">/// // score is an f32 in this example</span>
-    <span class="doccomment">/// for mapping in db.view::&lt;ScoresByRank&gt;().reduce_grouped().await? {</span>
+    <span class="doccomment">/// for mapping in ScoresByRank::entries_async(&amp;db).reduce_grouped().await? {</span>
     <span class="doccomment">///     println!(</span>
     <span class="doccomment">///         &quot;Rank {} has an average score of {:3}&quot;,</span>
     <span class="doccomment">///         mapping.key, mapping.value</span>
@@ -6143,7 +6145,7 @@
     <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
     <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
     <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// db.view::&lt;ScoresByRank&gt;().delete_docs().await?;</span>
+    <span class="doccomment">/// ScoresByRank::entries_async(&amp;db).delete_docs().await?;</span>
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
@@ -7426,7 +7428,7 @@
             <span class="ident">schema</span>::{
                 <span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">CollectionViewSchema</span>, <span class="ident">DefaultSerialization</span>,
                 <span class="ident">DefaultViewSerialization</span>, <span class="ident">Name</span>, <span class="ident">NamedCollection</span>, <span class="ident">ReduceResult</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>,
-                <span class="ident">Schematic</span>, <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>, <span class="ident">ViewMappedValue</span>,
+                <span class="ident">Schematic</span>, <span class="ident">SerializedCollection</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>, <span class="ident">ViewMappedValue</span>, <span class="ident">SerializedView</span>,
             },
             <span class="ident">Error</span>,
         };
