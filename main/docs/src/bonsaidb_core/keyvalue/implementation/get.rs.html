@@ -347,6 +347,12 @@
 <span id="342">342</span>
 <span id="343">343</span>
 <span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Future</span>, <span class="ident">FutureExt</span>};
 <span class="kw">use</span> <span class="ident">serde::Deserialize</span>;
 
@@ -397,9 +403,10 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">query</span>()<span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_u64</span>().<span class="ident">map_or_else</span>(
                 <span class="op">|</span><span class="op">|</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(
+                    <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+                        <span class="string">&quot;key-value&quot;</span>,
                         <span class="string">&quot;value not an u64 or would lose precision when converted to an u64&quot;</span>,
-                    )))
+                    ))
                 },
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
@@ -415,9 +422,10 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">query</span>()<span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_i64</span>().<span class="ident">map_or_else</span>(
                 <span class="op">|</span><span class="op">|</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(
+                    <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+                        <span class="string">&quot;key-value&quot;</span>,
                         <span class="string">&quot;value not an i64 or would lose precision when converted to an i64&quot;</span>,
-                    )))
+                    ))
                 },
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
@@ -433,9 +441,10 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">query</span>()<span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_f64</span>().<span class="ident">map_or_else</span>(
                 <span class="op">|</span><span class="op">|</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(
+                    <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+                        <span class="string">&quot;key-value&quot;</span>,
                         <span class="string">&quot;value not an f64 or would lose precision when converted to an f64&quot;</span>,
-                    )))
+                    ))
                 },
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
@@ -450,7 +459,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_u64_lossy</span>(<span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">query</span>()<span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_u64_lossy</span>(<span class="ident">saturating</span>).<span class="ident">map_or_else</span>(
-                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(<span class="string">&quot;value not numeric&quot;</span>))),
+                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;key-value&quot;</span>, <span class="string">&quot;value not numeric&quot;</span>)),
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
             <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
@@ -464,7 +473,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_i64_lossy</span>(<span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">query</span>()<span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_i64_lossy</span>(<span class="ident">saturating</span>).<span class="ident">map_or_else</span>(
-                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(<span class="string">&quot;value not numeric&quot;</span>))),
+                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;key-value&quot;</span>, <span class="string">&quot;value not numeric&quot;</span>)),
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
             <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
@@ -477,7 +486,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_f64_lossy</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">query</span>()<span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_f64_lossy</span>().<span class="ident">map_or_else</span>(
-                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(<span class="string">&quot;value not numeric&quot;</span>))),
+                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;key-value&quot;</span>, <span class="string">&quot;value not numeric&quot;</span>)),
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
             <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
@@ -562,9 +571,10 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="kw">await</span><span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_u64</span>().<span class="ident">map_or_else</span>(
                 <span class="op">|</span><span class="op">|</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(
+                    <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+                        <span class="string">&quot;key-value&quot;</span>,
                         <span class="string">&quot;value not an u64 or would lose precision when converted to an u64&quot;</span>,
-                    )))
+                    ))
                 },
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
@@ -580,9 +590,10 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="kw">await</span><span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_i64</span>().<span class="ident">map_or_else</span>(
                 <span class="op">|</span><span class="op">|</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(
+                    <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+                        <span class="string">&quot;key-value&quot;</span>,
                         <span class="string">&quot;value not an i64 or would lose precision when converted to an i64&quot;</span>,
-                    )))
+                    ))
                 },
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
@@ -598,9 +609,10 @@
         <span class="kw">match</span> <span class="self">self</span>.<span class="kw">await</span><span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_f64</span>().<span class="ident">map_or_else</span>(
                 <span class="op">|</span><span class="op">|</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(
+                    <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+                        <span class="string">&quot;key-value&quot;</span>,
                         <span class="string">&quot;value not an f64 or would lose precision when converted to an f64&quot;</span>,
-                    )))
+                    ))
                 },
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
@@ -615,7 +627,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">into_u64_lossy</span>(<span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="kw">await</span><span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_u64_lossy</span>(<span class="ident">saturating</span>).<span class="ident">map_or_else</span>(
-                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(<span class="string">&quot;value not numeric&quot;</span>))),
+                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;key-value&quot;</span>, <span class="string">&quot;value not numeric&quot;</span>)),
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
             <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
@@ -629,7 +641,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">into_i64_lossy</span>(<span class="self">self</span>, <span class="ident">saturating</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="kw">await</span><span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_i64_lossy</span>(<span class="ident">saturating</span>).<span class="ident">map_or_else</span>(
-                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(<span class="string">&quot;value not numeric&quot;</span>))),
+                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;key-value&quot;</span>, <span class="string">&quot;value not numeric&quot;</span>)),
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
             <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
@@ -642,7 +654,7 @@
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">into_f64_lossy</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="kw">await</span><span class="question-mark">?</span> {
             <span class="prelude-val">Some</span>(<span class="ident">value</span>) =&gt; <span class="ident">value</span>.<span class="ident">as_f64_lossy</span>().<span class="ident">map_or_else</span>(
-                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Database</span>(<span class="ident">String::from</span>(<span class="string">&quot;value not numeric&quot;</span>))),
+                <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;key-value&quot;</span>, <span class="string">&quot;value not numeric&quot;</span>)),
                 <span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>)),
             ),
             <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),

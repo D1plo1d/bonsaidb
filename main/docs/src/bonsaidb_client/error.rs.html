@@ -135,9 +135,6 @@
 <span id="130">130</span>
 <span id="131">131</span>
 <span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{<span class="ident">arc_bytes::serde::Bytes</span>, <span class="ident">schema::Name</span>};
 
 <span class="doccomment">/// Errors related to working with [`Client`](crate::Client)</span>
@@ -195,7 +192,7 @@
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="ident">Error</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">other</span> {
             <span class="ident">Error::Core</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
-            <span class="ident">other</span> =&gt; <span class="ident"><span class="self">Self</span>::Client</span>(<span class="ident">other</span>.<span class="ident">to_string</span>()),
+            <span class="ident">other</span> =&gt; <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;bonsaidb-client&quot;</span>, <span class="ident">other</span>),
         }
     }
 }
@@ -203,10 +200,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bincode::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="ident">bincode::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::Websocket</span>(<span class="macro">format!</span>(
-            <span class="string">&quot;error decoding websocket message: {:?}&quot;</span>,
-            <span class="ident">other</span>
-        )))
+        <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;bincode&quot;</span>, <span class="ident">other</span>))
     }
 }
 
@@ -216,7 +210,7 @@
         (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>:<span class="ident">ty</span>) =&gt; {
             <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::Error</span> {
                 <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>) -&gt; <span class="self">Self</span> {
-                    <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::Transport</span>(<span class="ident">other</span>.<span class="ident">to_string</span>()))
+                    <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;quic&quot;</span>, <span class="ident">other</span>))
                 }
             }
         };

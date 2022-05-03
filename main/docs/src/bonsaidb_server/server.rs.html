@@ -971,10 +971,6 @@
 <span id="966">966</span>
 <span id="967">967</span>
 <span id="968">968</span>
-<span id="969">969</span>
-<span id="970">970</span>
-<span id="971">971</span>
-<span id="972">972</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">collections</span>::{<span class="ident">hash_map</span>, <span class="ident">HashMap</span>},
     <span class="ident">fmt::Debug</span>,
@@ -1219,7 +1215,7 @@
         <span class="kw">let</span> <span class="ident">keypair</span> <span class="op">=</span> <span class="ident">KeyPair::new_self_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>);
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">certificate_chain</span>().<span class="kw">await</span>.<span class="ident">is_ok</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">overwrite</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::Configuration</span>(<span class="ident">String::from</span>(<span class="string">&quot;Certificate already installed. Enable overwrite if you wish to replace the existing certificate.&quot;</span>))));
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;bonsaidb-server config&quot;</span>, <span class="string">&quot;Certificate already installed. Enable overwrite if you wish to replace the existing certificate.&quot;</span>)));
         }
 
         <span class="self">self</span>.<span class="ident">install_certificate</span>(<span class="ident">keypair</span>.<span class="ident">certificate_chain</span>(), <span class="ident">keypair</span>.<span class="ident">private_key</span>())
@@ -1318,10 +1314,10 @@
             .<span class="ident">into_iter</span>()
             .<span class="ident">next</span>()
             .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::Configuration</span>(<span class="macro">format!</span>(
-                    <span class="string">&quot;no certificate found for {}&quot;</span>,
-                    <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>
-                )))
+                <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(
+                    <span class="string">&quot;bonsaidb-server config&quot;</span>,
+                    <span class="macro">format!</span>(<span class="string">&quot;no certificate found for {}&quot;</span>, <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>),
+                ))
             })<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">certificate</span>.<span class="ident">contents</span>)
     }
@@ -1339,10 +1335,10 @@
         {
             <span class="prelude-val">Ok</span>(<span class="ident">mapping</span>.<span class="ident">value</span>)
         } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::Configuration</span>(<span class="macro">format!</span>(
-                <span class="string">&quot;no certificate found for {}&quot;</span>,
-                <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>
-            ))))
+            <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(
+                <span class="string">&quot;bonsaidb-server config&quot;</span>,
+                <span class="macro">format!</span>(<span class="string">&quot;no certificate found for {}&quot;</span>, <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>),
+            )))
         }
     }
 
@@ -1355,13 +1351,9 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">Endpoint::builder</span>();
         <span class="ident">builder</span>.<span class="ident">set_protocols</span>([<span class="ident">CURRENT_PROTOCOL_VERSION</span>.<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>()]);
         <span class="ident">builder</span>.<span class="ident">set_address</span>(([<span class="number">0</span>; <span class="number">8</span>], <span class="ident">port</span>).<span class="ident">into</span>());
-        <span class="ident">builder</span>
-            .<span class="ident">set_max_idle_timeout</span>(<span class="prelude-val">None</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::Transport</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())))<span class="question-mark">?</span>;
+        <span class="ident">builder</span>.<span class="ident">set_max_idle_timeout</span>(<span class="prelude-val">None</span>)<span class="question-mark">?</span>;
         <span class="ident">builder</span>.<span class="ident">set_server_key_pair</span>(<span class="prelude-val">Some</span>(<span class="ident">keypair</span>));
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">server</span> <span class="op">=</span> <span class="ident">builder</span>
-            .<span class="ident">build</span>()
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::Transport</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">server</span> <span class="op">=</span> <span class="ident">builder</span>.<span class="ident">build</span>()<span class="question-mark">?</span>;
         {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="macro">fast_async_write!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">endpoint</span>);
             <span class="kw-2">*</span><span class="ident">endpoint</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">server</span>.<span class="ident">clone</span>());

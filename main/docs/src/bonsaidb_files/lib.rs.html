@@ -398,6 +398,15 @@
 <span id="393">393</span>
 <span id="394">394</span>
 <span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Large file storage support for BonsaiDb.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This crate provides support for storing large files in</span>
@@ -778,6 +787,15 @@
         <span class="kw">match</span> <span class="ident">err</span> {
             <span class="ident">bonsaidb_core::Error::UniqueKeyViolation</span> { .. } =&gt; <span class="ident"><span class="self">Self</span>::AlreadyExists</span>,
             <span class="ident">other</span> =&gt; <span class="ident"><span class="self">Self</span>::Database</span>(<span class="ident">other</span>),
+        }
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">bonsaidb_core::Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">Error</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">match</span> <span class="ident">err</span> {
+            <span class="ident">Error::Database</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
+            <span class="ident">other</span> =&gt; <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;bonsaidb-files&quot;</span>, <span class="ident">other</span>),
         }
     }
 }

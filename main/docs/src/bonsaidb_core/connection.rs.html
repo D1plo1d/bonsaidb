@@ -3878,9 +3878,6 @@
 <span id="3873">3873</span>
 <span id="3874">3874</span>
 <span id="3875">3875</span>
-<span id="3876">3876</span>
-<span id="3877">3877</span>
-<span id="3878">3878</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Borrow</span>,
     <span class="ident">convert::Infallible</span>,
@@ -3903,9 +3900,8 @@
     <span class="ident">key</span>::{<span class="ident">IntoPrefixRange</span>, <span class="ident">Key</span>, <span class="ident">KeyEncoding</span>},
     <span class="ident">permissions::Permissions</span>,
     <span class="ident">schema</span>::{
-        <span class="self">self</span>,
-        <span class="ident">view</span>::{<span class="self">self</span>, <span class="ident">map::MappedDocuments</span>},
-        <span class="ident">Map</span>, <span class="ident">MappedValue</span>, <span class="ident">Nameable</span>, <span class="ident">NamedReference</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">SerializedCollection</span>,
+        <span class="self">self</span>, <span class="ident">view::map::MappedDocuments</span>, <span class="ident">Map</span>, <span class="ident">MappedValue</span>, <span class="ident">Nameable</span>, <span class="ident">NamedReference</span>, <span class="ident">Schema</span>,
+        <span class="ident">SchemaName</span>, <span class="ident">SerializedCollection</span>,
     },
     <span class="ident">transaction</span>, <span class="ident">Error</span>,
 };
@@ -6194,20 +6190,20 @@
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Matches</span>(<span class="ident">key</span>) =&gt; <span class="ident">key</span>
                 .<span class="ident">as_ord_bytes</span>()
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>()))
+                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::other</span>(<span class="string">&quot;key serialization&quot;</span>, <span class="ident">err</span>))
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">SerializedQueryKey::Matches</span>(<span class="ident">Bytes::from</span>(<span class="ident">v</span>.<span class="ident">to_vec</span>()))),
-            <span class="ident"><span class="self">Self</span>::Range</span>(<span class="ident">range</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">SerializedQueryKey::Range</span>(<span class="ident">range</span>.<span class="ident">as_ord_bytes</span>().<span class="ident">map_err</span>(
-                <span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>()),
-            )<span class="question-mark">?</span>)),
+            <span class="ident"><span class="self">Self</span>::Range</span>(<span class="ident">range</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">SerializedQueryKey::Range</span>(
+                <span class="ident">range</span>
+                    .<span class="ident">as_ord_bytes</span>()
+                    .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::other</span>(<span class="string">&quot;key serialization&quot;</span>, <span class="ident">err</span>))<span class="question-mark">?</span>,
+            )),
             <span class="ident"><span class="self">Self</span>::Multiple</span>(<span class="ident">keys</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">keys</span>
                     .<span class="ident">iter</span>()
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">key</span><span class="op">|</span> {
                         <span class="ident">key</span>.<span class="ident">as_ord_bytes</span>()
                             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">key</span><span class="op">|</span> <span class="ident">Bytes::from</span>(<span class="ident">key</span>.<span class="ident">to_vec</span>()))
-                            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
-                                <span class="ident">Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>())
-                            })
+                            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::other</span>(<span class="string">&quot;key serialization&quot;</span>, <span class="ident">err</span>))
                     })
                     .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
 
@@ -6238,12 +6234,12 @@
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QueryKey</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">K</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::Matches</span>(<span class="ident">key</span>) =&gt; <span class="ident">K::from_ord_bytes</span>(<span class="ident">key</span>.<span class="ident">as_ref</span>())
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>()))
+                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::other</span>(<span class="string">&quot;key serialization&quot;</span>, <span class="ident">err</span>))
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">key</span><span class="op">|</span> <span class="ident">QueryKey::Matches</span>(<span class="ident">MaybeOwned::Owned</span>(<span class="ident">key</span>))),
             <span class="ident"><span class="self">Self</span>::Range</span>(<span class="ident">range</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">QueryKey::Range</span>(<span class="ident">RangeRef::owned</span>(
-                <span class="ident">range</span>.<span class="ident">deserialize</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
-                    <span class="ident">Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>())
-                })<span class="question-mark">?</span>,
+                <span class="ident">range</span>
+                    .<span class="ident">deserialize</span>()
+                    .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::other</span>(<span class="string">&quot;key serialization&quot;</span>, <span class="ident">err</span>))<span class="question-mark">?</span>,
             ))),
             <span class="ident"><span class="self">Self</span>::Multiple</span>(<span class="ident">keys</span>) =&gt; {
                 <span class="kw">let</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">keys</span>
@@ -6251,9 +6247,7 @@
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">key</span><span class="op">|</span> {
                         <span class="ident">K::from_ord_bytes</span>(<span class="ident">key</span>.<span class="ident">as_ref</span>())
                             .<span class="ident">map</span>(<span class="ident">MaybeOwned::Owned</span>)
-                            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
-                                <span class="ident">Error::Database</span>(<span class="ident">view::Error::key_serialization</span>(<span class="ident">err</span>).<span class="ident">to_string</span>())
-                            })
+                            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::other</span>(<span class="string">&quot;key serialization&quot;</span>, <span class="ident">err</span>))
                     })
                     .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
 

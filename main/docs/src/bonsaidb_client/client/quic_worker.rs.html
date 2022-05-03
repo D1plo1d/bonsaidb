@@ -331,11 +331,11 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="ident">Endpoint::builder</span>();
     <span class="ident">endpoint</span>
         .<span class="ident">set_max_idle_timeout</span>(<span class="prelude-val">None</span>)
-        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::Transport</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())))<span class="question-mark">?</span>;
+        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;quic&quot;</span>, <span class="ident">err</span>)))<span class="question-mark">?</span>;
     <span class="ident">endpoint</span>.<span class="ident">set_protocols</span>([<span class="ident">protocol_version</span>.<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>()]);
     <span class="kw">let</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="ident">endpoint</span>
         .<span class="ident">build</span>()
-        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::Transport</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())))<span class="question-mark">?</span>;
+        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;quic&quot;</span>, <span class="ident">err</span>)))<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">connecting</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">certificate</span>) <span class="op">=</span> <span class="ident">certificate</span> {
         <span class="ident">endpoint</span>.<span class="ident">connect_pinned</span>(<span class="ident">url</span>, <span class="ident">certificate</span>, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>
     } <span class="kw">else</span> {

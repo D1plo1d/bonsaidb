@@ -175,8 +175,7 @@
 <span id="170">170</span>
 <span id="171">171</span>
 <span id="172">172</span>
-<span id="173">173</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Display</span>, <span class="ident">sync::Arc</span>};
 
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{<span class="ident">permissions::PermissionDenied</span>, <span class="ident">schema</span>, <span class="ident">schema::InsertError</span>, <span class="ident">AnyError</span>};
 <span class="kw">use</span> <span class="ident">schema::InvalidNameError</span>;
@@ -184,10 +183,6 @@
 <span class="doccomment">/// An error occurred while interacting with a [`Server`](crate::Server).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror::Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// An error occurred from the QUIC transport layer.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a networking error occurred: &#39;{0}&#39;&quot;</span>)]</span>
-    <span class="ident">Transport</span>(<span class="ident">String</span>),
-
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
     <span class="doccomment">/// An error occurred from the Websocket transport layer.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a websocket error occurred: &#39;{0}&#39;&quot;</span>)]</span>
@@ -237,17 +232,22 @@
     <span class="ident">TlsSigningError</span>,
 }
 
+<span class="kw">impl</span> <span class="ident">Error</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">other</span>(<span class="ident">origin</span>: <span class="kw">impl</span> <span class="ident">Display</span>, <span class="ident">error</span>: <span class="kw">impl</span> <span class="ident">Display</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="ident">origin</span>, <span class="ident">error</span>))
+    }
+}
+
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">bonsaidb_core::Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="ident">Error</span>) -&gt; <span class="self">Self</span> {
         <span class="comment">// without it, there&#39;s no way to get this to_string() easily.</span>
         <span class="kw">match</span> <span class="ident">other</span> {
             <span class="ident">Error::Core</span>(<span class="ident">core</span>) <span class="op">|</span> <span class="ident">Error::Database</span>(<span class="ident">bonsaidb_local::Error::Core</span>(<span class="ident">core</span>)) =&gt; <span class="ident">core</span>,
-            <span class="ident">Error::Database</span>(<span class="ident">storage</span>) =&gt; <span class="ident"><span class="self">Self</span>::Database</span>(<span class="ident">storage</span>.<span class="ident">to_string</span>()),
-            <span class="ident">Error::Io</span>(<span class="ident">io</span>) =&gt; <span class="ident"><span class="self">Self</span>::Io</span>(<span class="ident">io</span>.<span class="ident">to_string</span>()),
-            <span class="ident">Error::Transport</span>(<span class="ident">networking</span>) =&gt; <span class="ident"><span class="self">Self</span>::Transport</span>(<span class="ident">networking</span>),
+            <span class="ident">Error::Database</span>(<span class="ident">storage</span>) =&gt; <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">storage</span>),
+            <span class="ident">Error::Io</span>(<span class="ident">io</span>) =&gt; <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;io&quot;</span>, <span class="ident">io</span>),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
-            <span class="ident">Error::WebSocket</span>(<span class="ident">err</span>) =&gt; <span class="ident"><span class="self">Self</span>::Websocket</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()),
-            <span class="ident">err</span> =&gt; <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()),
+            <span class="ident">Error::WebSocket</span>(<span class="ident">err</span>) =&gt; <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;bonsaidb-server websockets&quot;</span>, <span class="ident">err</span>),
+            <span class="ident">err</span> =&gt; <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;bonsaidb-server&quot;</span>, <span class="ident">err</span>),
         }
     }
 }
@@ -323,10 +323,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bincode::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="ident">bincode::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::Websocket</span>(<span class="macro">format!</span>(
-            <span class="string">&quot;error deserializing message: {:?}&quot;</span>,
-            <span class="ident">other</span>
-        )))
+        <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;bincode&quot;</span>, <span class="ident">other</span>))
     }
 }
 
@@ -334,7 +331,7 @@
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>:<span class="ident">ty</span>) =&gt; {
         <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
             <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>) -&gt; <span class="self">Self</span> {
-                <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::Transport</span>(<span class="ident">other</span>.<span class="ident">to_string</span>()))
+                <span class="ident"><span class="self">Self</span>::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;bonsaidb-server quic&quot;</span>, <span class="ident">other</span>))
             }
         }
     };
@@ -349,6 +346,7 @@
 <span class="macro">impl_from_fabruic!</span>(<span class="ident">fabruic::error::Incoming</span>);
 <span class="macro">impl_from_fabruic!</span>(<span class="ident">fabruic::error::AlreadyClosed</span>);
 <span class="macro">impl_from_fabruic!</span>(<span class="ident">fabruic::error::Config</span>);
+<span class="macro">impl_from_fabruic!</span>(<span class="ident">fabruic::error::Builder</span>);
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
 </body></html>

@@ -300,22 +300,6 @@
 <span id="295">295</span>
 <span id="296">296</span>
 <span id="297">297</span>
-<span id="298">298</span>
-<span id="299">299</span>
-<span id="300">300</span>
-<span id="301">301</span>
-<span id="302">302</span>
-<span id="303">303</span>
-<span id="304">304</span>
-<span id="305">305</span>
-<span id="306">306</span>
-<span id="307">307</span>
-<span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Core functionality and types for BonsaiDb.</span>
 
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -363,7 +347,7 @@
 <span class="doccomment">/// Types for Publish/Subscribe (`PubSub`) messaging.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pubsub</span>;
 
-<span class="kw">use</span> <span class="ident">std::string::FromUtf8Error</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Display</span>, <span class="ident">string::FromUtf8Error</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actionable</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">arc_bytes</span>;
@@ -441,42 +425,9 @@
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a database with name &#39;{0}&#39; already exists&quot;</span>)]</span>
     <span class="ident">DatabaseNameAlreadyTaken</span>(<span class="ident">String</span>),
 
-    <span class="doccomment">/// An error from interacting with local storage.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error from storage: {0}&quot;</span>)]</span>
-    <span class="ident">Database</span>(<span class="ident">String</span>),
-
-    <span class="doccomment">/// An error serializing data.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error serializing: {0}&quot;</span>)]</span>
-    <span class="ident">Serialization</span>(<span class="ident">String</span>),
-
-    <span class="doccomment">/// An error from interacting with a server.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error from server: {0}&quot;</span>)]</span>
-    <span class="ident">Server</span>(<span class="ident">String</span>),
-
-    <span class="doccomment">/// An error occurred from the QUIC transport layer.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a transport error occurred: &#39;{0}&#39;&quot;</span>)]</span>
-    <span class="ident">Transport</span>(<span class="ident">String</span>),
-
-    <span class="doccomment">/// An error occurred from the websocket transport layer.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a websocket error occurred: &#39;{0}&#39;&quot;</span>)]</span>
-    <span class="ident">Websocket</span>(<span class="ident">String</span>),
-
     <span class="doccomment">/// An error occurred from networking.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a networking error occurred: &#39;{0}&#39;&quot;</span>)]</span>
     <span class="ident">Networking</span>(<span class="ident">networking::Error</span>),
-
-    <span class="doccomment">/// An error occurred from IO.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;an io error occurred: &#39;{0}&#39;&quot;</span>)]</span>
-    <span class="ident">Io</span>(<span class="ident">String</span>),
-
-    <span class="doccomment">/// An error occurred with the provided configuration options.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;a configuration error occurred: &#39;{0}&#39;&quot;</span>)]</span>
-    <span class="ident">Configuration</span>(<span class="ident">String</span>),
-
-    <span class="doccomment">/// An error occurred inside of the client.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;an io error in the client: &#39;{0}&#39;&quot;</span>)]</span>
-    <span class="ident">Client</span>(<span class="ident">String</span>),
 
     <span class="doccomment">/// A `Collection` being added already exists. This can be caused by a collection name not being unique.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;attempted to define a collection that already has been defined&quot;</span>)]</span>
@@ -552,9 +503,26 @@
     <span class="doccomment">/// An error while operating with a time</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;time error: {0}&quot;</span>)]</span>
     <span class="ident">Time</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">TimeError</span>),
+
+    <span class="doccomment">/// An error from another crate.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error from {origin}: {error}&quot;</span>)]</span>
+    <span class="ident">Other</span> {
+        <span class="doccomment">/// The origin of the error.</span>
+        <span class="ident">origin</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The error message.</span>
+        <span class="ident">error</span>: <span class="ident">String</span>,
+    },
 }
 
 <span class="kw">impl</span> <span class="ident">Error</span> {
+    <span class="doccomment">/// Returns an instance of [`Self::Other`] with the given parameters.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">other</span>(<span class="ident">origin</span>: <span class="kw">impl</span> <span class="ident">Display</span>, <span class="ident">error</span>: <span class="kw">impl</span> <span class="ident">Display</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident"><span class="self">Self</span>::Other</span> {
+            <span class="ident">origin</span>: <span class="ident">origin</span>.<span class="ident">to_string</span>(),
+            <span class="ident">error</span>: <span class="ident">error</span>.<span class="ident">to_string</span>(),
+        }
+    }
+
     <span class="doccomment">/// Returns true if this error is a [`Error::UniqueKeyViolation`] from</span>
     <span class="doccomment">/// `View`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_unique_key_error</span><span class="op">&lt;</span><span class="ident">View</span>: <span class="ident">schema::View</span>, <span class="ident">C</span>: <span class="ident">HasSchema</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>) -&gt; <span class="ident">bool</span> {
@@ -584,7 +552,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">pot::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">pot::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Serialization</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
+        <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;pot&quot;</span>, <span class="ident">err</span>)
     }
 }
 
@@ -596,7 +564,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">view::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">view::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Database</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
+        <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;view&quot;</span>, <span class="ident">err</span>)
     }
 }
 
@@ -608,7 +576,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InvalidHexadecimal</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">InvalidHexadecimal</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Serialization</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
+        <span class="ident"><span class="self">Self</span>::other</span>(<span class="string">&quot;invalid hexadecimal&quot;</span>, <span class="ident">err</span>)
     }
 }
 
