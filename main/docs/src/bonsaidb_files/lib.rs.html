@@ -407,6 +407,57 @@
 <span id="402">402</span>
 <span id="403">403</span>
 <span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Large file storage support for BonsaiDb.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This crate provides support for storing large files in</span>
@@ -461,6 +512,7 @@
 <span class="kw">use</span> <span class="ident">bonsaidb_core::connection::AsyncConnection</span>;
 <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
     <span class="ident">connection::Connection</span>,
+    <span class="ident">key::time::TimestampAsNanoseconds</span>,
     <span class="ident">schema</span>::{<span class="ident">CollectionName</span>, <span class="ident">InsertError</span>, <span class="ident">Qualified</span>, <span class="ident">Schema</span>, <span class="ident">SchemaName</span>, <span class="ident">Schematic</span>},
 };
 <span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
@@ -610,6 +662,23 @@
         <span class="ident">direct::File</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="ident">::list_recursive</span>(<span class="ident">path</span>, <span class="ident">database</span>)
     }
 
+    <span class="doccomment">/// Returns statistics for all files contained within this collection. This</span>
+    <span class="doccomment">/// is equivalent to calling [`Self::stats_for_path`] with `&quot;/&quot;` for the</span>
+    <span class="doccomment">/// path.</span>
+    <span class="kw">fn</span> <span class="ident">stats</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">Connection</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(
+        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Statistics</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident"><span class="self">Self</span>::stats_for_path</span>(<span class="string">&quot;/&quot;</span>, <span class="ident">database</span>)
+    }
+
+    <span class="doccomment">/// Returns statistics for all files whose path starts with `path`.</span>
+    <span class="kw">fn</span> <span class="ident">stats_for_path</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">Connection</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(
+        <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Statistics</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident">direct::File</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="ident">::stats_for_path</span>(<span class="ident">path</span>, <span class="ident">database</span>)
+    }
+
     <span class="doccomment">/// Returns the file with the unique `id` given, if found. This function</span>
     <span class="doccomment">/// only loads metadata about the file, it does not load the contents of the</span>
     <span class="doccomment">/// file.</span>
@@ -681,6 +750,21 @@
         }
     }
 
+    <span class="doccomment">/// Deletes the file at `path`. Returns true if a file was deleted. Does not</span>
+    <span class="doccomment">/// error if the file is not found.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(
+        <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>) <span class="op">=</span> <span class="ident">direct::File</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="ident">::load_async</span>(<span class="ident">path</span>, <span class="ident">database</span>).<span class="kw">await</span><span class="question-mark">?</span> {
+            <span class="ident">file</span>.<span class="ident">delete</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>)
+        } <span class="kw">else</span> {
+            <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
+        }
+    }
+
     <span class="doccomment">/// Returns all files that have a containing path of exactly `path`. It will</span>
     <span class="doccomment">/// only return files that have been created, and will not return &quot;virtual&quot;</span>
     <span class="doccomment">/// directories that are part of a file&#39;s path but have never been created.</span>
@@ -707,19 +791,23 @@
         <span class="ident">direct::File</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="ident">::list_recursive_async</span>(<span class="ident">path</span>, <span class="ident">database</span>).<span class="kw">await</span>
     }
 
-    <span class="doccomment">/// Deletes the file at `path`. Returns true if a file was deleted. Does not</span>
-    <span class="doccomment">/// error if the file is not found.</span>
+    <span class="doccomment">/// Returns statistics for all files contained within this collection. This</span>
+    <span class="doccomment">/// is equivalent to calling [`Self::stats_for_path_async`] with `&quot;/&quot;` for the</span>
+    <span class="doccomment">/// path.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">stats_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(
+        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Statistics</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident"><span class="self">Self</span>::stats_for_path_async</span>(<span class="string">&quot;/&quot;</span>, <span class="ident">database</span>).<span class="kw">await</span>
+    }
+
+    <span class="doccomment">/// Returns statistics for all files whose path starts with `path`.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">stats_for_path_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(
         <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">file</span>) <span class="op">=</span> <span class="ident">direct::File</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="ident">::load_async</span>(<span class="ident">path</span>, <span class="ident">database</span>).<span class="kw">await</span><span class="question-mark">?</span> {
-            <span class="ident">file</span>.<span class="ident">delete</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
-        }
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Statistics</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
+        <span class="ident">direct::File</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="ident">::stats_for_path_async</span>(<span class="ident">path</span>, <span class="ident">database</span>).<span class="kw">await</span>
     }
 }
 
@@ -807,6 +895,20 @@
     <span class="ident">RemovingStart</span>,
     <span class="doccomment">/// Remove data from the end (tail) of the file when truncating.</span>
     <span class="ident">RemovingEnd</span>,
+}
+
+<span class="doccomment">/// Statistics about a set of files contained in a collection.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Statistics</span> {
+    <span class="doccomment">/// The total number of bytes contained within the path queried. This only</span>
+    <span class="doccomment">/// counts bytes that would be returned when reading the contents of files.</span>
+    <span class="doccomment">/// No metadata information is included in this calculation.</span>
+    <span class="kw">pub</span> <span class="ident">total_bytes</span>: <span class="ident">u64</span>,
+    <span class="doccomment">/// The number of files contained within the path queried.</span>
+    <span class="kw">pub</span> <span class="ident">file_count</span>: <span class="ident">usize</span>,
+    <span class="doccomment">/// The last timestamp data was appended to a file within the path queried.</span>
+    <span class="doccomment">/// This contains `None` if there is no data present.</span>
+    <span class="kw">pub</span> <span class="ident">last_appended_at</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TimestampAsNanoseconds</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
