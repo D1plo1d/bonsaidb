@@ -371,29 +371,32 @@ there is a version mis-match and automatically re-index the view.</p>
 <p>There is no mechanism to access the data until this operation is complete.</p>
 <h3 id="understanding-re-reduce"><a class="header" href="#understanding-re-reduce">Understanding Re-reduce</a></h3>
 <p>Let's examine this data set:</p>
-<table><thead><tr><th>Document ID</th><th>BlogPost Category</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Document ID</th><th>BlogPost Category</th></tr></thead><tbody>
 <tr><td>1</td><td>Some(&quot;Rust&quot;)</td></tr>
 <tr><td>2</td><td>Some(&quot;Rust&quot;)</td></tr>
 <tr><td>3</td><td>Some(&quot;Cooking&quot;)</td></tr>
 <tr><td>4</td><td>None</td></tr>
 </tbody></table>
+</div>
 <p>When updating views, each view entry is reduced and the value is cached. These
 are the view entries:</p>
-<table><thead><tr><th>View Entry ID</th><th>Reduced Value</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>View Entry ID</th><th>Reduced Value</th></tr></thead><tbody>
 <tr><td>Some(&quot;Rust&quot;)</td><td>2</td></tr>
 <tr><td>Some(&quot;Cooking&quot;)</td><td>1</td></tr>
 <tr><td>None</td><td>1</td></tr>
 </tbody></table>
+</div>
 <p>When a reduce query is issued for a single key, the value can be returned without further processing. But, if the reduce query matches multiple keys, the View's <code>reduce()</code> function will be called with the already reduced values with <code>rereduce</code> set to <code>true</code>. For example, retrieving the total count of blog posts:</p>
 <pre><code class="language-rust noplayground no_run">    let total_post_count = db.view::&lt;BlogPostsByCategory&gt;().reduce()?;
     assert_eq!(total_post_count, 3);
 </code></pre>
 <p>Once BonsaiDb has gathered each of the key's reduced values, it needs to further reduce that list into a single value. To accomplish this, the View's <code>reduce()</code> function to be invoked with <code>rereduce</code> set to <code>true</code>, and with mappings containing:</p>
-<table><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>
 <tr><td>Some(&quot;Rust&quot;)</td><td>2</td></tr>
 <tr><td>Some(&quot;Cooking&quot;)</td><td>1</td></tr>
 <tr><td>None</td><td>1</td></tr>
 </tbody></table>
+</div>
 <p>This produces a final value of 4.</p>
 <h2 id="how-does-bonsaidb-make-this-efficient"><a class="header" href="#how-does-bonsaidb-make-this-efficient">How does BonsaiDb make this efficient?</a></h2>
 <p>When saving Documents, BonsaiDb does not immediately update related views. It instead notes what documents have been updated since the last time the View was indexed.</p>
@@ -852,10 +855,11 @@ byte-by-byte comparison operation should match the result produced by comparing
 the two original values using the <a href="https://doc.rust-lang.org/std/cmp/trait.Ord.html"><code>Ord</code></a>. For integer formats, this
 generally means encoding the bytes in network byte order (big endian).</p>
 <p>For example, let's consider two values:</p>
-<table><thead><tr><th>Value</th><th><code>as_ord_bytes()</code></th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Value</th><th><code>as_ord_bytes()</code></th></tr></thead><tbody>
 <tr><td><code>1u16</code></td><td><code>[ 0, 1]</code></td></tr>
 <tr><td><code>300u16</code></td><td><code>[ 1, 44]</code></td></tr>
 </tbody></table>
+</div>
 <p><code>1_u16.cmp(&amp;300_u16)</code> and <code>1_u16.as_ord_bytes()?.cmp(&amp;300_u16.as_ord_bytes()?)</code>
 both produce Ordering::Less.</p>
 <h2 id="implementing-the-key-trait"><a class="header" href="#implementing-the-key-trait">Implementing the <code>Key</code> trait</a></h2>

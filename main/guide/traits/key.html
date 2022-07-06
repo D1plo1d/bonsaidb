@@ -150,10 +150,11 @@ byte-by-byte comparison operation should match the result produced by comparing
 the two original values using the <a href="https://doc.rust-lang.org/std/cmp/trait.Ord.html"><code>Ord</code></a>. For integer formats, this
 generally means encoding the bytes in network byte order (big endian).</p>
 <p>For example, let's consider two values:</p>
-<table><thead><tr><th>Value</th><th><code>as_ord_bytes()</code></th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Value</th><th><code>as_ord_bytes()</code></th></tr></thead><tbody>
 <tr><td><code>1u16</code></td><td><code>[ 0, 1]</code></td></tr>
 <tr><td><code>300u16</code></td><td><code>[ 1, 44]</code></td></tr>
 </tbody></table>
+</div>
 <p><code>1_u16.cmp(&amp;300_u16)</code> and <code>1_u16.as_ord_bytes()?.cmp(&amp;300_u16.as_ord_bytes()?)</code>
 both produce Ordering::Less.</p>
 <h2 id="implementing-the-key-trait"><a class="header" href="#implementing-the-key-trait">Implementing the <code>Key</code> trait</a></h2>
