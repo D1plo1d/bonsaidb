@@ -2185,6 +2185,11 @@
 <span id="2180">2180</span>
 <span id="2181">2181</span>
 <span id="2182">2182</span>
+<span id="2183">2183</span>
+<span id="2184">2184</span>
+<span id="2185">2185</span>
+<span id="2186">2186</span>
+<span id="2187">2187</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow</span>::{<span class="ident">Borrow</span>, <span class="ident">Cow</span>},
     <span class="ident">fmt::Debug</span>,
@@ -3702,7 +3707,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span>, <span class="lifetime">&#39;c</span>, <span class="ident">Id</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span>, <span class="ident">Id</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">NamedReference</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Id</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="ident"><span class="self">Self</span>::Id</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
     }
@@ -3890,6 +3895,7 @@
 
     <span class="doccomment">/// If an entry with the key doesn&#39;t exist, `cb` will be executed to provide</span>
     <span class="doccomment">/// an initial document. This document will be saved before being returned.</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">or_insert_with</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">EntryInsert</span><span class="op">&lt;</span><span class="ident">Col</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span> <span class="op">+</span> <span class="ident">Unpin</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">cb</span>: <span class="ident">F</span>,
@@ -3909,6 +3915,7 @@
     <span class="doccomment">/// be saved to the database before returning. If an error occurs during</span>
     <span class="doccomment">/// update, `cb` may be invoked multiple times, up to the</span>
     <span class="doccomment">/// [`retry_limit`](Self::retry_limit()).</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_with</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">EntryUpdate</span><span class="op">&lt;</span><span class="ident">Col</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span> <span class="op">+</span> <span class="ident">Unpin</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">cb</span>: <span class="ident">F</span>,
@@ -3925,7 +3932,7 @@
 
     <span class="doccomment">/// The number of attempts to attempt updating the document using</span>
     <span class="doccomment">/// `update_with` before returning an error.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">retry_limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attempts</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">retry_limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attempts</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">retry_limit</span> <span class="op">=</span> <span class="ident">attempts</span>;
         <span class="self">self</span>
     }
@@ -4197,18 +4204,21 @@
     <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Lists documents by id in ascending order.</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">ascending</span>();
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Lists documents by id in descending order.</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">descending</span>();
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Sets the maximum number of results to return.</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">limit</span>(<span class="ident">maximum_results</span>);
         <span class="self">self</span>

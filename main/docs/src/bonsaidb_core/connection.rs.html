@@ -3873,11 +3873,6 @@
 <span id="3868">3868</span>
 <span id="3869">3869</span>
 <span id="3870">3870</span>
-<span id="3871">3871</span>
-<span id="3872">3872</span>
-<span id="3873">3873</span>
-<span id="3874">3874</span>
-<span id="3875">3875</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">borrow::Borrow</span>,
     <span class="ident">convert::Infallible</span>,
@@ -4369,7 +4364,7 @@
     <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="lifetime">&#39;a</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
     <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
 {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">collection</span>: <span class="ident">MaybeOwned</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Collection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">range</span>: <span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cl::PrimaryKey</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
@@ -4382,19 +4377,19 @@
     }
 
     <span class="doccomment">/// Lists documents by id in ascending order.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Ascending</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Lists documents by id in descending order.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Descending</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Sets the maximum number of results to return.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">maximum_results</span>);
         <span class="self">self</span>
     }
@@ -4559,7 +4554,7 @@
     <span class="ident">Cn</span>: <span class="ident">Connection</span>,
     <span class="ident">Key</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
 {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">connection</span>,
             <span class="ident">key</span>: <span class="prelude-val">None</span>,
@@ -4584,9 +4579,10 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">K</span>: <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+        <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
     {
         <span class="ident">View</span> {
@@ -4681,12 +4677,9 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>(
-        <span class="self">self</span>,
-        <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>,
-    ) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>) -&gt; <span class="ident">View</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">K</span>: <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span>,
+        <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
     {
         <span class="ident">View</span> {
@@ -4715,7 +4708,7 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_access_policy</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">policy</span>: <span class="ident">AccessPolicy</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">with_access_policy</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">policy</span>: <span class="ident">AccessPolicy</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">access_policy</span> <span class="op">=</span> <span class="ident">policy</span>;
         <span class="self">self</span>
     }
@@ -4739,7 +4732,7 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Ascending</span>;
         <span class="self">self</span>
     }
@@ -4762,7 +4755,7 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Descending</span>;
         <span class="self">self</span>
     }
@@ -4779,7 +4772,7 @@
     <span class="doccomment">/// # Ok(())</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">maximum_results</span>);
         <span class="self">self</span>
     }
@@ -5521,7 +5514,7 @@
     <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">Cl::PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
     <span class="ident">Cl::PrimaryKey</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
 {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">collection</span>: <span class="ident">MaybeOwned</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">AsyncCollection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">Cl</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">range</span>: <span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cl::PrimaryKey</span>, <span class="ident">PrimaryKey</span><span class="op">&gt;</span>,
     ) -&gt; <span class="self">Self</span> {
@@ -5745,7 +5738,7 @@
     <span class="ident">Key</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
     <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">Key</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cn</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">connection</span>,
             <span class="ident">key</span>: <span class="prelude-val">None</span>,
@@ -5776,6 +5769,7 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>) -&gt; <span class="ident">AsyncView</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
@@ -5893,12 +5887,9 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="self">self</span>,
-        <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>,
-    ) -&gt; <span class="ident">AsyncView</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_key_prefix</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">prefix</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>) -&gt; <span class="ident">AsyncView</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Cn</span>, <span class="ident">V</span>, <span class="ident">K</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">K</span>: <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
+        <span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V::Key</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
         <span class="ident">V::Key</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
     {
         <span class="ident">AsyncView</span> {
@@ -5930,7 +5921,7 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_access_policy</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">policy</span>: <span class="ident">AccessPolicy</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">with_access_policy</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">policy</span>: <span class="ident">AccessPolicy</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">access_policy</span> <span class="op">=</span> <span class="ident">policy</span>;
         <span class="self">self</span>
     }
@@ -5956,7 +5947,7 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">ascending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Ascending</span>;
         <span class="self">self</span>
     }
@@ -5985,7 +5976,7 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">descending</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">sort</span> <span class="op">=</span> <span class="ident">Sort::Descending</span>;
         <span class="self">self</span>
     }
@@ -6004,7 +5995,7 @@
     <span class="doccomment">/// # })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">maximum_results</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">maximum_results</span>);
         <span class="self">self</span>
     }
@@ -6179,7 +6170,6 @@
     <span class="ident">Multiple</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MaybeOwned</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">KOwned</span>, <span class="ident">KBorrowed</span><span class="op">&gt;</span><span class="op">&gt;</span>),
 }
 
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::use_self</span>)]</span> <span class="comment">// clippy is wrong, Self is different because of generic parameters</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">KOwned</span>, <span class="ident">KBorrowed</span><span class="op">&gt;</span> <span class="ident">QueryKey</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">KOwned</span>, <span class="ident">KBorrowed</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">KBorrowed</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">KOwned</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
@@ -6226,7 +6216,6 @@
     <span class="ident">Multiple</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>),
 }
 
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::use_self</span>)]</span> <span class="comment">// clippy is wrong, Self is different because of generic parameters</span>
 <span class="kw">impl</span> <span class="ident">SerializedQueryKey</span> {
     <span class="doccomment">/// Deserializes the bytes into `K` via the [`Key`] trait.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialized</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&gt;</span>(
@@ -6420,9 +6409,9 @@
     <span class="doccomment">/// Maps the contained value, if any, and returns the resulting `Bound`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">T</span>) -&gt; <span class="ident">U</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">map</span>: <span class="ident">F</span>) -&gt; <span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Bound::Unbounded</span> =&gt; <span class="ident">Bound::Unbounded</span>,
-            <span class="ident">Bound::Included</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Included</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
-            <span class="ident">Bound::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Excluded</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
+            <span class="ident"><span class="self">Self</span>::Unbounded</span> =&gt; <span class="ident">Bound::Unbounded</span>,
+            <span class="ident"><span class="self">Self</span>::Included</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Included</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
+            <span class="ident"><span class="self">Self</span>::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Excluded</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
         }
     }
 
@@ -6430,18 +6419,18 @@
     <span class="doccomment">/// return type is a Result, unlike with `map`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_result</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">E</span>, <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">U</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">map</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Bound::Unbounded</span> =&gt; <span class="ident">Bound::Unbounded</span>,
-            <span class="ident">Bound::Included</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Included</span>(<span class="ident">map</span>(<span class="ident">value</span>)<span class="question-mark">?</span>),
-            <span class="ident">Bound::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Excluded</span>(<span class="ident">map</span>(<span class="ident">value</span>)<span class="question-mark">?</span>),
+            <span class="ident"><span class="self">Self</span>::Unbounded</span> =&gt; <span class="ident">Bound::Unbounded</span>,
+            <span class="ident"><span class="self">Self</span>::Included</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Included</span>(<span class="ident">map</span>(<span class="ident">value</span>)<span class="question-mark">?</span>),
+            <span class="ident"><span class="self">Self</span>::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Excluded</span>(<span class="ident">map</span>(<span class="ident">value</span>)<span class="question-mark">?</span>),
         })
     }
 
     <span class="doccomment">/// Maps each contained value as a reference.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_ref</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">U</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">map</span>: <span class="ident">F</span>) -&gt; <span class="ident">Bound</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">U</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Bound::Unbounded</span> =&gt; <span class="ident">Bound::Unbounded</span>,
-            <span class="ident">Bound::Included</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Included</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
-            <span class="ident">Bound::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Excluded</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
+            <span class="ident"><span class="self">Self</span>::Unbounded</span> =&gt; <span class="ident">Bound::Unbounded</span>,
+            <span class="ident"><span class="self">Self</span>::Included</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Included</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
+            <span class="ident"><span class="self">Self</span>::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="ident">Bound::Excluded</span>(<span class="ident">map</span>(<span class="ident">value</span>)),
         }
     }
 }
@@ -6475,9 +6464,9 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Bound::Unbounded</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Unbounded</span>),
-            <span class="ident">Bound::Included</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Included</span>(<span class="ident">T::from_ord_bytes</span>(<span class="ident">value</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>)),
-            <span class="ident">Bound::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Excluded</span>(<span class="ident">T::from_ord_bytes</span>(<span class="ident">value</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>)),
+            <span class="ident"><span class="self">Self</span>::Unbounded</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Unbounded</span>),
+            <span class="ident"><span class="self">Self</span>::Included</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Included</span>(<span class="ident">T::from_ord_bytes</span>(<span class="ident">value</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>)),
+            <span class="ident"><span class="self">Self</span>::Excluded</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Bound::Excluded</span>(<span class="ident">T::from_ord_bytes</span>(<span class="ident">value</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>)),
         }
     }
 }
@@ -6569,9 +6558,9 @@
 <span class="doccomment">/// A range reference type that can be serialized.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">TOwned</span>, <span class="ident">TBorrowed</span>: <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">=</span> <span class="ident">TOwned</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">TOwned</span>, <span class="ident">TBorrowed</span> <span class="op">=</span> <span class="ident">TOwned</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">TBorrowed</span>: <span class="ident">PartialEq</span>,
+    <span class="ident">TBorrowed</span>: <span class="ident">PartialEq</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>,
     <span class="ident">TOwned</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">TBorrowed</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">TBorrowed</span><span class="op">&gt;</span>,
 {
     <span class="doccomment">/// The start of the range.</span>
@@ -6722,7 +6711,7 @@
     <span class="ident">TOwned</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">TBorrowed</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">TBorrowed</span><span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Returns a borrowed range ref using the bounds in the range provided.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">borrowed</span>(<span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TBorrowed</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">borrowed</span>(<span class="ident">range</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TBorrowed</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">start</span>: <span class="ident">BoundRef::borrowed</span>(<span class="ident">range</span>.<span class="ident">start</span>),
             <span class="ident">end</span>: <span class="ident">BoundRef::borrowed</span>(<span class="ident">range</span>.<span class="ident">end</span>),
@@ -6802,7 +6791,7 @@
     <span class="ident">TOwned</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">TBorrowed</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">TBorrowed</span><span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Returns a borrowed bound from the bound provided.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">borrowed</span>(<span class="ident">range</span>: <span class="ident">Bound</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TBorrowed</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">borrowed</span>(<span class="ident">range</span>: <span class="ident">Bound</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TBorrowed</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">range</span> {
             <span class="ident">Bound::Unbounded</span> =&gt; <span class="ident"><span class="self">Self</span>::Unbounded</span>,
             <span class="ident">Bound::Included</span>(<span class="ident">value</span>) =&gt; <span class="ident"><span class="self">Self</span>::Included</span>(<span class="ident">MaybeOwned::Borrowed</span>(<span class="ident">value</span>)),
@@ -6811,6 +6800,7 @@
     }
 
     <span class="doccomment">/// Returns an owned bound ref from the bound provided.</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// false positive, destructors</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">owned</span>(<span class="ident">range</span>: <span class="ident">Bound</span><span class="op">&lt;</span><span class="ident">TOwned</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">range</span> {
             <span class="ident">Bound::Unbounded</span> =&gt; <span class="ident"><span class="self">Self</span>::Unbounded</span>,

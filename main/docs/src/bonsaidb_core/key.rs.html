@@ -1551,7 +1551,6 @@
 <span id="1546">1546</span>
 <span id="1547">1547</span>
 <span id="1548">1548</span>
-<span id="1549">1549</span>
 </pre><pre class="rust"><code><span class="doccomment">/// [`Key`] implementations for time types.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">time</span>;
 
@@ -1836,7 +1835,7 @@
 
 <span class="macro">impl_u8_slice_key_encoding!</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>);
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">IntoPrefixRange</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">to_prefix_range</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="ident">RangeRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">next</span>) <span class="op">=</span> <span class="ident">next_byte_sequence</span>(<span class="self">self</span>) {
             <span class="ident">RangeRef</span> {
@@ -2058,7 +2057,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">str</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">str</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">FromUtf8Error</span>;
 
     <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
@@ -3074,7 +3073,6 @@
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::use_self</span>)]</span> <span class="comment">// Weird interaction with num_derive</span>
 <span class="kw">fn</span> <span class="ident">enum_derive_tests</span>() -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">derive</span>(
         <span class="ident">Debug</span>,
