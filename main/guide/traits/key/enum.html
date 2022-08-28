@@ -144,7 +144,7 @@
                     <main>
                         <h2 id="using-an-enum-as-a-key"><a class="header" href="#using-an-enum-as-a-key">Using an Enum as a Key</a></h2>
 <p>The easiest way to expose an enum is to derive <a href="https://docs.rs/num-traits/0.2.14/num_traits/cast/trait.FromPrimitive.html"><code>num_traits::FromPrimitive</code></a> and <a href="https://docs.rs/num-traits/0.2.14/num_traits/cast/trait.ToPrimitive.html"><code>num_traits::ToPrimitive</code></a> using <a href="https://crates.io/crates/num-derive">num-derive</a>, and add an <code>impl EnumKey</code> line:</p>
-<pre><code class="language-rust noplayground no_run">#[derive(Serialize, Deserialize, PartialEq, Debug, Key, Clone)]
+<pre><code class="language-rust noplayground no_run">#[derive(Serialize, Deserialize, Eq, PartialEq, Debug, Key, Clone)]
 pub enum Category {
     Rust,
     Cooking,
