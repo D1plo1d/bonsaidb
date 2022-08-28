@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A builder for `ScanRange`"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Builder","A builder for `ScanRange`"]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A builder for `Sses3`"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Builder","A builder for `Sses3`"]]};

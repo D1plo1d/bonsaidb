@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["AsyncBuilder","Builder for a [`Command::Get`] key-value operation. Queries the value when awaited."],["Builder","Builder for a [`Command::Get`] key-value operation."]]});
+window.SIDEBAR_ITEMS = {"struct":[["AsyncBuilder","Builder for a [`Command::Get`] key-value operation. Queries the value when awaited."],["Builder","Builder for a [`Command::Get`] key-value operation."]]};

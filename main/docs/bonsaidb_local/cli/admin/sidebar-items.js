@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Command","An administrative command-line command."],["UserCommand","A command operating on `User`s."]]});
+window.SIDEBAR_ITEMS = {"enum":[["Command","An administrative command-line command."],["UserCommand","A command operating on `User`s."]]};

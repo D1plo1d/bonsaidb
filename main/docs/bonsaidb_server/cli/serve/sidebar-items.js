@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Serve","Execute the server"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Serve","Execute the server"]]};

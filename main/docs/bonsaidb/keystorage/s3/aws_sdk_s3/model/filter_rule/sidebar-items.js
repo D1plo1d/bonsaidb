@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A builder for `FilterRule`"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Builder","A builder for `FilterRule`"]]};

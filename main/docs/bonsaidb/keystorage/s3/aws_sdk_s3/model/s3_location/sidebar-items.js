@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A builder for `S3Location`"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Builder","A builder for `S3Location`"]]};

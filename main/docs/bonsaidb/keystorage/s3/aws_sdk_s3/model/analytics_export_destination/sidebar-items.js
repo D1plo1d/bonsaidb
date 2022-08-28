@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A builder for `AnalyticsExportDestination`"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Builder","A builder for `AnalyticsExportDestination`"]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A builder for `PutBucketAclInput`"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Builder","A builder for `PutBucketAclInput`"]]};

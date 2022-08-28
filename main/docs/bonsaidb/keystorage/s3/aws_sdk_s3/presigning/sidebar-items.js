@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["config","Presigning config and builder"],["request","Presigned request"]]});
+window.SIDEBAR_ITEMS = {"mod":[["config","Presigning config and builder"],["request","Presigned request"]]};

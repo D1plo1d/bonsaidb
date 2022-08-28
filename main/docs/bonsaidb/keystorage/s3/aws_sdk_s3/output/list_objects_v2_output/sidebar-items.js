@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","A builder for `ListObjectsV2Output`"]]});
+window.SIDEBAR_ITEMS = {"struct":[["Builder","A builder for `ListObjectsV2Output`"]]};

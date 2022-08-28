@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Namespaced","A namespaced key-value store. All operations performed with this will be separate from other namespaces."]]});
+window.SIDEBAR_ITEMS = {"struct":[["Namespaced","A namespaced key-value store. All operations performed with this will be separate from other namespaces."]]};
