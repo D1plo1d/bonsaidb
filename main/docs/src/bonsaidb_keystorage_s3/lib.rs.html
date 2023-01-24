@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-keystorage-s3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_keystorage_s3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_keystorage_s3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_keystorage_s3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-keystorage-s3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_keystorage_s3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -362,364 +356,363 @@
 <span id="356">356</span>
 <span id="357">357</span>
 <span id="358">358</span>
-</pre><pre class="rust"><code><span class="doccomment">//! [`VaultKeyStorage`] using S3-compatible storage.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This is the recommended method for securing your BonsaiDb database. There</span>
-<span class="doccomment">//! are many ways to acquire secure, inexpensive S3-compatible storage, such as</span>
-<span class="doccomment">//! Backblaze B2.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Do not configure your bucket with public access. You should only allow</span>
-<span class="doccomment">//! access from the IP addresses that your BonsaiDb server(s) are hosted on,</span>
-<span class="doccomment">//! or only allow authenticated access.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! To use this, specify the `vault_key_storage` configuration parameter:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! # use bonsaidb_keystorage_s3::S3VaultKeyStorage;</span>
-<span class="doccomment">//! # use aws_sdk_s3::Endpoint;</span>
-<span class="doccomment">//! # use bonsaidb_core::{document::KeyId, test_util::TestDirectory};</span>
-<span class="doccomment">//! # use bonsaidb_local::config::{StorageConfiguration, Builder};</span>
-<span class="doccomment">//! # use http::Uri;</span>
-<span class="doccomment">//! #</span>
-<span class="doccomment">//! # async fn test() {</span>
-<span class="doccomment">//! let directory = TestDirectory::new(&quot;bonsaidb-keystorage-s3-basic&quot;);</span>
-<span class="doccomment">//! let configuration = StorageConfiguration::new(&amp;directory)</span>
-<span class="doccomment">//!     .vault_key_storage(</span>
-<span class="doccomment">//!         S3VaultKeyStorage::new(&quot;bucket_name&quot;).endpoint(Endpoint::immutable(</span>
-<span class="doccomment">//!             Uri::try_from(&quot;https://s3.us-west-001.backblazeb2.com&quot;).unwrap(),</span>
-<span class="doccomment">//!         )),</span>
-<span class="doccomment">//!     )</span>
-<span class="doccomment">//!     .default_encryption_key(KeyId::Master);</span>
-<span class="doccomment">//! # }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The API calls are performed by the [`aws-sdk-s3`](aws_sdk_s3) crate.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! [`VaultKeyStorage`] using S3-compatible storage.
+//!
+//! This is the recommended method for securing your BonsaiDb database. There
+//! are many ways to acquire secure, inexpensive S3-compatible storage, such as
+//! Backblaze B2.
+//!
+//! Do not configure your bucket with public access. You should only allow
+//! access from the IP addresses that your BonsaiDb server(s) are hosted on,
+//! or only allow authenticated access.
+//!
+//! To use this, specify the `vault_key_storage` configuration parameter:
+//!
+//! ```rust
+//! # use bonsaidb_keystorage_s3::S3VaultKeyStorage;
+//! # use aws_sdk_s3::Endpoint;
+//! # use bonsaidb_core::{document::KeyId, test_util::TestDirectory};
+//! # use bonsaidb_local::config::{StorageConfiguration, Builder};
+//! # use http::Uri;
+//! #
+//! # async fn test() {
+//! let directory = TestDirectory::new(&quot;bonsaidb-keystorage-s3-basic&quot;);
+//! let configuration = StorageConfiguration::new(&amp;directory)
+//!     .vault_key_storage(
+//!         S3VaultKeyStorage::new(&quot;bucket_name&quot;).endpoint(Endpoint::immutable(
+//!             Uri::try_from(&quot;https://s3.us-west-001.backblazeb2.com&quot;).unwrap(),
+//!         )),
+//!     )
+//!     .default_encryption_key(KeyId::Master);
+//! # }
+//! ```
+//!
+//! The API calls are performed by the [`aws-sdk-s3`](aws_sdk_s3) crate.
 
-<span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
-<span class="attribute">#![<span class="ident">warn</span>(
-    <span class="ident">clippy::cargo</span>,
-    <span class="ident">missing_docs</span>,
-    <span class="comment">// clippy::missing_docs_in_private_items,</span>
-    <span class="ident">clippy::pedantic</span>,
-    <span class="ident">future_incompatible</span>,
-    <span class="ident">rust_2018_idioms</span>,
-)]</span>
-<span class="attribute">#![<span class="ident">allow</span>(
-    <span class="ident">clippy::missing_errors_doc</span>, <span class="comment">// TODO clippy::missing_errors_doc</span>
-    <span class="ident">clippy::missing_panics_doc</span>, <span class="comment">// TODO clippy::missing_panics_doc</span>
-    <span class="ident">clippy::option_if_let_else</span>,
-    <span class="ident">clippy::module_name_repetitions</span>,
-)]</span>
+</span><span class="attribute">#![forbid(unsafe_code)]
+#![warn(
+    clippy::cargo,
+    missing_docs,
+    <span class="comment">// clippy::missing_docs_in_private_items,
+    </span>clippy::pedantic,
+    future_incompatible,
+    rust_2018_idioms,
+)]
+#![allow(
+    clippy::missing_errors_doc, <span class="comment">// TODO clippy::missing_errors_doc
+    </span>clippy::missing_panics_doc, <span class="comment">// TODO clippy::missing_panics_doc
+    </span>clippy::option_if_let_else,
+    clippy::module_name_repetitions,
+)]
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Display</span>, <span class="ident">future::Future</span>};
+</span><span class="kw">use </span>std::{fmt::Display, future::Future};
 
-<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
-<span class="kw">use</span> <span class="ident">aws_config::meta::region::RegionProviderChain</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aws_sdk_s3</span>;
-<span class="kw">use</span> <span class="ident">aws_sdk_s3</span>::{<span class="ident">types::ByteStream</span>, <span class="ident">Client</span>, <span class="ident">Endpoint</span>, <span class="ident">Region</span>};
-<span class="kw">use</span> <span class="ident">bonsaidb_local</span>::{
-    <span class="ident">vault</span>::{<span class="ident">KeyPair</span>, <span class="ident">VaultKeyStorage</span>},
-    <span class="ident">StorageId</span>,
+<span class="kw">use </span>async_trait::async_trait;
+<span class="kw">use </span>aws_config::meta::region::RegionProviderChain;
+<span class="kw">pub use </span>aws_sdk_s3;
+<span class="kw">use </span>aws_sdk_s3::{types::ByteStream, Client, Endpoint, Region};
+<span class="kw">use </span>bonsaidb_local::{
+    vault::{KeyPair, VaultKeyStorage},
+    StorageId,
 };
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">http</span>;
-<span class="kw">use</span> <span class="ident">tokio::runtime</span>::{<span class="self">self</span>, <span class="ident">Handle</span>, <span class="ident">Runtime</span>};
+<span class="kw">pub use </span>http;
+<span class="kw">use </span>tokio::runtime::{<span class="self">self</span>, Handle, Runtime};
 
-<span class="doccomment">/// S3-compatible [`VaultKeyStorage`] implementor.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">S3VaultKeyStorage</span> {
-    <span class="ident">runtime</span>: <span class="ident">Tokio</span>,
-    <span class="ident">bucket</span>: <span class="ident">String</span>,
-    <span class="doccomment">/// The S3 endpoint to use. If not specified, the endpoint will be</span>
-    <span class="doccomment">/// determined automatically. This field can be used to support non-AWS S3</span>
-    <span class="doccomment">/// providers.</span>
-    <span class="kw">pub</span> <span class="ident">endpoint</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Endpoint</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The AWS region to use. If not specified, the region will be determined</span>
-    <span class="doccomment">/// by the aws sdk.</span>
-    <span class="kw">pub</span> <span class="ident">region</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Region</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The path prefix for keys to be stored within.</span>
-    <span class="kw">pub</span> <span class="ident">path</span>: <span class="ident">String</span>,
+<span class="doccomment">/// S3-compatible [`VaultKeyStorage`] implementor.
+</span><span class="attribute">#[derive(Default, Debug)]
+#[must_use]
+</span><span class="kw">pub struct </span>S3VaultKeyStorage {
+    runtime: Tokio,
+    bucket: String,
+    <span class="doccomment">/// The S3 endpoint to use. If not specified, the endpoint will be
+    /// determined automatically. This field can be used to support non-AWS S3
+    /// providers.
+    </span><span class="kw">pub </span>endpoint: <span class="prelude-ty">Option</span>&lt;Endpoint&gt;,
+    <span class="doccomment">/// The AWS region to use. If not specified, the region will be determined
+    /// by the aws sdk.
+    </span><span class="kw">pub </span>region: <span class="prelude-ty">Option</span>&lt;Region&gt;,
+    <span class="doccomment">/// The path prefix for keys to be stored within.
+    </span><span class="kw">pub </span>path: String,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">enum</span> <span class="ident">Tokio</span> {
-    <span class="ident">Runtime</span>(<span class="ident">Runtime</span>),
-    <span class="ident">Handle</span>(<span class="ident">Handle</span>),
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">enum </span>Tokio {
+    Runtime(Runtime),
+    Handle(Handle),
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Tokio</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident">Handle::try_current</span>().<span class="ident">map_or_else</span>(
-            <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
-                <span class="ident"><span class="self">Self</span>::Runtime</span>(
-                    <span class="ident">runtime::Builder::new_current_thread</span>()
-                        .<span class="ident">enable_all</span>()
-                        .<span class="ident">build</span>()
-                        .<span class="ident">unwrap</span>(),
+<span class="kw">impl </span>Default <span class="kw">for </span>Tokio {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        Handle::try_current().map_or_else(
+            |<span class="kw">_</span>| {
+                <span class="self">Self</span>::Runtime(
+                    runtime::Builder::new_current_thread()
+                        .enable_all()
+                        .build()
+                        .unwrap(),
                 )
             },
-            <span class="ident"><span class="self">Self</span>::Handle</span>,
+            <span class="self">Self</span>::Handle,
         )
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Tokio</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">block_on</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">future</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Tokio::Runtime</span>(<span class="ident">rt</span>) =&gt; <span class="ident">rt</span>.<span class="ident">block_on</span>(<span class="ident">future</span>),
-            <span class="ident">Tokio::Handle</span>(<span class="ident">rt</span>) =&gt; <span class="ident">rt</span>.<span class="ident">block_on</span>(<span class="ident">future</span>),
+<span class="kw">impl </span>Tokio {
+    <span class="kw">pub fn </span>block_on&lt;F: Future&lt;Output = R&gt;, R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, future: F) -&gt; R {
+        <span class="kw">match </span><span class="self">self </span>{
+            Tokio::Runtime(rt) =&gt; rt.block_on(future),
+            Tokio::Handle(rt) =&gt; rt.block_on(future),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">S3VaultKeyStorage</span> {
-    <span class="doccomment">/// Creates a new key storage instance for `bucket`. This instance will use</span>
-    <span class="doccomment">/// the currently available Tokio runtime or create one if none is</span>
-    <span class="doccomment">/// available.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">bucket</span>: <span class="kw">impl</span> <span class="ident">Display</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new_with_runtime</span>(<span class="ident">bucket</span>, <span class="ident">tokio::runtime::Handle::current</span>())
+<span class="kw">impl </span>S3VaultKeyStorage {
+    <span class="doccomment">/// Creates a new key storage instance for `bucket`. This instance will use
+    /// the currently available Tokio runtime or create one if none is
+    /// available.
+    </span><span class="kw">pub fn </span>new(bucket: <span class="kw">impl </span>Display) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new_with_runtime(bucket, tokio::runtime::Handle::current())
     }
 
-    <span class="doccomment">/// Creates a new key storage instance for `bucket`, which performs its</span>
-    <span class="doccomment">/// networking operations on `runtime`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with_runtime</span>(<span class="ident">bucket</span>: <span class="kw">impl</span> <span class="ident">Display</span>, <span class="ident">runtime</span>: <span class="ident">tokio::runtime::Handle</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">bucket</span>: <span class="ident">bucket</span>.<span class="ident">to_string</span>(),
-            <span class="ident">runtime</span>: <span class="ident">Tokio::Handle</span>(<span class="ident">runtime</span>),
-            ..<span class="ident"><span class="self">Self</span>::default</span>()
+    <span class="doccomment">/// Creates a new key storage instance for `bucket`, which performs its
+    /// networking operations on `runtime`.
+    </span><span class="kw">pub fn </span>new_with_runtime(bucket: <span class="kw">impl </span>Display, runtime: tokio::runtime::Handle) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            bucket: bucket.to_string(),
+            runtime: Tokio::Handle(runtime),
+            ..<span class="self">Self</span>::default()
         }
     }
 
-    <span class="doccomment">/// Sets the path prefix for vault keys to be stored within.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">path</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="kw">impl</span> <span class="ident">Display</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">path</span> <span class="op">=</span> <span class="ident">prefix</span>.<span class="ident">to_string</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the path prefix for vault keys to be stored within.
+    </span><span class="kw">pub fn </span>path(<span class="kw-2">mut </span><span class="self">self</span>, prefix: <span class="kw">impl </span>Display) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.path = prefix.to_string();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets the endpoint to use. See [`Self::endpoint`] for more information.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span> <span class="comment">// destructors</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">endpoint</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">endpoint</span>: <span class="ident">Endpoint</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">endpoint</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">endpoint</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the endpoint to use. See [`Self::endpoint`] for more information.
+    </span><span class="attribute">#[allow(clippy::missing_const_for_fn)] </span><span class="comment">// destructors
+    </span><span class="kw">pub fn </span>endpoint(<span class="kw-2">mut </span><span class="self">self</span>, endpoint: Endpoint) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.endpoint = <span class="prelude-val">Some</span>(endpoint);
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">path_for_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="ident">String</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">path</span>.<span class="ident">clone</span>();
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">path</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">path</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) {
-            <span class="ident">path</span>.<span class="ident">push</span>(<span class="string">&#39;/&#39;</span>);
+    <span class="kw">fn </span>path_for_id(<span class="kw-2">&amp;</span><span class="self">self</span>, storage_id: StorageId) -&gt; String {
+        <span class="kw">let </span><span class="kw-2">mut </span>path = <span class="self">self</span>.path.clone();
+        <span class="kw">if </span>!path.is_empty() &amp;&amp; !path.ends_with(<span class="string">&#39;/&#39;</span>) {
+            path.push(<span class="string">&#39;/&#39;</span>);
         }
-        <span class="ident">path</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">storage_id</span>.<span class="ident">to_string</span>());
-        <span class="ident">path</span>
+        path.push_str(<span class="kw-2">&amp;</span>storage_id.to_string());
+        path
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">client</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">aws_sdk_s3::Client</span> {
-        <span class="kw">let</span> <span class="ident">region_provider</span> <span class="op">=</span> <span class="ident">RegionProviderChain::first_try</span>(<span class="self">self</span>.<span class="ident">region</span>.<span class="ident">clone</span>())
-            .<span class="ident">or_default_provider</span>()
-            .<span class="ident">or_else</span>(<span class="ident">Region::new</span>(<span class="string">&quot;us-east-1&quot;</span>));
-        <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">aws_config::from_env</span>().<span class="ident">load</span>().<span class="kw">await</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">endpoint</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">endpoint</span>.<span class="ident">clone</span>() {
-            <span class="ident">Client::from_conf</span>(
-                <span class="ident">aws_sdk_s3::Config::builder</span>()
-                    .<span class="ident">endpoint_resolver</span>(<span class="ident">endpoint</span>)
-                    .<span class="ident">region</span>(<span class="ident">region_provider</span>.<span class="ident">region</span>().<span class="kw">await</span>)
-                    .<span class="ident">credentials_provider</span>(<span class="ident">config</span>.<span class="ident">credentials_provider</span>().<span class="ident">unwrap</span>().<span class="ident">clone</span>())
-                    .<span class="ident">build</span>(),
+    <span class="kw">async fn </span>client(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; aws_sdk_s3::Client {
+        <span class="kw">let </span>region_provider = RegionProviderChain::first_try(<span class="self">self</span>.region.clone())
+            .or_default_provider()
+            .or_else(Region::new(<span class="string">&quot;us-east-1&quot;</span>));
+        <span class="kw">let </span>config = aws_config::from_env().load().<span class="kw">await</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(endpoint) = <span class="self">self</span>.endpoint.clone() {
+            Client::from_conf(
+                aws_sdk_s3::Config::builder()
+                    .endpoint_resolver(endpoint)
+                    .region(region_provider.region().<span class="kw">await</span>)
+                    .credentials_provider(config.credentials_provider().unwrap().clone())
+                    .build(),
             )
-        } <span class="kw">else</span> {
-            <span class="ident">Client::new</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>)
+        } <span class="kw">else </span>{
+            Client::new(<span class="kw-2">&amp;</span>config)
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span> <span class="ident">VaultKeyStorage</span> <span class="kw">for</span> <span class="ident">S3VaultKeyStorage</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">anyhow::Error</span>;
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl </span>VaultKeyStorage <span class="kw">for </span>S3VaultKeyStorage {
+    <span class="kw">type </span>Error = anyhow::Error;
 
-    <span class="kw">fn</span> <span class="ident">set_vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>, <span class="ident">key</span>: <span class="ident">KeyPair</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">runtime</span>.<span class="ident">block_on</span>(<span class="kw">async</span> {
-            <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">client</span>().<span class="kw">await</span>;
-            <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">to_bytes</span>()<span class="question-mark">?</span>;
-            <span class="ident">client</span>
-                .<span class="ident">put_object</span>()
-                .<span class="ident">bucket</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bucket</span>)
-                .<span class="ident">key</span>(<span class="self">self</span>.<span class="ident">path_for_id</span>(<span class="ident">storage_id</span>))
-                .<span class="ident">body</span>(<span class="ident">ByteStream::from</span>(<span class="ident">key</span>.<span class="ident">to_vec</span>()))
-                .<span class="ident">send</span>()
+    <span class="kw">fn </span>set_vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, storage_id: StorageId, key: KeyPair) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="self">Self</span>::Error&gt; {
+        <span class="self">self</span>.runtime.block_on(<span class="kw">async </span>{
+            <span class="kw">let </span>client = <span class="self">self</span>.client().<span class="kw">await</span>;
+            <span class="kw">let </span>key = key.to_bytes()<span class="question-mark">?</span>;
+            client
+                .put_object()
+                .bucket(<span class="kw-2">&amp;</span><span class="self">self</span>.bucket)
+                .key(<span class="self">self</span>.path_for_id(storage_id))
+                .body(ByteStream::from(key.to_vec()))
+                .send()
                 .<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="prelude-val">Ok</span>(())
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">runtime</span>.<span class="ident">block_on</span>(<span class="kw">async</span> {
-            <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">client</span>().<span class="kw">await</span>;
-            <span class="kw">match</span> <span class="ident">client</span>
-                .<span class="ident">get_object</span>()
-                .<span class="ident">bucket</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bucket</span>)
-                .<span class="ident">key</span>(<span class="self">self</span>.<span class="ident">path_for_id</span>(<span class="ident">storage_id</span>))
-                .<span class="ident">send</span>()
-                .<span class="kw">await</span>
-            {
-                <span class="prelude-val">Ok</span>(<span class="ident">response</span>) =&gt; {
-                    <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">response</span>.<span class="ident">body</span>.<span class="ident">collect</span>().<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">into_bytes</span>();
-                    <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">KeyPair::from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>)
-                        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="macro">anyhow::anyhow!</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
-                    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">key</span>))
+    <span class="kw">fn </span>vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, storage_id: StorageId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;KeyPair&gt;, <span class="self">Self</span>::Error&gt; {
+        <span class="self">self</span>.runtime.block_on(<span class="kw">async </span>{
+            <span class="kw">let </span>client = <span class="self">self</span>.client().<span class="kw">await</span>;
+            <span class="kw">match </span>client
+                .get_object()
+                .bucket(<span class="kw-2">&amp;</span><span class="self">self</span>.bucket)
+                .key(<span class="self">self</span>.path_for_id(storage_id))
+                .send()
+                .<span class="kw">await
+            </span>{
+                <span class="prelude-val">Ok</span>(response) =&gt; {
+                    <span class="kw">let </span>bytes = response.body.collect().<span class="kw">await</span><span class="question-mark">?</span>.into_bytes();
+                    <span class="kw">let </span>key = KeyPair::from_bytes(<span class="kw-2">&amp;</span>bytes)
+                        .map_err(|err| <span class="macro">anyhow::anyhow!</span>(err.to_string()))<span class="question-mark">?</span>;
+                    <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(key))
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">aws_smithy_client::SdkError::ServiceError</span> {
-                    <span class="ident">err</span>:
-                        <span class="ident">aws_sdk_s3::error::GetObjectError</span> {
-                            <span class="ident">kind</span>: <span class="ident">aws_sdk_s3::error::GetObjectErrorKind::NoSuchKey</span>(<span class="kw">_</span>),
+                <span class="prelude-val">Err</span>(aws_smithy_client::SdkError::ServiceError {
+                    err:
+                        aws_sdk_s3::error::GetObjectError {
+                            kind: aws_sdk_s3::error::GetObjectErrorKind::NoSuchKey(<span class="kw">_</span>),
                             ..
                         },
                     ..
                 }) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-                <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="macro">anyhow::anyhow!</span>(<span class="ident">err</span>)),
+                <span class="prelude-val">Err</span>(err) =&gt; <span class="prelude-val">Err</span>(<span class="macro">anyhow::anyhow!</span>(err)),
             }
         })
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="macro">macro_rules!</span> <span class="ident">env_var</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">expr</span>) =&gt; {{
-        <span class="kw">match</span> <span class="ident">std::env::var</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="kw">if</span> <span class="op">!</span><span class="ident">value</span>.<span class="ident">is_empty</span>() =&gt; <span class="ident">value</span>,
-            <span class="kw">_</span> =&gt; {
+<span class="attribute">#[cfg(test)]
+</span><span class="macro">macro_rules! </span>env_var {
+    (<span class="macro-nonterminal">$name</span>:expr) =&gt; {{
+        <span class="kw">match </span>std::env::var(<span class="macro-nonterminal">$name</span>) {
+            <span class="prelude-val">Ok</span>(value) <span class="kw">if </span>!value.is_empty() =&gt; value,
+            <span class="kw">_ </span>=&gt; {
                 <span class="macro">log::error!</span>(
                     <span class="string">&quot;Ignoring basic_test because of missing environment variable: {}&quot;</span>,
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>
-                );
+                    <span class="macro-nonterminal">$name
+                </span>);
                 <span class="kw">return</span>;
             }
         }
     }};
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="attribute">#[<span class="ident">tokio::test</span>]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">basic_test</span>() {
-    <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-        <span class="ident">connection::AsyncStorageConnection</span>,
-        <span class="ident">document::KeyId</span>,
-        <span class="ident">schema::SerializedCollection</span>,
-        <span class="ident">test_util</span>::{<span class="ident">Basic</span>, <span class="ident">BasicSchema</span>, <span class="ident">TestDirectory</span>},
+<span class="attribute">#[cfg(test)]
+#[tokio::test]
+</span><span class="kw">async fn </span>basic_test() {
+    <span class="kw">use </span>bonsaidb_core::{
+        connection::AsyncStorageConnection,
+        document::KeyId,
+        schema::SerializedCollection,
+        test_util::{Basic, BasicSchema, TestDirectory},
     };
-    <span class="kw">use</span> <span class="ident">bonsaidb_local</span>::{
-        <span class="ident">config</span>::{<span class="ident">Builder</span>, <span class="ident">StorageConfiguration</span>},
-        <span class="ident">AsyncStorage</span>,
+    <span class="kw">use </span>bonsaidb_local::{
+        config::{Builder, StorageConfiguration},
+        AsyncStorage,
     };
-    <span class="kw">use</span> <span class="ident">http::Uri</span>;
-    <span class="ident">drop</span>(<span class="ident">dotenv::dotenv</span>());
+    <span class="kw">use </span>http::Uri;
+    drop(dotenv::dotenv());
 
-    <span class="kw">let</span> <span class="ident">bucket</span> <span class="op">=</span> <span class="macro">env_var!</span>(<span class="string">&quot;S3_BUCKET&quot;</span>);
-    <span class="kw">let</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="macro">env_var!</span>(<span class="string">&quot;S3_ENDPOINT&quot;</span>);
+    <span class="kw">let </span>bucket = <span class="macro">env_var!</span>(<span class="string">&quot;S3_BUCKET&quot;</span>);
+    <span class="kw">let </span>endpoint = <span class="macro">env_var!</span>(<span class="string">&quot;S3_ENDPOINT&quot;</span>);
 
-    <span class="kw">let</span> <span class="ident">directory</span> <span class="op">=</span> <span class="ident">TestDirectory::new</span>(<span class="string">&quot;bonsaidb-keystorage-s3-basic&quot;</span>);
+    <span class="kw">let </span>directory = TestDirectory::new(<span class="string">&quot;bonsaidb-keystorage-s3-basic&quot;</span>);
 
-    <span class="kw">let</span> <span class="ident">configuration</span> <span class="op">=</span> <span class="op">|</span><span class="ident">prefix</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="ident">S3VaultKeyStorage</span> {
-            <span class="ident">bucket</span>: <span class="ident">bucket</span>.<span class="ident">clone</span>(),
-            <span class="ident">endpoint</span>: <span class="prelude-val">Some</span>(<span class="ident">Endpoint::immutable</span>(<span class="ident">Uri::try_from</span>(<span class="kw-2">&amp;</span><span class="ident">endpoint</span>).<span class="ident">unwrap</span>())),
-            ..<span class="ident">S3VaultKeyStorage::default</span>()
+    <span class="kw">let </span>configuration = |prefix| {
+        <span class="kw">let </span><span class="kw-2">mut </span>vault_key_storage = S3VaultKeyStorage {
+            bucket: bucket.clone(),
+            endpoint: <span class="prelude-val">Some</span>(Endpoint::immutable(Uri::try_from(<span class="kw-2">&amp;</span>endpoint).unwrap())),
+            ..S3VaultKeyStorage::default()
         };
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">prefix</span>) <span class="op">=</span> <span class="ident">prefix</span> {
-            <span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="ident">vault_key_storage</span>.<span class="ident">path</span>(<span class="ident">prefix</span>);
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(prefix) = prefix {
+            vault_key_storage = vault_key_storage.path(prefix);
         }
 
-        <span class="ident">StorageConfiguration::new</span>(<span class="kw-2">&amp;</span><span class="ident">directory</span>)
-            .<span class="ident">vault_key_storage</span>(<span class="ident">vault_key_storage</span>)
-            .<span class="ident">default_encryption_key</span>(<span class="ident">KeyId::Master</span>)
-            .<span class="ident">with_schema</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>()
-            .<span class="ident">unwrap</span>()
+        StorageConfiguration::new(<span class="kw-2">&amp;</span>directory)
+            .vault_key_storage(vault_key_storage)
+            .default_encryption_key(KeyId::Master)
+            .with_schema::&lt;BasicSchema&gt;()
+            .unwrap()
     };
-    <span class="kw">let</span> <span class="ident">document</span> <span class="op">=</span> {
-        <span class="kw">let</span> <span class="ident">bonsai</span> <span class="op">=</span> <span class="ident">AsyncStorage::open</span>(<span class="ident">configuration</span>(<span class="prelude-val">None</span>)).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">bonsai</span>
-            .<span class="ident">create_database</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>(<span class="string">&quot;test&quot;</span>, <span class="bool-val">false</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">unwrap</span>();
-        <span class="ident">Basic::new</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">push_into_async</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>()
+    <span class="kw">let </span>document = {
+        <span class="kw">let </span>bonsai = AsyncStorage::open(configuration(<span class="prelude-val">None</span>)).<span class="kw">await</span>.unwrap();
+        <span class="kw">let </span>db = bonsai
+            .create_database::&lt;BasicSchema&gt;(<span class="string">&quot;test&quot;</span>, <span class="bool-val">false</span>)
+            .<span class="kw">await
+            </span>.unwrap();
+        Basic::new(<span class="string">&quot;test&quot;</span>).push_into_async(<span class="kw-2">&amp;</span>db).<span class="kw">await</span>.unwrap()
     };
 
     {
-        <span class="comment">// Should be able to access the storage again</span>
-        <span class="kw">let</span> <span class="ident">bonsai</span> <span class="op">=</span> <span class="ident">AsyncStorage::open</span>(<span class="ident">configuration</span>(<span class="prelude-val">None</span>)).<span class="kw">await</span>.<span class="ident">unwrap</span>();
+        <span class="comment">// Should be able to access the storage again
+        </span><span class="kw">let </span>bonsai = AsyncStorage::open(configuration(<span class="prelude-val">None</span>)).<span class="kw">await</span>.unwrap();
 
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">bonsai</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>(<span class="string">&quot;test&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">retrieved</span> <span class="op">=</span> <span class="ident">Basic::get_async</span>(<span class="kw-2">&amp;</span><span class="ident">document</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">db</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">unwrap</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;document not found&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">document</span>, <span class="ident">retrieved</span>);
+        <span class="kw">let </span>db = bonsai.database::&lt;BasicSchema&gt;(<span class="string">&quot;test&quot;</span>).<span class="kw">await</span>.unwrap();
+        <span class="kw">let </span>retrieved = Basic::get_async(<span class="kw-2">&amp;</span>document.header.id, <span class="kw-2">&amp;</span>db)
+            .<span class="kw">await
+            </span>.unwrap()
+            .expect(<span class="string">&quot;document not found&quot;</span>);
+        <span class="macro">assert_eq!</span>(document, retrieved);
     }
 
-    <span class="comment">// Verify that we can&#39;t access the storage again without the vault</span>
-    <span class="macro">assert!</span>(
-        <span class="ident">AsyncStorage::open</span>(<span class="ident">configuration</span>(<span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;path-prefix&quot;</span>))))
-            .<span class="kw">await</span>
-            .<span class="ident">is_err</span>()
+    <span class="comment">// Verify that we can&#39;t access the storage again without the vault
+    </span><span class="macro">assert!</span>(
+        AsyncStorage::open(configuration(<span class="prelude-val">Some</span>(String::from(<span class="string">&quot;path-prefix&quot;</span>))))
+            .<span class="kw">await
+            </span>.is_err()
     );
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">blocking_test</span>() {
-    <span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-        <span class="ident">connection::StorageConnection</span>,
-        <span class="ident">document::KeyId</span>,
-        <span class="ident">schema::SerializedCollection</span>,
-        <span class="ident">test_util</span>::{<span class="ident">Basic</span>, <span class="ident">BasicSchema</span>, <span class="ident">TestDirectory</span>},
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>blocking_test() {
+    <span class="kw">use </span>bonsaidb_core::{
+        connection::StorageConnection,
+        document::KeyId,
+        schema::SerializedCollection,
+        test_util::{Basic, BasicSchema, TestDirectory},
     };
-    <span class="kw">use</span> <span class="ident">bonsaidb_local</span>::{
-        <span class="ident">config</span>::{<span class="ident">Builder</span>, <span class="ident">StorageConfiguration</span>},
-        <span class="ident">Storage</span>,
+    <span class="kw">use </span>bonsaidb_local::{
+        config::{Builder, StorageConfiguration},
+        Storage,
     };
-    <span class="kw">use</span> <span class="ident">http::Uri</span>;
-    <span class="ident">drop</span>(<span class="ident">dotenv::dotenv</span>());
+    <span class="kw">use </span>http::Uri;
+    drop(dotenv::dotenv());
 
-    <span class="kw">let</span> <span class="ident">bucket</span> <span class="op">=</span> <span class="macro">env_var!</span>(<span class="string">&quot;S3_BUCKET&quot;</span>);
-    <span class="kw">let</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="macro">env_var!</span>(<span class="string">&quot;S3_ENDPOINT&quot;</span>);
+    <span class="kw">let </span>bucket = <span class="macro">env_var!</span>(<span class="string">&quot;S3_BUCKET&quot;</span>);
+    <span class="kw">let </span>endpoint = <span class="macro">env_var!</span>(<span class="string">&quot;S3_ENDPOINT&quot;</span>);
 
-    <span class="kw">let</span> <span class="ident">directory</span> <span class="op">=</span> <span class="ident">TestDirectory::new</span>(<span class="string">&quot;bonsaidb-keystorage-s3-blocking&quot;</span>);
+    <span class="kw">let </span>directory = TestDirectory::new(<span class="string">&quot;bonsaidb-keystorage-s3-blocking&quot;</span>);
 
-    <span class="kw">let</span> <span class="ident">configuration</span> <span class="op">=</span> <span class="op">|</span><span class="ident">prefix</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="ident">S3VaultKeyStorage</span> {
-            <span class="ident">bucket</span>: <span class="ident">bucket</span>.<span class="ident">clone</span>(),
-            <span class="ident">endpoint</span>: <span class="prelude-val">Some</span>(<span class="ident">Endpoint::immutable</span>(<span class="ident">Uri::try_from</span>(<span class="kw-2">&amp;</span><span class="ident">endpoint</span>).<span class="ident">unwrap</span>())),
-            ..<span class="ident">S3VaultKeyStorage::default</span>()
+    <span class="kw">let </span>configuration = |prefix| {
+        <span class="kw">let </span><span class="kw-2">mut </span>vault_key_storage = S3VaultKeyStorage {
+            bucket: bucket.clone(),
+            endpoint: <span class="prelude-val">Some</span>(Endpoint::immutable(Uri::try_from(<span class="kw-2">&amp;</span>endpoint).unwrap())),
+            ..S3VaultKeyStorage::default()
         };
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">prefix</span>) <span class="op">=</span> <span class="ident">prefix</span> {
-            <span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="ident">vault_key_storage</span>.<span class="ident">path</span>(<span class="ident">prefix</span>);
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(prefix) = prefix {
+            vault_key_storage = vault_key_storage.path(prefix);
         }
 
-        <span class="ident">StorageConfiguration::new</span>(<span class="kw-2">&amp;</span><span class="ident">directory</span>)
-            .<span class="ident">vault_key_storage</span>(<span class="ident">vault_key_storage</span>)
-            .<span class="ident">default_encryption_key</span>(<span class="ident">KeyId::Master</span>)
-            .<span class="ident">with_schema</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>()
-            .<span class="ident">unwrap</span>()
+        StorageConfiguration::new(<span class="kw-2">&amp;</span>directory)
+            .vault_key_storage(vault_key_storage)
+            .default_encryption_key(KeyId::Master)
+            .with_schema::&lt;BasicSchema&gt;()
+            .unwrap()
     };
-    <span class="kw">let</span> <span class="ident">document</span> <span class="op">=</span> {
-        <span class="kw">let</span> <span class="ident">bonsai</span> <span class="op">=</span> <span class="ident">Storage::open</span>(<span class="ident">configuration</span>(<span class="prelude-val">None</span>)).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">bonsai</span>
-            .<span class="ident">create_database</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>(<span class="string">&quot;test&quot;</span>, <span class="bool-val">false</span>)
-            .<span class="ident">unwrap</span>();
-        <span class="ident">Basic::new</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">push_into</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>).<span class="ident">unwrap</span>()
+    <span class="kw">let </span>document = {
+        <span class="kw">let </span>bonsai = Storage::open(configuration(<span class="prelude-val">None</span>)).unwrap();
+        <span class="kw">let </span>db = bonsai
+            .create_database::&lt;BasicSchema&gt;(<span class="string">&quot;test&quot;</span>, <span class="bool-val">false</span>)
+            .unwrap();
+        Basic::new(<span class="string">&quot;test&quot;</span>).push_into(<span class="kw-2">&amp;</span>db).unwrap()
     };
 
     {
-        <span class="comment">// Should be able to access the storage again</span>
-        <span class="kw">let</span> <span class="ident">bonsai</span> <span class="op">=</span> <span class="ident">Storage::open</span>(<span class="ident">configuration</span>(<span class="prelude-val">None</span>)).<span class="ident">unwrap</span>();
+        <span class="comment">// Should be able to access the storage again
+        </span><span class="kw">let </span>bonsai = Storage::open(configuration(<span class="prelude-val">None</span>)).unwrap();
 
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">bonsai</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">BasicSchema</span><span class="op">&gt;</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">retrieved</span> <span class="op">=</span> <span class="ident">Basic::get</span>(<span class="kw-2">&amp;</span><span class="ident">document</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">db</span>)
-            .<span class="ident">unwrap</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;document not found&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">document</span>, <span class="ident">retrieved</span>);
+        <span class="kw">let </span>db = bonsai.database::&lt;BasicSchema&gt;(<span class="string">&quot;test&quot;</span>).unwrap();
+        <span class="kw">let </span>retrieved = Basic::get(<span class="kw-2">&amp;</span>document.header.id, <span class="kw-2">&amp;</span>db)
+            .unwrap()
+            .expect(<span class="string">&quot;document not found&quot;</span>);
+        <span class="macro">assert_eq!</span>(document, retrieved);
     }
 
-    <span class="comment">// Verify that we can&#39;t access the storage again without the vault</span>
-    <span class="macro">assert!</span>(<span class="ident">Storage::open</span>(<span class="ident">configuration</span>(<span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;path-prefix&quot;</span>)))).<span class="ident">is_err</span>());
+    <span class="comment">// Verify that we can&#39;t access the storage again without the vault
+    </span><span class="macro">assert!</span>(Storage::open(configuration(<span class="prelude-val">Some</span>(String::from(<span class="string">&quot;path-prefix&quot;</span>)))).is_err());
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_keystorage_s3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_keystorage_s3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

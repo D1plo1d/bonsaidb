@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-client/src/client/quic_worker.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>quic_worker.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_client/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_client/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_client/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-client/src/client/quic_worker.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>quic_worker.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_client/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -179,50 +173,50 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">sync::Arc</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, sync::Arc};
 
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{<span class="ident">api::ApiName</span>, <span class="ident">networking::Payload</span>};
-<span class="kw">use</span> <span class="ident">bonsaidb_utils::fast_async_lock</span>;
-<span class="kw">use</span> <span class="ident">fabruic</span>::{<span class="self">self</span>, <span class="ident">Certificate</span>, <span class="ident">Endpoint</span>};
-<span class="kw">use</span> <span class="ident">flume::Receiver</span>;
-<span class="kw">use</span> <span class="ident">futures::StreamExt</span>;
-<span class="kw">use</span> <span class="ident">url::Url</span>;
+<span class="kw">use </span>bonsaidb_core::{api::ApiName, networking::Payload};
+<span class="kw">use </span>bonsaidb_utils::fast_async_lock;
+<span class="kw">use </span>fabruic::{<span class="self">self</span>, Certificate, Endpoint};
+<span class="kw">use </span>flume::Receiver;
+<span class="kw">use </span>futures::StreamExt;
+<span class="kw">use </span>url::Url;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::PendingRequest</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">client</span>::{<span class="ident">AnyApiCallback</span>, <span class="ident">OutstandingRequestMapHandle</span>, <span class="ident">SubscriberMap</span>},
-    <span class="ident">Error</span>,
+<span class="kw">use </span><span class="kw">super</span>::PendingRequest;
+<span class="kw">use crate</span>::{
+    client::{AnyApiCallback, OutstandingRequestMapHandle, SubscriberMap},
+    Error,
 };
 
-<span class="doccomment">/// This function will establish a connection and try to keep it active. If an</span>
-<span class="doccomment">/// error occurs, any queries that come in while reconnecting will have the</span>
-<span class="doccomment">/// error replayed to them.</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reconnecting_client_loop</span>(
-    <span class="kw-2">mut</span> <span class="ident">url</span>: <span class="ident">Url</span>,
-    <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-    <span class="ident">certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Certificate</span><span class="op">&gt;</span>,
-    <span class="ident">request_receiver</span>: <span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">PendingRequest</span><span class="op">&gt;</span>,
-    <span class="ident">custom_apis</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">subscribers</span>: <span class="ident">SubscriberMap</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">url</span>.<span class="ident">port</span>().<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">url</span>.<span class="ident">scheme</span>() <span class="op">==</span> <span class="string">&quot;bonsaidb&quot;</span> {
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">url</span>.<span class="ident">set_port</span>(<span class="prelude-val">Some</span>(<span class="number">5645</span>));
+<span class="doccomment">/// This function will establish a connection and try to keep it active. If an
+/// error occurs, any queries that come in while reconnecting will have the
+/// error replayed to them.
+</span><span class="kw">pub async fn </span>reconnecting_client_loop(
+    <span class="kw-2">mut </span>url: Url,
+    protocol_version: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str,
+    certificate: <span class="prelude-ty">Option</span>&lt;Certificate&gt;,
+    request_receiver: Receiver&lt;PendingRequest&gt;,
+    custom_apis: Arc&lt;HashMap&lt;ApiName, <span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>AnyApiCallback&gt;&gt;&gt;&gt;,
+    subscribers: SubscriberMap,
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="kw">if </span>url.port().is_none() &amp;&amp; url.scheme() == <span class="string">&quot;bonsaidb&quot; </span>{
+        <span class="kw">let _ </span>= url.set_port(<span class="prelude-val">Some</span>(<span class="number">5645</span>));
     }
 
-    <span class="ident">subscribers</span>.<span class="ident">clear</span>();
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">request</span>) <span class="op">=</span> <span class="ident">request_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>((<span class="ident">failed_request</span>, <span class="ident">err</span>)) <span class="op">=</span> <span class="ident">connect_and_process</span>(
-            <span class="kw-2">&amp;</span><span class="ident">url</span>,
-            <span class="ident">protocol_version</span>,
-            <span class="ident">certificate</span>.<span class="ident">as_ref</span>(),
-            <span class="ident">request</span>,
-            <span class="kw-2">&amp;</span><span class="ident">request_receiver</span>,
-            <span class="ident">custom_apis</span>.<span class="ident">clone</span>(),
+    subscribers.clear();
+    <span class="kw">while let </span><span class="prelude-val">Ok</span>(request) = request_receiver.recv_async().<span class="kw">await </span>{
+        <span class="kw">if let </span><span class="prelude-val">Err</span>((failed_request, err)) = connect_and_process(
+            <span class="kw-2">&amp;</span>url,
+            protocol_version,
+            certificate.as_ref(),
+            request,
+            <span class="kw-2">&amp;</span>request_receiver,
+            custom_apis.clone(),
         )
-        .<span class="kw">await</span>
-        {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">failed_request</span>) <span class="op">=</span> <span class="ident">failed_request</span> {
-                <span class="ident">drop</span>(<span class="ident">failed_request</span>.<span class="ident">responder</span>.<span class="ident">send</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)));
+        .<span class="kw">await
+        </span>{
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(failed_request) = failed_request {
+                drop(failed_request.responder.send(<span class="prelude-val">Err</span>(err)));
             }
             <span class="kw">continue</span>;
         }
@@ -231,129 +225,128 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect_and_process</span>(
-    <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>,
-    <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    <span class="ident">certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Certificate</span><span class="op">&gt;</span>,
-    <span class="ident">initial_request</span>: <span class="ident">PendingRequest</span>,
-    <span class="ident">request_receiver</span>: <span class="kw-2">&amp;</span><span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">PendingRequest</span><span class="op">&gt;</span>,
-    <span class="ident">custom_apis</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), (<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PendingRequest</span><span class="op">&gt;</span>, <span class="ident">Error</span>)<span class="op">&gt;</span> {
-    <span class="kw">let</span> (<span class="ident">_connection</span>, <span class="ident">payload_sender</span>, <span class="ident">payload_receiver</span>) <span class="op">=</span>
-        <span class="kw">match</span> <span class="ident">connect</span>(<span class="ident">url</span>, <span class="ident">certificate</span>, <span class="ident">protocol_version</span>).<span class="kw">await</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">result</span>) =&gt; <span class="ident">result</span>,
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>((<span class="prelude-val">Some</span>(<span class="ident">initial_request</span>), <span class="ident">err</span>)),
+<span class="kw">async fn </span>connect_and_process(
+    url: <span class="kw-2">&amp;</span>Url,
+    protocol_version: <span class="kw-2">&amp;</span>str,
+    certificate: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Certificate&gt;,
+    initial_request: PendingRequest,
+    request_receiver: <span class="kw-2">&amp;</span>Receiver&lt;PendingRequest&gt;,
+    custom_apis: Arc&lt;HashMap&lt;ApiName, <span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>AnyApiCallback&gt;&gt;&gt;&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), (<span class="prelude-ty">Option</span>&lt;PendingRequest&gt;, Error)&gt; {
+    <span class="kw">let </span>(_connection, payload_sender, payload_receiver) =
+        <span class="kw">match </span>connect(url, certificate, protocol_version).<span class="kw">await </span>{
+            <span class="prelude-val">Ok</span>(result) =&gt; result,
+            <span class="prelude-val">Err</span>(err) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>((<span class="prelude-val">Some</span>(initial_request), err)),
         };
 
-    <span class="kw">let</span> <span class="ident">outstanding_requests</span> <span class="op">=</span> <span class="ident">OutstandingRequestMapHandle::default</span>();
-    <span class="kw">let</span> <span class="ident">request_processor</span> <span class="op">=</span> <span class="ident">tokio::spawn</span>(<span class="ident">process</span>(
-        <span class="ident">outstanding_requests</span>.<span class="ident">clone</span>(),
-        <span class="ident">payload_receiver</span>,
-        <span class="ident">custom_apis</span>,
+    <span class="kw">let </span>outstanding_requests = OutstandingRequestMapHandle::default();
+    <span class="kw">let </span>request_processor = tokio::spawn(process(
+        outstanding_requests.clone(),
+        payload_receiver,
+        custom_apis,
     ));
 
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">payload_sender</span>.<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="ident">initial_request</span>.<span class="ident">request</span>) {
-        <span class="kw">return</span> <span class="prelude-val">Err</span>((<span class="prelude-val">Some</span>(<span class="ident">initial_request</span>), <span class="ident">Error::from</span>(<span class="ident">err</span>)));
+    <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = payload_sender.send(<span class="kw-2">&amp;</span>initial_request.request) {
+        <span class="kw">return </span><span class="prelude-val">Err</span>((<span class="prelude-val">Some</span>(initial_request), Error::from(err)));
     }
 
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outstanding_requests</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">outstanding_requests</span>);
-        <span class="ident">outstanding_requests</span>.<span class="ident">insert</span>(
-            <span class="ident">initial_request</span>
-                .<span class="ident">request</span>
-                .<span class="ident">id</span>
-                .<span class="ident">expect</span>(<span class="string">&quot;all requests require ids&quot;</span>),
-            <span class="ident">initial_request</span>,
+        <span class="kw">let </span><span class="kw-2">mut </span>outstanding_requests = <span class="macro">fast_async_lock!</span>(outstanding_requests);
+        outstanding_requests.insert(
+            initial_request
+                .request
+                .id
+                .expect(<span class="string">&quot;all requests require ids&quot;</span>),
+            initial_request,
         );
     }
 
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="macro">futures::try_join!</span>(
-        <span class="ident">process_requests</span>(
-            <span class="ident">outstanding_requests</span>.<span class="ident">clone</span>(),
-            <span class="ident">request_receiver</span>,
-            <span class="ident">payload_sender</span>
+    <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = <span class="macro">futures::try_join!</span>(
+        process_requests(
+            outstanding_requests.clone(),
+            request_receiver,
+            payload_sender
         ),
-        <span class="kw">async</span> { <span class="ident">request_processor</span>.<span class="kw">await</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::Disconnected</span>)<span class="question-mark">?</span> }
+        <span class="kw">async </span>{ request_processor.<span class="kw">await</span>.map_err(|<span class="kw">_</span>| Error::Disconnected)<span class="question-mark">? </span>}
     ) {
-        <span class="comment">// Our socket was disconnected, clear the outstanding requests before returning.</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outstanding_requests</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">outstanding_requests</span>);
-        <span class="kw">for</span> (<span class="kw">_</span>, <span class="ident">pending</span>) <span class="kw">in</span> <span class="ident">outstanding_requests</span>.<span class="ident">drain</span>() {
-            <span class="ident">drop</span>(<span class="ident">pending</span>.<span class="ident">responder</span>.<span class="ident">send</span>(<span class="prelude-val">Err</span>(<span class="ident">Error::Disconnected</span>)));
+        <span class="comment">// Our socket was disconnected, clear the outstanding requests before returning.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>outstanding_requests = <span class="macro">fast_async_lock!</span>(outstanding_requests);
+        <span class="kw">for </span>(<span class="kw">_</span>, pending) <span class="kw">in </span>outstanding_requests.drain() {
+            drop(pending.responder.send(<span class="prelude-val">Err</span>(Error::Disconnected)));
         }
-        <span class="kw">return</span> <span class="prelude-val">Err</span>((<span class="prelude-val">None</span>, <span class="ident">err</span>));
+        <span class="kw">return </span><span class="prelude-val">Err</span>((<span class="prelude-val">None</span>, err));
     }
 
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">process_requests</span>(
-    <span class="ident">outstanding_requests</span>: <span class="ident">OutstandingRequestMapHandle</span>,
-    <span class="ident">request_receiver</span>: <span class="kw-2">&amp;</span><span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">PendingRequest</span><span class="op">&gt;</span>,
-    <span class="ident">payload_sender</span>: <span class="ident">fabruic::Sender</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">client_request</span>) <span class="op">=</span> <span class="ident">request_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outstanding_requests</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">outstanding_requests</span>);
-        <span class="ident">payload_sender</span>.<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="ident">client_request</span>.<span class="ident">request</span>)<span class="question-mark">?</span>;
-        <span class="ident">outstanding_requests</span>.<span class="ident">insert</span>(
-            <span class="ident">client_request</span>.<span class="ident">request</span>.<span class="ident">id</span>.<span class="ident">expect</span>(<span class="string">&quot;all requests require ids&quot;</span>),
-            <span class="ident">client_request</span>,
+<span class="kw">async fn </span>process_requests(
+    outstanding_requests: OutstandingRequestMapHandle,
+    request_receiver: <span class="kw-2">&amp;</span>Receiver&lt;PendingRequest&gt;,
+    payload_sender: fabruic::Sender&lt;Payload&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="kw">while let </span><span class="prelude-val">Ok</span>(client_request) = request_receiver.recv_async().<span class="kw">await </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>outstanding_requests = <span class="macro">fast_async_lock!</span>(outstanding_requests);
+        payload_sender.send(<span class="kw-2">&amp;</span>client_request.request)<span class="question-mark">?</span>;
+        outstanding_requests.insert(
+            client_request.request.id.expect(<span class="string">&quot;all requests require ids&quot;</span>),
+            client_request,
         );
     }
 
-    <span class="comment">// Return an error to make sure try_join returns.</span>
-    <span class="prelude-val">Err</span>(<span class="ident">Error::Disconnected</span>)
+    <span class="comment">// Return an error to make sure try_join returns.
+    </span><span class="prelude-val">Err</span>(Error::Disconnected)
 }
 
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">process</span>(
-    <span class="ident">outstanding_requests</span>: <span class="ident">OutstandingRequestMapHandle</span>,
-    <span class="kw-2">mut</span> <span class="ident">payload_receiver</span>: <span class="ident">fabruic::Receiver</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
-    <span class="ident">custom_apis</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">payload</span>) <span class="op">=</span> <span class="ident">payload_receiver</span>.<span class="ident">next</span>().<span class="kw">await</span> {
-        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">payload</span><span class="question-mark">?</span>;
-        <span class="ident"><span class="kw">super</span>::process_response_payload</span>(<span class="ident">payload</span>, <span class="kw-2">&amp;</span><span class="ident">outstanding_requests</span>, <span class="kw-2">&amp;</span><span class="ident">custom_apis</span>).<span class="kw">await</span>;
+<span class="kw">pub async fn </span>process(
+    outstanding_requests: OutstandingRequestMapHandle,
+    <span class="kw-2">mut </span>payload_receiver: fabruic::Receiver&lt;Payload&gt;,
+    custom_apis: Arc&lt;HashMap&lt;ApiName, <span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>AnyApiCallback&gt;&gt;&gt;&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="kw">while let </span><span class="prelude-val">Some</span>(payload) = payload_receiver.next().<span class="kw">await </span>{
+        <span class="kw">let </span>payload = payload<span class="question-mark">?</span>;
+        <span class="kw">super</span>::process_response_payload(payload, <span class="kw-2">&amp;</span>outstanding_requests, <span class="kw-2">&amp;</span>custom_apis).<span class="kw">await</span>;
     }
 
-    <span class="prelude-val">Err</span>(<span class="ident">Error::Disconnected</span>)
+    <span class="prelude-val">Err</span>(Error::Disconnected)
 }
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect</span>(
-    <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>,
-    <span class="ident">certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Certificate</span><span class="op">&gt;</span>,
-    <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>
+<span class="kw">async fn </span>connect(
+    url: <span class="kw-2">&amp;</span>Url,
+    certificate: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Certificate&gt;,
+    protocol_version: <span class="kw-2">&amp;</span>str,
+) -&gt; <span class="prelude-ty">Result</span>&lt;
     (
-        <span class="ident">fabruic::Connection</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
-        <span class="ident">fabruic::Sender</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
-        <span class="ident">fabruic::Receiver</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
+        fabruic::Connection&lt;()&gt;,
+        fabruic::Sender&lt;Payload&gt;,
+        fabruic::Receiver&lt;Payload&gt;,
     ),
-    <span class="ident">Error</span>,
-<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="ident">Endpoint::builder</span>();
-    <span class="ident">endpoint</span>
-        .<span class="ident">set_max_idle_timeout</span>(<span class="prelude-val">None</span>)
-        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;quic&quot;</span>, <span class="ident">err</span>)))<span class="question-mark">?</span>;
-    <span class="ident">endpoint</span>.<span class="ident">set_protocols</span>([<span class="ident">protocol_version</span>.<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>()]);
-    <span class="kw">let</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="ident">endpoint</span>
-        .<span class="ident">build</span>()
-        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;quic&quot;</span>, <span class="ident">err</span>)))<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">connecting</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">certificate</span>) <span class="op">=</span> <span class="ident">certificate</span> {
-        <span class="ident">endpoint</span>.<span class="ident">connect_pinned</span>(<span class="ident">url</span>, <span class="ident">certificate</span>, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>
-    } <span class="kw">else</span> {
-        <span class="ident">endpoint</span>.<span class="ident">connect</span>(<span class="ident">url</span>).<span class="kw">await</span><span class="question-mark">?</span>
-    };
+    Error,
+&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>endpoint = Endpoint::builder();
+    endpoint
+        .set_max_idle_timeout(<span class="prelude-val">None</span>)
+        .map_err(|err| Error::Core(bonsaidb_core::Error::other(<span class="string">&quot;quic&quot;</span>, err)))<span class="question-mark">?</span>;
+    endpoint.set_protocols([protocol_version.as_bytes().to_vec()]);
+    <span class="kw">let </span>endpoint = endpoint
+        .build()
+        .map_err(|err| Error::Core(bonsaidb_core::Error::other(<span class="string">&quot;quic&quot;</span>, err)))<span class="question-mark">?</span>;
+    <span class="kw">let </span>connecting = <span class="kw">if let </span><span class="prelude-val">Some</span>(certificate) = certificate {
+        endpoint.connect_pinned(url, certificate, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?
+    </span>} <span class="kw">else </span>{
+        endpoint.connect(url).<span class="kw">await</span><span class="question-mark">?
+    </span>};
 
-    <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="ident">connecting</span>.<span class="ident">accept</span>::<span class="op">&lt;</span>()<span class="op">&gt;</span>().<span class="kw">await</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
-        <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">err</span>, <span class="ident">fabruic::error::Connecting::ProtocolMismatch</span>) {
-            <span class="ident">Error::ProtocolVersionMismatch</span>
-        } <span class="kw">else</span> {
-            <span class="ident">Error::from</span>(<span class="ident">err</span>)
+    <span class="kw">let </span>connection = connecting.accept::&lt;()&gt;().<span class="kw">await</span>.map_err(|err| {
+        <span class="kw">if </span><span class="macro">matches!</span>(err, fabruic::error::Connecting::ProtocolMismatch) {
+            Error::ProtocolVersionMismatch
+        } <span class="kw">else </span>{
+            Error::from(err)
         }
     })<span class="question-mark">?</span>;
-    <span class="kw">let</span> (<span class="ident">sender</span>, <span class="ident">receiver</span>) <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">open_stream</span>(<span class="kw-2">&amp;</span>()).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let </span>(sender, receiver) = connection.open_stream(<span class="kw-2">&amp;</span>()).<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="prelude-val">Ok</span>((<span class="ident">connection</span>, <span class="ident">sender</span>, <span class="ident">receiver</span>))
+    <span class="prelude-val">Ok</span>((connection, sender, receiver))
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_client" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_client" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

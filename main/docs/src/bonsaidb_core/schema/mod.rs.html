@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/schema/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/schema/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -114,116 +108,115 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-</pre><pre class="rust"><code><span class="kw">mod</span> <span class="ident">collection</span>;
-<span class="kw">mod</span> <span class="ident">names</span>;
-<span class="kw">mod</span> <span class="ident">schematic</span>;
-<span class="doccomment">/// Types for defining map/reduce-powered `View`s.</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">view</span>;
-<span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
+</pre><pre class="rust"><code><span class="kw">mod </span>collection;
+<span class="kw">mod </span>names;
+<span class="kw">mod </span>schematic;
+<span class="doccomment">/// Types for defining map/reduce-powered `View`s.
+</span><span class="kw">pub mod </span>view;
+<span class="kw">use </span>std::fmt::Debug;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_macros</span>::{<span class="ident">Collection</span>, <span class="ident">Schema</span>, <span class="ident">View</span>};
+<span class="kw">pub use </span>bonsaidb_macros::{Collection, Schema, View};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
-    <span class="ident">collection</span>::{
-        <span class="ident">AsyncEntry</span>, <span class="ident">AsyncList</span>, <span class="ident">Collection</span>, <span class="ident">DefaultSerialization</span>, <span class="ident">InsertError</span>, <span class="ident">List</span>, <span class="ident">Nameable</span>,
-        <span class="ident">NamedCollection</span>, <span class="ident">NamedReference</span>, <span class="ident">SerializedCollection</span>,
+<span class="kw">pub use </span><span class="self">self</span>::{
+    collection::{
+        AsyncEntry, AsyncList, Collection, DefaultSerialization, InsertError, List, Nameable,
+        NamedCollection, NamedReference, SerializedCollection,
     },
-    <span class="ident">names</span>::{
-        <span class="ident">Authority</span>, <span class="ident">CollectionName</span>, <span class="ident">InvalidNameError</span>, <span class="ident">Name</span>, <span class="ident">Qualified</span>, <span class="ident">QualifiedName</span>, <span class="ident">SchemaName</span>,
-        <span class="ident">ViewName</span>,
+    names::{
+        Authority, CollectionName, InvalidNameError, Name, Qualified, QualifiedName, SchemaName,
+        ViewName,
     },
-    <span class="ident">schematic::Schematic</span>,
-    <span class="ident">view</span>::{
-        <span class="ident">map</span>::{<span class="ident">Map</span>, <span class="ident">MappedValue</span>, <span class="ident">ViewMappedValue</span>},
-        <span class="ident">CollectionViewSchema</span>, <span class="ident">DefaultViewSerialization</span>, <span class="ident">ReduceResult</span>, <span class="ident">SerializedView</span>, <span class="ident">View</span>,
-        <span class="ident">ViewMapResult</span>, <span class="ident">ViewSchema</span>,
+    schematic::Schematic,
+    view::{
+        map::{Map, MappedValue, ViewMappedValue},
+        CollectionViewSchema, DefaultViewSerialization, ReduceResult, SerializedView, View,
+        ViewMapResult, ViewSchema,
     },
 };
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
-<span class="doccomment">/// Defines a group of collections that are stored into a single database.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Deriving this trait</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This trait can be derived rather than manually implemented:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use bonsaidb_core::schema::{Collection, Schema};</span>
-<span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Schema)]</span>
-<span class="doccomment">/// #[schema(name = &quot;MySchema&quot;, collections = [MyCollection])]</span>
-<span class="doccomment">/// # #[schema(core = bonsaidb_core)]</span>
-<span class="doccomment">/// pub struct MySchema;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Default, Collection)]</span>
-<span class="doccomment">/// #[collection(name = &quot;MyCollection&quot;)]</span>
-<span class="doccomment">/// # #[collection(core = bonsaidb_core)]</span>
-<span class="doccomment">/// pub struct MyCollection {</span>
-<span class="doccomment">///     pub rank: u32,</span>
-<span class="doccomment">///     pub score: f32,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// If you&#39;re publishing a schema for use in multiple projects, consider giving</span>
-<span class="doccomment">/// the schema an `authority`, which gives your schema a namespace:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use bonsaidb_core::schema::Schema;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Schema)]</span>
-<span class="doccomment">/// #[schema(name = &quot;MySchema&quot;, authority = &quot;khonsulabs&quot;, collections = [MyCollection])]</span>
-<span class="doccomment">/// # #[schema(core = bonsaidb_core)]</span>
-<span class="doccomment">/// pub struct MySchema;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # use serde::{Deserialize, Serialize};</span>
-<span class="doccomment">/// # use bonsaidb_core::schema::Collection;</span>
-<span class="doccomment">/// # #[derive(Debug, Serialize, Deserialize, Default, Collection)]</span>
-<span class="doccomment">/// # #[collection(name = &quot;MyCollection&quot;)]</span>
-<span class="doccomment">/// # #[collection(core = bonsaidb_core)]</span>
-<span class="doccomment">/// # pub struct MyCollection {</span>
-<span class="doccomment">/// #    pub rank: u32,</span>
-<span class="doccomment">/// #    pub score: f32,</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Schema</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
-    <span class="doccomment">/// Returns the unique [`SchemaName`] for this schema.</span>
-    <span class="kw">fn</span> <span class="ident">schema_name</span>() -&gt; <span class="ident">SchemaName</span>;
+<span class="doccomment">/// Defines a group of collections that are stored into a single database.
+///
+/// ## Deriving this trait
+///
+/// This trait can be derived rather than manually implemented:
+///
+/// ```rust
+/// use bonsaidb_core::schema::{Collection, Schema};
+/// use serde::{Deserialize, Serialize};
+///
+/// #[derive(Debug, Schema)]
+/// #[schema(name = &quot;MySchema&quot;, collections = [MyCollection])]
+/// # #[schema(core = bonsaidb_core)]
+/// pub struct MySchema;
+///
+/// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
+/// #[collection(name = &quot;MyCollection&quot;)]
+/// # #[collection(core = bonsaidb_core)]
+/// pub struct MyCollection {
+///     pub rank: u32,
+///     pub score: f32,
+/// }
+/// ```
+///
+/// If you&#39;re publishing a schema for use in multiple projects, consider giving
+/// the schema an `authority`, which gives your schema a namespace:
+///
+/// ```rust
+/// use bonsaidb_core::schema::Schema;
+///
+/// #[derive(Debug, Schema)]
+/// #[schema(name = &quot;MySchema&quot;, authority = &quot;khonsulabs&quot;, collections = [MyCollection])]
+/// # #[schema(core = bonsaidb_core)]
+/// pub struct MySchema;
+///
+/// # use serde::{Deserialize, Serialize};
+/// # use bonsaidb_core::schema::Collection;
+/// # #[derive(Debug, Serialize, Deserialize, Default, Collection)]
+/// # #[collection(name = &quot;MyCollection&quot;)]
+/// # #[collection(core = bonsaidb_core)]
+/// # pub struct MyCollection {
+/// #    pub rank: u32,
+/// #    pub score: f32,
+/// # }
+/// ```
+</span><span class="kw">pub trait </span>Schema: Send + Sync + Debug + <span class="lifetime">&#39;static </span>{
+    <span class="doccomment">/// Returns the unique [`SchemaName`] for this schema.
+    </span><span class="kw">fn </span>schema_name() -&gt; SchemaName;
 
-    <span class="doccomment">/// Defines the `Collection`s into `schema`.</span>
-    <span class="kw">fn</span> <span class="ident">define_collections</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="doccomment">/// Defines the `Collection`s into `schema`.
+    </span><span class="kw">fn </span>define_collections(schema: <span class="kw-2">&amp;mut </span>Schematic) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt;;
 
-    <span class="doccomment">/// Retrieves the [`Schematic`] for this schema.</span>
-    <span class="kw">fn</span> <span class="ident">schematic</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Schematic</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">Schematic::from_schema</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()
+    <span class="doccomment">/// Retrieves the [`Schematic`] for this schema.
+    </span><span class="kw">fn </span>schematic() -&gt; <span class="prelude-ty">Result</span>&lt;Schematic, Error&gt; {
+        Schematic::from_schema::&lt;<span class="self">Self</span>&gt;()
     }
 }
 
-<span class="doccomment">/// This implementation is for accessing databases when interacting with</span>
-<span class="doccomment">/// collections isn&#39;t required. For example, accessing only the key-value store</span>
-<span class="doccomment">/// or pubsub.</span>
-<span class="kw">impl</span> <span class="ident">Schema</span> <span class="kw">for</span> () {
-    <span class="kw">fn</span> <span class="ident">schema_name</span>() -&gt; <span class="ident">SchemaName</span> {
-        <span class="ident">SchemaName::new</span>(<span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>)
+<span class="doccomment">/// This implementation is for accessing databases when interacting with
+/// collections isn&#39;t required. For example, accessing only the key-value store
+/// or pubsub.
+</span><span class="kw">impl </span>Schema <span class="kw">for </span>() {
+    <span class="kw">fn </span>schema_name() -&gt; SchemaName {
+        SchemaName::new(<span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">define_collections</span>(<span class="ident">_schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn </span>define_collections(_schema: <span class="kw-2">&amp;mut </span>Schematic) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Schema</span> <span class="kw">for</span> <span class="ident">T</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Collection</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+<span class="kw">impl</span>&lt;T&gt; Schema <span class="kw">for </span>T
+<span class="kw">where
+    </span>T: Collection + <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">schema_name</span>() -&gt; <span class="ident">SchemaName</span> {
-        <span class="ident">SchemaName::from</span>(<span class="ident"><span class="self">Self</span>::collection_name</span>())
+    <span class="kw">fn </span>schema_name() -&gt; SchemaName {
+        SchemaName::from(<span class="self">Self</span>::collection_name())
     }
 
-    <span class="kw">fn</span> <span class="ident">define_collections</span>(<span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Schematic</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">schema</span>.<span class="ident">define_collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()
+    <span class="kw">fn </span>define_collections(schema: <span class="kw-2">&amp;mut </span>Schematic) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        schema.define_collection::&lt;<span class="self">Self</span>&gt;()
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

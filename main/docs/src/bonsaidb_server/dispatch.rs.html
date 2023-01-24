@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/dispatch.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dispatch.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/dispatch.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dispatch.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -679,681 +673,680 @@
 <span id="673">673</span>
 <span id="674">674</span>
 <span id="675">675</span>
-</pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::networking</span>::{<span class="ident">Authenticate</span>, <span class="ident">SetUserPassword</span>};
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">api::ApiName</span>,
-    <span class="ident">arc_bytes::serde::Bytes</span>,
-    <span class="ident">async_trait::async_trait</span>,
-    <span class="ident">connection</span>::{<span class="ident">AsyncConnection</span>, <span class="ident">AsyncLowLevelConnection</span>, <span class="ident">AsyncStorageConnection</span>, <span class="ident">HasSession</span>},
-    <span class="ident">keyvalue::AsyncKeyValue</span>,
-    <span class="ident">networking</span>::{
-        <span class="ident">AlterUserPermissionGroupMembership</span>, <span class="ident">AlterUserRoleMembership</span>, <span class="ident">ApplyTransaction</span>,
-        <span class="ident">AssumeIdentity</span>, <span class="ident">Compact</span>, <span class="ident">CompactCollection</span>, <span class="ident">CompactKeyValueStore</span>, <span class="ident">Count</span>, <span class="ident">CreateDatabase</span>,
-        <span class="ident">CreateSubscriber</span>, <span class="ident">CreateUser</span>, <span class="ident">DeleteDatabase</span>, <span class="ident">DeleteDocs</span>, <span class="ident">DeleteUser</span>, <span class="ident">ExecuteKeyOperation</span>,
-        <span class="ident">Get</span>, <span class="ident">GetMultiple</span>, <span class="ident">LastTransactionId</span>, <span class="ident">List</span>, <span class="ident">ListAvailableSchemas</span>, <span class="ident">ListDatabases</span>,
-        <span class="ident">ListExecutedTransactions</span>, <span class="ident">ListHeaders</span>, <span class="ident">LogOutSession</span>, <span class="ident">Publish</span>, <span class="ident">PublishToAll</span>, <span class="ident">Query</span>,
-        <span class="ident">QueryWithDocs</span>, <span class="ident">Reduce</span>, <span class="ident">ReduceGrouped</span>, <span class="ident">SubscribeTo</span>, <span class="ident">UnregisterSubscriber</span>, <span class="ident">UnsubscribeFrom</span>,
+</pre><pre class="rust"><code><span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+</span><span class="kw">use </span>bonsaidb_core::networking::{Authenticate, SetUserPassword};
+<span class="kw">use </span>bonsaidb_core::{
+    api::ApiName,
+    arc_bytes::serde::Bytes,
+    async_trait::async_trait,
+    connection::{AsyncConnection, AsyncLowLevelConnection, AsyncStorageConnection, HasSession},
+    keyvalue::AsyncKeyValue,
+    networking::{
+        AlterUserPermissionGroupMembership, AlterUserRoleMembership, ApplyTransaction,
+        AssumeIdentity, Compact, CompactCollection, CompactKeyValueStore, Count, CreateDatabase,
+        CreateSubscriber, CreateUser, DeleteDatabase, DeleteDocs, DeleteUser, ExecuteKeyOperation,
+        Get, GetMultiple, LastTransactionId, List, ListAvailableSchemas, ListDatabases,
+        ListExecutedTransactions, ListHeaders, LogOutSession, Publish, PublishToAll, Query,
+        QueryWithDocs, Reduce, ReduceGrouped, SubscribeTo, UnregisterSubscriber, UnsubscribeFrom,
     },
-    <span class="ident">pubsub::AsyncPubSub</span>,
+    pubsub::AsyncPubSub,
 };
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">api</span>::{<span class="ident">Handler</span>, <span class="ident">HandlerError</span>, <span class="ident">HandlerResult</span>, <span class="ident">HandlerSession</span>},
-    <span class="ident">Backend</span>, <span class="ident">Error</span>, <span class="ident">ServerConfiguration</span>,
+<span class="kw">use crate</span>::{
+    api::{Handler, HandlerError, HandlerResult, HandlerSession},
+    Backend, Error, ServerConfiguration,
 };
 
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>), <span class="ident">allow</span>(<span class="ident">unused_mut</span>))]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_api_handlers</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span>(
-    <span class="ident">config</span>: <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">config</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">AlterUserPermissionGroupMembership</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">AlterUserRoleMembership</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">ApplyTransaction</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">AssumeIdentity</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">Compact</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">CompactCollection</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">CompactKeyValueStore</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">Count</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">CreateDatabase</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">CreateSubscriber</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">CreateUser</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">DeleteDatabase</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">DeleteDocs</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">DeleteUser</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">ExecuteKeyOperation</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">Get</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">GetMultiple</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">LastTransactionId</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">List</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">ListHeaders</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">ListAvailableSchemas</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">ListDatabases</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">ListExecutedTransactions</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">LogOutSession</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">Publish</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">PublishToAll</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">Query</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">QueryWithDocs</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">Reduce</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">ReduceGrouped</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">SubscribeTo</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">UnregisterSubscriber</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-        .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">UnsubscribeFrom</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+<span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;password-hashing&quot;</span>), allow(unused_mut))]
+</span><span class="kw">pub fn </span>register_api_handlers&lt;B: Backend&gt;(
+    config: ServerConfiguration&lt;B&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;ServerConfiguration&lt;B&gt;, Error&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>config = config
+        .with_api::&lt;ServerDispatcher, AlterUserPermissionGroupMembership&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, AlterUserRoleMembership&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, ApplyTransaction&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, AssumeIdentity&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, Compact&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, CompactCollection&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, CompactKeyValueStore&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, Count&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, CreateDatabase&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, CreateSubscriber&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, CreateUser&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, DeleteDatabase&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, DeleteDocs&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, DeleteUser&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, ExecuteKeyOperation&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, Get&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, GetMultiple&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, LastTransactionId&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, List&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, ListHeaders&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, ListAvailableSchemas&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, ListDatabases&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, ListExecutedTransactions&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, LogOutSession&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, Publish&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, PublishToAll&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, Query&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, QueryWithDocs&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, Reduce&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, ReduceGrouped&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, SubscribeTo&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, UnregisterSubscriber&gt;()<span class="question-mark">?
+        </span>.with_api::&lt;ServerDispatcher, UnsubscribeFrom&gt;()<span class="question-mark">?</span>;
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-    {
-        <span class="ident">config</span> <span class="op">=</span> <span class="ident">config</span>
-            .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">Authenticate</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
-            .<span class="ident">with_api</span>::<span class="op">&lt;</span><span class="ident">ServerDispatcher</span>, <span class="ident">SetUserPassword</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+    </span>{
+        config = config
+            .with_api::&lt;ServerDispatcher, Authenticate&gt;()<span class="question-mark">?
+            </span>.with_api::&lt;ServerDispatcher, SetUserPassword&gt;()<span class="question-mark">?</span>;
     }
 
-    <span class="prelude-val">Ok</span>(<span class="ident">config</span>)
+    <span class="prelude-val">Ok</span>(config)
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServerDispatcher</span>;
-<span class="kw">impl</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">dispatch_api_request</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ApiName</span>,
-        <span class="ident">request</span>: <span class="ident">Bytes</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">dispatcher</span>) <span class="op">=</span> <span class="ident">session</span>.<span class="ident">server</span>.<span class="ident">custom_api_dispatcher</span>(<span class="ident">name</span>) {
-            <span class="ident">dispatcher</span>.<span class="ident">handle</span>(<span class="ident">session</span>, <span class="kw-2">&amp;</span><span class="ident">request</span>).<span class="kw">await</span>
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::from</span>(<span class="ident">bonsaidb_core::Error::ApiNotFound</span>(<span class="ident">name</span>.<span class="ident">clone</span>())))
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>ServerDispatcher;
+<span class="kw">impl </span>ServerDispatcher {
+    <span class="kw">pub async fn </span>dispatch_api_request&lt;B: Backend&gt;(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        name: <span class="kw-2">&amp;</span>ApiName,
+        request: Bytes,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Bytes, Error&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(dispatcher) = session.server.custom_api_dispatcher(name) {
+            dispatcher.handle(session, <span class="kw-2">&amp;</span>request).<span class="kw">await
+        </span>} <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::from(bonsaidb_core::Error::ApiNotFound(name.clone())))
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">CreateDatabase</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">request</span>: <span class="ident">CreateDatabase</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">CreateDatabase</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">create_database_with_schema</span>(
-                <span class="kw-2">&amp;</span><span class="ident">request</span>.<span class="ident">database</span>.<span class="ident">name</span>,
-                <span class="ident">request</span>.<span class="ident">database</span>.<span class="ident">schema</span>,
-                <span class="ident">request</span>.<span class="ident">only_if_needed</span>,
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, CreateDatabase&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        request: CreateDatabase,
+    ) -&gt; HandlerResult&lt;CreateDatabase&gt; {
+        session
+            .as_client
+            .create_database_with_schema(
+                <span class="kw-2">&amp;</span>request.database.name,
+                request.database.schema,
+                request.only_if_needed,
             )
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">DeleteDatabase</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">DeleteDatabase</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">DeleteDatabase</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>.<span class="ident">as_client</span>.<span class="ident">delete_database</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">name</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, DeleteDatabase&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: DeleteDatabase,
+    ) -&gt; HandlerResult&lt;DeleteDatabase&gt; {
+        session.as_client.delete_database(<span class="kw-2">&amp;</span>command.name).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">ListDatabases</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">_command</span>: <span class="ident">ListDatabases</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">ListDatabases</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">list_databases</span>()
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, ListDatabases&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        _command: ListDatabases,
+    ) -&gt; HandlerResult&lt;ListDatabases&gt; {
+        session
+            .as_client
+            .list_databases()
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">ListAvailableSchemas</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">_command</span>: <span class="ident">ListAvailableSchemas</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">ListAvailableSchemas</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">list_available_schemas</span>()
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, ListAvailableSchemas&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        _command: ListAvailableSchemas,
+    ) -&gt; HandlerResult&lt;ListAvailableSchemas&gt; {
+        session
+            .as_client
+            .list_available_schemas()
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">CreateUser</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">CreateUser</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">CreateUser</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">create_user</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">username</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, CreateUser&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: CreateUser,
+    ) -&gt; HandlerResult&lt;CreateUser&gt; {
+        session
+            .as_client
+            .create_user(<span class="kw-2">&amp;</span>command.username)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">DeleteUser</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">DeleteUser</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">DeleteUser</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">delete_user</span>(<span class="ident">command</span>.<span class="ident">user</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, DeleteUser&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: DeleteUser,
+    ) -&gt; HandlerResult&lt;DeleteUser&gt; {
+        session
+            .as_client
+            .delete_user(command.user)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">SetUserPassword</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">SetUserPassword</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">SetUserPassword</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">set_user_password</span>(<span class="ident">command</span>.<span class="ident">user</span>, <span class="ident">command</span>.<span class="ident">password</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+<span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, SetUserPassword&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: SetUserPassword,
+    ) -&gt; HandlerResult&lt;SetUserPassword&gt; {
+        session
+            .as_client
+            .set_user_password(command.user, command.password)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Authenticate</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">Authenticate</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Authenticate</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">authenticated</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">authenticate</span>(<span class="ident">command</span>.<span class="ident">authentication</span>)
+<span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, Authenticate&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: Authenticate,
+    ) -&gt; HandlerResult&lt;Authenticate&gt; {
+        <span class="kw">let </span>authenticated = session
+            .as_client
+            .authenticate(command.authentication)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">new_session</span> <span class="op">=</span> <span class="ident">authenticated</span>.<span class="ident">session</span>().<span class="ident">cloned</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let </span>new_session = authenticated.session().cloned().unwrap();
 
-        <span class="ident">session</span>.<span class="ident">client</span>.<span class="ident">logged_in_as</span>(<span class="ident">new_session</span>.<span class="ident">clone</span>());
+        session.client.logged_in_as(new_session.clone());
 
-        <span class="prelude-val">Ok</span>(<span class="ident">new_session</span>)
+        <span class="prelude-val">Ok</span>(new_session)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">AssumeIdentity</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">AssumeIdentity</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">AssumeIdentity</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">authenticated</span> <span class="op">=</span> <span class="ident">session</span>.<span class="ident">as_client</span>.<span class="ident">assume_identity</span>(<span class="ident">command</span>.<span class="number">0</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">new_session</span> <span class="op">=</span> <span class="ident">authenticated</span>.<span class="ident">session</span>().<span class="ident">cloned</span>().<span class="ident">unwrap</span>();
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, AssumeIdentity&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: AssumeIdentity,
+    ) -&gt; HandlerResult&lt;AssumeIdentity&gt; {
+        <span class="kw">let </span>authenticated = session.as_client.assume_identity(command.<span class="number">0</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>new_session = authenticated.session().cloned().unwrap();
 
-        <span class="ident">session</span>.<span class="ident">client</span>.<span class="ident">logged_in_as</span>(<span class="ident">new_session</span>.<span class="ident">clone</span>());
+        session.client.logged_in_as(new_session.clone());
 
-        <span class="prelude-val">Ok</span>(<span class="ident">new_session</span>)
+        <span class="prelude-val">Ok</span>(new_session)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">LogOutSession</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">LogOutSession</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">LogOutSession</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>.<span class="ident">client</span>.<span class="ident">log_out</span>(<span class="ident">command</span>.<span class="number">0</span>);
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, LogOutSession&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: LogOutSession,
+    ) -&gt; HandlerResult&lt;LogOutSession&gt; {
+        session.client.log_out(command.<span class="number">0</span>);
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">AlterUserPermissionGroupMembership</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">AlterUserPermissionGroupMembership</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">AlterUserPermissionGroupMembership</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">command</span>.<span class="ident">should_be_member</span> {
-            <span class="ident">session</span>
-                .<span class="ident">as_client</span>
-                .<span class="ident">add_permission_group_to_user</span>(<span class="ident">command</span>.<span class="ident">user</span>, <span class="ident">command</span>.<span class="ident">group</span>)
-                .<span class="kw">await</span>
-                .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
-        } <span class="kw">else</span> {
-            <span class="ident">session</span>
-                .<span class="ident">as_client</span>
-                .<span class="ident">remove_permission_group_from_user</span>(<span class="ident">command</span>.<span class="ident">user</span>, <span class="ident">command</span>.<span class="ident">group</span>)
-                .<span class="kw">await</span>
-                .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, AlterUserPermissionGroupMembership&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: AlterUserPermissionGroupMembership,
+    ) -&gt; HandlerResult&lt;AlterUserPermissionGroupMembership&gt; {
+        <span class="kw">if </span>command.should_be_member {
+            session
+                .as_client
+                .add_permission_group_to_user(command.user, command.group)
+                .<span class="kw">await
+                </span>.map_err(HandlerError::from)
+        } <span class="kw">else </span>{
+            session
+                .as_client
+                .remove_permission_group_from_user(command.user, command.group)
+                .<span class="kw">await
+                </span>.map_err(HandlerError::from)
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">AlterUserRoleMembership</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">AlterUserRoleMembership</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">AlterUserRoleMembership</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">command</span>.<span class="ident">should_be_member</span> {
-            <span class="ident">session</span>
-                .<span class="ident">as_client</span>
-                .<span class="ident">add_role_to_user</span>(<span class="ident">command</span>.<span class="ident">user</span>, <span class="ident">command</span>.<span class="ident">role</span>)
-                .<span class="kw">await</span>
-                .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
-        } <span class="kw">else</span> {
-            <span class="ident">session</span>
-                .<span class="ident">as_client</span>
-                .<span class="ident">remove_role_from_user</span>(<span class="ident">command</span>.<span class="ident">user</span>, <span class="ident">command</span>.<span class="ident">role</span>)
-                .<span class="kw">await</span>
-                .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, AlterUserRoleMembership&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: AlterUserRoleMembership,
+    ) -&gt; HandlerResult&lt;AlterUserRoleMembership&gt; {
+        <span class="kw">if </span>command.should_be_member {
+            session
+                .as_client
+                .add_role_to_user(command.user, command.role)
+                .<span class="kw">await
+                </span>.map_err(HandlerError::from)
+        } <span class="kw">else </span>{
+            session
+                .as_client
+                .remove_role_from_user(command.user, command.role)
+                .<span class="kw">await
+                </span>.map_err(HandlerError::from)
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Get</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">command</span>: <span class="ident">Get</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Get</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, Get&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, command: Get) -&gt; HandlerResult&lt;Get&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">get_from_collection</span>(<span class="ident">command</span>.<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">collection</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .get_from_collection(command.id, <span class="kw-2">&amp;</span>command.collection)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">GetMultiple</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">GetMultiple</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">GetMultiple</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, GetMultiple&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: GetMultiple,
+    ) -&gt; HandlerResult&lt;GetMultiple&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">get_multiple_from_collection</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">ids</span>, <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">collection</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .get_multiple_from_collection(<span class="kw-2">&amp;</span>command.ids, <span class="kw-2">&amp;</span>command.collection)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">List</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">command</span>: <span class="ident">List</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">List</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, List&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, command: List) -&gt; HandlerResult&lt;List&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">list_from_collection</span>(
-                <span class="ident">command</span>.<span class="ident">ids</span>,
-                <span class="ident">command</span>.<span class="ident">order</span>,
-                <span class="ident">command</span>.<span class="ident">limit</span>,
-                <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">collection</span>,
+        database
+            .list_from_collection(
+                command.ids,
+                command.order,
+                command.limit,
+                <span class="kw-2">&amp;</span>command.collection,
             )
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">ListHeaders</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">ListHeaders</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">ListHeaders</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="number">0</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, ListHeaders&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: ListHeaders,
+    ) -&gt; HandlerResult&lt;ListHeaders&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.<span class="number">0</span>.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">list_headers_from_collection</span>(
-                <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">ids</span>,
-                <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">order</span>,
-                <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">limit</span>,
-                <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="number">0</span>.<span class="ident">collection</span>,
+        database
+            .list_headers_from_collection(
+                command.<span class="number">0</span>.ids,
+                command.<span class="number">0</span>.order,
+                command.<span class="number">0</span>.limit,
+                <span class="kw-2">&amp;</span>command.<span class="number">0</span>.collection,
             )
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Count</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">command</span>: <span class="ident">Count</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Count</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, Count&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, command: Count) -&gt; HandlerResult&lt;Count&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">count_from_collection</span>(<span class="ident">command</span>.<span class="ident">ids</span>, <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">collection</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .count_from_collection(command.ids, <span class="kw-2">&amp;</span>command.collection)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Query</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">command</span>: <span class="ident">Query</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Query</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, Query&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, command: Query) -&gt; HandlerResult&lt;Query&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">query_by_name</span>(
-                <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">view</span>,
-                <span class="ident">command</span>.<span class="ident">key</span>,
-                <span class="ident">command</span>.<span class="ident">order</span>,
-                <span class="ident">command</span>.<span class="ident">limit</span>,
-                <span class="ident">command</span>.<span class="ident">access_policy</span>,
+        database
+            .query_by_name(
+                <span class="kw-2">&amp;</span>command.view,
+                command.key,
+                command.order,
+                command.limit,
+                command.access_policy,
             )
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">QueryWithDocs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">QueryWithDocs</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">QueryWithDocs</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="number">0</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, QueryWithDocs&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: QueryWithDocs,
+    ) -&gt; HandlerResult&lt;QueryWithDocs&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.<span class="number">0</span>.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">query_by_name_with_docs</span>(
-                <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="number">0</span>.<span class="ident">view</span>,
-                <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">key</span>,
-                <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">order</span>,
-                <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">limit</span>,
-                <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">access_policy</span>,
+        database
+            .query_by_name_with_docs(
+                <span class="kw-2">&amp;</span>command.<span class="number">0</span>.view,
+                command.<span class="number">0</span>.key,
+                command.<span class="number">0</span>.order,
+                command.<span class="number">0</span>.limit,
+                command.<span class="number">0</span>.access_policy,
             )
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Reduce</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">command</span>: <span class="ident">Reduce</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Reduce</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, Reduce&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, command: Reduce) -&gt; HandlerResult&lt;Reduce&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">reduce_by_name</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">view</span>, <span class="ident">command</span>.<span class="ident">key</span>, <span class="ident">command</span>.<span class="ident">access_policy</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map</span>(<span class="ident">Bytes::from</span>)
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .reduce_by_name(<span class="kw-2">&amp;</span>command.view, command.key, command.access_policy)
+            .<span class="kw">await
+            </span>.map(Bytes::from)
+            .map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">ReduceGrouped</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">ReduceGrouped</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">ReduceGrouped</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="number">0</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, ReduceGrouped&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: ReduceGrouped,
+    ) -&gt; HandlerResult&lt;ReduceGrouped&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.<span class="number">0</span>.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">reduce_grouped_by_name</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="number">0</span>.<span class="ident">view</span>, <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">key</span>, <span class="ident">command</span>.<span class="number">0</span>.<span class="ident">access_policy</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .reduce_grouped_by_name(<span class="kw-2">&amp;</span>command.<span class="number">0</span>.view, command.<span class="number">0</span>.key, command.<span class="number">0</span>.access_policy)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">ApplyTransaction</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">ApplyTransaction</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">ApplyTransaction</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, ApplyTransaction&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: ApplyTransaction,
+    ) -&gt; HandlerResult&lt;ApplyTransaction&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">apply_transaction</span>(<span class="ident">command</span>.<span class="ident">transaction</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .apply_transaction(command.transaction)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">DeleteDocs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">DeleteDocs</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">DeleteDocs</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, DeleteDocs&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: DeleteDocs,
+    ) -&gt; HandlerResult&lt;DeleteDocs&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">delete_docs_by_name</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">view</span>, <span class="ident">command</span>.<span class="ident">key</span>, <span class="ident">command</span>.<span class="ident">access_policy</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .delete_docs_by_name(<span class="kw-2">&amp;</span>command.view, command.key, command.access_policy)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">ListExecutedTransactions</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">ListExecutedTransactions</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">ListExecutedTransactions</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, ListExecutedTransactions&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: ListExecutedTransactions,
+    ) -&gt; HandlerResult&lt;ListExecutedTransactions&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">list_executed_transactions</span>(<span class="ident">command</span>.<span class="ident">starting_id</span>, <span class="ident">command</span>.<span class="ident">result_limit</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .list_executed_transactions(command.starting_id, command.result_limit)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">LastTransactionId</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">LastTransactionId</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">LastTransactionId</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, LastTransactionId&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: LastTransactionId,
+    ) -&gt; HandlerResult&lt;LastTransactionId&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">last_transaction_id</span>()
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .last_transaction_id()
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">CreateSubscriber</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">CreateSubscriber</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">CreateSubscriber</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, CreateSubscriber&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: CreateSubscriber,
+    ) -&gt; HandlerResult&lt;CreateSubscriber&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">subscriber</span> <span class="op">=</span> <span class="ident">database</span>.<span class="ident">create_subscriber</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">subscriber_id</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">id</span>();
+        <span class="kw">let </span>subscriber = database.create_subscriber().<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>subscriber_id = subscriber.id();
 
-        <span class="ident">session</span>.<span class="ident">client</span>.<span class="ident">register_subscriber</span>(
-            <span class="ident">subscriber</span>,
-            <span class="ident">session</span>.<span class="ident">as_client</span>.<span class="ident">session</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">session</span><span class="op">|</span> <span class="ident">session</span>.<span class="ident">id</span>),
+        session.client.register_subscriber(
+            subscriber,
+            session.as_client.session().and_then(|session| session.id),
         );
 
-        <span class="prelude-val">Ok</span>(<span class="ident">subscriber_id</span>)
+        <span class="prelude-val">Ok</span>(subscriber_id)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Publish</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">command</span>: <span class="ident">Publish</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Publish</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, Publish&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, command: Publish) -&gt; HandlerResult&lt;Publish&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">publish_bytes</span>(<span class="ident">command</span>.<span class="ident">topic</span>.<span class="ident">into_vec</span>(), <span class="ident">command</span>.<span class="ident">payload</span>.<span class="ident">into_vec</span>())
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .publish_bytes(command.topic.into_vec(), command.payload.into_vec())
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">PublishToAll</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">PublishToAll</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">PublishToAll</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, PublishToAll&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: PublishToAll,
+    ) -&gt; HandlerResult&lt;PublishToAll&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">publish_bytes_to_all</span>(
-                <span class="ident">command</span>.<span class="ident">topics</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="ident">Bytes::into_vec</span>),
-                <span class="ident">command</span>.<span class="ident">payload</span>.<span class="ident">into_vec</span>(),
+        database
+            .publish_bytes_to_all(
+                command.topics.into_iter().map(Bytes::into_vec),
+                command.payload.into_vec(),
             )
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">SubscribeTo</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">SubscribeTo</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">SubscribeTo</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">client</span>
-            .<span class="ident">subscribe_by_id</span>(
-                <span class="ident">command</span>.<span class="ident">subscriber_id</span>,
-                <span class="ident">command</span>.<span class="ident">topic</span>,
-                <span class="ident">session</span>.<span class="ident">as_client</span>.<span class="ident">session</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">session</span><span class="op">|</span> <span class="ident">session</span>.<span class="ident">id</span>),
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, SubscribeTo&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: SubscribeTo,
+    ) -&gt; HandlerResult&lt;SubscribeTo&gt; {
+        session
+            .client
+            .subscribe_by_id(
+                command.subscriber_id,
+                command.topic,
+                session.as_client.session().and_then(|session| session.id),
             )
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">UnsubscribeFrom</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">UnsubscribeFrom</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">UnsubscribeFrom</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">client</span>
-            .<span class="ident">unsubscribe_by_id</span>(
-                <span class="ident">command</span>.<span class="ident">subscriber_id</span>,
-                <span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">topic</span>,
-                <span class="ident">session</span>.<span class="ident">as_client</span>.<span class="ident">session</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">session</span><span class="op">|</span> <span class="ident">session</span>.<span class="ident">id</span>),
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, UnsubscribeFrom&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: UnsubscribeFrom,
+    ) -&gt; HandlerResult&lt;UnsubscribeFrom&gt; {
+        session
+            .client
+            .unsubscribe_by_id(
+                command.subscriber_id,
+                <span class="kw-2">&amp;</span>command.topic,
+                session.as_client.session().and_then(|session| session.id),
             )
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">UnregisterSubscriber</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">UnregisterSubscriber</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">UnregisterSubscriber</span><span class="op">&gt;</span> {
-        <span class="ident">session</span>
-            .<span class="ident">client</span>
-            .<span class="ident">unregister_subscriber_by_id</span>(
-                <span class="ident">command</span>.<span class="ident">subscriber_id</span>,
-                <span class="ident">session</span>.<span class="ident">as_client</span>.<span class="ident">session</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">session</span><span class="op">|</span> <span class="ident">session</span>.<span class="ident">id</span>),
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, UnregisterSubscriber&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: UnregisterSubscriber,
+    ) -&gt; HandlerResult&lt;UnregisterSubscriber&gt; {
+        session
+            .client
+            .unregister_subscriber_by_id(
+                command.subscriber_id,
+                session.as_client.session().and_then(|session| session.id),
             )
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+            .map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">ExecuteKeyOperation</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">ExecuteKeyOperation</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">ExecuteKeyOperation</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, ExecuteKeyOperation&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: ExecuteKeyOperation,
+    ) -&gt; HandlerResult&lt;ExecuteKeyOperation&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">execute_key_operation</span>(<span class="ident">command</span>.<span class="ident">op</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .execute_key_operation(command.op)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">CompactCollection</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">CompactCollection</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">CompactCollection</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, CompactCollection&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: CompactCollection,
+    ) -&gt; HandlerResult&lt;CompactCollection&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">compact_collection_by_name</span>(<span class="ident">command</span>.<span class="ident">name</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .compact_collection_by_name(command.name)
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">CompactKeyValueStore</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(
-        <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">command</span>: <span class="ident">CompactKeyValueStore</span>,
-    ) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">CompactKeyValueStore</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">session</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, CompactKeyValueStore&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(
+        session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;,
+        command: CompactKeyValueStore,
+    ) -&gt; HandlerResult&lt;CompactKeyValueStore&gt; {
+        <span class="kw">let </span>database = session
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>
-            .<span class="ident">compact_key_value_store</span>()
-            .<span class="kw">await</span>
-            .<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database
+            .compact_key_value_store()
+            .<span class="kw">await
+            </span>.map_err(HandlerError::from)
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Compact</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ServerDispatcher</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">client</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">command</span>: <span class="ident">Compact</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Compact</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">database</span> <span class="op">=</span> <span class="ident">client</span>
-            .<span class="ident">as_client</span>
-            .<span class="ident">database_without_schema</span>(<span class="kw-2">&amp;</span><span class="ident">command</span>.<span class="ident">database</span>)
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; Handler&lt;B, Compact&gt; <span class="kw">for </span>ServerDispatcher {
+    <span class="kw">async fn </span>handle(client: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, command: Compact) -&gt; HandlerResult&lt;Compact&gt; {
+        <span class="kw">let </span>database = client
+            .as_client
+            .database_without_schema(<span class="kw-2">&amp;</span>command.database)
             .<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="ident">database</span>.<span class="ident">compact</span>().<span class="kw">await</span>.<span class="ident">map_err</span>(<span class="ident">HandlerError::from</span>)
+        database.compact().<span class="kw">await</span>.map_err(HandlerError::from)
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/keyvalue/implementation/set.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>set.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/keyvalue/implementation/set.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>set.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -342,344 +336,343 @@
 <span id="336">336</span>
 <span id="337">337</span>
 <span id="338">338</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">ops::Add</span>,
-    <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>},
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    ops::Add,
+    time::{Duration, SystemTime},
 };
 
-<span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Future</span>, <span class="ident">FutureExt</span>};
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="kw">use </span>futures::{Future, FutureExt};
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">super</span>::{
-    <span class="ident">BuilderState</span>, <span class="ident">Command</span>, <span class="ident">KeyCheck</span>, <span class="ident">KeyOperation</span>, <span class="ident">KeyStatus</span>, <span class="ident">KeyValue</span>, <span class="ident">Output</span>, <span class="ident">PendingValue</span>,
-    <span class="ident">Timestamp</span>,
+<span class="kw">use super</span>::{
+    BuilderState, Command, KeyCheck, KeyOperation, KeyStatus, KeyValue, Output, PendingValue,
+    Timestamp,
 };
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">keyvalue</span>::{<span class="ident">AsyncKeyValue</span>, <span class="ident">SetCommand</span>, <span class="ident">Value</span>},
-    <span class="ident">Error</span>,
+<span class="kw">use crate</span>::{
+    keyvalue::{AsyncKeyValue, SetCommand, Value},
+    Error,
 };
 
-<span class="doccomment">/// Builder for a [`Command::Set`] key-value operation.</span>
-<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;the key-value operation is not performed until execute() is called&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Builder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">KeyValue</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="ident">kv</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">KeyValue</span>,
-    <span class="ident">namespace</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="ident">key</span>: <span class="ident">String</span>,
-    <span class="ident">value</span>: <span class="ident">PendingValue</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V</span><span class="op">&gt;</span>,
-    <span class="ident">expiration</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>,
-    <span class="ident">keep_existing_expiration</span>: <span class="ident">bool</span>,
-    <span class="ident">check</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyCheck</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Builder for a [`Command::Set`] key-value operation.
+</span><span class="attribute">#[must_use = <span class="string">&quot;the key-value operation is not performed until execute() is called&quot;</span>]
+</span><span class="kw">pub struct </span>Builder&lt;<span class="lifetime">&#39;a</span>, KeyValue, V&gt; {
+    kv: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>KeyValue,
+    namespace: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    key: String,
+    value: PendingValue&lt;<span class="lifetime">&#39;a</span>, V&gt;,
+    expiration: <span class="prelude-ty">Option</span>&lt;Timestamp&gt;,
+    keep_existing_expiration: bool,
+    check: <span class="prelude-ty">Option</span>&lt;KeyCheck&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Builder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">K</span>: <span class="ident">KeyValue</span>,
-    <span class="ident">V</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, K, V&gt; Builder&lt;<span class="lifetime">&#39;a</span>, K, V&gt;
+<span class="kw">where
+    </span>K: KeyValue,
+    V: Serialize + Send + Sync,
 {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">kv</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>,
-        <span class="ident">namespace</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">key</span>: <span class="ident">String</span>,
-        <span class="ident">value</span>: <span class="ident">PendingValue</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">key</span>,
-            <span class="ident">value</span>,
-            <span class="ident">kv</span>,
-            <span class="ident">namespace</span>,
-            <span class="ident">expiration</span>: <span class="prelude-val">None</span>,
-            <span class="ident">keep_existing_expiration</span>: <span class="bool-val">false</span>,
-            <span class="ident">check</span>: <span class="prelude-val">None</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>new(
+        kv: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>K,
+        namespace: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        key: String,
+        value: PendingValue&lt;<span class="lifetime">&#39;a</span>, V&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            key,
+            value,
+            kv,
+            namespace,
+            expiration: <span class="prelude-val">None</span>,
+            keep_existing_expiration: <span class="bool-val">false</span>,
+            check: <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="doccomment">/// Set this key to expire after `duration` from now.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expire_in</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">duration</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
-        <span class="comment">// TODO consider using checked_add here and making it return an error.</span>
-        <span class="self">self</span>.<span class="ident">expiration</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Timestamp::from</span>(<span class="ident">SystemTime::now</span>().<span class="ident">add</span>(<span class="ident">duration</span>)));
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Set this key to expire after `duration` from now.
+    </span><span class="kw">pub fn </span>expire_in(<span class="kw-2">mut </span><span class="self">self</span>, duration: Duration) -&gt; <span class="self">Self </span>{
+        <span class="comment">// TODO consider using checked_add here and making it return an error.
+        </span><span class="self">self</span>.expiration = <span class="prelude-val">Some</span>(Timestamp::from(SystemTime::now().add(duration)));
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Set this key to expire at the provided `time`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expire_at</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">time</span>: <span class="ident">SystemTime</span>) -&gt; <span class="self">Self</span> {
-        <span class="comment">// TODO consider using checked_add here and making it return an error.</span>
-        <span class="self">self</span>.<span class="ident">expiration</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Timestamp::from</span>(<span class="ident">time</span>));
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Set this key to expire at the provided `time`.
+    </span><span class="kw">pub fn </span>expire_at(<span class="kw-2">mut </span><span class="self">self</span>, time: SystemTime) -&gt; <span class="self">Self </span>{
+        <span class="comment">// TODO consider using checked_add here and making it return an error.
+        </span><span class="self">self</span>.expiration = <span class="prelude-val">Some</span>(Timestamp::from(time));
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// If the key already exists, do not update the currently set expiration.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">keep_existing_expiration</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">keep_existing_expiration</span> <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// If the key already exists, do not update the currently set expiration.
+    </span><span class="kw">pub const fn </span>keep_existing_expiration(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.keep_existing_expiration = <span class="bool-val">true</span>;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Only set the value if this key already exists.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">only_if_exists</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">check</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyCheck::OnlyIfPresent</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Only set the value if this key already exists.
+    </span><span class="kw">pub const fn </span>only_if_exists(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.check = <span class="prelude-val">Some</span>(KeyCheck::OnlyIfPresent);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Only set the value if this key isn&#39;t present.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">only_if_vacant</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">check</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyCheck::OnlyIfVacant</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Only set the value if this key isn&#39;t present.
+    </span><span class="kw">pub const fn </span>only_if_vacant(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.check = <span class="prelude-val">Some</span>(KeyCheck::OnlyIfVacant);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.</span>
-    <span class="doccomment">/// If no change is made, None will be returned.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">returning_previous</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="self">Self</span> {
-            <span class="ident">kv</span>,
-            <span class="ident">namespace</span>,
-            <span class="ident">key</span>,
-            <span class="ident">value</span>,
-            <span class="ident">expiration</span>,
-            <span class="ident">keep_existing_expiration</span>,
-            <span class="ident">check</span>,
-        } <span class="op">=</span> <span class="self">self</span>;
+    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.
+    /// If no change is made, None will be returned.
+    </span><span class="attribute">#[allow(clippy::missing_panics_doc)]
+    </span><span class="kw">pub fn </span>returning_previous(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Value&gt;, Error&gt; {
+        <span class="kw">let </span><span class="self">Self </span>{
+            kv,
+            namespace,
+            key,
+            value,
+            expiration,
+            keep_existing_expiration,
+            check,
+        } = <span class="self">self</span>;
 
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">kv</span>.<span class="ident">execute_key_operation</span>(<span class="ident">KeyOperation</span> {
-            <span class="ident">namespace</span>,
-            <span class="ident">key</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Set</span>(<span class="ident">SetCommand</span> {
-                <span class="ident">value</span>: <span class="ident">value</span>.<span class="ident">prepare</span>()<span class="question-mark">?</span>,
-                <span class="ident">expiration</span>,
-                <span class="ident">keep_existing_expiration</span>,
-                <span class="ident">check</span>,
-                <span class="ident">return_previous_value</span>: <span class="bool-val">true</span>,
+        <span class="kw">let </span>result = kv.execute_key_operation(KeyOperation {
+            namespace,
+            key,
+            command: Command::Set(SetCommand {
+                value: value.prepare()<span class="question-mark">?</span>,
+                expiration,
+                keep_existing_expiration,
+                check,
+                return_previous_value: <span class="bool-val">true</span>,
             }),
         })<span class="question-mark">?</span>;
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="ident">Output::Value</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">value</span>),
-            <span class="ident">Output::Status</span>(<span class="ident">KeyStatus::NotChanged</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-            <span class="ident">Output::Status</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Unexpected output from Set&quot;</span>),
+        <span class="kw">match </span>result {
+            Output::Value(value) =&gt; <span class="prelude-val">Ok</span>(value),
+            Output::Status(KeyStatus::NotChanged) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+            Output::Status(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Unexpected output from Set&quot;</span>),
         }
     }
 
-    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.</span>
-    <span class="doccomment">/// If no change is made, None will be returned.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">returning_previous_as</span><span class="op">&lt;</span><span class="ident">OtherV</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.
+    /// If no change is made, None will be returned.
+    </span><span class="attribute">#[allow(clippy::missing_panics_doc)]
+    </span><span class="kw">pub fn </span>returning_previous_as&lt;OtherV: <span class="kw">for</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt;&gt;(
         <span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OtherV</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">returning_previous</span>()<span class="question-mark">?</span>
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="ident">value</span>.<span class="ident">deserialize</span>())
-            .<span class="ident">transpose</span>()
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;OtherV&gt;, Error&gt; {
+        <span class="self">self</span>.returning_previous()<span class="question-mark">?
+            </span>.map(|value| value.deserialize())
+            .transpose()
     }
 
-    <span class="doccomment">/// Executes the operation using the configured options.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">execute</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">KeyStatus</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="self">Self</span> {
-            <span class="ident">kv</span>,
-            <span class="ident">namespace</span>,
-            <span class="ident">key</span>,
-            <span class="ident">value</span>,
-            <span class="ident">expiration</span>,
-            <span class="ident">keep_existing_expiration</span>,
-            <span class="ident">check</span>,
-        } <span class="op">=</span> <span class="self">self</span>;
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">kv</span>.<span class="ident">execute_key_operation</span>(<span class="ident">KeyOperation</span> {
-            <span class="ident">namespace</span>,
-            <span class="ident">key</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Set</span>(<span class="ident">SetCommand</span> {
-                <span class="ident">value</span>: <span class="ident">value</span>.<span class="ident">prepare</span>()<span class="question-mark">?</span>,
-                <span class="ident">expiration</span>,
-                <span class="ident">keep_existing_expiration</span>,
-                <span class="ident">check</span>,
-                <span class="ident">return_previous_value</span>: <span class="bool-val">false</span>,
+    <span class="doccomment">/// Executes the operation using the configured options.
+    </span><span class="kw">pub fn </span>execute(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;KeyStatus, Error&gt; {
+        <span class="kw">let </span><span class="self">Self </span>{
+            kv,
+            namespace,
+            key,
+            value,
+            expiration,
+            keep_existing_expiration,
+            check,
+        } = <span class="self">self</span>;
+        <span class="kw">let </span>result = kv.execute_key_operation(KeyOperation {
+            namespace,
+            key,
+            command: Command::Set(SetCommand {
+                value: value.prepare()<span class="question-mark">?</span>,
+                expiration,
+                keep_existing_expiration,
+                check,
+                return_previous_value: <span class="bool-val">false</span>,
             }),
         })<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Output::Status</span>(<span class="ident">status</span>) <span class="op">=</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">status</span>)
-        } <span class="kw">else</span> {
+        <span class="kw">if let </span>Output::Status(status) = result {
+            <span class="prelude-val">Ok</span>(status)
+        } <span class="kw">else </span>{
             <span class="macro">unreachable!</span>(<span class="string">&quot;Unexpected output from Set&quot;</span>)
         }
     }
 }
 
-<span class="doccomment">/// Builder for a [`Command::Set`] key-value operation.</span>
-<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;futures do nothing unless you `.await` or poll them&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AsyncBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">KeyValue</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="ident">state</span>: <span class="ident">BuilderState</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Options</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">KeyValue</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">KeyStatus</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Builder for a [`Command::Set`] key-value operation.
+</span><span class="attribute">#[must_use = <span class="string">&quot;futures do nothing unless you `.await` or poll them&quot;</span>]
+</span><span class="kw">pub struct </span>AsyncBuilder&lt;<span class="lifetime">&#39;a</span>, KeyValue, V&gt; {
+    state: BuilderState&lt;<span class="lifetime">&#39;a</span>, Options&lt;<span class="lifetime">&#39;a</span>, KeyValue, V&gt;, <span class="prelude-ty">Result</span>&lt;KeyStatus, Error&gt;&gt;,
 }
 
-<span class="kw">struct</span> <span class="ident">Options</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">KeyValue</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-    <span class="ident">kv</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">KeyValue</span>,
-    <span class="ident">namespace</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="ident">key</span>: <span class="ident">String</span>,
-    <span class="ident">value</span>: <span class="ident">PendingValue</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V</span><span class="op">&gt;</span>,
-    <span class="ident">expiration</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>,
-    <span class="ident">keep_existing_expiration</span>: <span class="ident">bool</span>,
-    <span class="ident">check</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyCheck</span><span class="op">&gt;</span>,
+<span class="kw">struct </span>Options&lt;<span class="lifetime">&#39;a</span>, KeyValue, V&gt; {
+    kv: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>KeyValue,
+    namespace: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    key: String,
+    value: PendingValue&lt;<span class="lifetime">&#39;a</span>, V&gt;,
+    expiration: <span class="prelude-ty">Option</span>&lt;Timestamp&gt;,
+    keep_existing_expiration: bool,
+    check: <span class="prelude-ty">Option</span>&lt;KeyCheck&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">AsyncBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">K</span>: <span class="ident">AsyncKeyValue</span>,
-    <span class="ident">V</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, K, V&gt; AsyncBuilder&lt;<span class="lifetime">&#39;a</span>, K, V&gt;
+<span class="kw">where
+    </span>K: AsyncKeyValue,
+    V: Serialize + Send + Sync,
 {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">kv</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">K</span>,
-        <span class="ident">namespace</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">key</span>: <span class="ident">String</span>,
-        <span class="ident">value</span>: <span class="ident">PendingValue</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">V</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">state</span>: <span class="ident">BuilderState::Pending</span>(<span class="prelude-val">Some</span>(<span class="ident">Options</span> {
-                <span class="ident">key</span>,
-                <span class="ident">value</span>,
-                <span class="ident">kv</span>,
-                <span class="ident">namespace</span>,
-                <span class="ident">expiration</span>: <span class="prelude-val">None</span>,
-                <span class="ident">keep_existing_expiration</span>: <span class="bool-val">false</span>,
-                <span class="ident">check</span>: <span class="prelude-val">None</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>new(
+        kv: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>K,
+        namespace: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        key: String,
+        value: PendingValue&lt;<span class="lifetime">&#39;a</span>, V&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            state: BuilderState::Pending(<span class="prelude-val">Some</span>(Options {
+                key,
+                value,
+                kv,
+                namespace,
+                expiration: <span class="prelude-val">None</span>,
+                keep_existing_expiration: <span class="bool-val">false</span>,
+                check: <span class="prelude-val">None</span>,
             })),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">options</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Options</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">BuilderState::Pending</span>(<span class="prelude-val">Some</span>(<span class="ident">options</span>)) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">state</span> {
-            <span class="ident">options</span>
-        } <span class="kw">else</span> {
+    <span class="kw">fn </span>options(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Options&lt;<span class="lifetime">&#39;a</span>, K, V&gt; {
+        <span class="kw">if let </span>BuilderState::Pending(<span class="prelude-val">Some</span>(options)) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.state {
+            options
+        } <span class="kw">else </span>{
             <span class="macro">panic!</span>(<span class="string">&quot;Attempted to use after retrieving the result&quot;</span>)
         }
     }
 
-    <span class="doccomment">/// Set this key to expire after `duration` from now.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expire_in</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">duration</span>: <span class="ident">Duration</span>) -&gt; <span class="self">Self</span> {
-        <span class="comment">// TODO consider using checked_add here and making it return an error.</span>
-        <span class="self">self</span>.<span class="ident">options</span>().<span class="ident">expiration</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Timestamp::from</span>(<span class="ident">SystemTime::now</span>().<span class="ident">add</span>(<span class="ident">duration</span>)));
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Set this key to expire after `duration` from now.
+    </span><span class="kw">pub fn </span>expire_in(<span class="kw-2">mut </span><span class="self">self</span>, duration: Duration) -&gt; <span class="self">Self </span>{
+        <span class="comment">// TODO consider using checked_add here and making it return an error.
+        </span><span class="self">self</span>.options().expiration = <span class="prelude-val">Some</span>(Timestamp::from(SystemTime::now().add(duration)));
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Set this key to expire at the provided `time`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expire_at</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">time</span>: <span class="ident">SystemTime</span>) -&gt; <span class="self">Self</span> {
-        <span class="comment">// TODO consider using checked_add here and making it return an error.</span>
-        <span class="self">self</span>.<span class="ident">options</span>().<span class="ident">expiration</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Timestamp::from</span>(<span class="ident">time</span>));
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Set this key to expire at the provided `time`.
+    </span><span class="kw">pub fn </span>expire_at(<span class="kw-2">mut </span><span class="self">self</span>, time: SystemTime) -&gt; <span class="self">Self </span>{
+        <span class="comment">// TODO consider using checked_add here and making it return an error.
+        </span><span class="self">self</span>.options().expiration = <span class="prelude-val">Some</span>(Timestamp::from(time));
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// If the key already exists, do not update the currently set expiration.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_existing_expiration</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">options</span>().<span class="ident">keep_existing_expiration</span> <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// If the key already exists, do not update the currently set expiration.
+    </span><span class="kw">pub fn </span>keep_existing_expiration(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.options().keep_existing_expiration = <span class="bool-val">true</span>;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Only set the value if this key already exists.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">only_if_exists</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">options</span>().<span class="ident">check</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyCheck::OnlyIfPresent</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Only set the value if this key already exists.
+    </span><span class="kw">pub fn </span>only_if_exists(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.options().check = <span class="prelude-val">Some</span>(KeyCheck::OnlyIfPresent);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Only set the value if this key isn&#39;t present.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">only_if_vacant</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">options</span>().<span class="ident">check</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyCheck::OnlyIfVacant</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Only set the value if this key isn&#39;t present.
+    </span><span class="kw">pub fn </span>only_if_vacant(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.options().check = <span class="prelude-val">Some</span>(KeyCheck::OnlyIfVacant);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.</span>
-    <span class="doccomment">/// If no change is made, None will be returned.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">returning_previous</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">BuilderState::Pending</span>(<span class="prelude-val">Some</span>(<span class="ident">builder</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span> {
-            <span class="kw">let</span> <span class="ident">Options</span> {
-                <span class="ident">kv</span>,
-                <span class="ident">namespace</span>,
-                <span class="ident">key</span>,
-                <span class="ident">value</span>,
-                <span class="ident">expiration</span>,
-                <span class="ident">keep_existing_expiration</span>,
-                <span class="ident">check</span>,
-            } <span class="op">=</span> <span class="ident">builder</span>;
+    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.
+    /// If no change is made, None will be returned.
+    </span><span class="attribute">#[allow(clippy::missing_panics_doc)]
+    </span><span class="kw">pub async fn </span>returning_previous(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Value&gt;, Error&gt; {
+        <span class="kw">if let </span>BuilderState::Pending(<span class="prelude-val">Some</span>(builder)) = <span class="self">self</span>.state {
+            <span class="kw">let </span>Options {
+                kv,
+                namespace,
+                key,
+                value,
+                expiration,
+                keep_existing_expiration,
+                check,
+            } = builder;
 
-            <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">kv</span>
-                .<span class="ident">execute_key_operation</span>(<span class="ident">KeyOperation</span> {
-                    <span class="ident">namespace</span>,
-                    <span class="ident">key</span>,
-                    <span class="ident">command</span>: <span class="ident">Command::Set</span>(<span class="ident">SetCommand</span> {
-                        <span class="ident">value</span>: <span class="ident">value</span>.<span class="ident">prepare</span>()<span class="question-mark">?</span>,
-                        <span class="ident">expiration</span>,
-                        <span class="ident">keep_existing_expiration</span>,
-                        <span class="ident">check</span>,
-                        <span class="ident">return_previous_value</span>: <span class="bool-val">true</span>,
+            <span class="kw">let </span>result = kv
+                .execute_key_operation(KeyOperation {
+                    namespace,
+                    key,
+                    command: Command::Set(SetCommand {
+                        value: value.prepare()<span class="question-mark">?</span>,
+                        expiration,
+                        keep_existing_expiration,
+                        check,
+                        return_previous_value: <span class="bool-val">true</span>,
                     }),
                 })
                 .<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">match</span> <span class="ident">result</span> {
-                <span class="ident">Output::Value</span>(<span class="ident">value</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">value</span>),
-                <span class="ident">Output::Status</span>(<span class="ident">KeyStatus::NotChanged</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-                <span class="ident">Output::Status</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Unexpected output from Set&quot;</span>),
+            <span class="kw">match </span>result {
+                Output::Value(value) =&gt; <span class="prelude-val">Ok</span>(value),
+                Output::Status(KeyStatus::NotChanged) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+                Output::Status(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;Unexpected output from Set&quot;</span>),
             }
-        } <span class="kw">else</span> {
+        } <span class="kw">else </span>{
             <span class="macro">panic!</span>(<span class="string">&quot;Using future after it&#39;s been executed&quot;</span>)
         }
     }
 
-    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.</span>
-    <span class="doccomment">/// If no change is made, None will be returned.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_panics_doc</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">returning_previous_as</span><span class="op">&lt;</span><span class="ident">OtherV</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Executes the Set operation, requesting the previous value be returned.
+    /// If no change is made, None will be returned.
+    </span><span class="attribute">#[allow(clippy::missing_panics_doc)]
+    </span><span class="kw">pub async fn </span>returning_previous_as&lt;OtherV: <span class="kw">for</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt;&gt;(
         <span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OtherV</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">returning_previous</span>()
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="ident">value</span>.<span class="ident">deserialize</span>())
-            .<span class="ident">transpose</span>()
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;OtherV&gt;, Error&gt; {
+        <span class="self">self</span>.returning_previous()
+            .<span class="kw">await</span><span class="question-mark">?
+            </span>.map(|value| value.deserialize())
+            .transpose()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">AsyncBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">K</span>: <span class="ident">AsyncKeyValue</span>,
-    <span class="ident">V</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, K, V&gt; Future <span class="kw">for </span>AsyncBuilder&lt;<span class="lifetime">&#39;a</span>, K, V&gt;
+<span class="kw">where
+    </span>K: AsyncKeyValue,
+    V: Serialize + Send + Sync,
 {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">KeyStatus</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">type </span>Output = <span class="prelude-ty">Result</span>&lt;KeyStatus, Error&gt;;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">std::pin::Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
-        <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::task::Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">std::task::Poll</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">state</span> {
-            <span class="ident">BuilderState::Executing</span>(<span class="ident">future</span>) =&gt; <span class="ident">future</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>),
-            <span class="ident">BuilderState::Pending</span>(<span class="ident">builder</span>) =&gt; {
-                <span class="kw">let</span> <span class="ident">Options</span> {
-                    <span class="ident">kv</span>,
-                    <span class="ident">namespace</span>,
-                    <span class="ident">key</span>,
-                    <span class="ident">value</span>,
-                    <span class="ident">expiration</span>,
-                    <span class="ident">keep_existing_expiration</span>,
-                    <span class="ident">check</span>,
-                } <span class="op">=</span> <span class="ident">builder</span>.<span class="ident">take</span>().<span class="ident">expect</span>(<span class="string">&quot;expected builder to have options&quot;</span>);
-                <span class="kw">let</span> <span class="ident">future</span> <span class="op">=</span> <span class="kw">async</span> <span class="kw">move</span> {
-                    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">kv</span>
-                        .<span class="ident">execute_key_operation</span>(<span class="ident">KeyOperation</span> {
-                            <span class="ident">namespace</span>,
-                            <span class="ident">key</span>,
-                            <span class="ident">command</span>: <span class="ident">Command::Set</span>(<span class="ident">SetCommand</span> {
-                                <span class="ident">value</span>: <span class="ident">value</span>.<span class="ident">prepare</span>()<span class="question-mark">?</span>,
-                                <span class="ident">expiration</span>,
-                                <span class="ident">keep_existing_expiration</span>,
-                                <span class="ident">check</span>,
-                                <span class="ident">return_previous_value</span>: <span class="bool-val">false</span>,
+    <span class="kw">fn </span>poll(
+        <span class="kw-2">mut </span><span class="self">self</span>: std::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
+        cx: <span class="kw-2">&amp;mut </span>std::task::Context&lt;<span class="lifetime">&#39;_</span>&gt;,
+    ) -&gt; std::task::Poll&lt;<span class="self">Self</span>::Output&gt; {
+        <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.state {
+            BuilderState::Executing(future) =&gt; future.as_mut().poll(cx),
+            BuilderState::Pending(builder) =&gt; {
+                <span class="kw">let </span>Options {
+                    kv,
+                    namespace,
+                    key,
+                    value,
+                    expiration,
+                    keep_existing_expiration,
+                    check,
+                } = builder.take().expect(<span class="string">&quot;expected builder to have options&quot;</span>);
+                <span class="kw">let </span>future = <span class="kw">async move </span>{
+                    <span class="kw">let </span>result = kv
+                        .execute_key_operation(KeyOperation {
+                            namespace,
+                            key,
+                            command: Command::Set(SetCommand {
+                                value: value.prepare()<span class="question-mark">?</span>,
+                                expiration,
+                                keep_existing_expiration,
+                                check,
+                                return_previous_value: <span class="bool-val">false</span>,
                             }),
                         })
                         .<span class="kw">await</span><span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Output::Status</span>(<span class="ident">status</span>) <span class="op">=</span> <span class="ident">result</span> {
-                        <span class="prelude-val">Ok</span>(<span class="ident">status</span>)
-                    } <span class="kw">else</span> {
+                    <span class="kw">if let </span>Output::Status(status) = result {
+                        <span class="prelude-val">Ok</span>(status)
+                    } <span class="kw">else </span>{
                         <span class="macro">unreachable!</span>(<span class="string">&quot;Unexpected output from Set&quot;</span>)
                     }
                 }
-                .<span class="ident">boxed</span>();
+                .boxed();
 
-                <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">BuilderState::Executing</span>(<span class="ident">future</span>);
-                <span class="self">self</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
+                <span class="self">self</span>.state = BuilderState::Executing(future);
+                <span class="self">self</span>.poll(cx)
             }
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

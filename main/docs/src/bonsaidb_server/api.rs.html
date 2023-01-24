@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/api.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>api.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/api.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>api.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -144,146 +138,145 @@
 <span id="138">138</span>
 <span id="139">139</span>
 <span id="140">140</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt::Debug</span>, <span class="ident">marker::PhantomData</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{fmt::Debug, marker::PhantomData};
 
-<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">api</span>::{<span class="self">self</span>, <span class="ident">Api</span>, <span class="ident">ApiError</span>, <span class="ident">Infallible</span>},
-    <span class="ident">arc_bytes::serde::Bytes</span>,
-    <span class="ident">permissions::PermissionDenied</span>,
-    <span class="ident">schema</span>::{<span class="ident">InsertError</span>, <span class="ident">InvalidNameError</span>},
+<span class="kw">use </span>async_trait::async_trait;
+<span class="kw">use </span>bonsaidb_core::{
+    api::{<span class="self">self</span>, Api, ApiError, Infallible},
+    arc_bytes::serde::Bytes,
+    permissions::PermissionDenied,
+    schema::{InsertError, InvalidNameError},
 };
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Backend</span>, <span class="ident">ConnectedClient</span>, <span class="ident">CustomServer</span>, <span class="ident">Error</span>, <span class="ident">NoBackend</span>};
+<span class="kw">use crate</span>::{Backend, ConnectedClient, CustomServer, Error, NoBackend};
 
-<span class="doccomment">/// A trait that can dispatch requests for a [`Api`].</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span>, <span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
-    <span class="doccomment">/// Returns a dispatcher to handle custom api requests. The parameters are</span>
-    <span class="doccomment">/// provided so that they can be cloned if needed during the processing of</span>
-    <span class="doccomment">/// requests.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">request</span>: <span class="ident">Api</span>) -&gt; <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span>;
+<span class="doccomment">/// A trait that can dispatch requests for a [`Api`].
+</span><span class="attribute">#[async_trait]
+</span><span class="kw">pub trait </span>Handler&lt;B: Backend, Api: api::Api&gt;: Send + Sync {
+    <span class="doccomment">/// Returns a dispatcher to handle custom api requests. The parameters are
+    /// provided so that they can be cloned if needed during the processing of
+    /// requests.
+    </span><span class="kw">async fn </span>handle(session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, request: Api) -&gt; HandlerResult&lt;Api&gt;;
 }
 
-<span class="doccomment">/// A session for a [`Handler`], providing ways to access the server and</span>
-<span class="doccomment">/// connected client.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The [`Handler`]&#39;s server reference. This server instance is not limited</span>
-    <span class="doccomment">/// to the permissions of the connected user.</span>
-    <span class="kw">pub</span> <span class="ident">server</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The connected client&#39;s server reference. This server instance will</span>
-    <span class="doccomment">/// reject any database operations that the connected client is not</span>
-    <span class="doccomment">/// explicitly authorized to perform based on its authentication state.</span>
-    <span class="kw">pub</span> <span class="ident">as_client</span>: <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The connected client making the API request.</span>
-    <span class="kw">pub</span> <span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A session for a [`Handler`], providing ways to access the server and
+/// connected client.
+</span><span class="kw">pub struct </span>HandlerSession&lt;<span class="lifetime">&#39;a</span>, B: Backend = NoBackend&gt; {
+    <span class="doccomment">/// The [`Handler`]&#39;s server reference. This server instance is not limited
+    /// to the permissions of the connected user.
+    </span><span class="kw">pub </span>server: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>CustomServer&lt;B&gt;,
+    <span class="doccomment">/// The connected client&#39;s server reference. This server instance will
+    /// reject any database operations that the connected client is not
+    /// explicitly authorized to perform based on its authentication state.
+    </span><span class="kw">pub </span>as_client: CustomServer&lt;B&gt;,
+    <span class="doccomment">/// The connected client making the API request.
+    </span><span class="kw">pub </span>client: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>ConnectedClient&lt;B&gt;,
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">AnyHandler</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">session</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+<span class="attribute">#[async_trait]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait </span>AnyHandler&lt;B: Backend&gt;: Send + Sync + Debug {
+    <span class="kw">async fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, session: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, request: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;Bytes, Error&gt;;
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">AnyWrapper</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">A</span><span class="op">&gt;</span>, <span class="ident">B</span>: <span class="ident">Backend</span>, <span class="ident">A</span>: <span class="ident">Api</span><span class="op">&gt;</span>(
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">D</span>, <span class="ident">B</span>, <span class="ident">A</span>)<span class="op">&gt;</span>,
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>AnyWrapper&lt;D: Handler&lt;B, A&gt;, B: Backend, A: Api&gt;(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) PhantomData&lt;(D, B, A)&gt;,
 );
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">B</span>, <span class="ident">A</span><span class="op">&gt;</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">AnyWrapper</span><span class="op">&lt;</span><span class="ident">D</span>, <span class="ident">B</span>, <span class="ident">A</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">D</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-    <span class="ident">B</span>: <span class="ident">Backend</span>,
-    <span class="ident">A</span>: <span class="ident">Api</span>,
+<span class="kw">impl</span>&lt;D, B, A&gt; Debug <span class="kw">for </span>AnyWrapper&lt;D, B, A&gt;
+<span class="kw">where
+    </span>D: Handler&lt;B, A&gt;,
+    B: Backend,
+    A: Api,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_tuple</span>(<span class="string">&quot;AnyWrapper&quot;</span>).<span class="ident">finish</span>()
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_tuple(<span class="string">&quot;AnyWrapper&quot;</span>).finish()
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span>, <span class="ident">A</span><span class="op">&gt;</span> <span class="ident">AnyHandler</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AnyWrapper</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">B</span>, <span class="ident">A</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">B</span>: <span class="ident">Backend</span>,
-    <span class="ident">T</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-    <span class="ident">A</span>: <span class="ident">Api</span>,
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;T, B, A&gt; AnyHandler&lt;B&gt; <span class="kw">for </span>AnyWrapper&lt;T, B, A&gt;
+<span class="kw">where
+    </span>B: Backend,
+    T: Handler&lt;B, A&gt;,
+    A: Api,
 {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">client</span>: <span class="ident">HandlerSession</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B</span><span class="op">&gt;</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">pot::from_slice</span>(<span class="ident">request</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">T::handle</span>(<span class="ident">client</span>, <span class="ident">request</span>).<span class="kw">await</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">response</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">response</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">HandlerError::Api</span>(<span class="ident">err</span>)) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">HandlerError::Server</span>(<span class="ident">err</span>)) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>),
+    <span class="kw">async fn </span>handle(<span class="kw-2">&amp;</span><span class="self">self</span>, client: HandlerSession&lt;<span class="lifetime">&#39;_</span>, B&gt;, request: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;Bytes, Error&gt; {
+        <span class="kw">let </span>request = pot::from_slice(request)<span class="question-mark">?</span>;
+        <span class="kw">let </span>response = <span class="kw">match </span>T::handle(client, request).<span class="kw">await </span>{
+            <span class="prelude-val">Ok</span>(response) =&gt; <span class="prelude-val">Ok</span>(response),
+            <span class="prelude-val">Err</span>(HandlerError::Api(err)) =&gt; <span class="prelude-val">Err</span>(err),
+            <span class="prelude-val">Err</span>(HandlerError::Server(err)) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(err),
         };
-        <span class="prelude-val">Ok</span>(<span class="ident">Bytes::from</span>(<span class="ident">pot::to_vec</span>(<span class="kw-2">&amp;</span><span class="ident">response</span>)<span class="question-mark">?</span>))
+        <span class="prelude-val">Ok</span>(Bytes::from(pot::to_vec(<span class="kw-2">&amp;</span>response)<span class="question-mark">?</span>))
     }
 }
 
-<span class="doccomment">/// An error that can occur inside of a [`Backend`] function.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span> <span class="op">=</span> <span class="ident">Infallible</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// An api-related error.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;api error: {0}&quot;</span>)]</span>
-    <span class="ident">Api</span>(<span class="ident">E</span>),
-    <span class="doccomment">/// A server-related error.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;server error: {0}&quot;</span>)]</span>
-    <span class="ident">Server</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">Error</span>),
+<span class="doccomment">/// An error that can occur inside of a [`Backend`] function.
+</span><span class="attribute">#[derive(thiserror::Error, Debug)]
+</span><span class="kw">pub enum </span>HandlerError&lt;E: ApiError = Infallible&gt; {
+    <span class="doccomment">/// An api-related error.
+    </span><span class="attribute">#[error(<span class="string">&quot;api error: {0}&quot;</span>)]
+    </span>Api(E),
+    <span class="doccomment">/// A server-related error.
+    </span><span class="attribute">#[error(<span class="string">&quot;server error: {0}&quot;</span>)]
+    </span>Server(<span class="attribute">#[from] </span>Error),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PermissionDenied</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">permission_denied</span>: <span class="ident">PermissionDenied</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">permission_denied</span>))
+<span class="kw">impl</span>&lt;E: ApiError&gt; From&lt;PermissionDenied&gt; <span class="kw">for </span>HandlerError&lt;E&gt; {
+    <span class="kw">fn </span>from(permission_denied: PermissionDenied) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(permission_denied))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">bonsaidb_core::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">err</span>))
+<span class="kw">impl</span>&lt;E: ApiError&gt; From&lt;bonsaidb_core::Error&gt; <span class="kw">for </span>HandlerError&lt;E&gt; {
+    <span class="kw">fn </span>from(err: bonsaidb_core::Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(err))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bonsaidb_local::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">bonsaidb_local::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">err</span>))
+<span class="kw">impl</span>&lt;E: ApiError&gt; From&lt;bonsaidb_local::Error&gt; <span class="kw">for </span>HandlerError&lt;E&gt; {
+    <span class="kw">fn </span>from(err: bonsaidb_local::Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(err))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InvalidNameError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">InvalidNameError</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">err</span>))
+<span class="kw">impl</span>&lt;E: ApiError&gt; From&lt;InvalidNameError&gt; <span class="kw">for </span>HandlerError&lt;E&gt; {
+    <span class="kw">fn </span>from(err: InvalidNameError) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(err))
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bincode::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="ident">bincode::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">bonsaidb_local::Error::from</span>(<span class="ident">other</span>)))
+<span class="attribute">#[cfg(feature = <span class="string">&quot;websockets&quot;</span>)]
+</span><span class="kw">impl</span>&lt;E: ApiError&gt; From&lt;bincode::Error&gt; <span class="kw">for </span>HandlerError&lt;E&gt; {
+    <span class="kw">fn </span>from(other: bincode::Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(bonsaidb_local::Error::from(other)))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">pot::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="ident">pot::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">other</span>))
+<span class="kw">impl</span>&lt;E: ApiError&gt; From&lt;pot::Error&gt; <span class="kw">for </span>HandlerError&lt;E&gt; {
+    <span class="kw">fn </span>from(other: pot::Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(other))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ApiError</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">std::io::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">std::io::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">err</span>))
+<span class="kw">impl</span>&lt;E: ApiError&gt; From&lt;std::io::Error&gt; <span class="kw">for </span>HandlerError&lt;E&gt; {
+    <span class="kw">fn </span>from(err: std::io::Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(err))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InsertError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">E</span>: <span class="ident">ApiError</span>,
+<span class="kw">impl</span>&lt;T, E&gt; From&lt;InsertError&lt;T&gt;&gt; <span class="kw">for </span>HandlerError&lt;E&gt;
+<span class="kw">where
+    </span>E: ApiError,
 {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">error</span>: <span class="ident">InsertError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Server</span>(<span class="ident">Error::from</span>(<span class="ident">error</span>.<span class="ident">error</span>))
+    <span class="kw">fn </span>from(error: InsertError&lt;T&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Server(Error::from(error.error))
     }
 }
 
-<span class="doccomment">/// The return type from a [`Handler`]&#39;s [`handle()`](Handler::handle)</span>
-<span class="doccomment">/// function.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">HandlerResult</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span> <span class="op">=</span>
-    <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">Api</span> <span class="kw">as</span> <span class="ident">api::Api</span><span class="op">&gt;</span><span class="ident">::Response</span>, <span class="ident">HandlerError</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">Api</span> <span class="kw">as</span> <span class="ident">api::Api</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="doccomment">/// The return type from a [`Handler`]&#39;s [`handle()`](Handler::handle)
+/// function.
+</span><span class="kw">pub type </span>HandlerResult&lt;Api&gt; =
+    <span class="prelude-ty">Result</span>&lt;&lt;Api <span class="kw">as </span>api::Api&gt;::Response, HandlerError&lt;&lt;Api <span class="kw">as </span>api::Api&gt;::Error&gt;&gt;;
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

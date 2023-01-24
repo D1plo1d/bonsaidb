@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-files/src/schema/block.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>block.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_files/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_files/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_files/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-files/src/schema/block.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>block.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_files/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -337,339 +331,338 @@
 <span id="331">331</span>
 <span id="332">332</span>
 <span id="333">333</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::BTreeMap</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">mem::size_of</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::BTreeMap, marker::PhantomData, mem::size_of};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::connection::AsyncConnection</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">connection::Connection</span>,
-    <span class="ident">document</span>::{<span class="ident">BorrowedDocument</span>, <span class="ident">Emit</span>},
-    <span class="ident">key</span>::{<span class="ident">time::TimestampAsNanoseconds</span>, <span class="ident">KeyEncoding</span>},
-    <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">View</span>, <span class="ident">ViewMapResult</span>, <span class="ident">ViewMappedValue</span>, <span class="ident">ViewSchema</span>},
-    <span class="ident">transaction</span>::{<span class="ident">Operation</span>, <span class="ident">Transaction</span>},
+<span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
+</span><span class="kw">use </span>bonsaidb_core::connection::AsyncConnection;
+<span class="kw">use </span>bonsaidb_core::{
+    connection::Connection,
+    document::{BorrowedDocument, Emit},
+    key::{time::TimestampAsNanoseconds, KeyEncoding},
+    schema::{Collection, CollectionName, View, ViewMapResult, ViewMappedValue, ViewSchema},
+    transaction::{Operation, Transaction},
 };
-<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="kw">use </span>derive_where::derive_where;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">direct::BlockInfo</span>, <span class="ident">schema::file::File</span>, <span class="ident">FileConfig</span>};
+<span class="kw">use crate</span>::{direct::BlockInfo, schema::file::File, FileConfig};
 
-<span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>)
-<span class="kw">where</span>
-    <span class="ident">Config</span>: <span class="ident">FileConfig</span>;
+<span class="attribute">#[derive_where(Debug, Default)]
+</span><span class="kw">pub struct </span>Block&lt;Config&gt;(PhantomData&lt;Config&gt;)
+<span class="kw">where
+    </span>Config: FileConfig;
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">Config</span>: <span class="ident">FileConfig</span>,
+<span class="kw">impl</span>&lt;Config&gt; Block&lt;Config&gt;
+<span class="kw">where
+    </span>Config: FileConfig,
 {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">append</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(
-        <span class="ident">data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">data</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">Transaction::new</span>();
-            <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">TimestampAsNanoseconds::now</span>();
-            <span class="comment">// Verify the file exists as part of appending. If the file was</span>
-            <span class="comment">// deleted out from underneath the appender, this will ensure no</span>
-            <span class="comment">// blocks are orphaned.</span>
-            <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">File</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)<span class="question-mark">?</span>);
+    <span class="kw">pub fn </span>append&lt;Database: Connection&gt;(
+        data: <span class="kw-2">&amp;</span>[u8],
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="kw">if </span>!data.is_empty() {
+            <span class="kw">let </span><span class="kw-2">mut </span>tx = Transaction::new();
+            <span class="kw">let </span>now = TimestampAsNanoseconds::now();
+            <span class="comment">// Verify the file exists as part of appending. If the file was
+            // deleted out from underneath the appender, this will ensure no
+            // blocks are orphaned.
+            </span>tx.push(Operation::check_document_exists::&lt;File&lt;Config&gt;&gt;(<span class="kw-2">&amp;</span>file_id)<span class="question-mark">?</span>);
 
-            <span class="kw">let</span> <span class="ident">block_collection</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::collection_name</span>();
-            <span class="kw">for</span> <span class="ident">chunk</span> <span class="kw">in</span> <span class="ident">data</span>.<span class="ident">chunks</span>(<span class="ident">Config::BLOCK_SIZE</span>) {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">block</span> <span class="op">=</span>
-                    <span class="ident">Vec::with_capacity</span>(<span class="ident">chunk</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>() <span class="op">+</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>());
-                <span class="ident">block</span>.<span class="ident">extend</span>(<span class="ident">chunk</span>);
-                <span class="ident">block</span>.<span class="ident">extend</span>(<span class="ident">file_id</span>.<span class="ident">to_be_bytes</span>());
-                <span class="ident">block</span>.<span class="ident">extend</span>(<span class="ident">now</span>.<span class="ident">representation</span>().<span class="ident">to_be_bytes</span>());
-                <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::insert</span>(<span class="ident">block_collection</span>.<span class="ident">clone</span>(), <span class="prelude-val">None</span>, <span class="ident">block</span>));
+            <span class="kw">let </span>block_collection = <span class="self">Self</span>::collection_name();
+            <span class="kw">for </span>chunk <span class="kw">in </span>data.chunks(Config::BLOCK_SIZE) {
+                <span class="kw">let </span><span class="kw-2">mut </span>block =
+                    Vec::with_capacity(chunk.len() + size_of::&lt;u32&gt;() + size_of::&lt;i64&gt;());
+                block.extend(chunk);
+                block.extend(file_id.to_be_bytes());
+                block.extend(now.representation().to_be_bytes());
+                tx.push(Operation::insert(block_collection.clone(), <span class="prelude-val">None</span>, block));
             }
 
-            <span class="ident">tx</span>.<span class="ident">apply</span>(<span class="ident">database</span>)<span class="question-mark">?</span>;
+            tx.apply(database)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">append_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(
-        <span class="ident">data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">data</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">Transaction::new</span>();
-            <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">TimestampAsNanoseconds::now</span>();
-            <span class="comment">// Verify the file exists as part of appending. If the file was</span>
-            <span class="comment">// deleted out from underneath the appender, this will ensure no</span>
-            <span class="comment">// blocks are orphaned.</span>
-            <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::check_document_exists</span>::<span class="op">&lt;</span><span class="ident">File</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)<span class="question-mark">?</span>);
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
+    </span><span class="kw">pub async fn </span>append_async&lt;Database: AsyncConnection&gt;(
+        data: <span class="kw-2">&amp;</span>[u8],
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="kw">if </span>!data.is_empty() {
+            <span class="kw">let </span><span class="kw-2">mut </span>tx = Transaction::new();
+            <span class="kw">let </span>now = TimestampAsNanoseconds::now();
+            <span class="comment">// Verify the file exists as part of appending. If the file was
+            // deleted out from underneath the appender, this will ensure no
+            // blocks are orphaned.
+            </span>tx.push(Operation::check_document_exists::&lt;File&lt;Config&gt;&gt;(<span class="kw-2">&amp;</span>file_id)<span class="question-mark">?</span>);
 
-            <span class="kw">let</span> <span class="ident">block_collection</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::collection_name</span>();
-            <span class="kw">for</span> <span class="ident">chunk</span> <span class="kw">in</span> <span class="ident">data</span>.<span class="ident">chunks</span>(<span class="ident">Config::BLOCK_SIZE</span>) {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">block</span> <span class="op">=</span>
-                    <span class="ident">Vec::with_capacity</span>(<span class="ident">chunk</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>() <span class="op">+</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>());
-                <span class="ident">block</span>.<span class="ident">extend</span>(<span class="ident">chunk</span>);
-                <span class="ident">block</span>.<span class="ident">extend</span>(<span class="ident">file_id</span>.<span class="ident">to_be_bytes</span>());
-                <span class="ident">block</span>.<span class="ident">extend</span>(<span class="ident">now</span>.<span class="ident">representation</span>().<span class="ident">to_be_bytes</span>());
-                <span class="ident">tx</span>.<span class="ident">push</span>(<span class="ident">Operation::insert</span>(<span class="ident">block_collection</span>.<span class="ident">clone</span>(), <span class="prelude-val">None</span>, <span class="ident">block</span>));
+            <span class="kw">let </span>block_collection = <span class="self">Self</span>::collection_name();
+            <span class="kw">for </span>chunk <span class="kw">in </span>data.chunks(Config::BLOCK_SIZE) {
+                <span class="kw">let </span><span class="kw-2">mut </span>block =
+                    Vec::with_capacity(chunk.len() + size_of::&lt;u32&gt;() + size_of::&lt;i64&gt;());
+                block.extend(chunk);
+                block.extend(file_id.to_be_bytes());
+                block.extend(now.representation().to_be_bytes());
+                tx.push(Operation::insert(block_collection.clone(), <span class="prelude-val">None</span>, block));
             }
 
-            <span class="ident">tx</span>.<span class="ident">apply_async</span>(<span class="ident">database</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            tx.apply_async(database).<span class="kw">await</span><span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">load</span><span class="op">&lt;</span>
+    <span class="kw">pub fn </span>load&lt;
         <span class="lifetime">&#39;a</span>,
-        <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
-        <span class="ident">Database</span>: <span class="ident">Connection</span>,
-    <span class="op">&gt;</span>(
-        <span class="ident">block_ids</span>: <span class="ident">DocumentIds</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()
-            .<span class="ident">get_multiple</span>(<span class="ident">block_ids</span>)<span class="question-mark">?</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">block</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">block</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>();
-                <span class="ident">contents</span>.<span class="ident">truncate</span>(<span class="ident">contents</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>() <span class="op">-</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>());
-                <span class="ident">block</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> (<span class="ident">id</span>, <span class="ident">contents</span>))
+        DocumentIds: IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>PrimaryKey, IntoIter = I&gt; + Send + Sync,
+        I: Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>PrimaryKey&gt; + Send + Sync,
+        PrimaryKey: <span class="kw">for</span>&lt;<span class="lifetime">&#39;k</span>&gt; KeyEncoding&lt;<span class="lifetime">&#39;k</span>, u64&gt; + <span class="lifetime">&#39;a</span>,
+        Database: Connection,
+    &gt;(
+        block_ids: DocumentIds,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BTreeMap&lt;u64, Vec&lt;u8&gt;&gt;, bonsaidb_core::Error&gt; {
+        database
+            .collection::&lt;<span class="self">Self</span>&gt;()
+            .get_multiple(block_ids)<span class="question-mark">?
+            </span>.into_iter()
+            .map(|block| {
+                <span class="kw">let </span><span class="kw-2">mut </span>contents = block.contents.into_vec();
+                contents.truncate(contents.len() - size_of::&lt;u32&gt;() - size_of::&lt;i64&gt;());
+                block.header.id.deserialize().map(|id| (id, contents))
             })
-            .<span class="ident">collect</span>()
+            .collect()
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">load_async</span><span class="op">&lt;</span>
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
+    </span><span class="kw">pub async fn </span>load_async&lt;
         <span class="lifetime">&#39;a</span>,
-        <span class="ident">DocumentIds</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PrimaryKey</span>, <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
-        <span class="ident">Database</span>: <span class="ident">AsyncConnection</span>,
-    <span class="op">&gt;</span>(
-        <span class="ident">block_ids</span>: <span class="ident">DocumentIds</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">collection</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()
-            .<span class="ident">get_multiple</span>(<span class="ident">block_ids</span>)
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">block</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">block</span>.<span class="ident">contents</span>.<span class="ident">into_vec</span>();
-                <span class="ident">contents</span>.<span class="ident">truncate</span>(<span class="ident">contents</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>() <span class="op">-</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>());
-                <span class="ident">block</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">deserialize</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> (<span class="ident">id</span>, <span class="ident">contents</span>))
+        DocumentIds: IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>PrimaryKey, IntoIter = I&gt; + Send + Sync,
+        I: Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>PrimaryKey&gt; + Send + Sync,
+        PrimaryKey: <span class="kw">for</span>&lt;<span class="lifetime">&#39;k</span>&gt; KeyEncoding&lt;<span class="lifetime">&#39;k</span>, u64&gt; + <span class="lifetime">&#39;a</span>,
+        Database: AsyncConnection,
+    &gt;(
+        block_ids: DocumentIds,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BTreeMap&lt;u64, Vec&lt;u8&gt;&gt;, bonsaidb_core::Error&gt; {
+        database
+            .collection::&lt;<span class="self">Self</span>&gt;()
+            .get_multiple(block_ids)
+            .<span class="kw">await</span><span class="question-mark">?
+            </span>.into_iter()
+            .map(|block| {
+                <span class="kw">let </span><span class="kw-2">mut </span>contents = block.contents.into_vec();
+                contents.truncate(contents.len() - size_of::&lt;u32&gt;() - size_of::&lt;i64&gt;());
+                block.header.id.deserialize().map(|id| (id, contents))
             })
-            .<span class="ident">collect</span>()
+            .collect()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">for_file</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BlockInfo</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">blocks</span> <span class="op">=</span> <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)
-            .<span class="ident">query</span>()<span class="question-mark">?</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">mapping</span><span class="op">|</span> <span class="ident">BlockInfo</span> {
-                <span class="ident">header</span>: <span class="ident">mapping</span>.<span class="ident">source</span>,
-                <span class="ident">length</span>: <span class="ident">usize::try_from</span>(<span class="ident">mapping</span>.<span class="ident">value</span>.<span class="ident">length</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">timestamp</span>: <span class="ident">mapping</span>.<span class="ident">value</span>.<span class="ident">timestamp</span>.<span class="ident">unwrap</span>(),
-                <span class="ident">offset</span>: <span class="number">0</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>for_file&lt;Database: Connection&gt;(
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;BlockInfo&gt;, bonsaidb_core::Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>blocks = database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_key(<span class="kw-2">&amp;</span>file_id)
+            .query()<span class="question-mark">?
+            </span>.into_iter()
+            .map(|mapping| BlockInfo {
+                header: mapping.source,
+                length: usize::try_from(mapping.value.length).unwrap(),
+                timestamp: mapping.value.timestamp.unwrap(),
+                offset: <span class="number">0</span>,
             })
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="ident">blocks</span>.<span class="ident">sort_by</span>(<span class="op">|</span><span class="ident">a</span>, <span class="ident">b</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">header</span>.<span class="ident">id</span>));
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">offset</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">for</span> <span class="ident">block</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">blocks</span> {
-            <span class="ident">block</span>.<span class="ident">offset</span> <span class="op">=</span> <span class="ident">offset</span>;
-            <span class="ident">offset</span> <span class="op">+</span><span class="op">=</span> <span class="ident">u64::try_from</span>(<span class="ident">block</span>.<span class="ident">length</span>).<span class="ident">unwrap</span>();
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        blocks.sort_by(|a, b| a.header.id.cmp(<span class="kw-2">&amp;</span>b.header.id));
+        <span class="kw">let </span><span class="kw-2">mut </span>offset = <span class="number">0</span>;
+        <span class="kw">for </span>block <span class="kw">in </span><span class="kw-2">&amp;mut </span>blocks {
+            block.offset = offset;
+            offset += u64::try_from(block.length).unwrap();
         }
-        <span class="prelude-val">Ok</span>(<span class="ident">blocks</span>)
+        <span class="prelude-val">Ok</span>(blocks)
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">summary_for_file</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BlockAppendInfo</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)
-            .<span class="ident">reduce</span>()
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>summary_for_file&lt;Database: Connection&gt;(
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BlockAppendInfo, bonsaidb_core::Error&gt; {
+        database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_key(<span class="kw-2">&amp;</span>file_id)
+            .reduce()
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">summary_for_file_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BlockAppendInfo</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)
-            .<span class="ident">reduce</span>()
-            .<span class="kw">await</span>
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>summary_for_file_async&lt;Database: AsyncConnection&gt;(
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BlockAppendInfo, bonsaidb_core::Error&gt; {
+        database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_key(<span class="kw-2">&amp;</span>file_id)
+            .reduce()
+            .<span class="kw">await
+    </span>}
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>summary_for_ids&lt;<span class="lifetime">&#39;a</span>, Database: Connection, Iter: IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>u32&gt;&gt;(
+        file_ids: Iter,
+        database: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BlockAppendInfo, bonsaidb_core::Error&gt; {
+        database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_keys(file_ids)
+            .reduce()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">summary_for_ids</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Database</span>: <span class="ident">Connection</span>, <span class="ident">Iter</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">file_ids</span>: <span class="ident">Iter</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BlockAppendInfo</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_keys</span>(<span class="ident">file_ids</span>)
-            .<span class="ident">reduce</span>()
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">summary_for_ids_async</span><span class="op">&lt;</span>
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>summary_for_ids_async&lt;
         <span class="lifetime">&#39;a</span>,
-        <span class="ident">Database</span>: <span class="ident">AsyncConnection</span>,
-        <span class="ident">Iter</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">u32</span><span class="op">&gt;</span>,
-    <span class="op">&gt;</span>(
-        <span class="ident">file_ids</span>: <span class="ident">Iter</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BlockAppendInfo</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_keys</span>(<span class="ident">file_ids</span>)
-            .<span class="ident">reduce</span>()
-            .<span class="kw">await</span>
-    }
+        Database: AsyncConnection,
+        Iter: IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>u32&gt;,
+    &gt;(
+        file_ids: Iter,
+        database: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BlockAppendInfo, bonsaidb_core::Error&gt; {
+        database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_keys(file_ids)
+            .reduce()
+            .<span class="kw">await
+    </span>}
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">for_file_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BlockInfo</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">blocks</span> <span class="op">=</span> <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)
-            .<span class="ident">query</span>()
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">mapping</span><span class="op">|</span> <span class="ident">BlockInfo</span> {
-                <span class="ident">header</span>: <span class="ident">mapping</span>.<span class="ident">source</span>,
-                <span class="ident">length</span>: <span class="ident">usize::try_from</span>(<span class="ident">mapping</span>.<span class="ident">value</span>.<span class="ident">length</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">timestamp</span>: <span class="ident">mapping</span>.<span class="ident">value</span>.<span class="ident">timestamp</span>.<span class="ident">unwrap</span>(),
-                <span class="ident">offset</span>: <span class="number">0</span>,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>for_file_async&lt;Database: AsyncConnection&gt;(
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;BlockInfo&gt;, bonsaidb_core::Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>blocks = database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_key(<span class="kw-2">&amp;</span>file_id)
+            .query()
+            .<span class="kw">await</span><span class="question-mark">?
+            </span>.into_iter()
+            .map(|mapping| BlockInfo {
+                header: mapping.source,
+                length: usize::try_from(mapping.value.length).unwrap(),
+                timestamp: mapping.value.timestamp.unwrap(),
+                offset: <span class="number">0</span>,
             })
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="ident">blocks</span>.<span class="ident">sort_by</span>(<span class="op">|</span><span class="ident">a</span>, <span class="ident">b</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">header</span>.<span class="ident">id</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">header</span>.<span class="ident">id</span>));
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">offset</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">for</span> <span class="ident">block</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">blocks</span> {
-            <span class="ident">block</span>.<span class="ident">offset</span> <span class="op">=</span> <span class="ident">offset</span>;
-            <span class="ident">offset</span> <span class="op">+</span><span class="op">=</span> <span class="ident">u64::try_from</span>(<span class="ident">block</span>.<span class="ident">length</span>).<span class="ident">unwrap</span>();
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        blocks.sort_by(|a, b| a.header.id.cmp(<span class="kw-2">&amp;</span>b.header.id));
+        <span class="kw">let </span><span class="kw-2">mut </span>offset = <span class="number">0</span>;
+        <span class="kw">for </span>block <span class="kw">in </span><span class="kw-2">&amp;mut </span>blocks {
+            block.offset = offset;
+            offset += u64::try_from(block.length).unwrap();
         }
-        <span class="prelude-val">Ok</span>(<span class="ident">blocks</span>)
+        <span class="prelude-val">Ok</span>(blocks)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_for_file</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)
-            .<span class="ident">delete_docs</span>()<span class="question-mark">?</span>;
+    <span class="kw">pub fn </span>delete_for_file&lt;Database: Connection&gt;(
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_key(<span class="kw-2">&amp;</span>file_id)
+            .delete_docs()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;async&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_for_file_async</span><span class="op">&lt;</span><span class="ident">Database</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(
-        <span class="ident">file_id</span>: <span class="ident">u32</span>,
-        <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">database</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="ident">file_id</span>)
-            .<span class="ident">delete_docs</span>()
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
+    </span><span class="kw">pub async fn </span>delete_for_file_async&lt;Database: AsyncConnection&gt;(
+        file_id: u32,
+        database: <span class="kw-2">&amp;</span>Database,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        database
+            .view::&lt;ByFile&lt;Config&gt;&gt;()
+            .with_key(<span class="kw-2">&amp;</span>file_id)
+            .delete_docs()
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Collection</span> <span class="kw">for</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">Config</span>: <span class="ident">FileConfig</span>,
+<span class="kw">impl</span>&lt;Config&gt; Collection <span class="kw">for </span>Block&lt;Config&gt;
+<span class="kw">where
+    </span>Config: FileConfig,
 {
-    <span class="kw">type</span> <span class="ident">PrimaryKey</span> <span class="op">=</span> <span class="ident">u64</span>;
+    <span class="kw">type </span>PrimaryKey = u64;
 
-    <span class="kw">fn</span> <span class="ident">collection_name</span>() -&gt; <span class="ident">CollectionName</span> {
-        <span class="ident">Config::blocks_name</span>()
+    <span class="kw">fn </span>collection_name() -&gt; CollectionName {
+        Config::blocks_name()
     }
 
-    <span class="kw">fn</span> <span class="ident">define_views</span>(
-        <span class="ident">schema</span>: <span class="kw-2">&amp;mut</span> <span class="ident">bonsaidb_core::schema::Schematic</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="ident">schema</span>.<span class="ident">define_view</span>(<span class="ident">ByFile</span>::<span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span><span class="ident">::default</span>())<span class="question-mark">?</span>;
+    <span class="kw">fn </span>define_views(
+        schema: <span class="kw-2">&amp;mut </span>bonsaidb_core::schema::Schematic,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        schema.define_view(ByFile::&lt;Config&gt;::default())<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">View</span>)]</span>
-<span class="attribute">#[<span class="ident">view</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;by-file&quot;</span>, <span class="ident">collection</span> <span class="op">=</span> <span class="ident">Block</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>, <span class="ident">key</span> <span class="op">=</span> <span class="ident">u32</span>, <span class="ident">value</span> <span class="op">=</span> <span class="ident">BlockAppendInfo</span>)]</span>
-<span class="attribute">#[<span class="ident">view</span>(<span class="ident">core</span> <span class="op">=</span> <span class="ident">bonsaidb_core</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>)
-<span class="kw">where</span>
-    <span class="ident">Config</span>: <span class="ident">FileConfig</span>;
+<span class="attribute">#[derive_where(Clone, Debug, Default)]
+#[derive(View)]
+#[view(name = <span class="string">&quot;by-file&quot;</span>, collection = Block&lt;Config&gt;, key = u32, value = BlockAppendInfo)]
+#[view(core = bonsaidb_core)]
+</span><span class="kw">struct </span>ByFile&lt;Config&gt;(PhantomData&lt;Config&gt;)
+<span class="kw">where
+    </span>Config: FileConfig;
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">ViewSchema</span> <span class="kw">for</span> <span class="ident">ByFile</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">Config</span>: <span class="ident">FileConfig</span>,
+<span class="kw">impl</span>&lt;Config&gt; ViewSchema <span class="kw">for </span>ByFile&lt;Config&gt;
+<span class="kw">where
+    </span>Config: FileConfig,
 {
-    <span class="kw">type</span> <span class="ident">View</span> <span class="op">=</span> <span class="self">Self</span>;
+    <span class="kw">type </span>View = <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">version</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-        <span class="number">2</span>
-    }
+    <span class="kw">fn </span>version(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+        <span class="number">2
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">map</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">ViewMapResult</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::View</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">timestamp_offset</span> <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>();
-        <span class="kw">let</span> <span class="ident">file_id_offset</span> <span class="op">=</span> <span class="ident">timestamp_offset</span> <span class="op">-</span> <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>();
+    <span class="kw">fn </span>map(<span class="kw-2">&amp;</span><span class="self">self</span>, doc: <span class="kw-2">&amp;</span>BorrowedDocument&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; ViewMapResult&lt;<span class="self">Self</span>::View&gt; {
+        <span class="kw">let </span>timestamp_offset = doc.contents.len() - size_of::&lt;i64&gt;();
+        <span class="kw">let </span>file_id_offset = timestamp_offset - size_of::&lt;u32&gt;();
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file_id</span> <span class="op">=</span> [<span class="number">0</span>; <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>()];
-        <span class="ident">file_id</span>.<span class="ident">copy_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">contents</span>[<span class="ident">file_id_offset</span>..<span class="ident">timestamp_offset</span>]);
-        <span class="kw">let</span> <span class="ident">file_id</span> <span class="op">=</span> <span class="ident">u32::from_be_bytes</span>(<span class="ident">file_id</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>file_id = [<span class="number">0</span>; size_of::&lt;u32&gt;()];
+        file_id.copy_from_slice(<span class="kw-2">&amp;</span>doc.contents[file_id_offset..timestamp_offset]);
+        <span class="kw">let </span>file_id = u32::from_be_bytes(file_id);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timestamp</span> <span class="op">=</span> [<span class="number">0</span>; <span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>()];
-        <span class="ident">timestamp</span>.<span class="ident">copy_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">doc</span>.<span class="ident">contents</span>[<span class="ident">timestamp_offset</span>..]);
-        <span class="kw">let</span> <span class="ident">timestamp</span> <span class="op">=</span> <span class="ident">TimestampAsNanoseconds::from_representation</span>(<span class="ident">i64::from_be_bytes</span>(<span class="ident">timestamp</span>));
+        <span class="kw">let </span><span class="kw-2">mut </span>timestamp = [<span class="number">0</span>; size_of::&lt;i64&gt;()];
+        timestamp.copy_from_slice(<span class="kw-2">&amp;</span>doc.contents[timestamp_offset..]);
+        <span class="kw">let </span>timestamp = TimestampAsNanoseconds::from_representation(i64::from_be_bytes(timestamp));
 
-        <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> <span class="ident">u64::try_from</span>(<span class="ident">file_id_offset</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let </span>length = u64::try_from(file_id_offset).unwrap();
 
-        <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">emit_key_and_value</span>(
-            <span class="ident">file_id</span>,
-            <span class="ident">BlockAppendInfo</span> {
-                <span class="ident">length</span>,
-                <span class="ident">timestamp</span>: <span class="prelude-val">Some</span>(<span class="ident">timestamp</span>),
+        doc.header.emit_key_and_value(
+            file_id,
+            BlockAppendInfo {
+                length,
+                timestamp: <span class="prelude-val">Some</span>(timestamp),
             },
         )
     }
 
-    <span class="kw">fn</span> <span class="ident">reduce</span>(
+    <span class="kw">fn </span>reduce(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">mappings</span>: <span class="kw-2">&amp;</span>[<span class="ident">ViewMappedValue</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::View</span><span class="op">&gt;</span>],
-        <span class="ident">_rereduce</span>: <span class="ident">bool</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::View</span> <span class="kw">as</span> <span class="ident">View</span><span class="op">&gt;</span><span class="ident">::Value</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">BlockAppendInfo</span> {
-            <span class="ident">length</span>: <span class="ident">mappings</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> <span class="ident">info</span>.<span class="ident">value</span>.<span class="ident">length</span>).<span class="ident">sum</span>(),
-            <span class="ident">timestamp</span>: <span class="ident">mappings</span>
-                .<span class="ident">iter</span>()
-                .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> <span class="ident">info</span>.<span class="ident">value</span>.<span class="ident">timestamp</span>)
-                .<span class="ident">max</span>(),
+        mappings: <span class="kw-2">&amp;</span>[ViewMappedValue&lt;<span class="self">Self</span>::View&gt;],
+        _rereduce: bool,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;&lt;<span class="self">Self</span>::View <span class="kw">as </span>View&gt;::Value, bonsaidb_core::Error&gt; {
+        <span class="prelude-val">Ok</span>(BlockAppendInfo {
+            length: mappings.iter().map(|info| info.value.length).sum(),
+            timestamp: mappings
+                .iter()
+                .filter_map(|info| info.value.timestamp)
+                .max(),
         })
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BlockAppendInfo</span> {
-    <span class="kw">pub</span> <span class="ident">length</span>: <span class="ident">u64</span>,
-    <span class="kw">pub</span> <span class="ident">timestamp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TimestampAsNanoseconds</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize)]
+</span><span class="kw">pub struct </span>BlockAppendInfo {
+    <span class="kw">pub </span>length: u64,
+    <span class="kw">pub </span>timestamp: <span class="prelude-ty">Option</span>&lt;TimestampAsNanoseconds&gt;,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_files" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

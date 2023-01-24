@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/keyvalue/timestamp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>timestamp.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/keyvalue/timestamp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>timestamp.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -115,117 +109,116 @@
 <span id="109">109</span>
 <span id="110">110</span>
 <span id="111">111</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">borrow::Cow</span>,
-    <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>, <span class="ident">UNIX_EPOCH</span>},
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    borrow::Cow,
+    time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::key</span>::{<span class="ident">IncorrectByteLength</span>, <span class="ident">Key</span>, <span class="ident">KeyEncoding</span>};
+<span class="kw">use </span><span class="kw">crate</span>::key::{IncorrectByteLength, Key, KeyEncoding};
 
-<span class="doccomment">/// A timestamp relative to [`UNIX_EPOCH`].</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Default</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Timestamp</span> {
-    <span class="doccomment">/// The number of whole seconds since [`UNIX_EPOCH`].</span>
-    <span class="kw">pub</span> <span class="ident">seconds</span>: <span class="ident">u64</span>,
-    <span class="doccomment">/// The number of nanoseconds in the timestamp.</span>
-    <span class="kw">pub</span> <span class="ident">nanos</span>: <span class="ident">u32</span>,
+<span class="doccomment">/// A timestamp relative to [`UNIX_EPOCH`].
+</span><span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Default)]
+</span><span class="kw">pub struct </span>Timestamp {
+    <span class="doccomment">/// The number of whole seconds since [`UNIX_EPOCH`].
+    </span><span class="kw">pub </span>seconds: u64,
+    <span class="doccomment">/// The number of nanoseconds in the timestamp.
+    </span><span class="kw">pub </span>nanos: u32,
 }
 
-<span class="kw">impl</span> <span class="ident">Timestamp</span> {
-    <span class="doccomment">/// The minimum representable Timestamp. This is equivalent to [`UNIX_EPOCH`].</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MIN</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> {
-        <span class="ident">seconds</span>: <span class="number">0</span>,
-        <span class="ident">nanos</span>: <span class="number">0</span>,
+<span class="kw">impl </span>Timestamp {
+    <span class="doccomment">/// The minimum representable Timestamp. This is equivalent to [`UNIX_EPOCH`].
+    </span><span class="kw">pub const </span>MIN: <span class="self">Self </span>= <span class="self">Self </span>{
+        seconds: <span class="number">0</span>,
+        nanos: <span class="number">0</span>,
     };
 
-    <span class="doccomment">/// The maximum valid value of Timestamp.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> {
-        <span class="ident">seconds</span>: <span class="ident">u64::MAX</span>,
-        <span class="ident">nanos</span>: <span class="number">999_999_999</span>,
+    <span class="doccomment">/// The maximum valid value of Timestamp.
+    </span><span class="kw">pub const </span>MAX: <span class="self">Self </span>= <span class="self">Self </span>{
+        seconds: u64::MAX,
+        nanos: <span class="number">999_999_999</span>,
     };
 
-    <span class="doccomment">/// Returns the current timestamp according to the OS. Uses [`SystemTime::now()`].</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">now</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">SystemTime::now</span>())
+    <span class="doccomment">/// Returns the current timestamp according to the OS. Uses [`SystemTime::now()`].
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>now() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(SystemTime::now())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">SystemTime</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Timestamp</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">time</span>: <span class="ident">SystemTime</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">duration_since_epoch</span> <span class="op">=</span> <span class="ident">time</span>
-            .<span class="ident">duration_since</span>(<span class="ident">UNIX_EPOCH</span>)
-            .<span class="ident">expect</span>(<span class="string">&quot;unrealistic system time&quot;</span>);
-        <span class="self">Self</span> {
-            <span class="ident">seconds</span>: <span class="ident">duration_since_epoch</span>.<span class="ident">as_secs</span>(),
-            <span class="ident">nanos</span>: <span class="ident">duration_since_epoch</span>.<span class="ident">subsec_nanos</span>(),
+<span class="kw">impl </span>From&lt;SystemTime&gt; <span class="kw">for </span>Timestamp {
+    <span class="kw">fn </span>from(time: SystemTime) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>duration_since_epoch = time
+            .duration_since(UNIX_EPOCH)
+            .expect(<span class="string">&quot;unrealistic system time&quot;</span>);
+        <span class="self">Self </span>{
+            seconds: duration_since_epoch.as_secs(),
+            nanos: duration_since_epoch.subsec_nanos(),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Duration</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">t</span>: <span class="ident">Timestamp</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">t</span>.<span class="ident">seconds</span>, <span class="ident">t</span>.<span class="ident">nanos</span>)
+<span class="kw">impl </span>From&lt;Timestamp&gt; <span class="kw">for </span>Duration {
+    <span class="kw">fn </span>from(t: Timestamp) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new(t.seconds, t.nanos)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::ops::Sub</span> <span class="kw">for</span> <span class="ident">Timestamp</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>;
+<span class="kw">impl </span>std::ops::Sub <span class="kw">for </span>Timestamp {
+    <span class="kw">type </span>Output = <span class="prelude-ty">Option</span>&lt;Duration&gt;;
 
-    <span class="kw">fn</span> <span class="ident">sub</span>(<span class="self">self</span>, <span class="ident">rhs</span>: <span class="self">Self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span> {
-        <span class="ident">Duration::from</span>(<span class="self">self</span>).<span class="ident">checked_sub</span>(<span class="ident">Duration::from</span>(<span class="ident">rhs</span>))
+    <span class="kw">fn </span>sub(<span class="self">self</span>, rhs: <span class="self">Self</span>) -&gt; <span class="self">Self</span>::Output {
+        Duration::from(<span class="self">self</span>).checked_sub(Duration::from(rhs))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">std::ops::Add</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Timestamp</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
+<span class="kw">impl </span>std::ops::Add&lt;Duration&gt; <span class="kw">for </span>Timestamp {
+    <span class="kw">type </span>Output = <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">add</span>(<span class="self">self</span>, <span class="ident">rhs</span>: <span class="ident">Duration</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">nanos</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nanos</span> <span class="op">+</span> <span class="ident">rhs</span>.<span class="ident">subsec_nanos</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seconds</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">seconds</span>.<span class="ident">saturating_add</span>(<span class="ident">rhs</span>.<span class="ident">as_secs</span>());
-        <span class="kw">while</span> <span class="ident">nanos</span> <span class="op">&gt;</span> <span class="number">1_000_000_000</span> {
-            <span class="ident">nanos</span> <span class="op">-</span><span class="op">=</span> <span class="number">1_000_000_000</span>;
-            <span class="ident">seconds</span> <span class="op">=</span> <span class="ident">seconds</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+    <span class="kw">fn </span>add(<span class="self">self</span>, rhs: Duration) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw">let </span><span class="kw-2">mut </span>nanos = <span class="self">self</span>.nanos + rhs.subsec_nanos();
+        <span class="kw">let </span><span class="kw-2">mut </span>seconds = <span class="self">self</span>.seconds.saturating_add(rhs.as_secs());
+        <span class="kw">while </span>nanos &gt; <span class="number">1_000_000_000 </span>{
+            nanos -= <span class="number">1_000_000_000</span>;
+            seconds = seconds.saturating_add(<span class="number">1</span>);
         }
-        <span class="self">Self</span> { <span class="ident">seconds</span>, <span class="ident">nanos</span> }
+        <span class="self">Self </span>{ seconds, nanos }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Timestamp</span> {
-    <span class="kw">fn</span> <span class="ident">from_ord_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="number">12</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">IncorrectByteLength</span>);
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Key&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>Timestamp {
+    <span class="kw">fn </span>from_ord_bytes(bytes: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">if </span>bytes.len() != <span class="number">12 </span>{
+            <span class="kw">return </span><span class="prelude-val">Err</span>(IncorrectByteLength);
         }
 
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">seconds</span>: <span class="ident">u64::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="number">0</span>..<span class="number">8</span>])<span class="question-mark">?</span>,
-            <span class="ident">nanos</span>: <span class="ident">u32::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="number">8</span>..<span class="number">12</span>])<span class="question-mark">?</span>,
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            seconds: u64::from_ord_bytes(<span class="kw-2">&amp;</span>bytes[<span class="number">0</span>..<span class="number">8</span>])<span class="question-mark">?</span>,
+            nanos: u32::from_ord_bytes(<span class="kw-2">&amp;</span>bytes[<span class="number">8</span>..<span class="number">12</span>])<span class="question-mark">?</span>,
         })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">KeyEncoding</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Timestamp</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">IncorrectByteLength</span>;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; KeyEncoding&lt;<span class="lifetime">&#39;a</span>, <span class="self">Self</span>&gt; <span class="kw">for </span>Timestamp {
+    <span class="kw">type </span>Error = IncorrectByteLength;
 
-    <span class="kw">const</span> <span class="ident">LENGTH</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="number">12</span>);
+    <span class="kw">const </span>LENGTH: <span class="prelude-ty">Option</span>&lt;usize&gt; = <span class="prelude-val">Some</span>(<span class="number">12</span>);
 
-    <span class="kw">fn</span> <span class="ident">as_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">std::borrow::Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">seconds_bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">seconds</span>.<span class="ident">to_be_bytes</span>();
-        <span class="kw">let</span> <span class="ident">nanos_bytes</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">nanos</span>.<span class="ident">to_be_bytes</span>();
-        <span class="prelude-val">Ok</span>(<span class="ident">Cow::Owned</span>([<span class="ident">seconds_bytes</span>, <span class="ident">nanos_bytes</span>].<span class="ident">concat</span>()))
+    <span class="kw">fn </span>as_ord_bytes(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;std::borrow::Cow&lt;<span class="lifetime">&#39;a</span>, [u8]&gt;, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>seconds_bytes: <span class="kw-2">&amp;</span>[u8] = <span class="kw-2">&amp;</span><span class="self">self</span>.seconds.to_be_bytes();
+        <span class="kw">let </span>nanos_bytes = <span class="kw-2">&amp;</span><span class="self">self</span>.nanos.to_be_bytes();
+        <span class="prelude-val">Ok</span>(Cow::Owned([seconds_bytes, nanos_bytes].concat()))
     }
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">key_test</span>() {
-    <span class="kw">let</span> <span class="ident">original</span> <span class="op">=</span> <span class="ident">Timestamp::now</span>();
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>key_test() {
+    <span class="kw">let </span>original = Timestamp::now();
     <span class="macro">assert_eq!</span>(
-        <span class="ident">Timestamp::from_ord_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">original</span>.<span class="ident">as_ord_bytes</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>(),
-        <span class="ident">original</span>
+        Timestamp::from_ord_bytes(<span class="kw-2">&amp;</span>original.as_ord_bytes().unwrap()).unwrap(),
+        original
     );
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

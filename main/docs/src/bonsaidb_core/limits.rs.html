@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/limits.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>limits.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_core/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/limits.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>limits.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_core/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -58,60 +52,59 @@
 <span id="52">52</span>
 <span id="53">53</span>
 <span id="54">54</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Limits used within BonsaiDb.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Unless otherwise noted, all size limits will be affected by compression, if</span>
-<span class="doccomment">//! enabled.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Transaction Limits</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The serialized summary of [`Changes`](crate::transaction::Changes) of a</span>
-<span class="doccomment">//! transaction must be less than 16 megabytes. This limit comes from</span>
-<span class="doccomment">//! [Nebari][nebari]&#39;s transaction log entry size limit.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! When querying previously executed transactions using</span>
-<span class="doccomment">//! [`Connection::list_executed_transactions()`](crate::connection::Connection::list_executed_transactions),</span>
-<span class="doccomment">//! the result set will be limited to [`LIST_TRANSACTIONS_MAX_RESULTS`] entries.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Document Limits</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Primary Key Limits</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [`DocumentId::MAX_LENGTH`](crate::document::DocumentId::MAX_LENGTH) is the</span>
-<span class="doccomment">//! maximum number of bytes a document ID can contain when in its serialized</span>
-<span class="doccomment">//! form. This is currently 64 kilobytes of data.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Size Limits</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Each document can be up to 4 gigabytes in size (4,294,967,296 bytes).</span>
-<span class="doccomment">//! However, care should be used when storing large documents, as the only way</span>
-<span class="doccomment">//! to load a document is for its entire data to be read from disk into memory.</span>
-<span class="doccomment">//! Storing large documents can lead to higher memory usage than you might</span>
-<span class="doccomment">//! anticipate.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Many NoSQL databases enforce document size limits at 16 megabytes or</span>
-<span class="doccomment">//! smaller, which encourages usage patterns that require less RAM. While</span>
-<span class="doccomment">//! BonsaiDb doesn&#39;t have as restrictive of a limit, users should consider</span>
-<span class="doccomment">//! approaches that keep document sizes smaller if RAM is a constraint.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # View Limits</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The serialized representation of the `Key` type must be less than 64</span>
-<span class="doccomment">//! kilobytes (65,536 bytes). It should be noted that using large keys will slow</span>
-<span class="doccomment">//! the view&#39;s performance. This is one reason why document IDs enforce a</span>
-<span class="doccomment">//! smaller size limit. By not enforcing as restrictive of a limit on views,</span>
-<span class="doccomment">//! more complex indexes can be built such as allowing tuples of strings of</span>
-<span class="doccomment">//! arbitrary length.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The serialized representation of all mappings emitted for a single `Key`</span>
-<span class="doccomment">//! must be less than 4 gigabytes in size.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [nebari]: https://github.com/khonsulabs/nebari</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Limits used within BonsaiDb.
+//!
+//! Unless otherwise noted, all size limits will be affected by compression, if
+//! enabled.
+//!
+//! # Transaction Limits
+//!
+//! The serialized summary of [`Changes`](crate::transaction::Changes) of a
+//! transaction must be less than 16 megabytes. This limit comes from
+//! [Nebari][nebari]&#39;s transaction log entry size limit.
+//!
+//! When querying previously executed transactions using
+//! [`Connection::list_executed_transactions()`](crate::connection::Connection::list_executed_transactions),
+//! the result set will be limited to [`LIST_TRANSACTIONS_MAX_RESULTS`] entries.
+//!
+//! # Document Limits
+//!
+//! ## Primary Key Limits
+//!
+//! [`DocumentId::MAX_LENGTH`](crate::document::DocumentId::MAX_LENGTH) is the
+//! maximum number of bytes a document ID can contain when in its serialized
+//! form. This is currently 64 kilobytes of data.
+//!
+//! ## Size Limits
+//!
+//! Each document can be up to 4 gigabytes in size (4,294,967,296 bytes).
+//! However, care should be used when storing large documents, as the only way
+//! to load a document is for its entire data to be read from disk into memory.
+//! Storing large documents can lead to higher memory usage than you might
+//! anticipate.
+//!
+//! Many NoSQL databases enforce document size limits at 16 megabytes or
+//! smaller, which encourages usage patterns that require less RAM. While
+//! BonsaiDb doesn&#39;t have as restrictive of a limit, users should consider
+//! approaches that keep document sizes smaller if RAM is a constraint.
+//!
+//! # View Limits
+//!
+//! The serialized representation of the `Key` type must be less than 64
+//! kilobytes (65,536 bytes). It should be noted that using large keys will slow
+//! the view&#39;s performance. This is one reason why document IDs enforce a
+//! smaller size limit. By not enforcing as restrictive of a limit on views,
+//! more complex indexes can be built such as allowing tuples of strings of
+//! arbitrary length.
+//!
+//! The serialized representation of all mappings emitted for a single `Key`
+//! must be less than 4 gigabytes in size.
+//!
+//! [nebari]: https://github.com/khonsulabs/nebari
 
-<span class="doccomment">/// The maximum number of results allowed to be returned from `list_executed_transactions`.</span>
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">LIST_TRANSACTIONS_MAX_RESULTS</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1000</span>;
-<span class="doccomment">/// If no `result_limit` is specified, this value is the limit used by default.</span>
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">100</span>;
+/// The maximum number of results allowed to be returned from `list_executed_transactions`.
+</span><span class="kw">pub const </span>LIST_TRANSACTIONS_MAX_RESULTS: u32 = <span class="number">1000</span>;
+<span class="doccomment">/// If no `result_limit` is specified, this value is the limit used by default.
+</span><span class="kw">pub const </span>LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT: u32 = <span class="number">100</span>;
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

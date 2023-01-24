@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/views/integrity_scanner.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>integrity_scanner.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_local/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/views/integrity_scanner.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>integrity_scanner.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_local/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -235,237 +229,236 @@
 <span id="229">229</span>
 <span id="230">230</span>
 <span id="231">231</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">collections::HashSet</span>, <span class="ident">convert::Infallible</span>, <span class="ident">hash::Hash</span>, <span class="ident">sync::Arc</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, collections::HashSet, convert::Infallible, hash::Hash, sync::Arc};
 
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">document::DocumentId</span>,
-    <span class="ident">schema</span>::{<span class="ident">CollectionName</span>, <span class="ident">ViewName</span>},
+<span class="kw">use </span>bonsaidb_core::{
+    document::DocumentId,
+    schema::{CollectionName, ViewName},
 };
-<span class="kw">use</span> <span class="ident">nebari</span>::{
-    <span class="ident">io::any::AnyFile</span>,
-    <span class="ident">tree</span>::{<span class="ident">Operation</span>, <span class="ident">ScanEvaluation</span>, <span class="ident">Unversioned</span>, <span class="ident">Versioned</span>},
-    <span class="ident">ArcBytes</span>, <span class="ident">Roots</span>, <span class="ident">Tree</span>,
+<span class="kw">use </span>nebari::{
+    io::any::AnyFile,
+    tree::{Operation, ScanEvaluation, Unversioned, Versioned},
+    ArcBytes, Roots, Tree,
 };
-<span class="kw">use</span> <span class="ident">parking_lot::Mutex</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="kw">use </span>parking_lot::Mutex;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">super</span>::{
-    <span class="ident">mapper</span>::{<span class="ident">Map</span>, <span class="ident">Mapper</span>},
-    <span class="ident">view_invalidated_docs_tree_name</span>, <span class="ident">view_versions_tree_name</span>,
+<span class="kw">use super</span>::{
+    mapper::{Map, Mapper},
+    view_invalidated_docs_tree_name, view_versions_tree_name,
 };
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">database</span>::{<span class="ident">document_tree_name</span>, <span class="ident">Database</span>},
-    <span class="ident">tasks</span>::{<span class="ident">handle::Handle</span>, <span class="ident">Job</span>, <span class="ident">Keyed</span>, <span class="ident">Task</span>},
-    <span class="ident">views</span>::{<span class="ident">view_document_map_tree_name</span>, <span class="ident">view_entries_tree_name</span>},
-    <span class="ident">Error</span>,
+<span class="kw">use crate</span>::{
+    database::{document_tree_name, Database},
+    tasks::{handle::Handle, Job, Keyed, Task},
+    views::{view_document_map_tree_name, view_entries_tree_name},
+    Error,
 };
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IntegrityScanner</span> {
-    <span class="kw">pub</span> <span class="ident">database</span>: <span class="ident">Database</span>,
-    <span class="kw">pub</span> <span class="ident">scan</span>: <span class="ident">IntegrityScan</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>IntegrityScanner {
+    <span class="kw">pub </span>database: Database,
+    <span class="kw">pub </span>scan: IntegrityScan,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Hash</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IntegrityScan</span> {
-    <span class="kw">pub</span> <span class="ident">view_version</span>: <span class="ident">u64</span>,
-    <span class="kw">pub</span> <span class="ident">database</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-    <span class="kw">pub</span> <span class="ident">view_name</span>: <span class="ident">ViewName</span>,
+<span class="attribute">#[derive(Debug, Hash, Eq, PartialEq, Clone)]
+</span><span class="kw">pub struct </span>IntegrityScan {
+    <span class="kw">pub </span>view_version: u64,
+    <span class="kw">pub </span>database: Arc&lt;Cow&lt;<span class="lifetime">&#39;static</span>, str&gt;&gt;,
+    <span class="kw">pub </span>collection: CollectionName,
+    <span class="kw">pub </span>view_name: ViewName,
 }
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">OptionalViewMapHandle</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Handle</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="kw">pub type </span>OptionalViewMapHandle = <span class="prelude-ty">Option</span>&lt;Arc&lt;Mutex&lt;<span class="prelude-ty">Option</span>&lt;Handle&lt;u64, Error&gt;&gt;&gt;&gt;&gt;;
 
-<span class="kw">impl</span> <span class="ident">Job</span> <span class="kw">for</span> <span class="ident">IntegrityScanner</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">OptionalViewMapHandle</span>;
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
+<span class="kw">impl </span>Job <span class="kw">for </span>IntegrityScanner {
+    <span class="kw">type </span>Output = OptionalViewMapHandle;
+    <span class="kw">type </span>Error = Error;
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">level</span> <span class="op">=</span> <span class="string">&quot;trace&quot;</span>, <span class="ident">skip_all</span>))]</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::too_many_lines</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">documents</span> <span class="op">=</span>
-            <span class="self">self</span>.<span class="ident">database</span>
-                .<span class="ident">roots</span>()
-                .<span class="ident">tree</span>(<span class="self">self</span>.<span class="ident">database</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Versioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
-                    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">collection</span>,
-                    <span class="ident">document_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">collection</span>),
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;tracing&quot;</span>, tracing::instrument(level = <span class="string">&quot;trace&quot;</span>, skip_all))]
+    #[allow(clippy::too_many_lines)]
+    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>documents =
+            <span class="self">self</span>.database
+                .roots()
+                .tree(<span class="self">self</span>.database.collection_tree::&lt;Versioned, <span class="kw">_</span>&gt;(
+                    <span class="kw-2">&amp;</span><span class="self">self</span>.scan.collection,
+                    document_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.scan.collection),
                 )<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">view_versions_tree</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
-            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">collection</span>,
-            <span class="ident">view_versions_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">collection</span>),
+        <span class="kw">let </span>view_versions_tree = <span class="self">self</span>.database.collection_tree::&lt;Unversioned, <span class="kw">_</span>&gt;(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.scan.collection,
+            view_versions_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.scan.collection),
         )<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">view_versions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">roots</span>().<span class="ident">tree</span>(<span class="ident">view_versions_tree</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>;
+        <span class="kw">let </span>view_versions = <span class="self">self</span>.database.roots().tree(view_versions_tree.clone())<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">view_name</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_name</span>.<span class="ident">clone</span>();
-        <span class="kw">let</span> <span class="ident">view_version</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_version</span>;
-        <span class="kw">let</span> <span class="ident">roots</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">roots</span>().<span class="ident">clone</span>();
-        <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="ident">view_versions</span>
-            .<span class="ident">get</span>(<span class="ident">view_name</span>.<span class="ident">to_string</span>().<span class="ident">as_bytes</span>())<span class="question-mark">?</span>
-            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">version</span><span class="op">|</span> <span class="ident">ViewVersion::from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">version</span>).<span class="ident">ok</span>())
-            .<span class="ident">unwrap_or_default</span>();
+        <span class="kw">let </span>view_name = <span class="self">self</span>.scan.view_name.clone();
+        <span class="kw">let </span>view_version = <span class="self">self</span>.scan.view_version;
+        <span class="kw">let </span>roots = <span class="self">self</span>.database.roots().clone();
+        <span class="kw">let </span>version = view_versions
+            .get(view_name.to_string().as_bytes())<span class="question-mark">?
+            </span>.and_then(|version| ViewVersion::from_bytes(<span class="kw-2">&amp;</span>version).ok())
+            .unwrap_or_default();
 
-        <span class="comment">// Remove any old files that are no longer used.</span>
-        <span class="ident">version</span>.<span class="ident">cleanup</span>(<span class="kw-2">&amp;</span><span class="ident">roots</span>, <span class="kw-2">&amp;</span><span class="ident">view_name</span>)<span class="question-mark">?</span>;
+        <span class="comment">// Remove any old files that are no longer used.
+        </span>version.cleanup(<span class="kw-2">&amp;</span>roots, <span class="kw-2">&amp;</span>view_name)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">task</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">version</span>.<span class="ident">is_current</span>(<span class="ident">view_version</span>) {
-            <span class="prelude-val">None</span>
-        } <span class="kw">else</span> {
-            <span class="comment">// The view isn&#39;t the current version, queue up all documents.</span>
-            <span class="kw">let</span> <span class="ident">missing_entries</span> <span class="op">=</span> <span class="ident">tree_keys</span>::<span class="op">&lt;</span><span class="ident">Versioned</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">documents</span>)<span class="question-mark">?</span>;
-            <span class="comment">// When a version is updated, we can make no guarantees about</span>
-            <span class="comment">// existing keys. The best we can do is delete the existing files so</span>
-            <span class="comment">// that the view starts fresh.</span>
-            <span class="ident">roots</span>.<span class="ident">delete_tree</span>(<span class="ident">view_invalidated_docs_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_name</span>))<span class="question-mark">?</span>;
-            <span class="ident">roots</span>.<span class="ident">delete_tree</span>(<span class="ident">view_entries_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_name</span>))<span class="question-mark">?</span>;
-            <span class="ident">roots</span>.<span class="ident">delete_tree</span>(<span class="ident">view_document_map_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_name</span>))<span class="question-mark">?</span>;
-            <span class="comment">// Add all missing entries to the invalidated list. The view</span>
-            <span class="comment">// mapping job will update them on the next pass.</span>
-            <span class="kw">let</span> <span class="ident">invalidated_entries_tree</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
-                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">collection</span>,
-                <span class="ident">view_invalidated_docs_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_name</span>),
+        <span class="kw">let </span>task = <span class="kw">if </span>version.is_current(view_version) {
+            <span class="prelude-val">None
+        </span>} <span class="kw">else </span>{
+            <span class="comment">// The view isn&#39;t the current version, queue up all documents.
+            </span><span class="kw">let </span>missing_entries = tree_keys::&lt;Versioned&gt;(<span class="kw-2">&amp;</span>documents)<span class="question-mark">?</span>;
+            <span class="comment">// When a version is updated, we can make no guarantees about
+            // existing keys. The best we can do is delete the existing files so
+            // that the view starts fresh.
+            </span>roots.delete_tree(view_invalidated_docs_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.scan.view_name))<span class="question-mark">?</span>;
+            roots.delete_tree(view_entries_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.scan.view_name))<span class="question-mark">?</span>;
+            roots.delete_tree(view_document_map_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.scan.view_name))<span class="question-mark">?</span>;
+            <span class="comment">// Add all missing entries to the invalidated list. The view
+            // mapping job will update them on the next pass.
+            </span><span class="kw">let </span>invalidated_entries_tree = <span class="self">self</span>.database.collection_tree::&lt;Unversioned, <span class="kw">_</span>&gt;(
+                <span class="kw-2">&amp;</span><span class="self">self</span>.scan.collection,
+                view_invalidated_docs_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.scan.view_name),
             )<span class="question-mark">?</span>;
 
-            <span class="kw">let</span> <span class="ident">transaction</span> <span class="op">=</span> <span class="ident">roots</span>.<span class="ident">transaction</span>(<span class="kw-2">&amp;</span>[<span class="ident">invalidated_entries_tree</span>, <span class="ident">view_versions_tree</span>])<span class="question-mark">?</span>;
+            <span class="kw">let </span>transaction = roots.transaction(<span class="kw-2">&amp;</span>[invalidated_entries_tree, view_versions_tree])<span class="question-mark">?</span>;
             {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">view_versions</span> <span class="op">=</span> <span class="ident">transaction</span>.<span class="ident">tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span><span class="op">&gt;</span>(<span class="number">1</span>).<span class="ident">unwrap</span>();
-                <span class="ident">view_versions</span>.<span class="ident">set</span>(
-                    <span class="ident">view_name</span>.<span class="ident">to_string</span>().<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>(),
-                    <span class="ident">ViewVersion::current_for</span>(<span class="ident">view_version</span>).<span class="ident">to_vec</span>()<span class="question-mark">?</span>,
+                <span class="kw">let </span><span class="kw-2">mut </span>view_versions = transaction.tree::&lt;Unversioned&gt;(<span class="number">1</span>).unwrap();
+                view_versions.set(
+                    view_name.to_string().as_bytes().to_vec(),
+                    ViewVersion::current_for(view_version).to_vec()<span class="question-mark">?</span>,
                 )<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">invalidated_entries</span> <span class="op">=</span> <span class="ident">transaction</span>.<span class="ident">tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span><span class="op">&gt;</span>(<span class="number">0</span>).<span class="ident">unwrap</span>();
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">missing_entries</span> <span class="op">=</span> <span class="ident">missing_entries</span>
-                    .<span class="ident">into_iter</span>()
-                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> <span class="ident">ArcBytes::from</span>(<span class="ident">id</span>.<span class="ident">to_vec</span>()))
-                    .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-                <span class="ident">missing_entries</span>.<span class="ident">sort</span>();
-                <span class="ident">invalidated_entries</span>.<span class="ident">modify</span>(<span class="ident">missing_entries</span>, <span class="ident">Operation::Set</span>(<span class="ident">ArcBytes::default</span>()))<span class="question-mark">?</span>;
+                <span class="kw">let </span><span class="kw-2">mut </span>invalidated_entries = transaction.tree::&lt;Unversioned&gt;(<span class="number">0</span>).unwrap();
+                <span class="kw">let </span><span class="kw-2">mut </span>missing_entries = missing_entries
+                    .into_iter()
+                    .map(|id| ArcBytes::from(id.to_vec()))
+                    .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+                missing_entries.sort();
+                invalidated_entries.modify(missing_entries, Operation::Set(ArcBytes::default()))<span class="question-mark">?</span>;
             }
-            <span class="ident">transaction</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
+            transaction.commit()<span class="question-mark">?</span>;
 
-            <span class="prelude-val">Some</span>(<span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="prelude-val">Some</span>(
-                <span class="self">self</span>.<span class="ident">database</span>
-                    .<span class="ident">storage</span>
-                    .<span class="ident">instance</span>
-                    .<span class="ident">tasks</span>()
-                    .<span class="ident">jobs</span>
-                    .<span class="ident">lookup_or_enqueue</span>(<span class="ident">Mapper</span> {
-                        <span class="ident">database</span>: <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">clone</span>(),
-                        <span class="ident">map</span>: <span class="ident">Map</span> {
-                            <span class="ident">database</span>: <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">data</span>.<span class="ident">name</span>.<span class="ident">clone</span>(),
-                            <span class="ident">collection</span>: <span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">collection</span>.<span class="ident">clone</span>(),
-                            <span class="ident">view_name</span>: <span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_name</span>.<span class="ident">clone</span>(),
+            <span class="prelude-val">Some</span>(Arc::new(Mutex::new(<span class="prelude-val">Some</span>(
+                <span class="self">self</span>.database
+                    .storage
+                    .instance
+                    .tasks()
+                    .jobs
+                    .lookup_or_enqueue(Mapper {
+                        database: <span class="self">self</span>.database.clone(),
+                        map: Map {
+                            database: <span class="self">self</span>.database.data.name.clone(),
+                            collection: <span class="self">self</span>.scan.collection.clone(),
+                            view_name: <span class="self">self</span>.scan.view_name.clone(),
                         },
                     }),
             ))))
         };
 
-        <span class="self">self</span>.<span class="ident">database</span>
-            .<span class="ident">storage</span>
-            .<span class="ident">instance</span>
-            .<span class="ident">tasks</span>()
-            .<span class="ident">mark_integrity_check_complete</span>(
-                <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">data</span>.<span class="ident">name</span>.<span class="ident">clone</span>(),
-                <span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">collection</span>.<span class="ident">clone</span>(),
-                <span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">view_name</span>.<span class="ident">clone</span>(),
+        <span class="self">self</span>.database
+            .storage
+            .instance
+            .tasks()
+            .mark_integrity_check_complete(
+                <span class="self">self</span>.database.data.name.clone(),
+                <span class="self">self</span>.scan.collection.clone(),
+                <span class="self">self</span>.scan.view_name.clone(),
             );
 
-        <span class="prelude-val">Ok</span>(<span class="ident">task</span>)
+        <span class="prelude-val">Ok</span>(task)
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ViewVersion</span> {
-    <span class="ident">internal_version</span>: <span class="ident">u8</span>,
-    <span class="ident">schema_version</span>: <span class="ident">u64</span>,
+<span class="attribute">#[derive(Serialize, Deserialize, Debug, Default)]
+</span><span class="kw">pub struct </span>ViewVersion {
+    internal_version: u8,
+    schema_version: u64,
 }
 
-<span class="kw">impl</span> <span class="ident">ViewVersion</span> {
-    <span class="kw">const</span> <span class="ident">CURRENT_VERSION</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">3</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">pot::from_slice</span>(<span class="ident">bytes</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">version</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">version</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">err</span>, <span class="ident">pot::Error::NotAPot</span>) <span class="op">&amp;&amp;</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">8</span> =&gt; {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">be_bytes</span> <span class="op">=</span> [<span class="number">0_u8</span>; <span class="number">8</span>];
-                <span class="ident">be_bytes</span>.<span class="ident">copy_from_slice</span>(<span class="ident">bytes</span>);
-                <span class="kw">let</span> <span class="ident">schema_version</span> <span class="op">=</span> <span class="ident">u64::from_be_bytes</span>(<span class="ident">be_bytes</span>);
-                <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-                    <span class="ident">internal_version</span>: <span class="number">0</span>,
-                    <span class="ident">schema_version</span>,
+<span class="kw">impl </span>ViewVersion {
+    <span class="kw">const </span>CURRENT_VERSION: u8 = <span class="number">3</span>;
+    <span class="kw">pub fn </span>from_bytes(bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">match </span>pot::from_slice(bytes) {
+            <span class="prelude-val">Ok</span>(version) =&gt; <span class="prelude-val">Ok</span>(version),
+            <span class="prelude-val">Err</span>(err) <span class="kw">if </span><span class="macro">matches!</span>(err, pot::Error::NotAPot) &amp;&amp; bytes.len() == <span class="number">8 </span>=&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>be_bytes = [<span class="number">0_u8</span>; <span class="number">8</span>];
+                be_bytes.copy_from_slice(bytes);
+                <span class="kw">let </span>schema_version = u64::from_be_bytes(be_bytes);
+                <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+                    internal_version: <span class="number">0</span>,
+                    schema_version,
                 })
             }
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::Error::from</span>(<span class="ident">err</span>)),
+            <span class="prelude-val">Err</span>(err) =&gt; <span class="prelude-val">Err</span>(<span class="kw">crate</span>::Error::from(err)),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="ident">pot::to_vec</span>(<span class="self">self</span>).<span class="ident">map_err</span>(<span class="ident"><span class="kw">crate</span>::Error::from</span>)
+    <span class="kw">pub fn </span>to_vec(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, <span class="kw">crate</span>::Error&gt; {
+        pot::to_vec(<span class="self">self</span>).map_err(<span class="kw">crate</span>::Error::from)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">current_for</span>(<span class="ident">schema_version</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">internal_version</span>: <span class="ident"><span class="self">Self</span>::CURRENT_VERSION</span>,
-            <span class="ident">schema_version</span>,
+    <span class="kw">pub fn </span>current_for(schema_version: u64) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            internal_version: <span class="self">Self</span>::CURRENT_VERSION,
+            schema_version,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_current</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">schema_version</span>: <span class="ident">u64</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">internal_version</span> <span class="op">==</span> <span class="ident"><span class="self">Self</span>::CURRENT_VERSION</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">schema_version</span> <span class="op">==</span> <span class="ident">schema_version</span>
+    <span class="kw">pub fn </span>is_current(<span class="kw-2">&amp;</span><span class="self">self</span>, schema_version: u64) -&gt; bool {
+        <span class="self">self</span>.internal_version == <span class="self">Self</span>::CURRENT_VERSION &amp;&amp; <span class="self">self</span>.schema_version == schema_version
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cleanup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">roots</span>: <span class="kw-2">&amp;</span><span class="ident">Roots</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>, <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">internal_version</span> <span class="op">&lt;</span> <span class="number">2</span> {
-            <span class="comment">// omitted entries was removed</span>
-            <span class="ident">roots</span>.<span class="ident">delete_tree</span>(<span class="macro">format!</span>(<span class="string">&quot;view.{:#}.omitted&quot;</span>, <span class="ident">view</span>))<span class="question-mark">?</span>;
+    <span class="kw">pub fn </span>cleanup(<span class="kw-2">&amp;</span><span class="self">self</span>, roots: <span class="kw-2">&amp;</span>Roots&lt;AnyFile&gt;, view: <span class="kw-2">&amp;</span>ViewName) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">if </span><span class="self">self</span>.internal_version &lt; <span class="number">2 </span>{
+            <span class="comment">// omitted entries was removed
+            </span>roots.delete_tree(<span class="macro">format!</span>(<span class="string">&quot;view.{view:#}.omitted&quot;</span>))<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">fn</span> <span class="ident">tree_keys</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">nebari::tree::Root</span><span class="op">&gt;</span>(
-    <span class="ident">tree</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ids</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-    <span class="ident">tree</span>.<span class="ident">scan</span>::<span class="op">&lt;</span><span class="ident">Infallible</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span>(
+<span class="kw">fn </span>tree_keys&lt;R: nebari::tree::Root&gt;(
+    tree: <span class="kw-2">&amp;</span>Tree&lt;R, AnyFile&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;HashSet&lt;DocumentId&gt;, <span class="kw">crate</span>::Error&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>ids = Vec::new();
+    tree.scan::&lt;Infallible, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>&gt;(
         <span class="kw-2">&amp;</span>(..),
         <span class="bool-val">true</span>,
-        <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="ident">ScanEvaluation::ReadData</span>,
-        <span class="op">|</span><span class="ident">key</span>, <span class="kw">_</span><span class="op">|</span> {
-            <span class="ident">ids</span>.<span class="ident">push</span>(<span class="ident">key</span>.<span class="ident">clone</span>());
-            <span class="ident">ScanEvaluation::Skip</span>
+        |<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>| ScanEvaluation::ReadData,
+        |key, <span class="kw">_</span>| {
+            ids.push(key.clone());
+            ScanEvaluation::Skip
         },
-        <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="macro">unreachable!</span>(),
+        |<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>| <span class="macro">unreachable!</span>(),
     )<span class="question-mark">?</span>;
 
-    <span class="prelude-val">Ok</span>(<span class="ident">ids</span>
-        .<span class="ident">into_iter</span>()
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">key</span><span class="op">|</span> <span class="ident">DocumentId::try_from</span>(<span class="ident">key</span>.<span class="ident">as_slice</span>()))
-        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>)
+    <span class="prelude-val">Ok</span>(ids
+        .into_iter()
+        .map(|key| DocumentId::try_from(key.as_slice()))
+        .collect::&lt;<span class="prelude-ty">Result</span>&lt;HashSet&lt;<span class="kw">_</span>&gt;, bonsaidb_core::Error&gt;&gt;()<span class="question-mark">?</span>)
 }
 
-<span class="kw">impl</span> <span class="ident">Keyed</span><span class="op">&lt;</span><span class="ident">Task</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">IntegrityScanner</span> {
-    <span class="kw">fn</span> <span class="ident">key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Task</span> {
-        <span class="ident">Task::IntegrityScan</span>(<span class="self">self</span>.<span class="ident">scan</span>.<span class="ident">clone</span>())
+<span class="kw">impl </span>Keyed&lt;Task&gt; <span class="kw">for </span>IntegrityScanner {
+    <span class="kw">fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Task {
+        Task::IntegrityScan(<span class="self">self</span>.scan.clone())
     }
 }
 
-<span class="comment">// The reason we use jobs like this is to make sure we can tweak how much is</span>
-<span class="comment">// happening at any given time.</span>
-<span class="comment">//</span>
-<span class="comment">// On the Server level, we&#39;ll need to cooperate with all the databases in a</span>
-<span class="comment">// shared pool of workers. So, we need to come up with a design for the view</span>
-<span class="comment">// updaters to work within this limitation.</span>
-<span class="comment">//</span>
-<span class="comment">// Integrity scan is simple: Have a shared structure on Database that keeps track</span>
-<span class="comment">// of all integrity scan results. It can check for an existing value and return,</span>
-<span class="comment">// or make you wait until the job is finished. For views, I suppose the best</span>
-<span class="comment">// that can be done is a similar approach, but the indexer&#39;s output is the last</span>
-<span class="comment">// transaction id it synced. When a request comes in, a check can be done if</span>
-<span class="comment">// there are any docs outdated, if so, the client can get the current transaction id</span>
-<span class="comment">// and ask the ViewScanning service manager to wait until that txid is scanned.</span>
-<span class="comment">//</span>
-<span class="comment">// The view can then scan and return the results it finds with confidence it was updated to that time.</span>
-<span class="comment">// If new requests come in while the current batch is being caught up to,</span>
-</code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+<span class="comment">// The reason we use jobs like this is to make sure we can tweak how much is
+// happening at any given time.
+//
+// On the Server level, we&#39;ll need to cooperate with all the databases in a
+// shared pool of workers. So, we need to come up with a design for the view
+// updaters to work within this limitation.
+//
+// Integrity scan is simple: Have a shared structure on Database that keeps track
+// of all integrity scan results. It can check for an existing value and return,
+// or make you wait until the job is finished. For views, I suppose the best
+// that can be done is a similar approach, but the indexer&#39;s output is the last
+// transaction id it synced. When a request comes in, a check can be done if
+// there are any docs outdated, if so, the client can get the current transaction id
+// and ask the ViewScanning service manager to wait until that txid is scanned.
+//
+// The view can then scan and return the results it finds with confidence it was updated to that time.
+// If new requests come in while the current batch is being caught up to,
+</span></code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

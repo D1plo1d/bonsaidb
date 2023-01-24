@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/server/connected_client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>connected_client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_server/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/server/connected_client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>connected_client.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_server/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -319,321 +313,320 @@
 <span id="313">313</span>
 <span id="314">314</span>
 <span id="315">315</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">collections::HashMap</span>,
-    <span class="ident">net::SocketAddr</span>,
-    <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>},
-    <span class="ident">sync::Arc</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    collections::HashMap,
+    net::SocketAddr,
+    ops::{Deref, DerefMut},
+    sync::Arc,
 };
 
-<span class="kw">use</span> <span class="ident">async_lock</span>::{<span class="ident">Mutex</span>, <span class="ident">MutexGuard</span>};
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">api</span>,
-    <span class="ident">api::ApiName</span>,
-    <span class="ident">arc_bytes::serde::Bytes</span>,
-    <span class="ident">connection</span>::{<span class="ident">Session</span>, <span class="ident">SessionId</span>},
-    <span class="ident">networking::MessageReceived</span>,
-    <span class="ident">pubsub</span>::{<span class="ident">Receiver</span>, <span class="ident">Subscriber</span> <span class="kw">as</span> <span class="kw">_</span>},
+<span class="kw">use </span>async_lock::{Mutex, MutexGuard};
+<span class="kw">use </span>bonsaidb_core::{
+    api,
+    api::ApiName,
+    arc_bytes::serde::Bytes,
+    connection::{Session, SessionId},
+    networking::MessageReceived,
+    pubsub::{Receiver, Subscriber <span class="kw">as _</span>},
 };
-<span class="kw">use</span> <span class="ident">bonsaidb_local::Subscriber</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_utils::fast_async_lock</span>;
-<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
-<span class="kw">use</span> <span class="ident">flume::Sender</span>;
-<span class="kw">use</span> <span class="ident">parking_lot::RwLock</span>;
+<span class="kw">use </span>bonsaidb_local::Subscriber;
+<span class="kw">use </span>bonsaidb_utils::fast_async_lock;
+<span class="kw">use </span>derive_where::derive_where;
+<span class="kw">use </span>flume::Sender;
+<span class="kw">use </span>parking_lot::RwLock;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Backend</span>, <span class="ident">CustomServer</span>, <span class="ident">Error</span>, <span class="ident">NoBackend</span>};
+<span class="kw">use crate</span>::{Backend, CustomServer, Error, NoBackend};
 
-<span class="doccomment">/// The ways a client can be connected to the server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Transport</span> {
-    <span class="doccomment">/// A connection over BonsaiDb&#39;s QUIC-based protocol.</span>
-    <span class="ident">Bonsai</span>,
-    <span class="doccomment">/// A connection over WebSockets.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
-    <span class="ident">WebSocket</span>,
+<span class="doccomment">/// The ways a client can be connected to the server.
+</span><span class="attribute">#[derive(Debug, PartialEq, Eq)]
+</span><span class="kw">pub enum </span>Transport {
+    <span class="doccomment">/// A connection over BonsaiDb&#39;s QUIC-based protocol.
+    </span>Bonsai,
+    <span class="doccomment">/// A connection over WebSockets.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;websockets&quot;</span>)]
+    </span>WebSocket,
 }
 
-<span class="doccomment">/// A connected database client.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
-    <span class="ident">data</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A connected database client.
+</span><span class="attribute">#[derive(Debug)]
+#[derive_where(Clone)]
+</span><span class="kw">pub struct </span>ConnectedClient&lt;B: Backend = NoBackend&gt; {
+    data: Arc&lt;Data&lt;B&gt;&gt;,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
-    <span class="ident">id</span>: <span class="ident">u32</span>,
-    <span class="ident">sessions</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>, <span class="ident">ClientSession</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">address</span>: <span class="ident">SocketAddr</span>,
-    <span class="ident">transport</span>: <span class="ident">Transport</span>,
-    <span class="ident">response_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>, <span class="ident">ApiName</span>, <span class="ident">Bytes</span>)<span class="op">&gt;</span>,
-    <span class="ident">client_data</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">B::ClientData</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>Data&lt;B: Backend = NoBackend&gt; {
+    id: u32,
+    sessions: RwLock&lt;HashMap&lt;<span class="prelude-ty">Option</span>&lt;SessionId&gt;, ClientSession&gt;&gt;,
+    address: SocketAddr,
+    transport: Transport,
+    response_sender: Sender&lt;(<span class="prelude-ty">Option</span>&lt;SessionId&gt;, ApiName, Bytes)&gt;,
+    client_data: Mutex&lt;<span class="prelude-ty">Option</span>&lt;B::ClientData&gt;&gt;,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ClientSession</span> {
-    <span class="ident">session</span>: <span class="ident">Session</span>,
-    <span class="ident">subscribers</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">Subscriber</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>ClientSession {
+    session: Session,
+    subscribers: HashMap&lt;u64, Subscriber&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Returns the address of the connected client.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">SocketAddr</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">address</span>
+<span class="kw">impl</span>&lt;B: Backend&gt; ConnectedClient&lt;B&gt; {
+    <span class="doccomment">/// Returns the address of the connected client.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>address(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>SocketAddr {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.data.address
     }
 
-    <span class="doccomment">/// Returns the transport method the client is connected via.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">transport</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Transport</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">transport</span>
+    <span class="doccomment">/// Returns the transport method the client is connected via.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>transport(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Transport {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.data.transport
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">logged_in_as</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">session</span>: <span class="ident">Session</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sessions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">sessions</span>.<span class="ident">write</span>();
-        <span class="ident">sessions</span>.<span class="ident">insert</span>(
-            <span class="ident">session</span>.<span class="ident">id</span>,
-            <span class="ident">ClientSession</span> {
-                <span class="ident">session</span>,
-                <span class="ident">subscribers</span>: <span class="ident">HashMap::default</span>(),
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>logged_in_as(<span class="kw-2">&amp;</span><span class="self">self</span>, session: Session) {
+        <span class="kw">let </span><span class="kw-2">mut </span>sessions = <span class="self">self</span>.data.sessions.write();
+        sessions.insert(
+            session.id,
+            ClientSession {
+                session,
+                subscribers: HashMap::default(),
             },
         );
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">log_out</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">session</span>: <span class="ident">SessionId</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sessions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">sessions</span>.<span class="ident">write</span>();
-        <span class="ident">sessions</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(<span class="ident">session</span>));
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>log_out(<span class="kw-2">&amp;</span><span class="self">self</span>, session: SessionId) {
+        <span class="kw">let </span><span class="kw-2">mut </span>sessions = <span class="self">self</span>.data.sessions.write();
+        sessions.remove(<span class="kw-2">&amp;</span><span class="prelude-val">Some</span>(session));
     }
 
-    <span class="doccomment">/// Sends a custom API response to the client.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Sends a custom API response to the client.
+    </span><span class="kw">pub fn </span>send&lt;Api: api::Api&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">session</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span>,
-        <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="ident">Api::Response</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">encoded</span> <span class="op">=</span> <span class="ident">pot::to_vec</span>(<span class="kw-2">&amp;</span><span class="prelude-ty">Result</span>::<span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Api::Response</span>, <span class="ident">Api::Error</span><span class="op">&gt;</span><span class="ident">::Ok</span>(<span class="ident">response</span>))<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">response_sender</span>.<span class="ident">send</span>((
-            <span class="ident">session</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">session</span><span class="op">|</span> <span class="ident">session</span>.<span class="ident">id</span>),
-            <span class="ident">Api::name</span>(),
-            <span class="ident">Bytes::from</span>(<span class="ident">encoded</span>),
+        session: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Session&gt;,
+        response: <span class="kw-2">&amp;</span>Api::Response,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>encoded = pot::to_vec(<span class="kw-2">&amp;</span><span class="prelude-ty">Result</span>::&lt;<span class="kw-2">&amp;</span>Api::Response, Api::Error&gt;::Ok(response))<span class="question-mark">?</span>;
+        <span class="self">self</span>.data.response_sender.send((
+            session.and_then(|session| session.id),
+            Api::name(),
+            Bytes::from(encoded),
         ))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Returns a locked reference to the stored client data.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">client_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">LockedClientDataGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">B::ClientData</span><span class="op">&gt;</span> {
-        <span class="ident">LockedClientDataGuard</span>(<span class="macro">fast_async_lock!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">client_data</span>))
+    <span class="doccomment">/// Returns a locked reference to the stored client data.
+    </span><span class="kw">pub async fn </span>client_data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; LockedClientDataGuard&lt;<span class="lifetime">&#39;_</span>, B::ClientData&gt; {
+        LockedClientDataGuard(<span class="macro">fast_async_lock!</span>(<span class="self">self</span>.data.client_data))
     }
 
-    <span class="doccomment">/// Looks up an active authentication session by its unique id. `None`</span>
-    <span class="doccomment">/// represents the unauthenticated session, and the result can be used to</span>
-    <span class="doccomment">/// check what permissions are allowed by default.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">session_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Session</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">sessions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">sessions</span>.<span class="ident">read</span>();
-        <span class="ident">sessions</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">session_id</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">data</span><span class="op">|</span> <span class="ident">data</span>.<span class="ident">session</span>.<span class="ident">clone</span>())
+    <span class="doccomment">/// Looks up an active authentication session by its unique id. `None`
+    /// represents the unauthenticated session, and the result can be used to
+    /// check what permissions are allowed by default.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>session(<span class="kw-2">&amp;</span><span class="self">self</span>, session_id: <span class="prelude-ty">Option</span>&lt;SessionId&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Session&gt; {
+        <span class="kw">let </span>sessions = <span class="self">self</span>.data.sessions.read();
+        sessions.get(<span class="kw-2">&amp;</span>session_id).map(|data| data.session.clone())
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">register_subscriber</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>register_subscriber(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">subscriber</span>: <span class="ident">Subscriber</span>,
-        <span class="ident">session_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>,
+        subscriber: Subscriber,
+        session_id: <span class="prelude-ty">Option</span>&lt;SessionId&gt;,
     ) {
-        <span class="kw">let</span> <span class="ident">subscriber_id</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">id</span>();
-        <span class="kw">let</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">subscriber</span>.<span class="ident">receiver</span>().<span class="ident">clone</span>();
+        <span class="kw">let </span>subscriber_id = subscriber.id();
+        <span class="kw">let </span>receiver = subscriber.receiver().clone();
         {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sessions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">sessions</span>.<span class="ident">write</span>();
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">client_session</span>) <span class="op">=</span> <span class="ident">sessions</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">session_id</span>) {
-                <span class="ident">client_session</span>
-                    .<span class="ident">subscribers</span>
-                    .<span class="ident">insert</span>(<span class="ident">subscriber</span>.<span class="ident">id</span>(), <span class="ident">subscriber</span>);
-            } <span class="kw">else</span> {
-                <span class="comment">// TODO return error for session not found.</span>
-                <span class="kw">return</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>sessions = <span class="self">self</span>.data.sessions.write();
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(client_session) = sessions.get_mut(<span class="kw-2">&amp;</span>session_id) {
+                client_session
+                    .subscribers
+                    .insert(subscriber.id(), subscriber);
+            } <span class="kw">else </span>{
+                <span class="comment">// TODO return error for session not found.
+                </span><span class="kw">return</span>;
             }
         }
-        <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-        <span class="ident">tokio::task::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-            <span class="ident">task_self</span>
-                .<span class="ident">forward_notifications_for</span>(<span class="ident">session_id</span>, <span class="ident">subscriber_id</span>, <span class="ident">receiver</span>)
+        <span class="kw">let </span>task_self = <span class="self">self</span>.clone();
+        tokio::task::spawn(<span class="kw">async move </span>{
+            task_self
+                .forward_notifications_for(session_id, subscriber_id, receiver)
                 .<span class="kw">await</span>;
         });
     }
 
-    <span class="doccomment">/// Sets the associated data for this client.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_client_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">data</span>: <span class="ident">B::ClientData</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client_data</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">client_data</span>);
-        <span class="kw-2">*</span><span class="ident">client_data</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">data</span>);
+    <span class="doccomment">/// Sets the associated data for this client.
+    </span><span class="kw">pub async fn </span>set_client_data(<span class="kw-2">&amp;</span><span class="self">self</span>, data: B::ClientData) {
+        <span class="kw">let </span><span class="kw-2">mut </span>client_data = <span class="macro">fast_async_lock!</span>(<span class="self">self</span>.data.client_data);
+        <span class="kw-2">*</span>client_data = <span class="prelude-val">Some</span>(data);
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">forward_notifications_for</span>(
+    <span class="kw">async fn </span>forward_notifications_for(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">session_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>,
-        <span class="ident">subscriber_id</span>: <span class="ident">u64</span>,
-        <span class="ident">receiver</span>: <span class="ident">Receiver</span>,
+        session_id: <span class="prelude-ty">Option</span>&lt;SessionId&gt;,
+        subscriber_id: u64,
+        receiver: Receiver,
     ) {
-        <span class="kw">let</span> <span class="ident">session</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">session</span>(<span class="ident">session_id</span>);
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">message</span>) <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">receive_async</span>().<span class="kw">await</span> {
-            <span class="kw">if</span> <span class="self">self</span>
-                .<span class="ident">send</span>::<span class="op">&lt;</span><span class="ident">MessageReceived</span><span class="op">&gt;</span>(
-                    <span class="ident">session</span>.<span class="ident">as_ref</span>(),
-                    <span class="kw-2">&amp;</span><span class="ident">MessageReceived</span> {
-                        <span class="ident">subscriber_id</span>,
-                        <span class="ident">topic</span>: <span class="ident">Bytes::from</span>(<span class="ident">message</span>.<span class="ident">topic</span>.<span class="number">0</span>.<span class="ident">into_vec</span>()),
-                        <span class="ident">payload</span>: <span class="ident">Bytes::from</span>(<span class="kw-2">&amp;</span><span class="ident">message</span>.<span class="ident">payload</span>[..]),
+        <span class="kw">let </span>session = <span class="self">self</span>.session(session_id);
+        <span class="kw">while let </span><span class="prelude-val">Ok</span>(message) = receiver.receive_async().<span class="kw">await </span>{
+            <span class="kw">if </span><span class="self">self
+                </span>.send::&lt;MessageReceived&gt;(
+                    session.as_ref(),
+                    <span class="kw-2">&amp;</span>MessageReceived {
+                        subscriber_id,
+                        topic: Bytes::from(message.topic.<span class="number">0</span>.into_vec()),
+                        payload: Bytes::from(<span class="kw-2">&amp;</span>message.payload[..]),
                     },
                 )
-                .<span class="ident">is_err</span>()
+                .is_err()
             {
                 <span class="kw">break</span>;
             }
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">subscribe_by_id</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>subscribe_by_id(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">subscriber_id</span>: <span class="ident">u64</span>,
-        <span class="ident">topic</span>: <span class="ident">Bytes</span>,
-        <span class="ident">check_session_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sessions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">sessions</span>.<span class="ident">write</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">client_session</span>) <span class="op">=</span> <span class="ident">sessions</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">check_session_id</span>) {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">subscriber</span>) <span class="op">=</span> <span class="ident">client_session</span>.<span class="ident">subscribers</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_id</span>) {
-                <span class="ident">subscriber</span>.<span class="ident">subscribe_to_bytes</span>(<span class="ident">topic</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
+        subscriber_id: u64,
+        topic: Bytes,
+        check_session_id: <span class="prelude-ty">Option</span>&lt;SessionId&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>sessions = <span class="self">self</span>.data.sessions.write();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(client_session) = sessions.get_mut(<span class="kw-2">&amp;</span>check_session_id) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(subscriber) = client_session.subscribers.get(<span class="kw-2">&amp;</span>subscriber_id) {
+                subscriber.subscribe_to_bytes(topic.<span class="number">0</span>)<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(())
-            } <span class="kw">else</span> {
-                <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+            } <span class="kw">else </span>{
+                <span class="prelude-val">Err</span>(Error::other(
                     <span class="string">&quot;bonsaidb-server pubsub&quot;</span>,
                     <span class="string">&quot;invalid subscriber id&quot;</span>,
                 ))
             }
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;bonsaidb-server auth&quot;</span>, <span class="string">&quot;invalid session id&quot;</span>))
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::other(<span class="string">&quot;bonsaidb-server auth&quot;</span>, <span class="string">&quot;invalid session id&quot;</span>))
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">unsubscribe_by_id</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>unsubscribe_by_id(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">subscriber_id</span>: <span class="ident">u64</span>,
-        <span class="ident">topic</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">check_session_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sessions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">sessions</span>.<span class="ident">write</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">client_session</span>) <span class="op">=</span> <span class="ident">sessions</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">check_session_id</span>) {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">subscriber</span>) <span class="op">=</span> <span class="ident">client_session</span>.<span class="ident">subscribers</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_id</span>) {
-                <span class="ident">subscriber</span>.<span class="ident">unsubscribe_from_bytes</span>(<span class="ident">topic</span>)<span class="question-mark">?</span>;
+        subscriber_id: u64,
+        topic: <span class="kw-2">&amp;</span>[u8],
+        check_session_id: <span class="prelude-ty">Option</span>&lt;SessionId&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>sessions = <span class="self">self</span>.data.sessions.write();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(client_session) = sessions.get_mut(<span class="kw-2">&amp;</span>check_session_id) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(subscriber) = client_session.subscribers.get(<span class="kw-2">&amp;</span>subscriber_id) {
+                subscriber.unsubscribe_from_bytes(topic)<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(())
-            } <span class="kw">else</span> {
-                <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+            } <span class="kw">else </span>{
+                <span class="prelude-val">Err</span>(Error::other(
                     <span class="string">&quot;bonsaidb-server pubsub&quot;</span>,
                     <span class="string">&quot;invalid subscriber id&quot;</span>,
                 ))
             }
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;bonsaidb-server auth&quot;</span>, <span class="string">&quot;invalid session id&quot;</span>))
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::other(<span class="string">&quot;bonsaidb-server auth&quot;</span>, <span class="string">&quot;invalid session id&quot;</span>))
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">unregister_subscriber_by_id</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>unregister_subscriber_by_id(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">subscriber_id</span>: <span class="ident">u64</span>,
-        <span class="ident">check_session_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sessions</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">sessions</span>.<span class="ident">write</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">client_session</span>) <span class="op">=</span> <span class="ident">sessions</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">check_session_id</span>) {
-            <span class="kw">if</span> <span class="ident">client_session</span>.<span class="ident">subscribers</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">subscriber_id</span>).<span class="ident">is_some</span>() {
+        subscriber_id: u64,
+        check_session_id: <span class="prelude-ty">Option</span>&lt;SessionId&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>sessions = <span class="self">self</span>.data.sessions.write();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(client_session) = sessions.get_mut(<span class="kw-2">&amp;</span>check_session_id) {
+            <span class="kw">if </span>client_session.subscribers.remove(<span class="kw-2">&amp;</span>subscriber_id).is_some() {
                 <span class="prelude-val">Ok</span>(())
-            } <span class="kw">else</span> {
-                <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(
+            } <span class="kw">else </span>{
+                <span class="prelude-val">Err</span>(Error::other(
                     <span class="string">&quot;bonsaidb-server pubsub&quot;</span>,
                     <span class="string">&quot;invalid subscriber id&quot;</span>,
                 ))
             }
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::other</span>(<span class="string">&quot;bonsaidb-server auth&quot;</span>, <span class="string">&quot;invalid session id&quot;</span>))
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::other(<span class="string">&quot;bonsaidb-server auth&quot;</span>, <span class="string">&quot;invalid session id&quot;</span>))
         }
     }
 }
 
-<span class="doccomment">/// A locked reference to associated client data.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LockedClientDataGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;client</span>, <span class="ident">ClientData</span><span class="op">&gt;</span>(<span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;client</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ClientData</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="doccomment">/// A locked reference to associated client data.
+</span><span class="kw">pub struct </span>LockedClientDataGuard&lt;<span class="lifetime">&#39;client</span>, ClientData&gt;(MutexGuard&lt;<span class="lifetime">&#39;client</span>, <span class="prelude-ty">Option</span>&lt;ClientData&gt;&gt;);
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;client</span>, <span class="ident">ClientData</span><span class="op">&gt;</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">LockedClientDataGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;client</span>, <span class="ident">ClientData</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ClientData</span><span class="op">&gt;</span>;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;client</span>, ClientData&gt; Deref <span class="kw">for </span>LockedClientDataGuard&lt;<span class="lifetime">&#39;client</span>, ClientData&gt; {
+    <span class="kw">type </span>Target = <span class="prelude-ty">Option</span>&lt;ClientData&gt;;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
-    }
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
+    </span>}
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;client</span>, <span class="ident">ClientData</span><span class="op">&gt;</span> <span class="ident">DerefMut</span> <span class="kw">for</span> <span class="ident">LockedClientDataGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;client</span>, <span class="ident">ClientData</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="number">0</span>
-    }
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;client</span>, ClientData&gt; DerefMut <span class="kw">for </span>LockedClientDataGuard&lt;<span class="lifetime">&#39;client</span>, ClientData&gt; {
+    <span class="kw">fn </span>deref_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0
+    </span>}
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OwnedClient</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> {
-    <span class="ident">client</span>: <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    <span class="ident">runtime</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">tokio::runtime::Handle</span><span class="op">&gt;</span>,
-    <span class="ident">server</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>OwnedClient&lt;B: Backend&gt; {
+    client: ConnectedClient&lt;B&gt;,
+    runtime: Arc&lt;tokio::runtime::Handle&gt;,
+    server: <span class="prelude-ty">Option</span>&lt;CustomServer&lt;B&gt;&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">OwnedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">id</span>: <span class="ident">u32</span>,
-        <span class="ident">address</span>: <span class="ident">SocketAddr</span>,
-        <span class="ident">transport</span>: <span class="ident">Transport</span>,
-        <span class="ident">response_sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>, <span class="ident">ApiName</span>, <span class="ident">Bytes</span>)<span class="op">&gt;</span>,
-        <span class="ident">server</span>: <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">default_session</span>: <span class="ident">Session</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="ident">session</span>.<span class="ident">insert</span>(
+<span class="kw">impl</span>&lt;B: Backend&gt; OwnedClient&lt;B&gt; {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(
+        id: u32,
+        address: SocketAddr,
+        transport: Transport,
+        response_sender: Sender&lt;(<span class="prelude-ty">Option</span>&lt;SessionId&gt;, ApiName, Bytes)&gt;,
+        server: CustomServer&lt;B&gt;,
+        default_session: Session,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>session = HashMap::new();
+        session.insert(
             <span class="prelude-val">None</span>,
-            <span class="ident">ClientSession</span> {
-                <span class="ident">session</span>: <span class="ident">default_session</span>,
-                <span class="ident">subscribers</span>: <span class="ident">HashMap::default</span>(),
+            ClientSession {
+                session: default_session,
+                subscribers: HashMap::default(),
             },
         );
-        <span class="self">Self</span> {
-            <span class="ident">client</span>: <span class="ident">ConnectedClient</span> {
-                <span class="ident">data</span>: <span class="ident">Arc::new</span>(<span class="ident">Data</span> {
-                    <span class="ident">id</span>,
-                    <span class="ident">address</span>,
-                    <span class="ident">transport</span>,
-                    <span class="ident">response_sender</span>,
-                    <span class="ident">sessions</span>: <span class="ident">RwLock::new</span>(<span class="ident">session</span>),
-                    <span class="ident">client_data</span>: <span class="ident">Mutex::default</span>(),
+        <span class="self">Self </span>{
+            client: ConnectedClient {
+                data: Arc::new(Data {
+                    id,
+                    address,
+                    transport,
+                    response_sender,
+                    sessions: RwLock::new(session),
+                    client_data: Mutex::default(),
                 }),
             },
-            <span class="ident">runtime</span>: <span class="ident">Arc::new</span>(<span class="ident">tokio::runtime::Handle::current</span>()),
-            <span class="ident">server</span>: <span class="prelude-val">Some</span>(<span class="ident">server</span>),
+            runtime: Arc::new(tokio::runtime::Handle::current()),
+            server: <span class="prelude-val">Some</span>(server),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">clone</span>()
+    <span class="kw">pub fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ConnectedClient&lt;B&gt; {
+        <span class="self">self</span>.client.clone()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">OwnedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">data</span>.<span class="ident">id</span>;
-        <span class="kw">let</span> <span class="ident">server</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
-        <span class="self">self</span>.<span class="ident">runtime</span>.<span class="ident">spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-            <span class="ident">server</span>.<span class="ident">disconnect_client</span>(<span class="ident">id</span>).<span class="kw">await</span>;
+<span class="kw">impl</span>&lt;B: Backend&gt; Drop <span class="kw">for </span>OwnedClient&lt;B&gt; {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">let </span>id = <span class="self">self</span>.client.data.id;
+        <span class="kw">let </span>server = <span class="self">self</span>.server.take().unwrap();
+        <span class="self">self</span>.runtime.spawn(<span class="kw">async move </span>{
+            server.disconnect_client(id).<span class="kw">await</span>;
         });
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">OwnedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>;
+<span class="kw">impl</span>&lt;B: Backend&gt; Deref <span class="kw">for </span>OwnedClient&lt;B&gt; {
+    <span class="kw">type </span>Target = ConnectedClient&lt;B&gt;;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">client</span>
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.client
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

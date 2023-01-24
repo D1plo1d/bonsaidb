@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/api.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>api.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_core/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/api.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>api.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_core/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -106,108 +100,107 @@
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Display</span>},
-    <span class="ident">ops::Deref</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    fmt::{Debug, Display},
+    ops::Deref,
 };
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bonsaidb_macros::Api</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="kw">pub use </span>bonsaidb_macros::Api;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema</span>::{<span class="ident">Authority</span>, <span class="ident">Name</span>, <span class="ident">Qualified</span>, <span class="ident">QualifiedName</span>};
+<span class="kw">use </span><span class="kw">crate</span>::schema::{Authority, Name, Qualified, QualifiedName};
 
-<span class="doccomment">/// An API request type. This trait is used by BonsaiDb&#39;s server to allow a</span>
-<span class="doccomment">/// client to send a request of this type, and the server can respond with a</span>
-<span class="doccomment">/// `Result&lt;`[`Api::Response`]`,`[`Api::Error`]`&gt;`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Deriving this trait</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This trait can be derived. The only required attribute is `name`:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - `name = &quot;api-name&quot;` or `name = &quot;api-name&quot;, authority = &quot;api-authority&quot;`:</span>
-<span class="doccomment">///   Configures the Api&#39;s fully qualified name. This name must be unique across</span>
-<span class="doccomment">///   all other Apis installed. When creating an Api that is meant to be reused,</span>
-<span class="doccomment">///   ensure that a unique authority is used to prevent name collisions.</span>
-<span class="doccomment">/// - `response = ResponseType`: Configures the [`Api::Response`] associated</span>
-<span class="doccomment">///   type. This is the type that the handler will return upon success. If not</span>
-<span class="doccomment">///   specified, `()` is used.</span>
-<span class="doccomment">/// - `error = ErrorType`: Configures the [`Api::Error`] associated type. This</span>
-<span class="doccomment">///   is the type that the handler will return upon error. If not specified,</span>
-<span class="doccomment">///   [`Infallible`] is used.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use bonsaidb_core::api::Api;</span>
-<span class="doccomment">/// use serde::{Deserialize, Serialize};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Api, Debug, Serialize, Deserialize)]</span>
-<span class="doccomment">/// #[api(name = &quot;list-records&quot;, response = Vec&lt;Record&gt;)]</span>
-<span class="doccomment">/// # #[api(core = bonsaidb_core)]</span>
-<span class="doccomment">/// struct ListRecords {</span>
-<span class="doccomment">///     starting_id: u64,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Serialize, Deserialize, Clone)]</span>
-<span class="doccomment">/// struct Record {</span>
-<span class="doccomment">///     title: String,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Api</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
-    <span class="doccomment">/// The type that represents an API response. This type will be sent to clients from the server.</span>
-    <span class="kw">type</span> <span class="ident">Response</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Serialize</span> <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span>;
-    <span class="doccomment">/// The error type that this  can return.</span>
-    <span class="kw">type</span> <span class="ident">Error</span>: <span class="ident">ApiError</span>;
+<span class="doccomment">/// An API request type. This trait is used by BonsaiDb&#39;s server to allow a
+/// client to send a request of this type, and the server can respond with a
+/// `Result&lt;`[`Api::Response`]`,`[`Api::Error`]`&gt;`.
+///
+/// # Deriving this trait
+///
+/// This trait can be derived. The only required attribute is `name`:
+///
+/// - `name = &quot;api-name&quot;` or `name = &quot;api-name&quot;, authority = &quot;api-authority&quot;`:
+///   Configures the Api&#39;s fully qualified name. This name must be unique across
+///   all other Apis installed. When creating an Api that is meant to be reused,
+///   ensure that a unique authority is used to prevent name collisions.
+/// - `response = ResponseType`: Configures the [`Api::Response`] associated
+///   type. This is the type that the handler will return upon success. If not
+///   specified, `()` is used.
+/// - `error = ErrorType`: Configures the [`Api::Error`] associated type. This
+///   is the type that the handler will return upon error. If not specified,
+///   [`Infallible`] is used.
+///
+/// ```rust
+/// use bonsaidb_core::api::Api;
+/// use serde::{Deserialize, Serialize};
+///
+/// #[derive(Api, Debug, Serialize, Deserialize)]
+/// #[api(name = &quot;list-records&quot;, response = Vec&lt;Record&gt;)]
+/// # #[api(core = bonsaidb_core)]
+/// struct ListRecords {
+///     starting_id: u64,
+/// }
+///
+/// #[derive(Debug, Serialize, Deserialize, Clone)]
+/// struct Record {
+///     title: String,
+/// }
+/// ```
+</span><span class="kw">pub trait </span>Api: Serialize + <span class="kw">for</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; + Send + Sync + Debug + <span class="lifetime">&#39;static </span>{
+    <span class="doccomment">/// The type that represents an API response. This type will be sent to clients from the server.
+    </span><span class="kw">type </span>Response: Clone + Serialize + <span class="kw">for</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; + Send + Sync + Debug;
+    <span class="doccomment">/// The error type that this  can return.
+    </span><span class="kw">type </span>Error: ApiError;
 
-    <span class="doccomment">/// Returns the unique name of this api.</span>
-    <span class="kw">fn</span> <span class="ident">name</span>() -&gt; <span class="ident">ApiName</span>;
+    <span class="doccomment">/// Returns the unique name of this api.
+    </span><span class="kw">fn </span>name() -&gt; ApiName;
 }
-<span class="doccomment">/// An Error type that can be used in within an [`Api`] definition.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The reason `std::convert::Infallible` can&#39;t be used is because `Api`</span>
-<span class="doccomment">/// errors must be able to be serialized across a network connection. While a</span>
-<span class="doccomment">/// value will never be present when this is Infallible, the associated type</span>
-<span class="doccomment">/// still must be declared as Serializable.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;an unreachable error&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Infallible</span> {}
+<span class="doccomment">/// An Error type that can be used in within an [`Api`] definition.
+///
+/// The reason `std::convert::Infallible` can&#39;t be used is because `Api`
+/// errors must be able to be serialized across a network connection. While a
+/// value will never be present when this is Infallible, the associated type
+/// still must be declared as Serializable.
+</span><span class="attribute">#[derive(thiserror::Error, Debug, Clone, Serialize, Deserialize)]
+#[error(<span class="string">&quot;an unreachable error&quot;</span>)]
+</span><span class="kw">pub enum </span>Infallible {}
 
-<span class="doccomment">/// An error that can be used within a [`Api`] definition.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ApiError</span>:
-    <span class="ident">std::fmt::Display</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Serialize</span> <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span>
+<span class="doccomment">/// An error that can be used within a [`Api`] definition.
+</span><span class="kw">pub trait </span>ApiError:
+    std::fmt::Display + Clone + Serialize + <span class="kw">for</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; + Send + Sync + Debug
 {
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ApiError</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">std::fmt::Display</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Serialize</span> <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span>
+<span class="kw">impl</span>&lt;T&gt; ApiError <span class="kw">for </span>T <span class="kw">where
+    </span>T: std::fmt::Display + Clone + Serialize + <span class="kw">for</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; + Send + Sync + Debug
 {
 }
 
-<span class="doccomment">/// The result of executing a custom API call.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ApiResult</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">Api</span> <span class="kw">as</span> <span class="ident"><span class="self">self</span>::Api</span><span class="op">&gt;</span><span class="ident">::Response</span>, <span class="op">&lt;</span><span class="ident">Api</span> <span class="kw">as</span> <span class="ident"><span class="self">self</span>::Api</span><span class="op">&gt;</span><span class="ident">::Error</span><span class="op">&gt;</span>;
+<span class="doccomment">/// The result of executing a custom API call.
+</span><span class="kw">pub type </span>ApiResult&lt;Api&gt; = <span class="prelude-ty">Result</span>&lt;&lt;Api <span class="kw">as </span><span class="self">self</span>::Api&gt;::Response, &lt;Api <span class="kw">as </span><span class="self">self</span>::Api&gt;::Error&gt;;
 
-<span class="doccomment">/// The qualified name of an [`Api`](crate::api::Api).</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">transparent</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ApiName</span>(<span class="ident">QualifiedName</span>);
+<span class="doccomment">/// The qualified name of an [`Api`](crate::api::Api).
+</span><span class="attribute">#[derive(Hash, PartialEq, Eq, Deserialize, Serialize, Debug, Clone, Ord, PartialOrd)]
+#[serde(transparent)]
+</span><span class="kw">pub struct </span>ApiName(QualifiedName);
 
-<span class="kw">impl</span> <span class="ident">Qualified</span> <span class="kw">for</span> <span class="ident">ApiName</span> {
-    <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Authority</span><span class="op">&gt;</span>, <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">authority</span>: <span class="ident">A</span>, <span class="ident">name</span>: <span class="ident">N</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span>(<span class="ident">QualifiedName::new</span>(<span class="ident">authority</span>, <span class="ident">name</span>))
+<span class="kw">impl </span>Qualified <span class="kw">for </span>ApiName {
+    <span class="kw">fn </span>new&lt;A: Into&lt;Authority&gt;, N: Into&lt;Name&gt;&gt;(authority: A, name: N) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(QualifiedName::new(authority, name))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">ApiName</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">Display::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, <span class="ident">f</span>)
+<span class="kw">impl </span>Display <span class="kw">for </span>ApiName {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        Display::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">ApiName</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">QualifiedName</span>;
+<span class="kw">impl </span>Deref <span class="kw">for </span>ApiName {
+    <span class="kw">type </span>Target = QualifiedName;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
-    }
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
+    </span>}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/server/database.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>database.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_server/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/server/database.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>database.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_server/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -270,272 +264,271 @@
 <span id="264">264</span>
 <span id="265">265</span>
 <span id="266">266</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::ops::Deref;
 
-<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">connection</span>::{
-        <span class="ident">AccessPolicy</span>, <span class="ident">AsyncLowLevelConnection</span>, <span class="ident">HasSchema</span>, <span class="ident">HasSession</span>, <span class="ident">Range</span>, <span class="ident">SerializedQueryKey</span>,
-        <span class="ident">Sort</span>,
+<span class="kw">use </span>async_trait::async_trait;
+<span class="kw">use </span>bonsaidb_core::{
+    connection::{
+        AccessPolicy, AsyncLowLevelConnection, HasSchema, HasSession, Range, SerializedQueryKey,
+        Sort,
     },
-    <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
-    <span class="ident">keyvalue::AsyncKeyValue</span>,
-    <span class="ident">permissions::Permissions</span>,
-    <span class="ident">pubsub::AsyncPubSub</span>,
-    <span class="ident">schema</span>::{<span class="self">self</span>, <span class="ident">view::map::MappedSerializedValue</span>, <span class="ident">CollectionName</span>, <span class="ident">Schematic</span>, <span class="ident">ViewName</span>},
-    <span class="ident">transaction</span>::{<span class="ident">OperationResult</span>, <span class="ident">Transaction</span>},
+    document::{DocumentId, Header, OwnedDocument},
+    keyvalue::AsyncKeyValue,
+    permissions::Permissions,
+    pubsub::AsyncPubSub,
+    schema::{<span class="self">self</span>, view::map::MappedSerializedValue, CollectionName, Schematic, ViewName},
+    transaction::{OperationResult, Transaction},
 };
-<span class="kw">use</span> <span class="ident">bonsaidb_local</span>::{<span class="ident">AsyncDatabase</span>, <span class="ident">Database</span>};
-<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
+<span class="kw">use </span>bonsaidb_local::{AsyncDatabase, Database};
+<span class="kw">use </span>derive_where::derive_where;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Backend</span>, <span class="ident">CustomServer</span>, <span class="ident">NoBackend</span>};
+<span class="kw">use crate</span>::{Backend, CustomServer, NoBackend};
 
-<span class="doccomment">/// A database belonging to a [`CustomServer`].</span>
-<span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">server</span>: <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">db</span>: <span class="ident">AsyncDatabase</span>,
+<span class="doccomment">/// A database belonging to a [`CustomServer`].
+</span><span class="attribute">#[derive_where(Debug, Clone)]
+</span><span class="kw">pub struct </span>ServerDatabase&lt;B: Backend = NoBackend&gt; {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) server: CustomServer&lt;B&gt;,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) db: AsyncDatabase,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Database</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">server</span>: <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">server</span>.<span class="ident">db</span>)
+<span class="kw">impl</span>&lt;B: Backend&gt; From&lt;ServerDatabase&lt;B&gt;&gt; <span class="kw">for </span>Database {
+    <span class="kw">fn </span>from(server: ServerDatabase&lt;B&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(server.db)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Database</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">server</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">server</span>.<span class="ident">db</span>.<span class="ident">clone</span>())
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, B: Backend&gt; From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>ServerDatabase&lt;B&gt;&gt; <span class="kw">for </span>Database {
+    <span class="kw">fn </span>from(server: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>ServerDatabase&lt;B&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(server.db.clone())
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Restricts an unauthenticated instance to having `effective_permissions`.</span>
-    <span class="doccomment">/// Returns `None` if a session has already been established.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_effective_permissions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">effective_permissions</span>: <span class="ident">Permissions</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>
-            .<span class="ident">with_effective_permissions</span>(<span class="ident">effective_permissions</span>)
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">db</span><span class="op">|</span> <span class="self">Self</span> {
-                <span class="ident">db</span>,
-                <span class="ident">server</span>: <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">clone</span>(),
+<span class="kw">impl</span>&lt;B: Backend&gt; ServerDatabase&lt;B&gt; {
+    <span class="doccomment">/// Restricts an unauthenticated instance to having `effective_permissions`.
+    /// Returns `None` if a session has already been established.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>with_effective_permissions(<span class="kw-2">&amp;</span><span class="self">self</span>, effective_permissions: Permissions) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="self">self</span>.db
+            .with_effective_permissions(effective_permissions)
+            .map(|db| <span class="self">Self </span>{
+                db,
+                server: <span class="self">self</span>.server.clone(),
             })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">AsyncDatabase</span>;
+<span class="kw">impl</span>&lt;B: Backend&gt; Deref <span class="kw">for </span>ServerDatabase&lt;B&gt; {
+    <span class="kw">type </span>Target = AsyncDatabase;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">db</span>
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.db
     }
 }
 
-<span class="doccomment">/// Uses `CustomServer`&#39;s `PubSub` relay.</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncPubSub</span> <span class="kw">for</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Subscriber</span> <span class="op">=</span> <span class="ident">bonsaidb_local::Subscriber</span>;
+<span class="doccomment">/// Uses `CustomServer`&#39;s `PubSub` relay.
+</span><span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; AsyncPubSub <span class="kw">for </span>ServerDatabase&lt;B&gt; {
+    <span class="kw">type </span>Subscriber = bonsaidb_local::Subscriber;
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_subscriber</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Subscriber</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">subscriber</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">create_subscriber</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">subscriber</span>)
+    <span class="kw">async fn </span>create_subscriber(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Subscriber, bonsaidb_core::Error&gt; {
+        <span class="kw">let </span>subscriber = <span class="self">self</span>.db.create_subscriber().<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(subscriber)
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_bytes</span>(
+    <span class="kw">async fn </span>publish_bytes(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">topic</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-        <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">publish_bytes</span>(<span class="ident">topic</span>, <span class="ident">payload</span>).<span class="kw">await</span>
-    }
+        topic: Vec&lt;u8&gt;,
+        payload: Vec&lt;u8&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.publish_bytes(topic, payload).<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">publish_bytes_to_all</span>(
+    <span class="kw">async fn </span>publish_bytes_to_all(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">topics</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;async_trait</span>,
-        <span class="ident">payload</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">publish_bytes_to_all</span>(<span class="ident">topics</span>, <span class="ident">payload</span>).<span class="kw">await</span>
+        topics: <span class="kw">impl </span>IntoIterator&lt;Item = Vec&lt;u8&gt;&gt; + Send + <span class="lifetime">&#39;async_trait</span>,
+        payload: Vec&lt;u8&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.publish_bytes_to_all(topics, payload).<span class="kw">await
+    </span>}
+}
+
+<span class="kw">impl</span>&lt;B: Backend&gt; HasSession <span class="kw">for </span>ServerDatabase&lt;B&gt; {
+    <span class="kw">fn </span>session(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>bonsaidb_core::connection::Session&gt; {
+        <span class="self">self</span>.server.session()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">HasSession</span> <span class="kw">for</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">bonsaidb_core::connection::Session</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">session</span>()
+<span class="doccomment">/// Pass-through implementation
+</span><span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; bonsaidb_core::connection::AsyncConnection <span class="kw">for </span>ServerDatabase&lt;B&gt; {
+    <span class="kw">type </span>Storage = CustomServer&lt;B&gt;;
+
+    <span class="kw">fn </span>storage(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Storage {
+        <span class="self">self</span>.server.clone()
     }
+
+    <span class="kw">async fn </span>list_executed_transactions(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        starting_id: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        result_limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;bonsaidb_core::transaction::Executed&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db
+            .list_executed_transactions(starting_id, result_limit)
+            .<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>last_transaction_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;u64&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.last_transaction_id().<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>compact_collection&lt;C: schema::Collection&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.compact_collection::&lt;C&gt;().<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>compact(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.compact().<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>compact_key_value_store(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.compact_key_value_store().<span class="kw">await
+    </span>}
 }
 
-<span class="doccomment">/// Pass-through implementation</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">bonsaidb_core::connection::AsyncConnection</span> <span class="kw">for</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Storage</span> <span class="op">=</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">storage</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Storage</span> {
-        <span class="self">self</span>.<span class="ident">server</span>.<span class="ident">clone</span>()
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_executed_transactions</span>(
+<span class="doccomment">/// Pass-through implementation
+</span><span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; AsyncKeyValue <span class="kw">for </span>ServerDatabase&lt;B&gt; {
+    <span class="kw">async fn </span>execute_key_operation(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">starting_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">result_limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">bonsaidb_core::transaction::Executed</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>
-            .<span class="ident">list_executed_transactions</span>(<span class="ident">starting_id</span>, <span class="ident">result_limit</span>)
-            .<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">last_transaction_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">last_transaction_id</span>().<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact_collection</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">schema::Collection</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">compact_collection</span>::<span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>().<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">compact</span>().<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact_key_value_store</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">compact_key_value_store</span>().<span class="kw">await</span>
-    }
+        op: bonsaidb_core::keyvalue::KeyOperation,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;bonsaidb_core::keyvalue::Output, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.execute_key_operation(op).<span class="kw">await
+    </span>}
 }
 
-<span class="doccomment">/// Pass-through implementation</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncKeyValue</span> <span class="kw">for</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute_key_operation</span>(
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; AsyncLowLevelConnection <span class="kw">for </span>ServerDatabase&lt;B&gt; {
+    <span class="kw">async fn </span>get_from_collection(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">op</span>: <span class="ident">bonsaidb_core::keyvalue::KeyOperation</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bonsaidb_core::keyvalue::Output</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute_key_operation</span>(<span class="ident">op</span>).<span class="kw">await</span>
-    }
+        id: DocumentId,
+        collection: <span class="kw-2">&amp;</span>CollectionName,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;OwnedDocument&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.get_from_collection(id, collection).<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>list_from_collection(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        ids: Range&lt;DocumentId&gt;,
+        order: Sort,
+        limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        collection: <span class="kw-2">&amp;</span>CollectionName,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;OwnedDocument&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db
+            .list_from_collection(ids, order, limit, collection)
+            .<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>list_headers_from_collection(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        ids: Range&lt;DocumentId&gt;,
+        order: Sort,
+        limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        collection: <span class="kw-2">&amp;</span>CollectionName,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Header&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db
+            .list_headers_from_collection(ids, order, limit, collection)
+            .<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>count_from_collection(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        ids: Range&lt;DocumentId&gt;,
+        collection: <span class="kw-2">&amp;</span>CollectionName,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;u64, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.count_from_collection(ids, collection).<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>get_multiple_from_collection(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        ids: <span class="kw-2">&amp;</span>[DocumentId],
+        collection: <span class="kw-2">&amp;</span>CollectionName,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;OwnedDocument&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.get_multiple_from_collection(ids, collection).<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>compact_collection_by_name(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        collection: CollectionName,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.compact_collection_by_name(collection).<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>query_by_name(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        view: <span class="kw-2">&amp;</span>ViewName,
+        key: <span class="prelude-ty">Option</span>&lt;SerializedQueryKey&gt;,
+        order: Sort,
+        limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        access_policy: AccessPolicy,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;schema::view::map::Serialized&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db
+            .query_by_name(view, key, order, limit, access_policy)
+            .<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>query_by_name_with_docs(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        view: <span class="kw-2">&amp;</span>ViewName,
+        key: <span class="prelude-ty">Option</span>&lt;SerializedQueryKey&gt;,
+        order: Sort,
+        limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        access_policy: AccessPolicy,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;schema::view::map::MappedSerializedDocuments, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db
+            .query_by_name_with_docs(view, key, order, limit, access_policy)
+            .<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>reduce_by_name(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        view: <span class="kw-2">&amp;</span>ViewName,
+        key: <span class="prelude-ty">Option</span>&lt;SerializedQueryKey&gt;,
+        access_policy: AccessPolicy,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.reduce_by_name(view, key, access_policy).<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>reduce_grouped_by_name(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        view: <span class="kw-2">&amp;</span>ViewName,
+        key: <span class="prelude-ty">Option</span>&lt;SerializedQueryKey&gt;,
+        access_policy: AccessPolicy,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;MappedSerializedValue&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db
+            .reduce_grouped_by_name(view, key, access_policy)
+            .<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>delete_docs_by_name(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        view: <span class="kw-2">&amp;</span>ViewName,
+        key: <span class="prelude-ty">Option</span>&lt;SerializedQueryKey&gt;,
+        access_policy: AccessPolicy,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;u64, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.delete_docs_by_name(view, key, access_policy).<span class="kw">await
+    </span>}
+
+    <span class="kw">async fn </span>apply_transaction(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        transaction: Transaction,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;OperationResult&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.db.apply_transaction(transaction).<span class="kw">await
+    </span>}
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncLowLevelConnection</span> <span class="kw">for</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_from_collection</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">id</span>: <span class="ident">DocumentId</span>,
-        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">get_from_collection</span>(<span class="ident">id</span>, <span class="ident">collection</span>).<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_from_collection</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
-        <span class="ident">order</span>: <span class="ident">Sort</span>,
-        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
-        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>
-            .<span class="ident">list_from_collection</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">collection</span>)
-            .<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_headers_from_collection</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
-        <span class="ident">order</span>: <span class="ident">Sort</span>,
-        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
-        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>
-            .<span class="ident">list_headers_from_collection</span>(<span class="ident">ids</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">collection</span>)
-            .<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">count_from_collection</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">ids</span>: <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
-        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">count_from_collection</span>(<span class="ident">ids</span>, <span class="ident">collection</span>).<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_multiple_from_collection</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">DocumentId</span>],
-        <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">get_multiple_from_collection</span>(<span class="ident">ids</span>, <span class="ident">collection</span>).<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">compact_collection_by_name</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">compact_collection_by_name</span>(<span class="ident">collection</span>).<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_by_name</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
-        <span class="ident">order</span>: <span class="ident">Sort</span>,
-        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">schema::view::map::Serialized</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>
-            .<span class="ident">query_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
-            .<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">query_by_name_with_docs</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
-        <span class="ident">order</span>: <span class="ident">Sort</span>,
-        <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">schema::view::map::MappedSerializedDocuments</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>
-            .<span class="ident">query_by_name_with_docs</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">order</span>, <span class="ident">limit</span>, <span class="ident">access_policy</span>)
-            .<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce_by_name</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">reduce_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">reduce_grouped_by_name</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">MappedSerializedValue</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>
-            .<span class="ident">reduce_grouped_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>)
-            .<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_docs_by_name</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="ident">ViewName</span>,
-        <span class="ident">key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SerializedQueryKey</span><span class="op">&gt;</span>,
-        <span class="ident">access_policy</span>: <span class="ident">AccessPolicy</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">delete_docs_by_name</span>(<span class="ident">view</span>, <span class="ident">key</span>, <span class="ident">access_policy</span>).<span class="kw">await</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">apply_transaction</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">transaction</span>: <span class="ident">Transaction</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OperationResult</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">apply_transaction</span>(<span class="ident">transaction</span>).<span class="kw">await</span>
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">HasSchema</span> <span class="kw">for</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">schematic</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Schematic</span> {
-        <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">schematic</span>()
+<span class="kw">impl</span>&lt;B: Backend&gt; HasSchema <span class="kw">for </span>ServerDatabase&lt;B&gt; {
+    <span class="kw">fn </span>schematic(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Schematic {
+        <span class="self">self</span>.db.schematic()
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

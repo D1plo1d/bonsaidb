@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/config.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>config.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/config.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>config.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -270,272 +264,303 @@
 <span id="264">264</span>
 <span id="265">265</span>
 <span id="266">266</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">marker::PhantomData</span>, <span class="ident">path::Path</span>, <span class="ident">sync::Arc</span>};
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, marker::PhantomData, path::Path, sync::Arc};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::document::KeyId</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">api</span>,
-    <span class="ident">api::ApiName</span>,
-    <span class="ident">permissions</span>::{<span class="ident">Permissions</span>, <span class="ident">Statement</span>},
-    <span class="ident">schema::Schema</span>,
+<span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
+</span><span class="kw">use </span>bonsaidb_core::document::KeyId;
+<span class="kw">use </span>bonsaidb_core::{
+    api,
+    api::ApiName,
+    permissions::{Permissions, Statement},
+    schema::Schema,
 };
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_local::config::Compression</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_local::config</span>::{<span class="ident">Builder</span>, <span class="ident">KeyValuePersistence</span>, <span class="ident">StorageConfiguration</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_local::vault::AnyVaultKeyStorage</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;compression&quot;</span>)]
+</span><span class="kw">use </span>bonsaidb_local::config::Compression;
+<span class="kw">use </span>bonsaidb_local::config::{Builder, KeyValuePersistence, StorageConfiguration};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
+</span><span class="kw">use </span>bonsaidb_local::vault::AnyVaultKeyStorage;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">api</span>::{<span class="ident">AnyHandler</span>, <span class="ident">AnyWrapper</span>, <span class="ident">Handler</span>},
-    <span class="ident">Backend</span>, <span class="ident">Error</span>, <span class="ident">NoBackend</span>,
+<span class="kw">use crate</span>::{
+    api::{AnyHandler, AnyWrapper, Handler},
+    Backend, Error, NoBackend,
 };
 
-<span class="doccomment">/// Configuration options for [`Server`](crate::Server)</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The DNS name of the server.</span>
-    <span class="kw">pub</span> <span class="ident">server_name</span>: <span class="ident">String</span>,
-    <span class="doccomment">/// Number of sumultaneous requests a single client can have in flight at a</span>
-    <span class="doccomment">/// time. Default value is 16. It is important to have this number be tuned</span>
-    <span class="doccomment">/// relative to `request_workers` such that one client cannot overwhelm the</span>
-    <span class="doccomment">/// entire queue.</span>
-    <span class="kw">pub</span> <span class="ident">client_simultaneous_request_limit</span>: <span class="ident">usize</span>,
-    <span class="doccomment">/// Number of simultaneous requests to be processed. Default value is 16.</span>
-    <span class="kw">pub</span> <span class="ident">request_workers</span>: <span class="ident">usize</span>,
-    <span class="doccomment">/// Configuration options for individual databases.</span>
-    <span class="kw">pub</span> <span class="ident">storage</span>: <span class="ident">StorageConfiguration</span>,
-    <span class="doccomment">/// The permissions granted to all connections to this server.</span>
-    <span class="kw">pub</span> <span class="ident">default_permissions</span>: <span class="ident">DefaultPermissions</span>,
-    <span class="doccomment">/// The ACME settings for automatic TLS certificate management.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">acme</span>: <span class="ident">AcmeConfiguration</span>,
+<span class="doccomment">/// Configuration options for [`Server`](crate::Server)
+</span><span class="attribute">#[derive(Debug, Clone)]
+#[must_use]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>ServerConfiguration&lt;B: Backend = NoBackend&gt; {
+    <span class="doccomment">/// The [`Backend`] for the server.
+    </span><span class="kw">pub </span>backend: B,
+    <span class="doccomment">/// The DNS name of the server.
+    </span><span class="kw">pub </span>server_name: String,
+    <span class="doccomment">/// Number of sumultaneous requests a single client can have in flight at a
+    /// time. Default value is 16. It is important to have this number be tuned
+    /// relative to `request_workers` such that one client cannot overwhelm the
+    /// entire queue.
+    </span><span class="kw">pub </span>client_simultaneous_request_limit: usize,
+    <span class="doccomment">/// Number of simultaneous requests to be processed. Default value is 16.
+    </span><span class="kw">pub </span>request_workers: usize,
+    <span class="doccomment">/// Configuration options for individual databases.
+    </span><span class="kw">pub </span>storage: StorageConfiguration,
+    <span class="doccomment">/// The permissions granted to all connections to this server.
+    </span><span class="kw">pub </span>default_permissions: DefaultPermissions,
+    <span class="doccomment">/// The ACME settings for automatic TLS certificate management.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+    </span><span class="kw">pub </span>acme: AcmeConfiguration,
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">custom_apis</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyHandler</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) custom_apis: HashMap&lt;ApiName, Arc&lt;<span class="kw">dyn </span>AnyHandler&lt;B&gt;&gt;&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Sets [`Self::server_name`](Self#structfield.server_name) to `server_name` and returns self.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">server_name</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">server_name</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">server_name</span> <span class="op">=</span> <span class="ident">server_name</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
+<span class="kw">impl</span>&lt;B: Backend&gt; ServerConfiguration&lt;B&gt; {
+    <span class="doccomment">/// Returns a default configuration for the given backend.
+    </span><span class="kw">pub fn </span>default_for(backend: B) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            backend,
+            server_name: String::from(<span class="string">&quot;bonsaidb&quot;</span>),
+            client_simultaneous_request_limit: <span class="number">16</span>,
+            <span class="comment">// TODO this was arbitrarily picked, it probably should be higher,
+            // but it also should probably be based on the cpu&#39;s capabilities
+            </span>request_workers: <span class="number">16</span>,
+            storage: bonsaidb_local::config::StorageConfiguration::default(),
+            default_permissions: DefaultPermissions::Permissions(Permissions::default()),
+            custom_apis: HashMap::default(),
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+            </span>acme: AcmeConfiguration::default(),
+        }
     }
 
-    <span class="doccomment">/// Sets [`Self::client_simultaneous_request_limit`](Self#structfield.client_simultaneous_request_limit) to `request_limit` and returns self.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">client_simultaneous_request_limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request_limit</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">client_simultaneous_request_limit</span> <span class="op">=</span> <span class="ident">request_limit</span>;
-        <span class="self">self</span>
+    <span class="doccomment">/// Returns a default configuration for the given backend and path.
+    </span><span class="kw">pub fn </span>new_with_backend&lt;P: AsRef&lt;Path&gt;&gt;(path: P, backend: B) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::default_for(backend).path(path)
     }
 
-    <span class="doccomment">/// Sets [`Self::request_workers`](Self#structfield.request_workers) to `workers` and returns self.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">request_workers</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">workers</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">request_workers</span> <span class="op">=</span> <span class="ident">workers</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets [`Self::server_name`](Self#structfield.server_name) to `server_name` and returns self.
+    </span><span class="kw">pub fn </span>server_name(<span class="kw-2">mut </span><span class="self">self</span>, server_name: <span class="kw">impl </span>Into&lt;String&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.server_name = server_name.into();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets [`Self::default_permissions`](Self#structfield.default_permissions) to `default_permissions` and returns self.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_permissions</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DefaultPermissions</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">default_permissions</span>: <span class="ident">P</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">default_permissions</span> <span class="op">=</span> <span class="ident">default_permissions</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets [`Self::client_simultaneous_request_limit`](Self#structfield.client_simultaneous_request_limit) to `request_limit` and returns self.
+    </span><span class="kw">pub const fn </span>client_simultaneous_request_limit(<span class="kw-2">mut </span><span class="self">self</span>, request_limit: usize) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.client_simultaneous_request_limit = request_limit;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets [`AcmeConfiguration::contact_email`] to `contact_email` and returns self.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">acme_contact_email</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">contact_email</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">acme</span>.<span class="ident">contact_email</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">contact_email</span>.<span class="ident">into</span>());
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets [`Self::request_workers`](Self#structfield.request_workers) to `workers` and returns self.
+    </span><span class="kw">pub const fn </span>request_workers(<span class="kw-2">mut </span><span class="self">self</span>, workers: usize) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.request_workers = workers;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets [`AcmeConfiguration::directory`] to `directory` and returns self.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">acme_directory</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">directory</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">acme</span>.<span class="ident">directory</span> <span class="op">=</span> <span class="ident">directory</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets [`Self::default_permissions`](Self#structfield.default_permissions) to `default_permissions` and returns self.
+    </span><span class="kw">pub fn </span>default_permissions&lt;P: Into&lt;DefaultPermissions&gt;&gt;(
+        <span class="kw-2">mut </span><span class="self">self</span>,
+        default_permissions: P,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.default_permissions = default_permissions.into();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Registers a `handler` for a [`Api`][api::Api]. When an [`Api`][api::Api] is</span>
-    <span class="doccomment">/// received by the server, the handler will be invoked</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_custom_api</span><span class="op">&lt;</span><span class="ident">Dispatcher</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Api</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>, <span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="comment">// TODO this should error on duplicate registration.</span>
-        <span class="self">self</span>.<span class="ident">custom_apis</span>.<span class="ident">insert</span>(
-            <span class="ident">Api::name</span>(),
-            <span class="ident">Arc::new</span>(<span class="ident">AnyWrapper</span>::<span class="op">&lt;</span><span class="ident">Dispatcher</span>, <span class="ident">B</span>, <span class="ident">Api</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>)),
+    <span class="doccomment">/// Sets [`AcmeConfiguration::contact_email`] to `contact_email` and returns self.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+    </span><span class="kw">pub fn </span>acme_contact_email(<span class="kw-2">mut </span><span class="self">self</span>, contact_email: <span class="kw">impl </span>Into&lt;String&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.acme.contact_email = <span class="prelude-val">Some</span>(contact_email.into());
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Sets [`AcmeConfiguration::directory`] to `directory` and returns self.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+    </span><span class="kw">pub fn </span>acme_directory(<span class="kw-2">mut </span><span class="self">self</span>, directory: <span class="kw">impl </span>Into&lt;String&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.acme.directory = directory.into();
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Registers a `handler` for a [`Api`][api::Api]. When an [`Api`][api::Api] is
+    /// received by the server, the handler will be invoked
+    </span><span class="kw">pub fn </span>register_custom_api&lt;Dispatcher: Handler&lt;B, Api&gt; + <span class="lifetime">&#39;static</span>, Api: api::Api&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="comment">// TODO this should error on duplicate registration.
+        </span><span class="self">self</span>.custom_apis.insert(
+            Api::name(),
+            Arc::new(AnyWrapper::&lt;Dispatcher, B, Api&gt;(PhantomData)),
         );
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Registers the custom api dispatcher and returns self.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_api</span><span class="op">&lt;</span><span class="ident">Dispatcher</span>: <span class="ident">Handler</span><span class="op">&lt;</span><span class="ident">B</span>, <span class="ident">Api</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>, <span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">register_custom_api</span>::<span class="op">&lt;</span><span class="ident">Dispatcher</span>, <span class="ident">Api</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+    <span class="doccomment">/// Registers the custom api dispatcher and returns self.
+    </span><span class="kw">pub fn </span>with_api&lt;Dispatcher: Handler&lt;B, Api&gt; + <span class="lifetime">&#39;static</span>, Api: api::Api&gt;(
+        <span class="kw-2">mut </span><span class="self">self</span>,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="self">self</span>.register_custom_api::&lt;Dispatcher, Api&gt;()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">server_name</span>: <span class="ident">String::from</span>(<span class="string">&quot;bonsaidb&quot;</span>),
-            <span class="ident">client_simultaneous_request_limit</span>: <span class="number">16</span>,
-            <span class="comment">// TODO this was arbitrarily picked, it probably should be higher,</span>
-            <span class="comment">// but it also should probably be based on the cpu&#39;s capabilities</span>
-            <span class="ident">request_workers</span>: <span class="number">16</span>,
-            <span class="ident">storage</span>: <span class="ident">bonsaidb_local::config::StorageConfiguration::default</span>(),
-            <span class="ident">default_permissions</span>: <span class="ident">DefaultPermissions::Permissions</span>(<span class="ident">Permissions::default</span>()),
-            <span class="ident">custom_apis</span>: <span class="ident">HashMap::default</span>(),
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-            <span class="ident">acme</span>: <span class="ident">AcmeConfiguration::default</span>(),
-        }
+<span class="kw">impl</span>&lt;B&gt; Default <span class="kw">for </span>ServerConfiguration&lt;B&gt;
+<span class="kw">where
+    </span>B: Backend + Default,
+{
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::default_for(B::default())
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-<span class="kw">mod</span> <span class="ident">acme</span> {
-    <span class="doccomment">/// The Automated Certificate Management Environment (ACME) configuration.</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AcmeConfiguration</span> {
-        <span class="doccomment">/// The contact email to register with the ACME directory for the account.</span>
-        <span class="kw">pub</span> <span class="ident">contact_email</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="doccomment">/// The ACME directory to use for registration. The default is</span>
-        <span class="doccomment">/// [`LETS_ENCRYPT_PRODUCTION_DIRECTORY`].</span>
-        <span class="kw">pub</span> <span class="ident">directory</span>: <span class="ident">String</span>,
+<span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+</span><span class="kw">mod </span>acme {
+    <span class="doccomment">/// The Automated Certificate Management Environment (ACME) configuration.
+    </span><span class="attribute">#[derive(Debug, Clone)]
+    </span><span class="kw">pub struct </span>AcmeConfiguration {
+        <span class="doccomment">/// The contact email to register with the ACME directory for the account.
+        </span><span class="kw">pub </span>contact_email: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        <span class="doccomment">/// The ACME directory to use for registration. The default is
+        /// [`LETS_ENCRYPT_PRODUCTION_DIRECTORY`].
+        </span><span class="kw">pub </span>directory: String,
     }
 
-    <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">AcmeConfiguration</span> {
-        <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-            <span class="self">Self</span> {
-                <span class="ident">contact_email</span>: <span class="prelude-val">None</span>,
-                <span class="ident">directory</span>: <span class="ident">LETS_ENCRYPT_PRODUCTION_DIRECTORY</span>.<span class="ident">to_string</span>(),
+    <span class="kw">impl </span>Default <span class="kw">for </span>AcmeConfiguration {
+        <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+            <span class="self">Self </span>{
+                contact_email: <span class="prelude-val">None</span>,
+                directory: LETS_ENCRYPT_PRODUCTION_DIRECTORY.to_string(),
             }
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">async_acme::acme</span>::{<span class="ident">LETS_ENCRYPT_PRODUCTION_DIRECTORY</span>, <span class="ident">LETS_ENCRYPT_STAGING_DIRECTORY</span>};
+    <span class="kw">pub use </span>async_acme::acme::{LETS_ENCRYPT_PRODUCTION_DIRECTORY, LETS_ENCRYPT_STAGING_DIRECTORY};
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">acme</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+</span><span class="kw">pub use </span>acme::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// The default permissions to use for all connections to the server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DefaultPermissions</span> {
-    <span class="doccomment">/// Allow all permissions. Do not use outside of completely trusted environments.</span>
-    <span class="ident">AllowAll</span>,
-    <span class="doccomment">/// A defined set of permissions.</span>
-    <span class="ident">Permissions</span>(<span class="ident">Permissions</span>),
+<span class="doccomment">/// The default permissions to use for all connections to the server.
+</span><span class="attribute">#[derive(Debug, Clone)]
+</span><span class="kw">pub enum </span>DefaultPermissions {
+    <span class="doccomment">/// Allow all permissions. Do not use outside of completely trusted environments.
+    </span>AllowAll,
+    <span class="doccomment">/// A defined set of permissions.
+    </span>Permissions(Permissions),
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">DefaultPermissions</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Permissions</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">permissions</span>: <span class="ident">DefaultPermissions</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="ident">permissions</span> {
-            <span class="ident">DefaultPermissions::Permissions</span>(<span class="ident">permissions</span>) =&gt; <span class="ident">permissions</span>,
-            <span class="ident">DefaultPermissions::AllowAll</span> =&gt; <span class="ident"><span class="self">Self</span>::allow_all</span>(),
+<span class="kw">impl </span>From&lt;DefaultPermissions&gt; <span class="kw">for </span>Permissions {
+    <span class="kw">fn </span>from(permissions: DefaultPermissions) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>permissions {
+            DefaultPermissions::Permissions(permissions) =&gt; permissions,
+            DefaultPermissions::AllowAll =&gt; <span class="self">Self</span>::allow_all(),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DefaultPermissions</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">permissions</span>: <span class="ident">Permissions</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Permissions</span>(<span class="ident">permissions</span>)
+<span class="kw">impl </span>From&lt;Permissions&gt; <span class="kw">for </span>DefaultPermissions {
+    <span class="kw">fn </span>from(permissions: Permissions) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Permissions(permissions)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Statement</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DefaultPermissions</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">permissions</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Statement</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Permissions::from</span>(<span class="ident">permissions</span>))
+<span class="kw">impl </span>From&lt;Vec&lt;Statement&gt;&gt; <span class="kw">for </span>DefaultPermissions {
+    <span class="kw">fn </span>from(permissions: Vec&lt;Statement&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(Permissions::from(permissions))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Statement</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DefaultPermissions</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">permissions</span>: <span class="ident">Statement</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Permissions::from</span>(<span class="ident">permissions</span>))
+<span class="kw">impl </span>From&lt;Statement&gt; <span class="kw">for </span>DefaultPermissions {
+    <span class="kw">fn </span>from(permissions: Statement) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(Permissions::from(permissions))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Builder</span> <span class="kw">for</span> <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">with_schema</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">bonsaidb_local::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">register_schema</span>::<span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+<span class="kw">impl</span>&lt;B: Backend&gt; Builder <span class="kw">for </span>ServerConfiguration&lt;B&gt; {
+    <span class="kw">fn </span>with_schema&lt;S: Schema&gt;(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, bonsaidb_local::Error&gt; {
+        <span class="self">self</span>.storage.register_schema::&lt;S&gt;()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">memory_only</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">memory_only</span> <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>memory_only(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.memory_only = <span class="bool-val">true</span>;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">path</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">path</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>().<span class="ident">to_owned</span>());
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>path&lt;P: AsRef&lt;Path&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, path: P) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.path = <span class="prelude-val">Some</span>(path.as_ref().to_owned());
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">unique_id</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">unique_id</span>: <span class="ident">u64</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">unique_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">unique_id</span>);
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>unique_id(<span class="kw-2">mut </span><span class="self">self</span>, unique_id: u64) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.unique_id = <span class="prelude-val">Some</span>(unique_id);
+        <span class="self">self
+    </span>}
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">vault_key_storage</span><span class="op">&lt;</span><span class="ident">VaultKeyStorage</span>: <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">key_storage</span>: <span class="ident">VaultKeyStorage</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">vault_key_storage</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">std::sync::Arc::new</span>(<span class="ident">key_storage</span>));
-        <span class="self">self</span>
-    }
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
+    </span><span class="kw">fn </span>vault_key_storage&lt;VaultKeyStorage: AnyVaultKeyStorage&gt;(
+        <span class="kw-2">mut </span><span class="self">self</span>,
+        key_storage: VaultKeyStorage,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.vault_key_storage = <span class="prelude-val">Some</span>(std::sync::Arc::new(key_storage));
+        <span class="self">self
+    </span>}
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;encryption&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">default_encryption_key</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">KeyId</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">default_encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">key</span>);
-        <span class="self">self</span>
-    }
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
+    </span><span class="kw">fn </span>default_encryption_key(<span class="kw-2">mut </span><span class="self">self</span>, key: KeyId) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.default_encryption_key = <span class="prelude-val">Some</span>(key);
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">tasks_worker_count</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">worker_count</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">workers</span>.<span class="ident">worker_count</span> <span class="op">=</span> <span class="ident">worker_count</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>tasks_worker_count(<span class="kw-2">mut </span><span class="self">self</span>, worker_count: usize) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.workers.worker_count = worker_count;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">tasks_parallelization</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">parallelization</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">workers</span>.<span class="ident">parallelization</span> <span class="op">=</span> <span class="ident">parallelization</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>tasks_parallelization(<span class="kw-2">mut </span><span class="self">self</span>, parallelization: usize) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.workers.parallelization = parallelization;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">check_view_integrity_on_open</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">check</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">views</span>.<span class="ident">check_integrity_on_open</span> <span class="op">=</span> <span class="ident">check</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>check_view_integrity_on_open(<span class="kw-2">mut </span><span class="self">self</span>, check: bool) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.views.check_integrity_on_open = check;
+        <span class="self">self
+    </span>}
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;compression&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">default_compression</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">compression</span>: <span class="ident">Compression</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">default_compression</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">compression</span>);
-        <span class="self">self</span>
-    }
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;compression&quot;</span>)]
+    </span><span class="kw">fn </span>default_compression(<span class="kw-2">mut </span><span class="self">self</span>, compression: Compression) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.default_compression = <span class="prelude-val">Some</span>(compression);
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">key_value_persistence</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">persistence</span>: <span class="ident">KeyValuePersistence</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">key_value_persistence</span> <span class="op">=</span> <span class="ident">persistence</span>;
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>key_value_persistence(<span class="kw-2">mut </span><span class="self">self</span>, persistence: KeyValuePersistence) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.key_value_persistence = persistence;
+        <span class="self">self
+    </span>}
 
-    <span class="kw">fn</span> <span class="ident">authenticated_permissions</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Permissions</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">authenticated_permissions</span>: <span class="ident">P</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">authenticated_permissions</span> <span class="op">=</span> <span class="ident">authenticated_permissions</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
-    }
+    <span class="kw">fn </span>authenticated_permissions&lt;P: Into&lt;Permissions&gt;&gt;(
+        <span class="kw-2">mut </span><span class="self">self</span>,
+        authenticated_permissions: P,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.authenticated_permissions = authenticated_permissions.into();
+        <span class="self">self
+    </span>}
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">argon</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">argon</span>: <span class="ident">bonsaidb_local::config::ArgonConfiguration</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">argon</span> <span class="op">=</span> <span class="ident">argon</span>;
-        <span class="self">self</span>
-    }
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+    </span><span class="kw">fn </span>argon(<span class="kw-2">mut </span><span class="self">self</span>, argon: bonsaidb_local::config::ArgonConfiguration) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.storage.argon = argon;
+        <span class="self">self
+    </span>}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

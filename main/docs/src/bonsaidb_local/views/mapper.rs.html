@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/views/mapper.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mapper.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_local/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/views/mapper.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mapper.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_local/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -549,551 +543,550 @@
 <span id="543">543</span>
 <span id="544">544</span>
 <span id="545">545</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">borrow::Cow</span>,
-    <span class="ident">collections</span>::{<span class="ident">hash_map::RandomState</span>, <span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>, <span class="ident">HashSet</span>},
-    <span class="ident">sync::Arc</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    borrow::Cow,
+    collections::{hash_map::RandomState, BTreeMap, BTreeSet, HashSet},
+    sync::Arc,
 };
 
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">arc_bytes</span>::{<span class="ident">serde::Bytes</span>, <span class="ident">ArcBytes</span>, <span class="ident">OwnedBytes</span>},
-    <span class="ident">connection::Connection</span>,
-    <span class="ident">schema</span>::{
-        <span class="ident">view</span>::{<span class="self">self</span>, <span class="ident">map</span>, <span class="ident">Serialized</span>},
-        <span class="ident">CollectionName</span>, <span class="ident">ViewName</span>,
+<span class="kw">use </span>bonsaidb_core::{
+    arc_bytes::{serde::Bytes, ArcBytes, OwnedBytes},
+    connection::Connection,
+    schema::{
+        view::{<span class="self">self</span>, map, Serialized},
+        CollectionName, ViewName,
     },
 };
-<span class="kw">use</span> <span class="ident">easy_parallel::Parallel</span>;
-<span class="kw">use</span> <span class="ident">nebari</span>::{
-    <span class="ident">io::any::AnyFile</span>,
-    <span class="ident">tree</span>::{<span class="ident">AnyTreeRoot</span>, <span class="ident">CompareSwap</span>, <span class="ident">KeyOperation</span>, <span class="ident">Operation</span>, <span class="ident">Unversioned</span>, <span class="ident">Versioned</span>},
-    <span class="ident">LockedTransactionTree</span>, <span class="ident">Tree</span>, <span class="ident">UnlockedTransactionTree</span>,
+<span class="kw">use </span>easy_parallel::Parallel;
+<span class="kw">use </span>nebari::{
+    io::any::AnyFile,
+    tree::{AnyTreeRoot, CompareSwap, KeyOperation, Operation, Unversioned, Versioned},
+    LockedTransactionTree, Tree, UnlockedTransactionTree,
 };
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">database</span>::{<span class="ident">deserialize_document</span>, <span class="ident">document_tree_name</span>, <span class="ident">Database</span>},
-    <span class="ident">tasks</span>::{<span class="ident">Job</span>, <span class="ident">Keyed</span>, <span class="ident">Task</span>},
-    <span class="ident">views</span>::{
-        <span class="ident">view_document_map_tree_name</span>, <span class="ident">view_entries_tree_name</span>, <span class="ident">view_invalidated_docs_tree_name</span>,
-        <span class="ident">EntryMapping</span>, <span class="ident">ViewEntry</span>,
+<span class="kw">use crate</span>::{
+    database::{deserialize_document, document_tree_name, Database},
+    tasks::{Job, Keyed, Task},
+    views::{
+        view_document_map_tree_name, view_entries_tree_name, view_invalidated_docs_tree_name,
+        EntryMapping, ViewEntry,
     },
-    <span class="ident">Error</span>,
+    Error,
 };
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Mapper</span> {
-    <span class="kw">pub</span> <span class="ident">database</span>: <span class="ident">Database</span>,
-    <span class="kw">pub</span> <span class="ident">map</span>: <span class="ident">Map</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>Mapper {
+    <span class="kw">pub </span>database: Database,
+    <span class="kw">pub </span>map: Map,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Hash</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Map</span> {
-    <span class="kw">pub</span> <span class="ident">database</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-    <span class="kw">pub</span> <span class="ident">view_name</span>: <span class="ident">ViewName</span>,
+<span class="attribute">#[derive(Debug, Hash, Eq, PartialEq, Clone)]
+</span><span class="kw">pub struct </span>Map {
+    <span class="kw">pub </span>database: Arc&lt;Cow&lt;<span class="lifetime">&#39;static</span>, str&gt;&gt;,
+    <span class="kw">pub </span>collection: CollectionName,
+    <span class="kw">pub </span>view_name: ViewName,
 }
 
-<span class="kw">impl</span> <span class="ident">Job</span> <span class="kw">for</span> <span class="ident">Mapper</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">u64</span>;
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
+<span class="kw">impl </span>Job <span class="kw">for </span>Mapper {
+    <span class="kw">type </span>Output = u64;
+    <span class="kw">type </span>Error = Error;
 
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tracing&quot;</span>, <span class="ident">tracing::instrument</span>(<span class="ident">level</span> <span class="op">=</span> <span class="string">&quot;trace&quot;</span>, <span class="ident">skip_all</span>))]</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::too_many_lines</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">documents</span> <span class="op">=</span>
-            <span class="self">self</span>.<span class="ident">database</span>
-                .<span class="ident">roots</span>()
-                .<span class="ident">tree</span>(<span class="self">self</span>.<span class="ident">database</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Versioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
-                    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">collection</span>,
-                    <span class="ident">document_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">collection</span>),
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;tracing&quot;</span>, tracing::instrument(level = <span class="string">&quot;trace&quot;</span>, skip_all))]
+    #[allow(clippy::too_many_lines)]
+    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, Error&gt; {
+        <span class="kw">let </span>documents =
+            <span class="self">self</span>.database
+                .roots()
+                .tree(<span class="self">self</span>.database.collection_tree::&lt;Versioned, <span class="kw">_</span>&gt;(
+                    <span class="kw-2">&amp;</span><span class="self">self</span>.map.collection,
+                    document_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.map.collection),
                 )<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">view_entries</span> <span class="op">=</span>
-            <span class="self">self</span>.<span class="ident">database</span>
-                .<span class="ident">roots</span>()
-                .<span class="ident">tree</span>(<span class="self">self</span>.<span class="ident">database</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
-                    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">collection</span>,
-                    <span class="ident">view_entries_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">view_name</span>),
+        <span class="kw">let </span>view_entries =
+            <span class="self">self</span>.database
+                .roots()
+                .tree(<span class="self">self</span>.database.collection_tree::&lt;Unversioned, <span class="kw">_</span>&gt;(
+                    <span class="kw-2">&amp;</span><span class="self">self</span>.map.collection,
+                    view_entries_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.map.view_name),
                 )<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">document_map</span> <span class="op">=</span>
-            <span class="self">self</span>.<span class="ident">database</span>
-                .<span class="ident">roots</span>()
-                .<span class="ident">tree</span>(<span class="self">self</span>.<span class="ident">database</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
-                    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">collection</span>,
-                    <span class="ident">view_document_map_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">view_name</span>),
+        <span class="kw">let </span>document_map =
+            <span class="self">self</span>.database
+                .roots()
+                .tree(<span class="self">self</span>.database.collection_tree::&lt;Unversioned, <span class="kw">_</span>&gt;(
+                    <span class="kw-2">&amp;</span><span class="self">self</span>.map.collection,
+                    view_document_map_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.map.view_name),
                 )<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">invalidated_entries</span> <span class="op">=</span>
-            <span class="self">self</span>.<span class="ident">database</span>
-                .<span class="ident">roots</span>()
-                .<span class="ident">tree</span>(<span class="self">self</span>.<span class="ident">database</span>.<span class="ident">collection_tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="kw">_</span><span class="op">&gt;</span>(
-                    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">collection</span>,
-                    <span class="ident">view_invalidated_docs_tree_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map</span>.<span class="ident">view_name</span>),
+        <span class="kw">let </span>invalidated_entries =
+            <span class="self">self</span>.database
+                .roots()
+                .tree(<span class="self">self</span>.database.collection_tree::&lt;Unversioned, <span class="kw">_</span>&gt;(
+                    <span class="kw-2">&amp;</span><span class="self">self</span>.map.collection,
+                    view_invalidated_docs_tree_name(<span class="kw-2">&amp;</span><span class="self">self</span>.map.view_name),
                 )<span class="question-mark">?</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">transaction_id</span> <span class="op">=</span> <span class="self">self</span>
-            .<span class="ident">database</span>
-            .<span class="ident">last_transaction_id</span>()<span class="question-mark">?</span>
-            .<span class="ident">expect</span>(<span class="string">&quot;no way to have documents without a transaction&quot;</span>);
+        <span class="kw">let </span>transaction_id = <span class="self">self
+            </span>.database
+            .last_transaction_id()<span class="question-mark">?
+            </span>.expect(<span class="string">&quot;no way to have documents without a transaction&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">storage</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">clone</span>();
-        <span class="kw">let</span> <span class="ident">map_request</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">clone</span>();
+        <span class="kw">let </span>storage = <span class="self">self</span>.database.clone();
+        <span class="kw">let </span>map_request = <span class="self">self</span>.map.clone();
 
-        <span class="ident">map_view</span>(
-            <span class="kw-2">&amp;</span><span class="ident">invalidated_entries</span>,
-            <span class="kw-2">&amp;</span><span class="ident">document_map</span>,
-            <span class="kw-2">&amp;</span><span class="ident">documents</span>,
-            <span class="kw-2">&amp;</span><span class="ident">view_entries</span>,
-            <span class="kw-2">&amp;</span><span class="ident">storage</span>,
-            <span class="kw-2">&amp;</span><span class="ident">map_request</span>,
+        map_view(
+            <span class="kw-2">&amp;</span>invalidated_entries,
+            <span class="kw-2">&amp;</span>document_map,
+            <span class="kw-2">&amp;</span>documents,
+            <span class="kw-2">&amp;</span>view_entries,
+            <span class="kw-2">&amp;</span>storage,
+            <span class="kw-2">&amp;</span>map_request,
         )<span class="question-mark">?</span>;
 
-        <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">storage</span>.<span class="ident">instance</span>.<span class="ident">tasks</span>().<span class="ident">mark_view_updated</span>(
-            <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">database</span>.<span class="ident">clone</span>(),
-            <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">collection</span>.<span class="ident">clone</span>(),
-            <span class="self">self</span>.<span class="ident">map</span>.<span class="ident">view_name</span>.<span class="ident">clone</span>(),
-            <span class="ident">transaction_id</span>,
+        <span class="self">self</span>.database.storage.instance.tasks().mark_view_updated(
+            <span class="self">self</span>.map.database.clone(),
+            <span class="self">self</span>.map.collection.clone(),
+            <span class="self">self</span>.map.view_name.clone(),
+            transaction_id,
         );
 
-        <span class="prelude-val">Ok</span>(<span class="ident">transaction_id</span>)
+        <span class="prelude-val">Ok</span>(transaction_id)
     }
 }
 
-<span class="kw">fn</span> <span class="ident">map_view</span>(
-    <span class="ident">invalidated_entries</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    <span class="ident">document_map</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    <span class="ident">documents</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">Versioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    <span class="ident">view_entries</span>: <span class="kw-2">&amp;</span><span class="ident">Tree</span><span class="op">&lt;</span><span class="ident">Unversioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">Database</span>,
-    <span class="ident">map_request</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">const</span> <span class="ident">CHUNK_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">100_000</span>;
-    <span class="comment">// Only do any work if there are invalidated documents to process</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">invalidated_ids</span> <span class="op">=</span> <span class="ident">invalidated_entries</span>
-        .<span class="ident">get_range</span>(<span class="kw-2">&amp;</span>(..))<span class="question-mark">?</span>
-        .<span class="ident">into_iter</span>()
-        .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">key</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">key</span>)
-        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-    <span class="kw">while</span> <span class="op">!</span><span class="ident">invalidated_ids</span>.<span class="ident">is_empty</span>() {
-        <span class="kw">let</span> <span class="ident">transaction</span> <span class="op">=</span> <span class="ident">database</span>
-            .<span class="ident">roots</span>()
-            .<span class="ident">transaction</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">dyn</span> <span class="ident">AnyTreeRoot</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span>[
-                <span class="ident">Box::new</span>(<span class="ident">invalidated_entries</span>.<span class="ident">clone</span>()) <span class="kw">as</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyTreeRoot</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-                <span class="ident">Box::new</span>(<span class="ident">document_map</span>.<span class="ident">clone</span>()),
-                <span class="ident">Box::new</span>(<span class="ident">documents</span>.<span class="ident">clone</span>()),
-                <span class="ident">Box::new</span>(<span class="ident">view_entries</span>.<span class="ident">clone</span>()),
+<span class="kw">fn </span>map_view(
+    invalidated_entries: <span class="kw-2">&amp;</span>Tree&lt;Unversioned, AnyFile&gt;,
+    document_map: <span class="kw-2">&amp;</span>Tree&lt;Unversioned, AnyFile&gt;,
+    documents: <span class="kw-2">&amp;</span>Tree&lt;Versioned, AnyFile&gt;,
+    view_entries: <span class="kw-2">&amp;</span>Tree&lt;Unversioned, AnyFile&gt;,
+    database: <span class="kw-2">&amp;</span>Database,
+    map_request: <span class="kw-2">&amp;</span>Map,
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="kw">const </span>CHUNK_SIZE: usize = <span class="number">100_000</span>;
+    <span class="comment">// Only do any work if there are invalidated documents to process
+    </span><span class="kw">let </span><span class="kw-2">mut </span>invalidated_ids = invalidated_entries
+        .get_range(<span class="kw-2">&amp;</span>(..))<span class="question-mark">?
+        </span>.into_iter()
+        .map(|(key, <span class="kw">_</span>)| key)
+        .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+    <span class="kw">while </span>!invalidated_ids.is_empty() {
+        <span class="kw">let </span>transaction = database
+            .roots()
+            .transaction::&lt;<span class="kw">_</span>, <span class="kw">dyn </span>AnyTreeRoot&lt;AnyFile&gt;&gt;(<span class="kw-2">&amp;</span>[
+                Box::new(invalidated_entries.clone()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>AnyTreeRoot&lt;AnyFile&gt;&gt;,
+                Box::new(document_map.clone()),
+                Box::new(documents.clone()),
+                Box::new(view_entries.clone()),
             ])<span class="question-mark">?</span>;
         {
-            <span class="kw">let</span> <span class="ident">view</span> <span class="op">=</span> <span class="ident">database</span>
-                .<span class="ident">data</span>
-                .<span class="ident">schema</span>
-                .<span class="ident">view_by_name</span>(<span class="kw-2">&amp;</span><span class="ident">map_request</span>.<span class="ident">view_name</span>)
-                .<span class="ident">unwrap</span>();
+            <span class="kw">let </span>view = database
+                .data
+                .schema
+                .view_by_name(<span class="kw-2">&amp;</span>map_request.view_name)
+                .unwrap();
 
-            <span class="kw">let</span> <span class="ident">document_ids</span> <span class="op">=</span> <span class="ident">invalidated_ids</span>
-                .<span class="ident">drain</span>(<span class="ident">invalidated_ids</span>.<span class="ident">len</span>().<span class="ident">saturating_sub</span>(<span class="ident">CHUNK_SIZE</span>)..)
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-            <span class="kw">let</span> <span class="ident">document_map</span> <span class="op">=</span> <span class="ident">transaction</span>.<span class="ident">unlocked_tree</span>(<span class="number">1</span>).<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">documents</span> <span class="op">=</span> <span class="ident">transaction</span>.<span class="ident">unlocked_tree</span>(<span class="number">2</span>).<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">view_entries</span> <span class="op">=</span> <span class="ident">transaction</span>.<span class="ident">unlocked_tree</span>(<span class="number">3</span>).<span class="ident">unwrap</span>();
-            <span class="ident">DocumentRequest</span> {
-                <span class="ident">document_ids</span>: <span class="ident">document_ids</span>.<span class="ident">clone</span>(),
-                <span class="ident">map_request</span>,
-                <span class="ident">database</span>,
-                <span class="ident">document_map</span>,
-                <span class="ident">documents</span>,
-                <span class="ident">view_entries</span>,
-                <span class="ident">view</span>,
+            <span class="kw">let </span>document_ids = invalidated_ids
+                .drain(invalidated_ids.len().saturating_sub(CHUNK_SIZE)..)
+                .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+            <span class="kw">let </span>document_map = transaction.unlocked_tree(<span class="number">1</span>).unwrap();
+            <span class="kw">let </span>documents = transaction.unlocked_tree(<span class="number">2</span>).unwrap();
+            <span class="kw">let </span>view_entries = transaction.unlocked_tree(<span class="number">3</span>).unwrap();
+            DocumentRequest {
+                document_ids: document_ids.clone(),
+                map_request,
+                database,
+                document_map,
+                documents,
+                view_entries,
+                view,
             }
-            .<span class="ident">map</span>()<span class="question-mark">?</span>;
+            .map()<span class="question-mark">?</span>;
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">invalidated_entries</span> <span class="op">=</span> <span class="ident">transaction</span>.<span class="ident">tree</span>::<span class="op">&lt;</span><span class="ident">Unversioned</span><span class="op">&gt;</span>(<span class="number">0</span>).<span class="ident">unwrap</span>();
-            <span class="ident">invalidated_entries</span>.<span class="ident">modify</span>(<span class="ident">document_ids</span>, <span class="ident">nebari::tree::Operation::Remove</span>)<span class="question-mark">?</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>invalidated_entries = transaction.tree::&lt;Unversioned&gt;(<span class="number">0</span>).unwrap();
+            invalidated_entries.modify(document_ids, nebari::tree::Operation::Remove)<span class="question-mark">?</span>;
         }
-        <span class="ident">transaction</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
+        transaction.commit()<span class="question-mark">?</span>;
     }
 
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DocumentRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="ident">document_ids</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">map_request</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Map</span>,
-    <span class="kw">pub</span> <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Database</span>,
+<span class="kw">pub struct </span>DocumentRequest&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub </span>document_ids: Vec&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+    <span class="kw">pub </span>map_request: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Map,
+    <span class="kw">pub </span>database: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Database,
 
-    <span class="kw">pub</span> <span class="ident">document_map</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">UnlockedTransactionTree</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">UnlockedTransactionTree</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">view_entries</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">UnlockedTransactionTree</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw">dyn</span> <span class="ident">Serialized</span>,
+    <span class="kw">pub </span>document_map: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>UnlockedTransactionTree&lt;AnyFile&gt;,
+    <span class="kw">pub </span>documents: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>UnlockedTransactionTree&lt;AnyFile&gt;,
+    <span class="kw">pub </span>view_entries: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>UnlockedTransactionTree&lt;AnyFile&gt;,
+    <span class="kw">pub </span>view: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw">dyn </span>Serialized,
 }
 
-<span class="kw">type</span> <span class="ident">DocumentIdPayload</span> <span class="op">=</span> (<span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>);
-<span class="kw">type</span> <span class="ident">BatchPayload</span> <span class="op">=</span> (<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">DocumentIdPayload</span><span class="op">&gt;</span>);
+<span class="kw">type </span>DocumentIdPayload = (ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, <span class="prelude-ty">Option</span>&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;);
+<span class="kw">type </span>BatchPayload = (Vec&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;, flume::Receiver&lt;DocumentIdPayload&gt;);
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">DocumentRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">generate_batches</span>(
-        <span class="ident">batch_sender</span>: <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">BatchPayload</span><span class="op">&gt;</span>,
-        <span class="ident">document_ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>],
-        <span class="ident">documents</span>: <span class="kw-2">&amp;</span><span class="ident">UnlockedTransactionTree</span><span class="op">&lt;</span><span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="comment">// Generate batches</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">documents</span> <span class="op">=</span> <span class="ident">documents</span>.<span class="ident">lock</span>::<span class="op">&lt;</span><span class="ident">Versioned</span><span class="op">&gt;</span>();
-        <span class="kw">for</span> <span class="ident">chunk</span> <span class="kw">in</span> <span class="ident">document_ids</span>.<span class="ident">chunks</span>(<span class="number">1024</span>) {
-            <span class="kw">let</span> (<span class="ident">document_id_sender</span>, <span class="ident">document_id_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="ident">chunk</span>.<span class="ident">len</span>());
-            <span class="ident">batch_sender</span>
-                .<span class="ident">send</span>((<span class="ident">chunk</span>.<span class="ident">to_vec</span>(), <span class="ident">document_id_receiver</span>))
-                .<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">documents</span> <span class="op">=</span> <span class="ident">documents</span>.<span class="ident">get_multiple</span>(<span class="ident">chunk</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">ArcBytes::as_slice</span>))<span class="question-mark">?</span>;
-            <span class="ident">documents</span>.<span class="ident">sort_by</span>(<span class="op">|</span><span class="ident">a</span>, <span class="ident">b</span><span class="op">|</span> <span class="ident">a</span>.<span class="number">0</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="number">0</span>));
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; DocumentRequest&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>generate_batches(
+        batch_sender: flume::Sender&lt;BatchPayload&gt;,
+        document_ids: <span class="kw-2">&amp;</span>[ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;],
+        documents: <span class="kw-2">&amp;</span>UnlockedTransactionTree&lt;AnyFile&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="comment">// Generate batches
+        </span><span class="kw">let </span><span class="kw-2">mut </span>documents = documents.lock::&lt;Versioned&gt;();
+        <span class="kw">for </span>chunk <span class="kw">in </span>document_ids.chunks(<span class="number">1024</span>) {
+            <span class="kw">let </span>(document_id_sender, document_id_receiver) = flume::bounded(chunk.len());
+            batch_sender
+                .send((chunk.to_vec(), document_id_receiver))
+                .unwrap();
+            <span class="kw">let </span><span class="kw-2">mut </span>documents = documents.get_multiple(chunk.iter().map(ArcBytes::as_slice))<span class="question-mark">?</span>;
+            documents.sort_by(|a, b| a.<span class="number">0</span>.cmp(<span class="kw-2">&amp;</span>b.<span class="number">0</span>));
 
-            <span class="kw">for</span> <span class="ident">document_id</span> <span class="kw">in</span> <span class="ident">chunk</span>.<span class="ident">iter</span>().<span class="ident">rev</span>() {
-                <span class="kw">let</span> <span class="ident">document</span> <span class="op">=</span> <span class="ident">documents</span>
-                    .<span class="ident">last</span>()
-                    .<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span>(<span class="ident">key</span>, <span class="kw">_</span>)<span class="op">|</span> (<span class="ident">key</span> <span class="op">==</span> <span class="ident">document_id</span>))
-                    .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">documents</span>.<span class="ident">pop</span>().<span class="ident">unwrap</span>().<span class="number">1</span>);
+            <span class="kw">for </span>document_id <span class="kw">in </span>chunk.iter().rev() {
+                <span class="kw">let </span>document = documents
+                    .last()
+                    .map_or(<span class="bool-val">false</span>, |(key, <span class="kw">_</span>)| (key == document_id))
+                    .then(|| documents.pop().unwrap().<span class="number">1</span>);
 
-                <span class="ident">document_id_sender</span>
-                    .<span class="ident">send</span>((<span class="ident">document_id</span>.<span class="ident">clone</span>(), <span class="ident">document</span>))
-                    .<span class="ident">unwrap</span>();
+                document_id_sender
+                    .send((document_id.clone(), document))
+                    .unwrap();
             }
 
-            <span class="ident">drop</span>(<span class="ident">document_id_sender</span>);
+            drop(document_id_sender);
         }
-        <span class="ident">drop</span>(<span class="ident">batch_sender</span>);
+        drop(batch_sender);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">map_batches</span>(
-        <span class="ident">batch_receiver</span>: <span class="kw-2">&amp;</span><span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">BatchPayload</span><span class="op">&gt;</span>,
-        <span class="ident">mapped_sender</span>: <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Batch</span><span class="op">&gt;</span>,
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Serialized</span>,
-        <span class="ident">parallelization</span>: <span class="ident">usize</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="comment">// Process batches</span>
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>((<span class="ident">document_ids</span>, <span class="ident">document_id_receiver</span>)) <span class="op">=</span> <span class="ident">batch_receiver</span>.<span class="ident">recv</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">Batch</span> {
-                <span class="ident">document_ids</span>,
-                ..<span class="ident">Batch::default</span>()
+    <span class="kw">fn </span>map_batches(
+        batch_receiver: <span class="kw-2">&amp;</span>flume::Receiver&lt;BatchPayload&gt;,
+        mapped_sender: flume::Sender&lt;Batch&gt;,
+        view: <span class="kw-2">&amp;</span><span class="kw">dyn </span>Serialized,
+        parallelization: usize,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="comment">// Process batches
+        </span><span class="kw">while let </span><span class="prelude-val">Ok</span>((document_ids, document_id_receiver)) = batch_receiver.recv() {
+            <span class="kw">let </span><span class="kw-2">mut </span>batch = Batch {
+                document_ids,
+                ..Batch::default()
             };
-            <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">Parallel::new</span>()
-                .<span class="ident">each</span>(<span class="number">1</span>..<span class="op">=</span><span class="ident">parallelization</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-                    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>((<span class="ident">document_id</span>, <span class="ident">document</span>)) <span class="op">=</span> <span class="ident">document_id_receiver</span>.<span class="ident">recv</span>() {
-                        <span class="kw">let</span> <span class="ident">map_result</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">document</span>) <span class="op">=</span> <span class="ident">document</span> {
-                            <span class="kw">let</span> <span class="ident">document</span> <span class="op">=</span> <span class="ident">deserialize_document</span>(<span class="kw-2">&amp;</span><span class="ident">document</span>)<span class="question-mark">?</span>;
+            <span class="kw">for </span>result <span class="kw">in </span>Parallel::new()
+                .each(<span class="number">1</span>..=parallelization, |<span class="kw">_</span>| -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">_</span>, Error&gt; {
+                    <span class="kw">let </span><span class="kw-2">mut </span>results = Vec::new();
+                    <span class="kw">while let </span><span class="prelude-val">Ok</span>((document_id, document)) = document_id_receiver.recv() {
+                        <span class="kw">let </span>map_result = <span class="kw">if let </span><span class="prelude-val">Some</span>(document) = document {
+                            <span class="kw">let </span>document = deserialize_document(<span class="kw-2">&amp;</span>document)<span class="question-mark">?</span>;
 
-                            <span class="comment">// Call the schema map function</span>
-                            <span class="ident">view</span>.<span class="ident">map</span>(<span class="kw-2">&amp;</span><span class="ident">document</span>).<span class="ident">map_err</span>(<span class="ident">bonsaidb_core::Error::from</span>)<span class="question-mark">?</span>
-                        } <span class="kw">else</span> {
-                            <span class="comment">// Get multiple didn&#39;t return this document ID.</span>
-                            <span class="ident">Vec::new</span>()
+                            <span class="comment">// Call the schema map function
+                            </span>view.map(<span class="kw-2">&amp;</span>document).map_err(bonsaidb_core::Error::from)<span class="question-mark">?
+                        </span>} <span class="kw">else </span>{
+                            <span class="comment">// Get multiple didn&#39;t return this document ID.
+                            </span>Vec::new()
                         };
-                        <span class="kw">let</span> <span class="ident">keys</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">OwnedBytes</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">map_result</span>
-                            .<span class="ident">iter</span>()
-                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">map</span><span class="op">|</span> <span class="ident">OwnedBytes::from</span>(<span class="ident">map</span>.<span class="ident">key</span>.<span class="ident">as_slice</span>()))
-                            .<span class="ident">collect</span>();
-                        <span class="kw">let</span> <span class="ident">new_keys</span> <span class="op">=</span> <span class="ident">ArcBytes::from</span>(<span class="ident">bincode::serialize</span>(<span class="kw-2">&amp;</span><span class="ident">keys</span>)<span class="question-mark">?</span>);
+                        <span class="kw">let </span>keys: HashSet&lt;OwnedBytes&gt; = map_result
+                            .iter()
+                            .map(|map| OwnedBytes::from(map.key.as_slice()))
+                            .collect();
+                        <span class="kw">let </span>new_keys = ArcBytes::from(bincode::serialize(<span class="kw-2">&amp;</span>keys)<span class="question-mark">?</span>);
 
-                        <span class="ident">results</span>.<span class="ident">push</span>((<span class="ident">document_id</span>, <span class="ident">new_keys</span>, <span class="ident">keys</span>, <span class="ident">map_result</span>));
+                        results.push((document_id, new_keys, keys, map_result));
                     }
 
-                    <span class="prelude-val">Ok</span>(<span class="ident">results</span>)
+                    <span class="prelude-val">Ok</span>(results)
                 })
-                .<span class="ident">run</span>()
+                .run()
             {
-                <span class="kw">for</span> (<span class="ident">document_id</span>, <span class="ident">new_keys</span>, <span class="ident">keys</span>, <span class="ident">map_result</span>) <span class="kw">in</span> <span class="ident">result</span><span class="question-mark">?</span> {
-                    <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">keys</span> {
-                        <span class="ident">batch</span>.<span class="ident">all_keys</span>.<span class="ident">insert</span>(<span class="ident">key</span>.<span class="number">0</span>.<span class="ident">clone</span>());
+                <span class="kw">for </span>(document_id, new_keys, keys, map_result) <span class="kw">in </span>result<span class="question-mark">? </span>{
+                    <span class="kw">for </span>key <span class="kw">in </span><span class="kw-2">&amp;</span>keys {
+                        batch.all_keys.insert(key.<span class="number">0</span>.clone());
                     }
-                    <span class="ident">batch</span>.<span class="ident">document_maps</span>.<span class="ident">insert</span>(<span class="ident">document_id</span>.<span class="ident">clone</span>(), <span class="ident">new_keys</span>);
-                    <span class="ident">batch</span>.<span class="ident">document_keys</span>.<span class="ident">insert</span>(<span class="ident">document_id</span>.<span class="ident">clone</span>(), <span class="ident">keys</span>);
-                    <span class="kw">for</span> <span class="ident">mapping</span> <span class="kw">in</span> <span class="ident">map_result</span> {
-                        <span class="kw">let</span> <span class="ident">key_mappings</span> <span class="op">=</span> <span class="ident">batch</span>
-                            .<span class="ident">new_mappings</span>
-                            .<span class="ident">entry</span>(<span class="ident">ArcBytes::from</span>(<span class="ident">mapping</span>.<span class="ident">key</span>.<span class="ident">to_vec</span>()))
-                            .<span class="ident">or_insert_with</span>(<span class="ident">Vec::default</span>);
-                        <span class="ident">key_mappings</span>.<span class="ident">push</span>(<span class="ident">mapping</span>);
+                    batch.document_maps.insert(document_id.clone(), new_keys);
+                    batch.document_keys.insert(document_id.clone(), keys);
+                    <span class="kw">for </span>mapping <span class="kw">in </span>map_result {
+                        <span class="kw">let </span>key_mappings = batch
+                            .new_mappings
+                            .entry(ArcBytes::from(mapping.key.to_vec()))
+                            .or_insert_with(Vec::default);
+                        key_mappings.push(mapping);
                     }
                 }
             }
-            <span class="ident">mapped_sender</span>.<span class="ident">send</span>(<span class="ident">batch</span>).<span class="ident">unwrap</span>();
+            mapped_sender.send(batch).unwrap();
         }
-        <span class="ident">drop</span>(<span class="ident">mapped_sender</span>);
+        drop(mapped_sender);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">update_document_map</span>(
-        <span class="ident">document_ids</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">document_map</span>: <span class="kw-2">&amp;mut</span> <span class="ident">LockedTransactionTree</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Unversioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-        <span class="ident">document_maps</span>: <span class="kw-2">&amp;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="kw-2">mut</span> <span class="ident">document_keys</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">OwnedBytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">all_keys</span>: <span class="kw-2">&amp;mut</span> <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="comment">// We need to store a record of all the mappings this document produced.</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">maps_to_clear</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="ident">document_map</span>.<span class="ident">modify</span>(
-            <span class="ident">document_ids</span>,
-            <span class="ident">nebari::tree::Operation::CompareSwap</span>(<span class="ident">CompareSwap::new</span>(<span class="kw-2">&amp;mut</span> <span class="op">|</span><span class="ident">key</span>, <span class="ident">value</span><span class="op">|</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">existing_map</span>) <span class="op">=</span> <span class="ident">value</span> {
-                    <span class="ident">maps_to_clear</span>.<span class="ident">push</span>((<span class="ident">key</span>.<span class="ident">to_owned</span>(), <span class="ident">existing_map</span>));
+    <span class="kw">fn </span>update_document_map(
+        document_ids: Vec&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+        document_map: <span class="kw-2">&amp;mut </span>LockedTransactionTree&lt;<span class="lifetime">&#39;_</span>, Unversioned, AnyFile&gt;,
+        document_maps: <span class="kw-2">&amp;</span>BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+        <span class="kw-2">mut </span>document_keys: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, HashSet&lt;OwnedBytes&gt;&gt;,
+        all_keys: <span class="kw-2">&amp;mut </span>BTreeSet&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, HashSet&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;&gt;, Error&gt; {
+        <span class="comment">// We need to store a record of all the mappings this document produced.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>maps_to_clear = Vec::new();
+        document_map.modify(
+            document_ids,
+            nebari::tree::Operation::CompareSwap(CompareSwap::new(<span class="kw-2">&amp;mut </span>|key, value| {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(existing_map) = value {
+                    maps_to_clear.push((key.to_owned(), existing_map));
                 }
-                <span class="kw">let</span> <span class="ident">new_map</span> <span class="op">=</span> <span class="ident">document_maps</span>.<span class="ident">get</span>(<span class="ident">key</span>).<span class="ident">unwrap</span>();
-                <span class="ident">KeyOperation::Set</span>(<span class="ident">new_map</span>.<span class="ident">clone</span>())
+                <span class="kw">let </span>new_map = document_maps.get(key).unwrap();
+                KeyOperation::Set(new_map.clone())
             })),
         )<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">view_entries_to_clean</span> <span class="op">=</span> <span class="ident">BTreeMap::new</span>();
-        <span class="kw">for</span> (<span class="ident">document_id</span>, <span class="ident">existing_map</span>) <span class="kw">in</span> <span class="ident">maps_to_clear</span> {
-            <span class="kw">let</span> <span class="ident">existing_keys</span> <span class="op">=</span> <span class="ident">bincode::deserialize</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">OwnedBytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">existing_map</span>)<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">new_keys</span> <span class="op">=</span> <span class="ident">document_keys</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">document_id</span>).<span class="ident">unwrap</span>();
-            <span class="kw">for</span> <span class="ident">key</span> <span class="kw">in</span> <span class="ident">existing_keys</span>.<span class="ident">difference</span>(<span class="kw-2">&amp;</span><span class="ident">new_keys</span>) {
-                <span class="ident">all_keys</span>.<span class="ident">insert</span>(<span class="ident">key</span>.<span class="ident">clone</span>().<span class="number">0</span>);
-                <span class="kw">let</span> <span class="ident">key_documents</span> <span class="op">=</span> <span class="ident">view_entries_to_clean</span>
-                    .<span class="ident">entry</span>(<span class="ident">key</span>.<span class="ident">clone</span>().<span class="number">0</span>)
-                    .<span class="ident">or_insert_with</span>(<span class="ident">HashSet</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">RandomState</span><span class="op">&gt;</span><span class="ident">::default</span>);
-                <span class="ident">key_documents</span>.<span class="ident">insert</span>(<span class="ident">document_id</span>.<span class="ident">clone</span>());
+        <span class="kw">let </span><span class="kw-2">mut </span>view_entries_to_clean = BTreeMap::new();
+        <span class="kw">for </span>(document_id, existing_map) <span class="kw">in </span>maps_to_clear {
+            <span class="kw">let </span>existing_keys = bincode::deserialize::&lt;HashSet&lt;OwnedBytes&gt;&gt;(<span class="kw-2">&amp;</span>existing_map)<span class="question-mark">?</span>;
+            <span class="kw">let </span>new_keys = document_keys.remove(<span class="kw-2">&amp;</span>document_id).unwrap();
+            <span class="kw">for </span>key <span class="kw">in </span>existing_keys.difference(<span class="kw-2">&amp;</span>new_keys) {
+                all_keys.insert(key.clone().<span class="number">0</span>);
+                <span class="kw">let </span>key_documents = view_entries_to_clean
+                    .entry(key.clone().<span class="number">0</span>)
+                    .or_insert_with(HashSet::&lt;<span class="kw">_</span>, RandomState&gt;::default);
+                key_documents.insert(document_id.clone());
             }
         }
-        <span class="prelude-val">Ok</span>(<span class="ident">view_entries_to_clean</span>)
+        <span class="prelude-val">Ok</span>(view_entries_to_clean)
     }
 
-    <span class="kw">fn</span> <span class="ident">update_view_entries</span>(
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Serialized</span>,
-        <span class="ident">map_request</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
-        <span class="ident">view_entries</span>: <span class="kw-2">&amp;mut</span> <span class="ident">LockedTransactionTree</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Unversioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-        <span class="ident">all_keys</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">view_entries_to_clean</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-        <span class="ident">new_mappings</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">map::Serialized</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">updater</span> <span class="op">=</span> <span class="ident">ViewEntryUpdater</span> {
-            <span class="ident">view</span>,
-            <span class="ident">map_request</span>,
-            <span class="ident">view_entries_to_clean</span>,
-            <span class="ident">new_mappings</span>,
-            <span class="ident">result</span>: <span class="prelude-val">Ok</span>(()),
-            <span class="ident">has_reduce</span>: <span class="bool-val">true</span>,
+    <span class="kw">fn </span>update_view_entries(
+        view: <span class="kw-2">&amp;</span><span class="kw">dyn </span>Serialized,
+        map_request: <span class="kw-2">&amp;</span>Map,
+        view_entries: <span class="kw-2">&amp;mut </span>LockedTransactionTree&lt;<span class="lifetime">&#39;_</span>, Unversioned, AnyFile&gt;,
+        all_keys: BTreeSet&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+        view_entries_to_clean: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, HashSet&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;&gt;,
+        new_mappings: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, Vec&lt;map::Serialized&gt;&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>updater = ViewEntryUpdater {
+            view,
+            map_request,
+            view_entries_to_clean,
+            new_mappings,
+            result: <span class="prelude-val">Ok</span>(()),
+            has_reduce: <span class="bool-val">true</span>,
         };
-        <span class="ident">view_entries</span>
-            .<span class="ident">modify</span>(
-                <span class="ident">all_keys</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>(),
-                <span class="ident">Operation::CompareSwap</span>(<span class="ident">CompareSwap::new</span>(<span class="kw-2">&amp;mut</span> <span class="op">|</span><span class="ident">key</span>, <span class="ident">view_entries</span><span class="op">|</span> {
-                    <span class="ident">updater</span>.<span class="ident">compare_swap_view_entry</span>(<span class="ident">key</span>, <span class="ident">view_entries</span>)
+        view_entries
+            .modify(
+                all_keys.into_iter().collect(),
+                Operation::CompareSwap(CompareSwap::new(<span class="kw-2">&amp;mut </span>|key, view_entries| {
+                    updater.compare_swap_view_entry(key, view_entries)
                 })),
             )
-            .<span class="ident">map_err</span>(<span class="ident">Error::from</span>)
-            .<span class="ident">and</span>(<span class="ident">updater</span>.<span class="ident">result</span>)
+            .map_err(Error::from)
+            .and(updater.result)
     }
 
-    <span class="kw">fn</span> <span class="ident">save_mappings</span>(
-        <span class="ident">mapped_receiver</span>: <span class="kw-2">&amp;</span><span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Batch</span><span class="op">&gt;</span>,
-        <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Serialized</span>,
-        <span class="ident">map_request</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
-        <span class="ident">document_map</span>: <span class="kw-2">&amp;mut</span> <span class="ident">LockedTransactionTree</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Unversioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-        <span class="ident">view_entries</span>: <span class="kw-2">&amp;mut</span> <span class="ident">LockedTransactionTree</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Unversioned</span>, <span class="ident">AnyFile</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">Batch</span> {
-            <span class="ident">document_ids</span>,
-            <span class="ident">document_maps</span>,
-            <span class="ident">document_keys</span>,
-            <span class="ident">new_mappings</span>,
-            <span class="kw-2">mut</span> <span class="ident">all_keys</span>,
-        }) <span class="op">=</span> <span class="ident">mapped_receiver</span>.<span class="ident">recv</span>()
+    <span class="kw">fn </span>save_mappings(
+        mapped_receiver: <span class="kw-2">&amp;</span>flume::Receiver&lt;Batch&gt;,
+        view: <span class="kw-2">&amp;</span><span class="kw">dyn </span>Serialized,
+        map_request: <span class="kw-2">&amp;</span>Map,
+        document_map: <span class="kw-2">&amp;mut </span>LockedTransactionTree&lt;<span class="lifetime">&#39;_</span>, Unversioned, AnyFile&gt;,
+        view_entries: <span class="kw-2">&amp;mut </span>LockedTransactionTree&lt;<span class="lifetime">&#39;_</span>, Unversioned, AnyFile&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">while let </span><span class="prelude-val">Ok</span>(Batch {
+            document_ids,
+            document_maps,
+            document_keys,
+            new_mappings,
+            <span class="kw-2">mut </span>all_keys,
+        }) = mapped_receiver.recv()
         {
-            <span class="kw">let</span> <span class="ident">view_entries_to_clean</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::update_document_map</span>(
-                <span class="ident">document_ids</span>,
-                <span class="ident">document_map</span>,
-                <span class="kw-2">&amp;</span><span class="ident">document_maps</span>,
-                <span class="ident">document_keys</span>,
-                <span class="kw-2">&amp;mut</span> <span class="ident">all_keys</span>,
+            <span class="kw">let </span>view_entries_to_clean = <span class="self">Self</span>::update_document_map(
+                document_ids,
+                document_map,
+                <span class="kw-2">&amp;</span>document_maps,
+                document_keys,
+                <span class="kw-2">&amp;mut </span>all_keys,
             )<span class="question-mark">?</span>;
 
-            <span class="ident"><span class="self">Self</span>::update_view_entries</span>(
-                <span class="ident">view</span>,
-                <span class="ident">map_request</span>,
-                <span class="ident">view_entries</span>,
-                <span class="ident">all_keys</span>,
-                <span class="ident">view_entries_to_clean</span>,
-                <span class="ident">new_mappings</span>,
+            <span class="self">Self</span>::update_view_entries(
+                view,
+                map_request,
+                view_entries,
+                all_keys,
+                view_entries_to_clean,
+                new_mappings,
             )<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">batch_sender</span>, <span class="ident">batch_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
-        <span class="kw">let</span> (<span class="ident">mapped_sender</span>, <span class="ident">mapped_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
+    <span class="kw">pub fn </span>map(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>(batch_sender, batch_receiver) = flume::bounded(<span class="number">1</span>);
+        <span class="kw">let </span>(mapped_sender, mapped_receiver) = flume::bounded(<span class="number">1</span>);
 
-        <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">Parallel::new</span>()
-            .<span class="ident">add</span>(<span class="op">|</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::generate_batches</span>(<span class="ident">batch_sender</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">document_ids</span>, <span class="self">self</span>.<span class="ident">documents</span>))
-            .<span class="ident">add</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="ident"><span class="self">Self</span>::map_batches</span>(
-                    <span class="kw-2">&amp;</span><span class="ident">batch_receiver</span>,
-                    <span class="ident">mapped_sender</span>,
-                    <span class="self">self</span>.<span class="ident">view</span>,
-                    <span class="self">self</span>.<span class="ident">database</span>.<span class="ident">storage</span>().<span class="ident">parallelization</span>(),
+        <span class="kw">for </span>result <span class="kw">in </span>Parallel::new()
+            .add(|| <span class="self">Self</span>::generate_batches(batch_sender, <span class="kw-2">&amp;</span><span class="self">self</span>.document_ids, <span class="self">self</span>.documents))
+            .add(|| {
+                <span class="self">Self</span>::map_batches(
+                    <span class="kw-2">&amp;</span>batch_receiver,
+                    mapped_sender,
+                    <span class="self">self</span>.view,
+                    <span class="self">self</span>.database.storage().parallelization(),
                 )
             })
-            .<span class="ident">add</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">document_map</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">document_map</span>.<span class="ident">lock</span>();
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">view_entries</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">view_entries</span>.<span class="ident">lock</span>();
-                <span class="ident"><span class="self">Self</span>::save_mappings</span>(
-                    <span class="kw-2">&amp;</span><span class="ident">mapped_receiver</span>,
-                    <span class="self">self</span>.<span class="ident">view</span>,
-                    <span class="self">self</span>.<span class="ident">map_request</span>,
-                    <span class="kw-2">&amp;mut</span> <span class="ident">document_map</span>,
-                    <span class="kw-2">&amp;mut</span> <span class="ident">view_entries</span>,
+            .add(|| {
+                <span class="kw">let </span><span class="kw-2">mut </span>document_map = <span class="self">self</span>.document_map.lock();
+                <span class="kw">let </span><span class="kw-2">mut </span>view_entries = <span class="self">self</span>.view_entries.lock();
+                <span class="self">Self</span>::save_mappings(
+                    <span class="kw-2">&amp;</span>mapped_receiver,
+                    <span class="self">self</span>.view,
+                    <span class="self">self</span>.map_request,
+                    <span class="kw-2">&amp;mut </span>document_map,
+                    <span class="kw-2">&amp;mut </span>view_entries,
                 )
             })
-            .<span class="ident">run</span>()
+            .run()
         {
-            <span class="ident">result</span><span class="question-mark">?</span>;
+            result<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Batch</span> {
-    <span class="ident">document_ids</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">document_maps</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">document_keys</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">OwnedBytes</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">new_mappings</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">map::Serialized</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">all_keys</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Default)]
+</span><span class="kw">struct </span>Batch {
+    document_ids: Vec&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+    document_maps: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+    document_keys: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, HashSet&lt;OwnedBytes&gt;&gt;,
+    new_mappings: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, Vec&lt;map::Serialized&gt;&gt;,
+    all_keys: BTreeSet&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">Keyed</span><span class="op">&lt;</span><span class="ident">Task</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Mapper</span> {
-    <span class="kw">fn</span> <span class="ident">key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Task</span> {
-        <span class="ident">Task::ViewMap</span>(<span class="self">self</span>.<span class="ident">map</span>.<span class="ident">clone</span>())
+<span class="kw">impl </span>Keyed&lt;Task&gt; <span class="kw">for </span>Mapper {
+    <span class="kw">fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Task {
+        Task::ViewMap(<span class="self">self</span>.map.clone())
     }
 }
 
-<span class="kw">struct</span> <span class="ident">ViewEntryUpdater</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw">dyn</span> <span class="ident">Serialized</span>,
-    <span class="ident">map_request</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Map</span>,
-    <span class="ident">view_entries_to_clean</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">new_mappings</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">map::Serialized</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">result</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">has_reduce</span>: <span class="ident">bool</span>,
+<span class="kw">struct </span>ViewEntryUpdater&lt;<span class="lifetime">&#39;a</span>&gt; {
+    view: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw">dyn </span>Serialized,
+    map_request: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Map,
+    view_entries_to_clean: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, HashSet&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;&gt;,
+    new_mappings: BTreeMap&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;, Vec&lt;map::Serialized&gt;&gt;,
+    result: <span class="prelude-ty">Result</span>&lt;(), Error&gt;,
+    has_reduce: bool,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ViewEntryUpdater</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">compare_swap_view_entry</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-        <span class="ident">view_entries</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">KeyOperation</span><span class="op">&lt;</span><span class="ident">ArcBytes</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">view_entry</span> <span class="op">=</span> <span class="ident">view_entries</span>
-            .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">view_entries</span><span class="op">|</span> <span class="ident">bincode::deserialize</span>::<span class="op">&lt;</span><span class="ident">ViewEntry</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">view_entries</span>).<span class="ident">ok</span>())
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ViewEntry</span> {
-                <span class="ident">key</span>: <span class="ident">Bytes::from</span>(<span class="ident">key</span>.<span class="ident">to_vec</span>()),
-                <span class="ident">view_version</span>: <span class="self">self</span>.<span class="ident">view</span>.<span class="ident">version</span>(),
-                <span class="ident">mappings</span>: <span class="macro">vec!</span>[],
-                <span class="ident">reduced_value</span>: <span class="ident">Bytes::default</span>(),
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ViewEntryUpdater&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>compare_swap_view_entry(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        key: <span class="kw-2">&amp;</span>ArcBytes&lt;<span class="lifetime">&#39;_</span>&gt;,
+        view_entries: <span class="prelude-ty">Option</span>&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt;,
+    ) -&gt; KeyOperation&lt;ArcBytes&lt;<span class="lifetime">&#39;static</span>&gt;&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>view_entry = view_entries
+            .and_then(|view_entries| bincode::deserialize::&lt;ViewEntry&gt;(<span class="kw-2">&amp;</span>view_entries).ok())
+            .unwrap_or_else(|| ViewEntry {
+                key: Bytes::from(key.to_vec()),
+                view_version: <span class="self">self</span>.view.version(),
+                mappings: <span class="macro">vec!</span>[],
+                reduced_value: Bytes::default(),
             });
-        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">to_owned</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">document_ids</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">view_entries_to_clean</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>) {
-            <span class="ident">view_entry</span>
-                .<span class="ident">mappings</span>
-                .<span class="ident">retain</span>(<span class="op">|</span><span class="ident">m</span><span class="op">|</span> <span class="op">!</span><span class="ident">document_ids</span>.<span class="ident">contains</span>(<span class="ident">m</span>.<span class="ident">source</span>.<span class="ident">id</span>.<span class="ident">as_ref</span>()));
+        <span class="kw">let </span>key = key.to_owned();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(document_ids) = <span class="self">self</span>.view_entries_to_clean.remove(<span class="kw-2">&amp;</span>key) {
+            view_entry
+                .mappings
+                .retain(|m| !document_ids.contains(m.source.id.as_ref()));
 
-            <span class="kw">if</span> <span class="ident">view_entry</span>.<span class="ident">mappings</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">new_mappings</span>.<span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>[..]) {
-                <span class="kw">return</span> <span class="ident">KeyOperation::Remove</span>;
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">has_reduce</span> {
-                <span class="kw">let</span> <span class="ident">mappings</span> <span class="op">=</span> <span class="ident">view_entry</span>
-                    .<span class="ident">mappings</span>
-                    .<span class="ident">iter</span>()
-                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">m</span><span class="op">|</span> (<span class="kw-2">&amp;</span><span class="ident">key</span>[..], <span class="ident">m</span>.<span class="ident">value</span>.<span class="ident">as_slice</span>()))
-                    .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            <span class="kw">if </span>view_entry.mappings.is_empty() &amp;&amp; !<span class="self">self</span>.new_mappings.contains_key(<span class="kw-2">&amp;</span>key[..]) {
+                <span class="kw">return </span>KeyOperation::Remove;
+            } <span class="kw">else if </span><span class="self">self</span>.has_reduce {
+                <span class="kw">let </span>mappings = view_entry
+                    .mappings
+                    .iter()
+                    .map(|m| (<span class="kw-2">&amp;</span>key[..], m.value.as_slice()))
+                    .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-                <span class="kw">match</span> <span class="self">self</span>.<span class="ident">view</span>.<span class="ident">reduce</span>(<span class="kw-2">&amp;</span><span class="ident">mappings</span>, <span class="bool-val">false</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">reduced</span>) =&gt; {
-                        <span class="ident">view_entry</span>.<span class="ident">reduced_value</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="ident">reduced</span>);
+                <span class="kw">match </span><span class="self">self</span>.view.reduce(<span class="kw-2">&amp;</span>mappings, <span class="bool-val">false</span>) {
+                    <span class="prelude-val">Ok</span>(reduced) =&gt; {
+                        view_entry.reduced_value = Bytes::from(reduced);
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">view::Error::Core</span>(<span class="ident">bonsaidb_core::Error::ReduceUnimplemented</span>)) =&gt; {
-                        <span class="self">self</span>.<span class="ident">has_reduce</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                    <span class="prelude-val">Err</span>(view::Error::Core(bonsaidb_core::Error::ReduceUnimplemented)) =&gt; {
+                        <span class="self">self</span>.has_reduce = <span class="bool-val">false</span>;
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">other</span>) =&gt; {
-                        <span class="self">self</span>.<span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">Err</span>(<span class="ident">Error::from</span>(<span class="ident">other</span>));
-                        <span class="kw">return</span> <span class="ident">KeyOperation::Skip</span>;
+                    <span class="prelude-val">Err</span>(other) =&gt; {
+                        <span class="self">self</span>.result = <span class="prelude-val">Err</span>(Error::from(other));
+                        <span class="kw">return </span>KeyOperation::Skip;
                     }
                 }
             }
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">new_mappings</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">new_mappings</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>[..]) {
-            <span class="kw">for</span> <span class="ident">map::Serialized</span> { <span class="ident">source</span>, <span class="ident">value</span>, .. } <span class="kw">in</span> <span class="ident">new_mappings</span> {
-                <span class="comment">// Before altering any data, verify that the key is unique if this is a unique view.</span>
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">view</span>.<span class="ident">unique</span>()
-                    <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">view_entry</span>.<span class="ident">mappings</span>.<span class="ident">is_empty</span>()
-                    <span class="op">&amp;&amp;</span> <span class="ident">view_entry</span>.<span class="ident">mappings</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">id</span> <span class="op">!</span><span class="op">=</span> <span class="ident">source</span>.<span class="ident">id</span>
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(new_mappings) = <span class="self">self</span>.new_mappings.remove(<span class="kw-2">&amp;</span>key[..]) {
+            <span class="kw">for </span>map::Serialized { source, value, .. } <span class="kw">in </span>new_mappings {
+                <span class="comment">// Before altering any data, verify that the key is unique if this is a unique view.
+                </span><span class="kw">if </span><span class="self">self</span>.view.unique()
+                    &amp;&amp; !view_entry.mappings.is_empty()
+                    &amp;&amp; view_entry.mappings[<span class="number">0</span>].source.id != source.id
                 {
-                    <span class="self">self</span>.<span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::UniqueKeyViolation</span> {
-                        <span class="ident">view</span>: <span class="self">self</span>.<span class="ident">map_request</span>.<span class="ident">view_name</span>.<span class="ident">clone</span>(),
-                        <span class="ident">conflicting_document</span>: <span class="ident">Box::new</span>(<span class="ident">source</span>),
-                        <span class="ident">existing_document</span>: <span class="ident">Box::new</span>(<span class="ident">view_entry</span>.<span class="ident">mappings</span>[<span class="number">0</span>].<span class="ident">source</span>.<span class="ident">clone</span>()),
+                    <span class="self">self</span>.result = <span class="prelude-val">Err</span>(Error::Core(bonsaidb_core::Error::UniqueKeyViolation {
+                        view: <span class="self">self</span>.map_request.view_name.clone(),
+                        conflicting_document: Box::new(source),
+                        existing_document: Box::new(view_entry.mappings[<span class="number">0</span>].source.clone()),
                     }));
-                    <span class="kw">return</span> <span class="ident">KeyOperation::Skip</span>;
+                    <span class="kw">return </span>KeyOperation::Skip;
                 }
-                <span class="kw">let</span> <span class="ident">entry_mapping</span> <span class="op">=</span> <span class="ident">EntryMapping</span> { <span class="ident">source</span>, <span class="ident">value</span> };
+                <span class="kw">let </span>entry_mapping = EntryMapping { source, value };
 
-                <span class="comment">// attempt to update an existing</span>
-                <span class="comment">// entry for this document, if</span>
-                <span class="comment">// present</span>
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found</span> <span class="op">=</span> <span class="bool-val">false</span>;
-                <span class="kw">for</span> <span class="ident">mapping</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">view_entry</span>.<span class="ident">mappings</span> {
-                    <span class="kw">if</span> <span class="ident">mapping</span>.<span class="ident">source</span>.<span class="ident">id</span> <span class="op">==</span> <span class="ident">entry_mapping</span>.<span class="ident">source</span>.<span class="ident">id</span> {
-                        <span class="ident">found</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                        <span class="ident">mapping</span>.<span class="ident">source</span>.<span class="ident">revision</span> <span class="op">=</span> <span class="ident">entry_mapping</span>.<span class="ident">source</span>.<span class="ident">revision</span>;
-                        <span class="ident">mapping</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">entry_mapping</span>.<span class="ident">value</span>.<span class="ident">clone</span>();
+                <span class="comment">// attempt to update an existing
+                // entry for this document, if
+                // present
+                </span><span class="kw">let </span><span class="kw-2">mut </span>found = <span class="bool-val">false</span>;
+                <span class="kw">for </span>mapping <span class="kw">in </span><span class="kw-2">&amp;mut </span>view_entry.mappings {
+                    <span class="kw">if </span>mapping.source.id == entry_mapping.source.id {
+                        found = <span class="bool-val">true</span>;
+                        mapping.source.revision = entry_mapping.source.revision;
+                        mapping.value = entry_mapping.value.clone();
                         <span class="kw">break</span>;
                     }
                 }
 
-                <span class="comment">// If an existing mapping wasn&#39;t</span>
-                <span class="comment">// found, add it</span>
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">found</span> {
-                    <span class="ident">view_entry</span>.<span class="ident">mappings</span>.<span class="ident">push</span>(<span class="ident">entry_mapping</span>);
+                <span class="comment">// If an existing mapping wasn&#39;t
+                // found, add it
+                </span><span class="kw">if </span>!found {
+                    view_entry.mappings.push(entry_mapping);
                 }
             }
 
-            <span class="comment">// There was a choice to be made here of whether to call</span>
-            <span class="comment">// reduce()  with all of the existing values, or call it with</span>
-            <span class="comment">// rereduce=true passing only the new value and the old stored</span>
-            <span class="comment">// value. In this implementation, it&#39;s technically less</span>
-            <span class="comment">// efficient, but we can guarantee that every value has only</span>
-            <span class="comment">// been reduced once, and potentially re-reduced a single-time.</span>
-            <span class="comment">// If we constantly try to update the value to optimize the size</span>
-            <span class="comment">// of `mappings`, the fear is that the value computed may lose</span>
-            <span class="comment">// precision in some contexts over time. Thus, the decision was</span>
-            <span class="comment">// made to always call reduce() with all the mappings within a</span>
-            <span class="comment">// single ViewEntry.</span>
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">has_reduce</span> {
-                <span class="kw">let</span> <span class="ident">mappings</span> <span class="op">=</span> <span class="ident">view_entry</span>
-                    .<span class="ident">mappings</span>
-                    .<span class="ident">iter</span>()
-                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">m</span><span class="op">|</span> (<span class="ident">key</span>.<span class="ident">as_slice</span>(), <span class="ident">m</span>.<span class="ident">value</span>.<span class="ident">as_slice</span>()))
-                    .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            <span class="comment">// There was a choice to be made here of whether to call
+            // reduce()  with all of the existing values, or call it with
+            // rereduce=true passing only the new value and the old stored
+            // value. In this implementation, it&#39;s technically less
+            // efficient, but we can guarantee that every value has only
+            // been reduced once, and potentially re-reduced a single-time.
+            // If we constantly try to update the value to optimize the size
+            // of `mappings`, the fear is that the value computed may lose
+            // precision in some contexts over time. Thus, the decision was
+            // made to always call reduce() with all the mappings within a
+            // single ViewEntry.
+            </span><span class="kw">if </span><span class="self">self</span>.has_reduce {
+                <span class="kw">let </span>mappings = view_entry
+                    .mappings
+                    .iter()
+                    .map(|m| (key.as_slice(), m.value.as_slice()))
+                    .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-                <span class="kw">match</span> <span class="self">self</span>.<span class="ident">view</span>.<span class="ident">reduce</span>(<span class="kw-2">&amp;</span><span class="ident">mappings</span>, <span class="bool-val">false</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">reduced</span>) =&gt; {
-                        <span class="ident">view_entry</span>.<span class="ident">reduced_value</span> <span class="op">=</span> <span class="ident">Bytes::from</span>(<span class="ident">reduced</span>);
+                <span class="kw">match </span><span class="self">self</span>.view.reduce(<span class="kw-2">&amp;</span>mappings, <span class="bool-val">false</span>) {
+                    <span class="prelude-val">Ok</span>(reduced) =&gt; {
+                        view_entry.reduced_value = Bytes::from(reduced);
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">view::Error::Core</span>(<span class="ident">bonsaidb_core::Error::ReduceUnimplemented</span>)) =&gt; {
-                        <span class="self">self</span>.<span class="ident">has_reduce</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                    <span class="prelude-val">Err</span>(view::Error::Core(bonsaidb_core::Error::ReduceUnimplemented)) =&gt; {
+                        <span class="self">self</span>.has_reduce = <span class="bool-val">false</span>;
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">other</span>) =&gt; {
-                        <span class="self">self</span>.<span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">Err</span>(<span class="ident">Error::from</span>(<span class="ident">other</span>));
-                        <span class="kw">return</span> <span class="ident">KeyOperation::Skip</span>;
+                    <span class="prelude-val">Err</span>(other) =&gt; {
+                        <span class="self">self</span>.result = <span class="prelude-val">Err</span>(Error::from(other));
+                        <span class="kw">return </span>KeyOperation::Skip;
                     }
                 }
             }
         }
 
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">bincode::serialize</span>(<span class="kw-2">&amp;</span><span class="ident">view_entry</span>).<span class="ident">unwrap</span>();
-        <span class="ident">KeyOperation::Set</span>(<span class="ident">ArcBytes::from</span>(<span class="ident">value</span>))
+        <span class="kw">let </span>value = bincode::serialize(<span class="kw-2">&amp;</span>view_entry).unwrap();
+        KeyOperation::Set(ArcBytes::from(value))
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

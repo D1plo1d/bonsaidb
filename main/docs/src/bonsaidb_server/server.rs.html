@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/server.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>server.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_server/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-server/src/server.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>server.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_server/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -972,418 +966,424 @@
 <span id="966">966</span>
 <span id="967">967</span>
 <span id="968">968</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">collections</span>::{<span class="ident">hash_map</span>, <span class="ident">HashMap</span>},
-    <span class="ident">fmt::Debug</span>,
-    <span class="ident">net::SocketAddr</span>,
-    <span class="ident">ops::Deref</span>,
-    <span class="ident">path::PathBuf</span>,
-    <span class="ident">sync</span>::{
-        <span class="ident">atomic</span>::{<span class="ident">AtomicU32</span>, <span class="ident">AtomicUsize</span>, <span class="ident">Ordering</span>},
-        <span class="ident">Arc</span>,
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    collections::{hash_map, HashMap},
+    fmt::Debug,
+    net::SocketAddr,
+    ops::Deref,
+    path::PathBuf,
+    sync::{
+        atomic::{AtomicU32, AtomicUsize, Ordering},
+        Arc,
     },
-    <span class="ident">time::Duration</span>,
+    time::Duration,
 };
 
-<span class="kw">use</span> <span class="ident">async_lock</span>::{<span class="ident">Mutex</span>, <span class="ident">RwLock</span>};
-<span class="kw">use</span> <span class="ident">async_trait::async_trait</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">admin</span>::{<span class="ident">Admin</span>, <span class="ident">ADMIN_DATABASE_NAME</span>},
-    <span class="ident">api</span>,
-    <span class="ident">api::ApiName</span>,
-    <span class="ident">arc_bytes::serde::Bytes</span>,
-    <span class="ident">connection</span>::{
-        <span class="self">self</span>, <span class="ident">AsyncConnection</span>, <span class="ident">AsyncStorageConnection</span>, <span class="ident">HasSession</span>, <span class="ident">IdentityReference</span>, <span class="ident">Session</span>,
-        <span class="ident">SessionId</span>,
+<span class="kw">use </span>async_lock::{Mutex, RwLock};
+<span class="kw">use </span>async_trait::async_trait;
+<span class="kw">use </span>bonsaidb_core::{
+    admin::{Admin, ADMIN_DATABASE_NAME},
+    api,
+    api::ApiName,
+    arc_bytes::serde::Bytes,
+    connection::{
+        <span class="self">self</span>, AsyncConnection, AsyncStorageConnection, HasSession, IdentityReference, Session,
+        SessionId,
     },
-    <span class="ident">networking</span>::{<span class="self">self</span>, <span class="ident">Payload</span>, <span class="ident">CURRENT_PROTOCOL_VERSION</span>},
-    <span class="ident">permissions</span>::{
-        <span class="ident">bonsai</span>::{<span class="ident">bonsaidb_resource_name</span>, <span class="ident">BonsaiAction</span>, <span class="ident">ServerAction</span>},
-        <span class="ident">Permissions</span>,
+    networking::{<span class="self">self</span>, Payload, CURRENT_PROTOCOL_VERSION},
+    permissions::{
+        bonsai::{bonsaidb_resource_name, BonsaiAction, ServerAction},
+        Permissions,
     },
-    <span class="ident">schema</span>::{<span class="self">self</span>, <span class="ident">Nameable</span>, <span class="ident">NamedCollection</span>, <span class="ident">Schema</span>},
+    schema::{<span class="self">self</span>, Nameable, NamedCollection, Schema},
 };
-<span class="kw">use</span> <span class="ident">bonsaidb_local</span>::{<span class="ident">config::Builder</span>, <span class="ident">AsyncStorage</span>, <span class="ident">Storage</span>, <span class="ident">StorageNonBlocking</span>};
-<span class="kw">use</span> <span class="ident">bonsaidb_utils</span>::{<span class="ident">fast_async_lock</span>, <span class="ident">fast_async_read</span>, <span class="ident">fast_async_write</span>};
-<span class="kw">use</span> <span class="ident">derive_where::derive_where</span>;
-<span class="kw">use</span> <span class="ident">fabruic</span>::{<span class="self">self</span>, <span class="ident">CertificateChain</span>, <span class="ident">Endpoint</span>, <span class="ident">KeyPair</span>, <span class="ident">PrivateKey</span>};
-<span class="kw">use</span> <span class="ident">flume::Sender</span>;
-<span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Future</span>, <span class="ident">StreamExt</span>};
-<span class="kw">use</span> <span class="ident">rustls::sign::CertifiedKey</span>;
-<span class="kw">use</span> <span class="ident">schema::SchemaName</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
-<span class="kw">use</span> <span class="ident">signal_hook::consts::SIGQUIT</span>;
-<span class="kw">use</span> <span class="ident">signal_hook::consts</span>::{<span class="ident">SIGINT</span>, <span class="ident">SIGTERM</span>};
-<span class="kw">use</span> <span class="ident">tokio::sync</span>::{<span class="ident">oneshot</span>, <span class="ident">Notify</span>};
+<span class="kw">use </span>bonsaidb_local::{config::Builder, AsyncStorage, Storage, StorageNonBlocking};
+<span class="kw">use </span>bonsaidb_utils::{fast_async_lock, fast_async_read, fast_async_write};
+<span class="kw">use </span>derive_where::derive_where;
+<span class="kw">use </span>fabruic::{<span class="self">self</span>, CertificateChain, Endpoint, KeyPair, PrivateKey};
+<span class="kw">use </span>flume::Sender;
+<span class="kw">use </span>futures::{Future, StreamExt};
+<span class="kw">use </span>rustls::sign::CertifiedKey;
+<span class="kw">use </span>schema::SchemaName;
+<span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">use </span>signal_hook::consts::SIGQUIT;
+<span class="kw">use </span>signal_hook::consts::{SIGINT, SIGTERM};
+<span class="kw">use </span>tokio::sync::{oneshot, Notify};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config::AcmeConfiguration</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">api</span>::{<span class="ident">AnyHandler</span>, <span class="ident">HandlerSession</span>},
-    <span class="ident">backend::ConnectionHandling</span>,
-    <span class="ident">dispatch</span>::{<span class="ident">register_api_handlers</span>, <span class="ident">ServerDispatcher</span>},
-    <span class="ident">error::Error</span>,
-    <span class="ident">hosted</span>::{<span class="ident">Hosted</span>, <span class="ident">SerializablePrivateKey</span>, <span class="ident">TlsCertificate</span>, <span class="ident">TlsCertificatesByDomain</span>},
-    <span class="ident">server::shutdown</span>::{<span class="ident">Shutdown</span>, <span class="ident">ShutdownState</span>},
-    <span class="ident">Backend</span>, <span class="ident">BackendError</span>, <span class="ident">NoBackend</span>, <span class="ident">ServerConfiguration</span>,
-};
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">acme</span>;
-<span class="kw">mod</span> <span class="ident">connected_client</span>;
-<span class="kw">mod</span> <span class="ident">database</span>;
-
-<span class="kw">mod</span> <span class="ident">shutdown</span>;
-<span class="kw">mod</span> <span class="ident">tcp</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;websockets&quot;</span>)]</span>
-<span class="kw">mod</span> <span class="ident">websockets</span>;
-
-<span class="kw">use</span> <span class="ident"><span class="self">self</span>::connected_client::OwnedClient</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
-    <span class="ident">connected_client</span>::{<span class="ident">ConnectedClient</span>, <span class="ident">LockedClientDataGuard</span>, <span class="ident">Transport</span>},
-    <span class="ident">database::ServerDatabase</span>,
-    <span class="ident">tcp</span>::{<span class="ident">ApplicationProtocols</span>, <span class="ident">HttpService</span>, <span class="ident">Peer</span>, <span class="ident">StandardTcpProtocols</span>, <span class="ident">TcpService</span>},
+<span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::config::AcmeConfiguration;
+<span class="kw">use crate</span>::{
+    api::{AnyHandler, HandlerSession},
+    backend::ConnectionHandling,
+    dispatch::{register_api_handlers, ServerDispatcher},
+    error::Error,
+    hosted::{Hosted, SerializablePrivateKey, TlsCertificate, TlsCertificatesByDomain},
+    server::shutdown::{Shutdown, ShutdownState},
+    Backend, BackendError, NoBackend, ServerConfiguration,
 };
 
-<span class="kw">static</span> <span class="ident">CONNECTED_CLIENT_ID_COUNTER</span>: <span class="ident">AtomicU32</span> <span class="op">=</span> <span class="ident">AtomicU32::new</span>(<span class="number">0</span>);
+<span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+</span><span class="kw">pub mod </span>acme;
+<span class="kw">mod </span>connected_client;
+<span class="kw">mod </span>database;
 
-<span class="doccomment">/// A BonsaiDb server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">derive_where</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
-    <span class="ident">data</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Data</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">storage</span>: <span class="ident">AsyncStorage</span>,
+<span class="kw">mod </span>shutdown;
+<span class="kw">mod </span>tcp;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;websockets&quot;</span>)]
+</span><span class="kw">mod </span>websockets;
+
+<span class="kw">use </span><span class="self">self</span>::connected_client::OwnedClient;
+<span class="kw">pub use </span><span class="self">self</span>::{
+    connected_client::{ConnectedClient, LockedClientDataGuard, Transport},
+    database::ServerDatabase,
+    tcp::{ApplicationProtocols, HttpService, Peer, StandardTcpProtocols, TcpService},
+};
+
+<span class="kw">static </span>CONNECTED_CLIENT_ID_COUNTER: AtomicU32 = AtomicU32::new(<span class="number">0</span>);
+
+<span class="doccomment">/// A BonsaiDb server.
+</span><span class="attribute">#[derive(Debug)]
+#[derive_where(Clone)]
+</span><span class="kw">pub struct </span>CustomServer&lt;B: Backend = NoBackend&gt; {
+    data: Arc&lt;Data&lt;B&gt;&gt;,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) storage: AsyncStorage,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Storage</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">server</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">server</span>.<span class="ident">storage</span>.<span class="ident">clone</span>())
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, B: Backend&gt; From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>CustomServer&lt;B&gt;&gt; <span class="kw">for </span>Storage {
+    <span class="kw">fn </span>from(server: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>CustomServer&lt;B&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(server.storage.clone())
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Storage</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">server</span>: <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">server</span>.<span class="ident">storage</span>)
+<span class="kw">impl</span>&lt;B: Backend&gt; From&lt;CustomServer&lt;B&gt;&gt; <span class="kw">for </span>Storage {
+    <span class="kw">fn </span>from(server: CustomServer&lt;B&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(server.storage)
     }
 }
 
-<span class="doccomment">/// A BonsaiDb server without a custom backend.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Server</span> <span class="op">=</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">NoBackend</span><span class="op">&gt;</span>;
+<span class="doccomment">/// A BonsaiDb server without a custom backend.
+</span><span class="kw">pub type </span>Server = CustomServer&lt;NoBackend&gt;;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Data</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">NoBackend</span><span class="op">&gt;</span> {
-    <span class="ident">clients</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">request_processor</span>: <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">ClientRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">default_session</span>: <span class="ident">Session</span>,
-    <span class="ident">endpoint</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Endpoint</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">client_simultaneous_request_limit</span>: <span class="ident">usize</span>,
-    <span class="ident">primary_tls_key</span>: <span class="ident">CachedCertifiedKey</span>,
-    <span class="ident">primary_domain</span>: <span class="ident">String</span>,
-    <span class="ident">custom_apis</span>: <span class="ident">parking_lot::RwLock</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyHandler</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-    <span class="ident">acme</span>: <span class="ident">AcmeConfiguration</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-    <span class="ident">alpn_keys</span>: <span class="ident">AlpnKeys</span>,
-    <span class="ident">shutdown</span>: <span class="ident">Shutdown</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>Data&lt;B: Backend = NoBackend&gt; {
+    backend: B,
+    clients: RwLock&lt;HashMap&lt;u32, ConnectedClient&lt;B&gt;&gt;&gt;,
+    request_processor: flume::Sender&lt;ClientRequest&lt;B&gt;&gt;,
+    default_session: Session,
+    endpoint: RwLock&lt;<span class="prelude-ty">Option</span>&lt;Endpoint&gt;&gt;,
+    client_simultaneous_request_limit: usize,
+    primary_tls_key: CachedCertifiedKey,
+    primary_domain: String,
+    custom_apis: parking_lot::RwLock&lt;HashMap&lt;ApiName, Arc&lt;<span class="kw">dyn </span>AnyHandler&lt;B&gt;&gt;&gt;&gt;,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+    </span>acme: AcmeConfiguration,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+    </span>alpn_keys: AlpnKeys,
+    shutdown: Shutdown,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">struct</span> <span class="ident">CachedCertifiedKey</span>(<span class="ident">parking_lot::Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">CertifiedKey</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="attribute">#[derive(Default)]
+</span><span class="kw">struct </span>CachedCertifiedKey(parking_lot::Mutex&lt;<span class="prelude-ty">Option</span>&lt;Arc&lt;CertifiedKey&gt;&gt;&gt;);
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">CachedCertifiedKey</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_tuple</span>(<span class="string">&quot;CachedCertifiedKey&quot;</span>).<span class="ident">finish</span>()
+<span class="kw">impl </span>Debug <span class="kw">for </span>CachedCertifiedKey {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_tuple(<span class="string">&quot;CachedCertifiedKey&quot;</span>).finish()
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">CachedCertifiedKey</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">parking_lot::Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">CertifiedKey</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+<span class="kw">impl </span>Deref <span class="kw">for </span>CachedCertifiedKey {
+    <span class="kw">type </span>Target = parking_lot::Mutex&lt;<span class="prelude-ty">Option</span>&lt;Arc&lt;CertifiedKey&gt;&gt;&gt;;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
-    }
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
+    </span>}
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Opens a server using `directory` for storage.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">open</span>(
-        <span class="ident">configuration</span>: <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">BackendError</span><span class="op">&lt;</span><span class="ident">B::Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">configuration</span> <span class="op">=</span> <span class="ident">register_api_handlers</span>(<span class="ident">B::configure</span>(<span class="ident">configuration</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> (<span class="ident">request_sender</span>, <span class="ident">request_receiver</span>) <span class="op">=</span> <span class="ident">flume::unbounded</span>::<span class="op">&lt;</span><span class="ident">ClientRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">configuration</span>.<span class="ident">request_workers</span> {
-            <span class="kw">let</span> <span class="ident">request_receiver</span> <span class="op">=</span> <span class="ident">request_receiver</span>.<span class="ident">clone</span>();
-            <span class="ident">tokio::task::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-                <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">client_request</span>) <span class="op">=</span> <span class="ident">request_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span> {
-                    <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">client_request</span>.<span class="ident">request</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
-                    <span class="kw">let</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">client_request</span>.<span class="ident">session</span>.<span class="ident">clone</span>();
-                    <span class="comment">// TODO we should be able to upgrade a session-less Storage to one with a Session.</span>
-                    <span class="comment">// The Session needs to be looked up from the client based on the request&#39;s session id.</span>
-                    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">client_request</span>.<span class="ident">server</span>.<span class="ident">storage</span>.<span class="ident">assume_session</span>(<span class="ident">session</span>) {
-                        <span class="prelude-val">Ok</span>(<span class="ident">storage</span>) =&gt; {
-                            <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">HandlerSession</span> {
-                                <span class="ident">server</span>: <span class="kw-2">&amp;</span><span class="ident">client_request</span>.<span class="ident">server</span>,
-                                <span class="ident">client</span>: <span class="kw-2">&amp;</span><span class="ident">client_request</span>.<span class="ident">client</span>,
-                                <span class="ident">as_client</span>: <span class="self">Self</span> {
-                                    <span class="ident">data</span>: <span class="ident">client_request</span>.<span class="ident">server</span>.<span class="ident">data</span>.<span class="ident">clone</span>(),
-                                    <span class="ident">storage</span>,
+<span class="kw">impl</span>&lt;B: Backend&gt; CustomServer&lt;B&gt; {
+    <span class="doccomment">/// Opens a server using `directory` for storage.
+    </span><span class="kw">pub async fn </span>open(
+        configuration: ServerConfiguration&lt;B&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, BackendError&lt;B::Error&gt;&gt; {
+        <span class="kw">let </span>configuration = register_api_handlers(B::configure(configuration)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>(request_sender, request_receiver) = flume::unbounded::&lt;ClientRequest&lt;B&gt;&gt;();
+        <span class="kw">for _ in </span><span class="number">0</span>..configuration.request_workers {
+            <span class="kw">let </span>request_receiver = request_receiver.clone();
+            tokio::task::spawn(<span class="kw">async move </span>{
+                <span class="kw">while let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>client_request) = request_receiver.recv_async().<span class="kw">await </span>{
+                    <span class="kw">let </span>request = client_request.request.take().unwrap();
+                    <span class="kw">let </span>session = client_request.session.clone();
+                    <span class="comment">// TODO we should be able to upgrade a session-less Storage to one with a Session.
+                    // The Session needs to be looked up from the client based on the request&#39;s session id.
+                    </span><span class="kw">let </span>result = <span class="kw">match </span>client_request.server.storage.assume_session(session) {
+                        <span class="prelude-val">Ok</span>(storage) =&gt; {
+                            <span class="kw">let </span>client = HandlerSession {
+                                server: <span class="kw-2">&amp;</span>client_request.server,
+                                client: <span class="kw-2">&amp;</span>client_request.client,
+                                as_client: <span class="self">Self </span>{
+                                    data: client_request.server.data.clone(),
+                                    storage,
                                 },
                             };
-                            <span class="ident">ServerDispatcher::dispatch_api_request</span>(
-                                <span class="ident">client</span>,
-                                <span class="kw-2">&amp;</span><span class="ident">request</span>.<span class="ident">name</span>,
-                                <span class="ident">request</span>.<span class="ident">value</span>.<span class="ident">unwrap</span>(),
+                            ServerDispatcher::dispatch_api_request(
+                                client,
+                                <span class="kw-2">&amp;</span>request.name,
+                                request.value.unwrap(),
                             )
-                            .<span class="kw">await</span>
-                            .<span class="ident">map_err</span>(<span class="ident">bonsaidb_core::Error::from</span>)
+                            .<span class="kw">await
+                            </span>.map_err(bonsaidb_core::Error::from)
                         }
-                        <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">err</span>),
+                        <span class="prelude-val">Err</span>(err) =&gt; <span class="prelude-val">Err</span>(err),
                     };
-                    <span class="ident">drop</span>(<span class="ident">client_request</span>.<span class="ident">result_sender</span>.<span class="ident">send</span>((<span class="ident">request</span>.<span class="ident">name</span>, <span class="ident">result</span>)));
+                    drop(client_request.result_sender.send((request.name, result)));
                 }
             });
         }
 
-        <span class="kw">let</span> <span class="ident">storage</span> <span class="op">=</span> <span class="ident">AsyncStorage::open</span>(<span class="ident">configuration</span>.<span class="ident">storage</span>.<span class="ident">with_schema</span>::<span class="op">&lt;</span><span class="ident">Hosted</span><span class="op">&gt;</span>()<span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>storage = AsyncStorage::open(configuration.storage.with_schema::&lt;Hosted&gt;()<span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="ident">storage</span>.<span class="ident">create_database</span>::<span class="op">&lt;</span><span class="ident">Hosted</span><span class="op">&gt;</span>(<span class="string">&quot;_hosted&quot;</span>, <span class="bool-val">true</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        storage.create_database::&lt;Hosted&gt;(<span class="string">&quot;_hosted&quot;</span>, <span class="bool-val">true</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">default_permissions</span> <span class="op">=</span> <span class="ident">Permissions::from</span>(<span class="ident">configuration</span>.<span class="ident">default_permissions</span>);
+        <span class="kw">let </span>default_permissions = Permissions::from(configuration.default_permissions);
 
-        <span class="kw">let</span> <span class="ident">server</span> <span class="op">=</span> <span class="self">Self</span> {
-            <span class="ident">storage</span>,
-            <span class="ident">data</span>: <span class="ident">Arc::new</span>(<span class="ident">Data</span> {
-                <span class="ident">clients</span>: <span class="ident">RwLock::default</span>(),
-                <span class="ident">endpoint</span>: <span class="ident">RwLock::default</span>(),
-                <span class="ident">request_processor</span>: <span class="ident">request_sender</span>,
-                <span class="ident">default_session</span>: <span class="ident">Session</span> {
-                    <span class="ident">permissions</span>: <span class="ident">default_permissions</span>,
-                    ..<span class="ident">Session::default</span>()
+        <span class="kw">let </span>server = <span class="self">Self </span>{
+            storage,
+            data: Arc::new(Data {
+                backend: configuration.backend,
+                clients: RwLock::default(),
+                endpoint: RwLock::default(),
+                request_processor: request_sender,
+                default_session: Session {
+                    permissions: default_permissions,
+                    ..Session::default()
                 },
-                <span class="ident">client_simultaneous_request_limit</span>: <span class="ident">configuration</span>.<span class="ident">client_simultaneous_request_limit</span>,
-                <span class="ident">primary_tls_key</span>: <span class="ident">CachedCertifiedKey::default</span>(),
-                <span class="ident">primary_domain</span>: <span class="ident">configuration</span>.<span class="ident">server_name</span>,
-                <span class="ident">custom_apis</span>: <span class="ident">parking_lot::RwLock::new</span>(<span class="ident">configuration</span>.<span class="ident">custom_apis</span>),
-                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-                <span class="ident">acme</span>: <span class="ident">configuration</span>.<span class="ident">acme</span>,
-                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;acme&quot;</span>)]</span>
-                <span class="ident">alpn_keys</span>: <span class="ident">AlpnKeys::default</span>(),
-                <span class="ident">shutdown</span>: <span class="ident">Shutdown::new</span>(),
+                client_simultaneous_request_limit: configuration.client_simultaneous_request_limit,
+                primary_tls_key: CachedCertifiedKey::default(),
+                primary_domain: configuration.server_name,
+                custom_apis: parking_lot::RwLock::new(configuration.custom_apis),
+                <span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+                </span>acme: configuration.acme,
+                <span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
+                </span>alpn_keys: AlpnKeys::default(),
+                shutdown: Shutdown::new(),
             }),
         };
-        <span class="ident">B::initialize</span>(<span class="kw-2">&amp;</span><span class="ident">server</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">server</span>)
+
+        server.data.backend.initialize(<span class="kw-2">&amp;</span>server).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(server)
     }
 
-    <span class="doccomment">/// Returns the path to the public pinned certificate, if this server has</span>
-    <span class="doccomment">/// one. Note: this function will always succeed, but the file may not</span>
-    <span class="doccomment">/// exist.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pinned_certificate_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PathBuf</span> {
-        <span class="self">self</span>.<span class="ident">path</span>().<span class="ident">join</span>(<span class="string">&quot;pinned-certificate.der&quot;</span>)
+    <span class="doccomment">/// Returns the path to the public pinned certificate, if this server has
+    /// one. Note: this function will always succeed, but the file may not
+    /// exist.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>pinned_certificate_path(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PathBuf {
+        <span class="self">self</span>.path().join(<span class="string">&quot;pinned-certificate.der&quot;</span>)
     }
 
-    <span class="doccomment">/// Returns the primary domain configured for this server.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">primary_domain</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>
+    <span class="doccomment">/// Returns the primary domain configured for this server.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>primary_domain(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.data.primary_domain
     }
 
-    <span class="doccomment">/// Returns the administration database.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">admin</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">admin</span>().<span class="kw">await</span>;
-        <span class="ident">ServerDatabase</span> {
-            <span class="ident">server</span>: <span class="self">self</span>.<span class="ident">clone</span>(),
-            <span class="ident">db</span>,
+    <span class="doccomment">/// Returns the administration database.
+    </span><span class="kw">pub async fn </span>admin(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ServerDatabase&lt;B&gt; {
+        <span class="kw">let </span>db = <span class="self">self</span>.storage.admin().<span class="kw">await</span>;
+        ServerDatabase {
+            server: <span class="self">self</span>.clone(),
+            db,
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">hosted</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">Hosted</span><span class="op">&gt;</span>(<span class="string">&quot;_hosted&quot;</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>();
-        <span class="ident">ServerDatabase</span> {
-            <span class="ident">server</span>: <span class="self">self</span>.<span class="ident">clone</span>(),
-            <span class="ident">db</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>hosted(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ServerDatabase&lt;B&gt; {
+        <span class="kw">let </span>db = <span class="self">self</span>.storage.database::&lt;Hosted&gt;(<span class="string">&quot;_hosted&quot;</span>).<span class="kw">await</span>.unwrap();
+        ServerDatabase {
+            server: <span class="self">self</span>.clone(),
+            db,
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">custom_api_dispatcher</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ApiName</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyHandler</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">dispatchers</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">custom_apis</span>.<span class="ident">read</span>();
-        <span class="ident">dispatchers</span>.<span class="ident">get</span>(<span class="ident">name</span>).<span class="ident">cloned</span>()
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>custom_api_dispatcher(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>ApiName) -&gt; <span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>AnyHandler&lt;B&gt;&gt;&gt; {
+        <span class="kw">let </span>dispatchers = <span class="self">self</span>.data.custom_apis.read();
+        dispatchers.get(name).cloned()
     }
 
-    <span class="doccomment">/// Installs an X.509 certificate used for general purpose connections.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">install_self_signed_certificate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">overwrite</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">keypair</span> <span class="op">=</span> <span class="ident">KeyPair::new_self_signed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>);
+    <span class="doccomment">/// Installs an X.509 certificate used for general purpose connections.
+    </span><span class="kw">pub async fn </span>install_self_signed_certificate(<span class="kw-2">&amp;</span><span class="self">self</span>, overwrite: bool) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>keypair = KeyPair::new_self_signed(<span class="kw-2">&amp;</span><span class="self">self</span>.data.primary_domain);
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">certificate_chain</span>().<span class="kw">await</span>.<span class="ident">is_ok</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">overwrite</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(<span class="string">&quot;bonsaidb-server config&quot;</span>, <span class="string">&quot;Certificate already installed. Enable overwrite if you wish to replace the existing certificate.&quot;</span>)));
+        <span class="kw">if </span><span class="self">self</span>.certificate_chain().<span class="kw">await</span>.is_ok() &amp;&amp; !overwrite {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::Core(bonsaidb_core::Error::other(<span class="string">&quot;bonsaidb-server config&quot;</span>, <span class="string">&quot;Certificate already installed. Enable overwrite if you wish to replace the existing certificate.&quot;</span>)));
         }
 
-        <span class="self">self</span>.<span class="ident">install_certificate</span>(<span class="ident">keypair</span>.<span class="ident">certificate_chain</span>(), <span class="ident">keypair</span>.<span class="ident">private_key</span>())
+        <span class="self">self</span>.install_certificate(keypair.certificate_chain(), keypair.private_key())
             .<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="ident">tokio::fs::write</span>(
-            <span class="self">self</span>.<span class="ident">pinned_certificate_path</span>(),
-            <span class="ident">keypair</span>.<span class="ident">end_entity_certificate</span>().<span class="ident">as_ref</span>(),
+        tokio::fs::write(
+            <span class="self">self</span>.pinned_certificate_path(),
+            keypair.end_entity_certificate().as_ref(),
         )
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Installs a certificate chain and private key used for TLS connections.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pem&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">install_pem_certificate</span>(
+    <span class="doccomment">/// Installs a certificate chain and private key used for TLS connections.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;pem&quot;</span>)]
+    </span><span class="kw">pub async fn </span>install_pem_certificate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">certificate_chain</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">private_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">private_key</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">pem::parse</span>(<span class="ident">private_key</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">pem</span>) =&gt; <span class="ident">PrivateKey::unchecked_from_der</span>(<span class="ident">pem</span>.<span class="ident">contents</span>),
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">PrivateKey::from_der</span>(<span class="ident">private_key</span>)<span class="question-mark">?</span>,
+        certificate_chain: <span class="kw-2">&amp;</span>[u8],
+        private_key: <span class="kw-2">&amp;</span>[u8],
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>private_key = <span class="kw">match </span>pem::parse(private_key) {
+            <span class="prelude-val">Ok</span>(pem) =&gt; PrivateKey::unchecked_from_der(pem.contents),
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; PrivateKey::from_der(private_key)<span class="question-mark">?</span>,
         };
-        <span class="kw">let</span> <span class="ident">certificates</span> <span class="op">=</span> <span class="ident">pem::parse_many</span>(<span class="kw-2">&amp;</span><span class="ident">certificate_chain</span>)<span class="question-mark">?</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">entry</span><span class="op">|</span> <span class="ident">fabruic::Certificate::unchecked_from_der</span>(<span class="ident">entry</span>.<span class="ident">contents</span>))
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+        <span class="kw">let </span>certificates = pem::parse_many(certificate_chain)<span class="question-mark">?
+            </span>.into_iter()
+            .map(|entry| fabruic::Certificate::unchecked_from_der(entry.contents))
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-        <span class="self">self</span>.<span class="ident">install_certificate</span>(
-            <span class="kw-2">&amp;</span><span class="ident">CertificateChain::unchecked_from_certificates</span>(<span class="ident">certificates</span>),
-            <span class="kw-2">&amp;</span><span class="ident">private_key</span>,
+        <span class="self">self</span>.install_certificate(
+            <span class="kw-2">&amp;</span>CertificateChain::unchecked_from_certificates(certificates),
+            <span class="kw-2">&amp;</span>private_key,
         )
-        .<span class="kw">await</span>
-    }
+        .<span class="kw">await
+    </span>}
 
-    <span class="doccomment">/// Installs a certificate chain and private key used for TLS connections.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">install_certificate</span>(
+    <span class="doccomment">/// Installs a certificate chain and private key used for TLS connections.
+    </span><span class="kw">pub async fn </span>install_certificate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">certificate_chain</span>: <span class="kw-2">&amp;</span><span class="ident">CertificateChain</span>,
-        <span class="ident">private_key</span>: <span class="kw-2">&amp;</span><span class="ident">PrivateKey</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hosted</span>().<span class="kw">await</span>;
+        certificate_chain: <span class="kw-2">&amp;</span>CertificateChain,
+        private_key: <span class="kw-2">&amp;</span>PrivateKey,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>db = <span class="self">self</span>.hosted().<span class="kw">await</span>;
 
-        <span class="ident">TlsCertificate::entry_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>, <span class="kw-2">&amp;</span><span class="ident">db</span>)
-            .<span class="ident">update_with</span>(<span class="op">|</span><span class="ident">cert</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TlsCertificate</span><span class="op">|</span> {
-                <span class="ident">cert</span>.<span class="ident">certificate_chain</span> <span class="op">=</span> <span class="ident">certificate_chain</span>.<span class="ident">clone</span>();
-                <span class="ident">cert</span>.<span class="ident">private_key</span> <span class="op">=</span> <span class="ident">SerializablePrivateKey</span>(<span class="ident">private_key</span>.<span class="ident">clone</span>());
+        TlsCertificate::entry_async(<span class="kw-2">&amp;</span><span class="self">self</span>.data.primary_domain, <span class="kw-2">&amp;</span>db)
+            .update_with(|cert: <span class="kw-2">&amp;mut </span>TlsCertificate| {
+                cert.certificate_chain = certificate_chain.clone();
+                cert.private_key = SerializablePrivateKey(private_key.clone());
             })
-            .<span class="ident">or_insert_with</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">TlsCertificate</span> {
-                <span class="ident">domains</span>: <span class="macro">vec!</span>[<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>.<span class="ident">clone</span>()],
-                <span class="ident">private_key</span>: <span class="ident">SerializablePrivateKey</span>(<span class="ident">private_key</span>.<span class="ident">clone</span>()),
-                <span class="ident">certificate_chain</span>: <span class="ident">certificate_chain</span>.<span class="ident">clone</span>(),
+            .or_insert_with(|| TlsCertificate {
+                domains: <span class="macro">vec!</span>[<span class="self">self</span>.data.primary_domain.clone()],
+                private_key: SerializablePrivateKey(private_key.clone()),
+                certificate_chain: certificate_chain.clone(),
             })
             .<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="self">self</span>.<span class="ident">refresh_certified_key</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="self">self</span>.refresh_certified_key().<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">pinned_certificate_path</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">pinned_certificate_path</span>();
-        <span class="kw">if</span> <span class="ident">pinned_certificate_path</span>.<span class="ident">exists</span>() {
-            <span class="ident">tokio::fs::remove_file</span>(<span class="kw-2">&amp;</span><span class="ident">pinned_certificate_path</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>pinned_certificate_path = <span class="self">self</span>.pinned_certificate_path();
+        <span class="kw">if </span>pinned_certificate_path.exists() {
+            tokio::fs::remove_file(<span class="kw-2">&amp;</span>pinned_certificate_path).<span class="kw">await</span><span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">refresh_certified_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">certificate</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tls_certificate</span>().<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">async fn </span>refresh_certified_key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>certificate = <span class="self">self</span>.tls_certificate().<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cached_key</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_tls_key</span>.<span class="ident">lock</span>();
-        <span class="kw">let</span> <span class="ident">private_key</span> <span class="op">=</span> <span class="ident">rustls::PrivateKey</span>(
-            <span class="ident">fabruic::dangerous::PrivateKey::as_ref</span>(<span class="kw-2">&amp;</span><span class="ident">certificate</span>.<span class="ident">private_key</span>.<span class="number">0</span>).<span class="ident">to_vec</span>(),
+        <span class="kw">let </span><span class="kw-2">mut </span>cached_key = <span class="self">self</span>.data.primary_tls_key.lock();
+        <span class="kw">let </span>private_key = rustls::PrivateKey(
+            fabruic::dangerous::PrivateKey::as_ref(<span class="kw-2">&amp;</span>certificate.private_key.<span class="number">0</span>).to_vec(),
         );
-        <span class="kw">let</span> <span class="ident">private_key</span> <span class="op">=</span> <span class="ident">rustls::sign::any_ecdsa_type</span>(<span class="kw-2">&amp;</span><span class="ident">Arc::new</span>(<span class="ident">private_key</span>))<span class="question-mark">?</span>;
+        <span class="kw">let </span>private_key = rustls::sign::any_ecdsa_type(<span class="kw-2">&amp;</span>Arc::new(private_key))<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">certificates</span> <span class="op">=</span> <span class="ident">certificate</span>
-            .<span class="ident">certificate_chain</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">cert</span><span class="op">|</span> <span class="ident">rustls::Certificate</span>(<span class="ident">cert</span>.<span class="ident">as_ref</span>().<span class="ident">to_vec</span>()))
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+        <span class="kw">let </span>certificates = certificate
+            .certificate_chain
+            .iter()
+            .map(|cert| rustls::Certificate(cert.as_ref().to_vec()))
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-        <span class="kw">let</span> <span class="ident">certified_key</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">CertifiedKey::new</span>(<span class="ident">certificates</span>, <span class="ident">private_key</span>));
-        <span class="kw-2">*</span><span class="ident">cached_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">certified_key</span>);
+        <span class="kw">let </span>certified_key = Arc::new(CertifiedKey::new(certificates, private_key));
+        <span class="kw-2">*</span>cached_key = <span class="prelude-val">Some</span>(certified_key);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">tls_certificate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TlsCertificate</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hosted</span>().<span class="kw">await</span>;
-        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">certificate</span>) <span class="op">=</span> <span class="ident">db</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">TlsCertificatesByDomain</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>)
-            .<span class="ident">query_with_collection_docs</span>()
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">documents</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">next</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(
+    <span class="kw">async fn </span>tls_certificate(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;TlsCertificate, Error&gt; {
+        <span class="kw">let </span>db = <span class="self">self</span>.hosted().<span class="kw">await</span>;
+        <span class="kw">let </span>(<span class="kw">_</span>, certificate) = db
+            .view::&lt;TlsCertificatesByDomain&gt;()
+            .with_key(<span class="kw-2">&amp;</span><span class="self">self</span>.data.primary_domain)
+            .query_with_collection_docs()
+            .<span class="kw">await</span><span class="question-mark">?
+            </span>.documents
+            .into_iter()
+            .next()
+            .ok_or_else(|| {
+                Error::Core(bonsaidb_core::Error::other(
                     <span class="string">&quot;bonsaidb-server config&quot;</span>,
-                    <span class="macro">format!</span>(<span class="string">&quot;no certificate found for {}&quot;</span>, <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>),
+                    <span class="macro">format!</span>(<span class="string">&quot;no certificate found for {}&quot;</span>, <span class="self">self</span>.data.primary_domain),
                 ))
             })<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">certificate</span>.<span class="ident">contents</span>)
+        <span class="prelude-val">Ok</span>(certificate.contents)
     }
 
-    <span class="doccomment">/// Returns the current certificate chain.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">certificate_chain</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CertificateChain</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hosted</span>().<span class="kw">await</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">mapping</span>) <span class="op">=</span> <span class="ident">db</span>
-            .<span class="ident">view</span>::<span class="op">&lt;</span><span class="ident">TlsCertificatesByDomain</span><span class="op">&gt;</span>()
-            .<span class="ident">with_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>)
-            .<span class="ident">query</span>()
-            .<span class="kw">await</span><span class="question-mark">?</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">next</span>()
+    <span class="doccomment">/// Returns the current certificate chain.
+    </span><span class="kw">pub async fn </span>certificate_chain(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;CertificateChain, Error&gt; {
+        <span class="kw">let </span>db = <span class="self">self</span>.hosted().<span class="kw">await</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(mapping) = db
+            .view::&lt;TlsCertificatesByDomain&gt;()
+            .with_key(<span class="kw-2">&amp;</span><span class="self">self</span>.data.primary_domain)
+            .query()
+            .<span class="kw">await</span><span class="question-mark">?
+            </span>.into_iter()
+            .next()
         {
-            <span class="prelude-val">Ok</span>(<span class="ident">mapping</span>.<span class="ident">value</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::Core</span>(<span class="ident">bonsaidb_core::Error::other</span>(
+            <span class="prelude-val">Ok</span>(mapping.value)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::Core(bonsaidb_core::Error::other(
                 <span class="string">&quot;bonsaidb-server config&quot;</span>,
-                <span class="macro">format!</span>(<span class="string">&quot;no certificate found for {}&quot;</span>, <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">primary_domain</span>),
+                <span class="macro">format!</span>(<span class="string">&quot;no certificate found for {}&quot;</span>, <span class="self">self</span>.data.primary_domain),
             )))
         }
     }
 
-    <span class="doccomment">/// Listens for incoming client connections. Does not return until the</span>
-    <span class="doccomment">/// server shuts down.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">listen_on</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">port</span>: <span class="ident">u16</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">certificate</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tls_certificate</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">keypair</span> <span class="op">=</span>
-            <span class="ident">KeyPair::from_parts</span>(<span class="ident">certificate</span>.<span class="ident">certificate_chain</span>, <span class="ident">certificate</span>.<span class="ident">private_key</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">Endpoint::builder</span>();
-        <span class="ident">builder</span>.<span class="ident">set_protocols</span>([<span class="ident">CURRENT_PROTOCOL_VERSION</span>.<span class="ident">as_bytes</span>().<span class="ident">to_vec</span>()]);
-        <span class="ident">builder</span>.<span class="ident">set_address</span>(([<span class="number">0</span>; <span class="number">8</span>], <span class="ident">port</span>).<span class="ident">into</span>());
-        <span class="ident">builder</span>.<span class="ident">set_max_idle_timeout</span>(<span class="prelude-val">None</span>)<span class="question-mark">?</span>;
-        <span class="ident">builder</span>.<span class="ident">set_server_key_pair</span>(<span class="prelude-val">Some</span>(<span class="ident">keypair</span>));
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">server</span> <span class="op">=</span> <span class="ident">builder</span>.<span class="ident">build</span>()<span class="question-mark">?</span>;
+    <span class="doccomment">/// Listens for incoming client connections. Does not return until the
+    /// server shuts down.
+    </span><span class="kw">pub async fn </span>listen_on(<span class="kw-2">&amp;</span><span class="self">self</span>, port: u16) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>certificate = <span class="self">self</span>.tls_certificate().<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>keypair =
+            KeyPair::from_parts(certificate.certificate_chain, certificate.private_key.<span class="number">0</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>builder = Endpoint::builder();
+        builder.set_protocols([CURRENT_PROTOCOL_VERSION.as_bytes().to_vec()]);
+        builder.set_address(([<span class="number">0</span>; <span class="number">8</span>], port).into());
+        builder.set_max_idle_timeout(<span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+        builder.set_server_key_pair(<span class="prelude-val">Some</span>(keypair));
+        <span class="kw">let </span><span class="kw-2">mut </span>server = builder.build()<span class="question-mark">?</span>;
         {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">endpoint</span> <span class="op">=</span> <span class="macro">fast_async_write!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">endpoint</span>);
-            <span class="kw-2">*</span><span class="ident">endpoint</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">server</span>.<span class="ident">clone</span>());
+            <span class="kw">let </span><span class="kw-2">mut </span>endpoint = <span class="macro">fast_async_write!</span>(<span class="self">self</span>.data.endpoint);
+            <span class="kw-2">*</span>endpoint = <span class="prelude-val">Some</span>(server.clone());
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">shutdown_watcher</span> <span class="op">=</span> <span class="self">self</span>
-            .<span class="ident">data</span>
-            .<span class="ident">shutdown</span>
-            .<span class="ident">watcher</span>()
-            .<span class="kw">await</span>
-            .<span class="ident">expect</span>(<span class="string">&quot;server already shut down&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>shutdown_watcher = <span class="self">self
+            </span>.data
+            .shutdown
+            .watcher()
+            .<span class="kw">await
+            </span>.expect(<span class="string">&quot;server already shut down&quot;</span>);
 
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">result</span>) <span class="op">=</span> <span class="macro">tokio::select!</span> {
-            <span class="ident">shutdown_state</span> <span class="op">=</span> <span class="ident">shutdown_watcher</span>.<span class="ident">wait_for_shutdown</span>() =&gt; {
-                <span class="ident">drop</span>(<span class="ident">server</span>.<span class="ident">close_incoming</span>());
-                <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">shutdown_state</span>, <span class="ident">ShutdownState::GracefulShutdown</span>) {
-                    <span class="ident">server</span>.<span class="ident">wait_idle</span>().<span class="kw">await</span>;
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(result) = <span class="macro">tokio::select! </span>{
+            shutdown_state = shutdown_watcher.wait_for_shutdown() =&gt; {
+                drop(server.close_incoming());
+                <span class="kw">if </span><span class="macro">matches!</span>(shutdown_state, ShutdownState::GracefulShutdown) {
+                    server.wait_idle().<span class="kw">await</span>;
                 }
-                <span class="ident">drop</span>(<span class="ident">server</span>.<span class="ident">close</span>());
-                <span class="prelude-val">None</span>
-            },
-            <span class="ident">msg</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">next</span>() =&gt; <span class="ident">msg</span>
+                drop(server.close());
+                <span class="prelude-val">None
+            </span>},
+            msg = server.next() =&gt; msg
         } {
-            <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">accept</span>::<span class="op">&lt;</span>()<span class="op">&gt;</span>().<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-            <span class="ident">tokio::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-                <span class="kw">let</span> <span class="ident">address</span> <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">remote_address</span>();
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">task_self</span>.<span class="ident">handle_bonsai_connection</span>(<span class="ident">connection</span>).<span class="kw">await</span> {
-                    <span class="macro">log::error!</span>(<span class="string">&quot;[server] closing connection {}: {:?}&quot;</span>, <span class="ident">address</span>, <span class="ident">err</span>);
+            <span class="kw">let </span>connection = result.accept::&lt;()&gt;().<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let </span>task_self = <span class="self">self</span>.clone();
+            tokio::spawn(<span class="kw">async move </span>{
+                <span class="kw">let </span>address = connection.remote_address();
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = task_self.handle_bonsai_connection(connection).<span class="kw">await </span>{
+                    <span class="macro">log::error!</span>(<span class="string">&quot;[server] closing connection {}: {:?}&quot;</span>, address, err);
                 }
             });
         }
@@ -1391,555 +1391,554 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Returns all of the currently connected clients.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connected_clients</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">clients</span> <span class="op">=</span> <span class="macro">fast_async_read!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clients</span>);
-        <span class="ident">clients</span>.<span class="ident">values</span>().<span class="ident">cloned</span>().<span class="ident">collect</span>()
+    <span class="doccomment">/// Returns all of the currently connected clients.
+    </span><span class="kw">pub async fn </span>connected_clients(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;ConnectedClient&lt;B&gt;&gt; {
+        <span class="kw">let </span>clients = <span class="macro">fast_async_read!</span>(<span class="self">self</span>.data.clients);
+        clients.values().cloned().collect()
     }
 
-    <span class="doccomment">/// Sends a custom API response to all connected clients.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">broadcast</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="ident">Api::Response</span>) {
-        <span class="kw">let</span> <span class="ident">clients</span> <span class="op">=</span> <span class="macro">fast_async_read!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clients</span>);
-        <span class="kw">for</span> <span class="ident">client</span> <span class="kw">in</span> <span class="ident">clients</span>.<span class="ident">values</span>() {
-            <span class="comment">// TODO should this broadcast to all sessions too rather than only the global session?</span>
-            <span class="ident">drop</span>(<span class="ident">client</span>.<span class="ident">send</span>::<span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span>(<span class="prelude-val">None</span>, <span class="ident">response</span>));
+    <span class="doccomment">/// Sends a custom API response to all connected clients.
+    </span><span class="kw">pub async fn </span>broadcast&lt;Api: api::Api&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, response: <span class="kw-2">&amp;</span>Api::Response) {
+        <span class="kw">let </span>clients = <span class="macro">fast_async_read!</span>(<span class="self">self</span>.data.clients);
+        <span class="kw">for </span>client <span class="kw">in </span>clients.values() {
+            <span class="comment">// TODO should this broadcast to all sessions too rather than only the global session?
+            </span>drop(client.send::&lt;Api&gt;(<span class="prelude-val">None</span>, response));
         }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">initialize_client</span>(
+    <span class="kw">async fn </span>initialize_client(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">transport</span>: <span class="ident">Transport</span>,
-        <span class="ident">address</span>: <span class="ident">SocketAddr</span>,
-        <span class="ident">sender</span>: <span class="ident">Sender</span><span class="op">&lt;</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SessionId</span><span class="op">&gt;</span>, <span class="ident">ApiName</span>, <span class="ident">Bytes</span>)<span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OwnedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">data</span>.<span class="ident">default_session</span>.<span class="ident">allowed_to</span>(
-            <span class="kw-2">&amp;</span><span class="ident">bonsaidb_resource_name</span>(),
-            <span class="kw-2">&amp;</span><span class="ident">BonsaiAction::Server</span>(<span class="ident">ServerAction::Connect</span>),
+        transport: Transport,
+        address: SocketAddr,
+        sender: Sender&lt;(<span class="prelude-ty">Option</span>&lt;SessionId&gt;, ApiName, Bytes)&gt;,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;OwnedClient&lt;B&gt;&gt; {
+        <span class="kw">if </span>!<span class="self">self</span>.data.default_session.allowed_to(
+            bonsaidb_resource_name(),
+            <span class="kw-2">&amp;</span>BonsaiAction::Server(ServerAction::Connect),
         ) {
-            <span class="kw">return</span> <span class="prelude-val">None</span>;
+            <span class="kw">return </span><span class="prelude-val">None</span>;
         }
 
-        <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="kw">loop</span> {
-            <span class="kw">let</span> <span class="ident">next_id</span> <span class="op">=</span> <span class="ident">CONNECTED_CLIENT_ID_COUNTER</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering::SeqCst</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">clients</span> <span class="op">=</span> <span class="macro">fast_async_write!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clients</span>);
-            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">hash_map::Entry::Vacant</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">clients</span>.<span class="ident">entry</span>(<span class="ident">next_id</span>) {
-                <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">OwnedClient::new</span>(
-                    <span class="ident">next_id</span>,
-                    <span class="ident">address</span>,
-                    <span class="ident">transport</span>,
-                    <span class="ident">sender</span>,
-                    <span class="self">self</span>.<span class="ident">clone</span>(),
-                    <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">default_session</span>.<span class="ident">clone</span>(),
+        <span class="kw">let </span>client = <span class="kw">loop </span>{
+            <span class="kw">let </span>next_id = CONNECTED_CLIENT_ID_COUNTER.fetch_add(<span class="number">1</span>, Ordering::SeqCst);
+            <span class="kw">let </span><span class="kw-2">mut </span>clients = <span class="macro">fast_async_write!</span>(<span class="self">self</span>.data.clients);
+            <span class="kw">if let </span>hash_map::Entry::Vacant(e) = clients.entry(next_id) {
+                <span class="kw">let </span>client = OwnedClient::new(
+                    next_id,
+                    address,
+                    transport,
+                    sender,
+                    <span class="self">self</span>.clone(),
+                    <span class="self">self</span>.data.default_session.clone(),
                 );
-                <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">client</span>.<span class="ident">clone</span>());
-                <span class="kw">break</span> <span class="ident">client</span>;
+                e.insert(client.clone());
+                <span class="kw">break </span>client;
             }
         };
 
-        <span class="kw">match</span> <span class="ident">B::client_connected</span>(<span class="kw-2">&amp;</span><span class="ident">client</span>, <span class="self">self</span>).<span class="kw">await</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">ConnectionHandling::Accept</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">client</span>),
-            <span class="prelude-val">Ok</span>(<span class="ident">ConnectionHandling::Reject</span>) =&gt; <span class="prelude-val">None</span>,
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
+        <span class="kw">match </span><span class="self">self</span>.data.backend.client_connected(<span class="kw-2">&amp;</span>client, <span class="self">self</span>).<span class="kw">await </span>{
+            <span class="prelude-val">Ok</span>(ConnectionHandling::Accept) =&gt; <span class="prelude-val">Some</span>(client),
+            <span class="prelude-val">Ok</span>(ConnectionHandling::Reject) =&gt; <span class="prelude-val">None</span>,
+            <span class="prelude-val">Err</span>(err) =&gt; {
                 <span class="macro">log::error!</span>(
-                    <span class="string">&quot;[server] Rejecting connection due to error in `client_connected`: {err:?}&quot;</span>
-                );
-                <span class="prelude-val">None</span>
-            }
+                    <span class="string">&quot;[server] Rejecting connection due to error in `client_connected`: {err:?}&quot;
+                </span>);
+                <span class="prelude-val">None
+            </span>}
         }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">disconnect_client</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u32</span>) {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">client</span>) <span class="op">=</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">clients</span> <span class="op">=</span> <span class="macro">fast_async_write!</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clients</span>);
-            <span class="ident">clients</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>)
+    <span class="kw">async fn </span>disconnect_client(<span class="kw-2">&amp;</span><span class="self">self</span>, id: u32) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(client) = {
+            <span class="kw">let </span><span class="kw-2">mut </span>clients = <span class="macro">fast_async_write!</span>(<span class="self">self</span>.data.clients);
+            clients.remove(<span class="kw-2">&amp;</span>id)
         } {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">B::client_disconnected</span>(<span class="ident">client</span>, <span class="self">self</span>).<span class="kw">await</span> {
+            <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = <span class="self">self</span>.data.backend.client_disconnected(client, <span class="self">self</span>).<span class="kw">await </span>{
                 <span class="macro">log::error!</span>(<span class="string">&quot;[server] Error in `client_disconnected`: {err:?}&quot;</span>);
             }
         }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle_bonsai_connection</span>(
+    <span class="kw">async fn </span>handle_bonsai_connection(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="kw-2">mut</span> <span class="ident">connection</span>: <span class="ident">fabruic::Connection</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">incoming</span>) <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">next</span>().<span class="kw">await</span> {
-            <span class="kw">let</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">incoming</span> {
-                <span class="prelude-val">Ok</span>(<span class="ident">incoming</span>) =&gt; <span class="ident">incoming</span>,
-                <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
+        <span class="kw-2">mut </span>connection: fabruic::Connection&lt;()&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(incoming) = connection.next().<span class="kw">await </span>{
+            <span class="kw">let </span>incoming = <span class="kw">match </span>incoming {
+                <span class="prelude-val">Ok</span>(incoming) =&gt; incoming,
+                <span class="prelude-val">Err</span>(err) =&gt; {
                     <span class="macro">log::error!</span>(<span class="string">&quot;[server] Error establishing a stream: {err:?}&quot;</span>);
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                 }
             };
 
-            <span class="kw">match</span> <span class="ident">incoming</span>
-                .<span class="ident">accept</span>::<span class="op">&lt;</span><span class="ident">networking::Payload</span>, <span class="ident">networking::Payload</span><span class="op">&gt;</span>()
-                .<span class="kw">await</span>
-            {
-                <span class="prelude-val">Ok</span>((<span class="ident">sender</span>, <span class="ident">receiver</span>)) =&gt; {
-                    <span class="kw">let</span> (<span class="ident">api_response_sender</span>, <span class="ident">api_response_receiver</span>) <span class="op">=</span> <span class="ident">flume::unbounded</span>();
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">disconnector</span>) <span class="op">=</span> <span class="self">self</span>
-                        .<span class="ident">initialize_client</span>(
-                            <span class="ident">Transport::Bonsai</span>,
-                            <span class="ident">connection</span>.<span class="ident">remote_address</span>(),
-                            <span class="ident">api_response_sender</span>,
+            <span class="kw">match </span>incoming
+                .accept::&lt;networking::Payload, networking::Payload&gt;()
+                .<span class="kw">await
+            </span>{
+                <span class="prelude-val">Ok</span>((sender, receiver)) =&gt; {
+                    <span class="kw">let </span>(api_response_sender, api_response_receiver) = flume::unbounded();
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(disconnector) = <span class="self">self
+                        </span>.initialize_client(
+                            Transport::Bonsai,
+                            connection.remote_address(),
+                            api_response_sender,
                         )
-                        .<span class="kw">await</span>
-                    {
-                        <span class="kw">let</span> <span class="ident">task_sender</span> <span class="op">=</span> <span class="ident">sender</span>.<span class="ident">clone</span>();
-                        <span class="ident">tokio::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-                            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>((<span class="ident">session_id</span>, <span class="ident">name</span>, <span class="ident">bytes</span>)) <span class="op">=</span>
-                                <span class="ident">api_response_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span>
-                            {
-                                <span class="kw">if</span> <span class="ident">task_sender</span>
-                                    .<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="ident">Payload</span> {
-                                        <span class="ident">id</span>: <span class="prelude-val">None</span>,
-                                        <span class="ident">session_id</span>,
-                                        <span class="ident">name</span>,
-                                        <span class="ident">value</span>: <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>),
+                        .<span class="kw">await
+                    </span>{
+                        <span class="kw">let </span>task_sender = sender.clone();
+                        tokio::spawn(<span class="kw">async move </span>{
+                            <span class="kw">while let </span><span class="prelude-val">Ok</span>((session_id, name, bytes)) =
+                                api_response_receiver.recv_async().<span class="kw">await
+                            </span>{
+                                <span class="kw">if </span>task_sender
+                                    .send(<span class="kw-2">&amp;</span>Payload {
+                                        id: <span class="prelude-val">None</span>,
+                                        session_id,
+                                        name,
+                                        value: <span class="prelude-val">Ok</span>(bytes),
                                     })
-                                    .<span class="ident">is_err</span>()
+                                    .is_err()
                                 {
                                     <span class="kw">break</span>;
                                 }
                             }
-                            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">connection</span>.<span class="ident">close</span>().<span class="kw">await</span>;
+                            <span class="kw">let _ </span>= connection.close().<span class="kw">await</span>;
                         });
 
-                        <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-                        <span class="ident">tokio::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-                            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">task_self</span>
-                                .<span class="ident">handle_stream</span>(<span class="ident">disconnector</span>, <span class="ident">sender</span>, <span class="ident">receiver</span>)
-                                .<span class="kw">await</span>
-                            {
+                        <span class="kw">let </span>task_self = <span class="self">self</span>.clone();
+                        tokio::spawn(<span class="kw">async move </span>{
+                            <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = task_self
+                                .handle_stream(disconnector, sender, receiver)
+                                .<span class="kw">await
+                            </span>{
                                 <span class="macro">log::error!</span>(<span class="string">&quot;[server] Error handling stream: {err:?}&quot;</span>);
                             }
                         });
-                    } <span class="kw">else</span> {
+                    } <span class="kw">else </span>{
                         <span class="macro">log::error!</span>(<span class="string">&quot;[server] Backend rejected connection.&quot;</span>);
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                     }
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
+                <span class="prelude-val">Err</span>(err) =&gt; {
                     <span class="macro">log::error!</span>(<span class="string">&quot;[server] Error accepting incoming stream: {err:?}&quot;</span>);
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                 }
             }
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle_client_requests</span>(
+    <span class="kw">async fn </span>handle_client_requests(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">client</span>: <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">request_receiver</span>: <span class="ident">flume::Receiver</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
-        <span class="ident">response_sender</span>: <span class="ident">flume::Sender</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
+        client: ConnectedClient&lt;B&gt;,
+        request_receiver: flume::Receiver&lt;Payload&gt;,
+        response_sender: flume::Sender&lt;Payload&gt;,
     ) {
-        <span class="kw">let</span> <span class="ident">notify</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">Notify::new</span>());
-        <span class="kw">let</span> <span class="ident">requests_in_queue</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">AtomicUsize::new</span>(<span class="number">0</span>));
-        <span class="kw">loop</span> {
-            <span class="kw">let</span> <span class="ident">current_requests</span> <span class="op">=</span> <span class="ident">requests_in_queue</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>);
-            <span class="kw">if</span> <span class="ident">current_requests</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">client_simultaneous_request_limit</span> {
-                <span class="comment">// Wait for requests to finish.</span>
-                <span class="ident">notify</span>.<span class="ident">notified</span>().<span class="kw">await</span>;
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">requests_in_queue</span>
-                .<span class="ident">compare_exchange</span>(
-                    <span class="ident">current_requests</span>,
-                    <span class="ident">current_requests</span> <span class="op">+</span> <span class="number">1</span>,
-                    <span class="ident">Ordering::SeqCst</span>,
-                    <span class="ident">Ordering::SeqCst</span>,
+        <span class="kw">let </span>notify = Arc::new(Notify::new());
+        <span class="kw">let </span>requests_in_queue = Arc::new(AtomicUsize::new(<span class="number">0</span>));
+        <span class="kw">loop </span>{
+            <span class="kw">let </span>current_requests = requests_in_queue.load(Ordering::SeqCst);
+            <span class="kw">if </span>current_requests == <span class="self">self</span>.data.client_simultaneous_request_limit {
+                <span class="comment">// Wait for requests to finish.
+                </span>notify.notified().<span class="kw">await</span>;
+            } <span class="kw">else if </span>requests_in_queue
+                .compare_exchange(
+                    current_requests,
+                    current_requests + <span class="number">1</span>,
+                    Ordering::SeqCst,
+                    Ordering::SeqCst,
                 )
-                .<span class="ident">is_ok</span>()
+                .is_ok()
             {
-                <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">request_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span> {
-                    <span class="prelude-val">Ok</span>(<span class="ident">payload</span>) =&gt; <span class="ident">payload</span>,
+                <span class="kw">let </span>payload = <span class="kw">match </span>request_receiver.recv_async().<span class="kw">await </span>{
+                    <span class="prelude-val">Ok</span>(payload) =&gt; payload,
                     <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">break</span>,
                 };
-                <span class="kw">let</span> <span class="ident">session_id</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">session_id</span>;
-                <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span>;
-                <span class="kw">let</span> <span class="ident">task_sender</span> <span class="op">=</span> <span class="ident">response_sender</span>.<span class="ident">clone</span>();
+                <span class="kw">let </span>session_id = payload.session_id;
+                <span class="kw">let </span>id = payload.id;
+                <span class="kw">let </span>task_sender = response_sender.clone();
 
-                <span class="kw">let</span> <span class="ident">notify</span> <span class="op">=</span> <span class="ident">notify</span>.<span class="ident">clone</span>();
-                <span class="kw">let</span> <span class="ident">requests_in_queue</span> <span class="op">=</span> <span class="ident">requests_in_queue</span>.<span class="ident">clone</span>();
-                <span class="self">self</span>.<span class="ident">handle_request_through_worker</span>(
-                    <span class="ident">payload</span>,
-                    <span class="kw">move</span> <span class="op">|</span><span class="ident">name</span>, <span class="ident">value</span><span class="op">|</span> <span class="kw">async</span> <span class="kw">move</span> {
-                        <span class="ident">drop</span>(<span class="ident">task_sender</span>.<span class="ident">send</span>(<span class="ident">Payload</span> {
-                            <span class="ident">session_id</span>,
-                            <span class="ident">id</span>,
-                            <span class="ident">name</span>,
-                            <span class="ident">value</span>,
+                <span class="kw">let </span>notify = notify.clone();
+                <span class="kw">let </span>requests_in_queue = requests_in_queue.clone();
+                <span class="self">self</span>.handle_request_through_worker(
+                    payload,
+                    <span class="kw">move </span>|name, value| <span class="kw">async move </span>{
+                        drop(task_sender.send(Payload {
+                            session_id,
+                            id,
+                            name,
+                            value,
                         }));
 
-                        <span class="ident">requests_in_queue</span>.<span class="ident">fetch_sub</span>(<span class="number">1</span>, <span class="ident">Ordering::SeqCst</span>);
+                        requests_in_queue.fetch_sub(<span class="number">1</span>, Ordering::SeqCst);
 
-                        <span class="ident">notify</span>.<span class="ident">notify_one</span>();
+                        notify.notify_one();
 
                         <span class="prelude-val">Ok</span>(())
                     },
-                    <span class="ident">client</span>.<span class="ident">clone</span>(),
+                    client.clone(),
                 )
-                .<span class="kw">await</span>
-                .<span class="ident">unwrap</span>();
+                .<span class="kw">await
+                </span>.unwrap();
             }
         }
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle_request_through_worker</span><span class="op">&lt;</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">ApiName</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>) -&gt; <span class="ident">R</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-        <span class="ident">R</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-    <span class="op">&gt;</span>(
+    <span class="kw">async fn </span>handle_request_through_worker&lt;
+        F: FnOnce(ApiName, <span class="prelude-ty">Result</span>&lt;Bytes, bonsaidb_core::Error&gt;) -&gt; R + Send + <span class="lifetime">&#39;static</span>,
+        R: Future&lt;Output = <span class="prelude-ty">Result</span>&lt;(), Error&gt;&gt; + Send,
+    &gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">request</span>: <span class="ident">Payload</span>,
-        <span class="ident">callback</span>: <span class="ident">F</span>,
-        <span class="ident">client</span>: <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">result_sender</span>, <span class="ident">result_receiver</span>) <span class="op">=</span> <span class="ident">oneshot::channel</span>();
-        <span class="kw">let</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">client</span>
-            .<span class="ident">session</span>(<span class="ident">request</span>.<span class="ident">session_id</span>)
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">default_session</span>.<span class="ident">clone</span>());
-        <span class="self">self</span>.<span class="ident">data</span>
-            .<span class="ident">request_processor</span>
-            .<span class="ident">send</span>(<span class="ident">ClientRequest</span>::<span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="ident">::new</span>(
-                <span class="ident">request</span>,
-                <span class="self">self</span>.<span class="ident">clone</span>(),
-                <span class="ident">client</span>,
-                <span class="ident">session</span>,
-                <span class="ident">result_sender</span>,
+        request: Payload,
+        callback: F,
+        client: ConnectedClient&lt;B&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>(result_sender, result_receiver) = oneshot::channel();
+        <span class="kw">let </span>session = client
+            .session(request.session_id)
+            .unwrap_or_else(|| <span class="self">self</span>.data.default_session.clone());
+        <span class="self">self</span>.data
+            .request_processor
+            .send(ClientRequest::&lt;B&gt;::new(
+                request,
+                <span class="self">self</span>.clone(),
+                client,
+                session,
+                result_sender,
             ))
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::InternalCommunication</span>)<span class="question-mark">?</span>;
-        <span class="ident">tokio::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-            <span class="kw">let</span> (<span class="ident">name</span>, <span class="ident">result</span>) <span class="op">=</span> <span class="ident">result_receiver</span>.<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="comment">// Map the error into a Response::Error. The jobs system supports</span>
-            <span class="comment">// multiple receivers receiving output, and wraps Err to avoid</span>
-            <span class="comment">// requiring the error to be cloneable. As such, we have to unwrap</span>
-            <span class="comment">// it. Thankfully, we can guarantee nothing else is waiting on a</span>
-            <span class="comment">// response to a request than the original requestor, so this can be</span>
-            <span class="comment">// safely unwrapped.</span>
-            <span class="ident">callback</span>(<span class="ident">name</span>, <span class="ident">result</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="prelude-ty">Result</span>::<span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span><span class="ident">::Ok</span>(())
+            .map_err(|<span class="kw">_</span>| Error::InternalCommunication)<span class="question-mark">?</span>;
+        tokio::spawn(<span class="kw">async move </span>{
+            <span class="kw">let </span>(name, result) = result_receiver.<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="comment">// Map the error into a Response::Error. The jobs system supports
+            // multiple receivers receiving output, and wraps Err to avoid
+            // requiring the error to be cloneable. As such, we have to unwrap
+            // it. Thankfully, we can guarantee nothing else is waiting on a
+            // response to a request than the original requestor, so this can be
+            // safely unwrapped.
+            </span>callback(name, result).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="prelude-ty">Result</span>::&lt;(), Error&gt;::Ok(())
         });
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle_stream</span>(
+    <span class="kw">async fn </span>handle_stream(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">client</span>: <span class="ident">OwnedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">sender</span>: <span class="ident">fabruic::Sender</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
-        <span class="kw-2">mut</span> <span class="ident">receiver</span>: <span class="ident">fabruic::Receiver</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">payload_sender</span>, <span class="ident">payload_receiver</span>) <span class="op">=</span> <span class="ident">flume::unbounded</span>();
-        <span class="ident">tokio::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">payload</span>) <span class="op">=</span> <span class="ident">payload_receiver</span>.<span class="ident">recv_async</span>().<span class="kw">await</span> {
-                <span class="kw">if</span> <span class="ident">sender</span>.<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>).<span class="ident">is_err</span>() {
+        client: OwnedClient&lt;B&gt;,
+        sender: fabruic::Sender&lt;Payload&gt;,
+        <span class="kw-2">mut </span>receiver: fabruic::Receiver&lt;Payload&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>(payload_sender, payload_receiver) = flume::unbounded();
+        tokio::spawn(<span class="kw">async move </span>{
+            <span class="kw">while let </span><span class="prelude-val">Ok</span>(payload) = payload_receiver.recv_async().<span class="kw">await </span>{
+                <span class="kw">if </span>sender.send(<span class="kw-2">&amp;</span>payload).is_err() {
                     <span class="kw">break</span>;
                 }
             }
         });
 
-        <span class="kw">let</span> (<span class="ident">request_sender</span>, <span class="ident">request_receiver</span>) <span class="op">=</span>
-            <span class="ident">flume::bounded</span>::<span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">data</span>.<span class="ident">client_simultaneous_request_limit</span>);
-        <span class="kw">let</span> <span class="ident">task_self</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-        <span class="ident">tokio::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-            <span class="ident">task_self</span>
-                .<span class="ident">handle_client_requests</span>(<span class="ident">client</span>.<span class="ident">clone</span>(), <span class="ident">request_receiver</span>, <span class="ident">payload_sender</span>)
+        <span class="kw">let </span>(request_sender, request_receiver) =
+            flume::bounded::&lt;Payload&gt;(<span class="self">self</span>.data.client_simultaneous_request_limit);
+        <span class="kw">let </span>task_self = <span class="self">self</span>.clone();
+        tokio::spawn(<span class="kw">async move </span>{
+            task_self
+                .handle_client_requests(client.clone(), request_receiver, payload_sender)
                 .<span class="kw">await</span>;
         });
 
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">payload</span>) <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">next</span>().<span class="kw">await</span> {
-            <span class="ident">drop</span>(<span class="ident">request_sender</span>.<span class="ident">send_async</span>(<span class="ident">payload</span><span class="question-mark">?</span>).<span class="kw">await</span>);
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(payload) = receiver.next().<span class="kw">await </span>{
+            drop(request_sender.send_async(payload<span class="question-mark">?</span>).<span class="kw">await</span>);
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Shuts the server down. If a `timeout` is provided, the server will stop</span>
-    <span class="doccomment">/// accepting new connections and attempt to respond to any outstanding</span>
-    <span class="doccomment">/// requests already being processed. After the `timeout` has elapsed or if</span>
-    <span class="doccomment">/// no `timeout` was provided, the server is forcefully shut down.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">shutdown</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">timeout</span>) <span class="op">=</span> <span class="ident">timeout</span> {
-            <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">shutdown</span>.<span class="ident">graceful_shutdown</span>(<span class="ident">timeout</span>).<span class="kw">await</span>;
-        } <span class="kw">else</span> {
-            <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">shutdown</span>.<span class="ident">shutdown</span>().<span class="kw">await</span>;
+    <span class="doccomment">/// Shuts the server down. If a `timeout` is provided, the server will stop
+    /// accepting new connections and attempt to respond to any outstanding
+    /// requests already being processed. After the `timeout` has elapsed or if
+    /// no `timeout` was provided, the server is forcefully shut down.
+    </span><span class="kw">pub async fn </span>shutdown(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(timeout) = timeout {
+            <span class="self">self</span>.data.shutdown.graceful_shutdown(timeout).<span class="kw">await</span>;
+        } <span class="kw">else </span>{
+            <span class="self">self</span>.data.shutdown.shutdown().<span class="kw">await</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Listens for signals from the operating system that the server should</span>
-    <span class="doccomment">/// shut down and attempts to gracefully shut down.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">listen_for_shutdown</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">GRACEFUL_SHUTDOWN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span>;
-        <span class="kw">const</span> <span class="ident">TERMINATE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">2</span>;
+    <span class="doccomment">/// Listens for signals from the operating system that the server should
+    /// shut down and attempts to gracefully shut down.
+    </span><span class="kw">pub async fn </span>listen_for_shutdown(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>GRACEFUL_SHUTDOWN: usize = <span class="number">1</span>;
+        <span class="kw">const </span>TERMINATE: usize = <span class="number">2</span>;
 
-        <span class="kw">enum</span> <span class="ident">SignalShutdownState</span> {
-            <span class="ident">Running</span>,
-            <span class="ident">ShuttingDown</span>(<span class="ident">flume::Receiver</span><span class="op">&lt;</span>()<span class="op">&gt;</span>),
+        <span class="kw">enum </span>SignalShutdownState {
+            Running,
+            ShuttingDown(flume::Receiver&lt;()&gt;),
         }
 
-        <span class="kw">let</span> <span class="ident">shutdown_state</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">SignalShutdownState::Running</span>));
-        <span class="kw">let</span> <span class="ident">flag</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">AtomicUsize::default</span>());
-        <span class="kw">let</span> <span class="ident">register_hook</span> <span class="op">=</span> <span class="op">|</span><span class="ident">flag</span>: <span class="kw-2">&amp;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicUsize</span><span class="op">&gt;</span><span class="op">|</span> {
-            <span class="ident">signal_hook::flag::register_usize</span>(<span class="ident">SIGINT</span>, <span class="ident">flag</span>.<span class="ident">clone</span>(), <span class="ident">GRACEFUL_SHUTDOWN</span>)<span class="question-mark">?</span>;
-            <span class="ident">signal_hook::flag::register_usize</span>(<span class="ident">SIGTERM</span>, <span class="ident">flag</span>.<span class="ident">clone</span>(), <span class="ident">TERMINATE</span>)<span class="question-mark">?</span>;
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
-            <span class="ident">signal_hook::flag::register_usize</span>(<span class="ident">SIGQUIT</span>, <span class="ident">flag</span>.<span class="ident">clone</span>(), <span class="ident">TERMINATE</span>)<span class="question-mark">?</span>;
-            <span class="prelude-ty">Result</span>::<span class="op">&lt;</span>(), <span class="ident">std::io::Error</span><span class="op">&gt;</span><span class="ident">::Ok</span>(())
+        <span class="kw">let </span>shutdown_state = Arc::new(Mutex::new(SignalShutdownState::Running));
+        <span class="kw">let </span>flag = Arc::new(AtomicUsize::default());
+        <span class="kw">let </span>register_hook = |flag: <span class="kw-2">&amp;</span>Arc&lt;AtomicUsize&gt;| {
+            signal_hook::flag::register_usize(SIGINT, flag.clone(), GRACEFUL_SHUTDOWN)<span class="question-mark">?</span>;
+            signal_hook::flag::register_usize(SIGTERM, flag.clone(), TERMINATE)<span class="question-mark">?</span>;
+            <span class="attribute">#[cfg(not(windows))]
+            </span>signal_hook::flag::register_usize(SIGQUIT, flag.clone(), TERMINATE)<span class="question-mark">?</span>;
+            <span class="prelude-ty">Result</span>::&lt;(), std::io::Error&gt;::Ok(())
         };
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">register_hook</span>(<span class="kw-2">&amp;</span><span class="ident">flag</span>) {
+        <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = register_hook(<span class="kw-2">&amp;</span>flag) {
             <span class="macro">log::error!</span>(<span class="string">&quot;Error installing signals for graceful shutdown: {err:?}&quot;</span>);
-            <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::MAX</span>).<span class="kw">await</span>;
-        } <span class="kw">else</span> {
-            <span class="kw">loop</span> {
-                <span class="kw">match</span> <span class="ident">flag</span>.<span class="ident">load</span>(<span class="ident">Ordering::Relaxed</span>) {
-                    <span class="number">0</span> =&gt; {
-                        <span class="comment">// No signal</span>
-                    }
-                    <span class="ident">GRACEFUL_SHUTDOWN</span> =&gt; {
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">shutdown_state</span>);
-                        <span class="kw">match</span> <span class="kw-2">*</span><span class="ident">state</span> {
-                            <span class="ident">SignalShutdownState::Running</span> =&gt; {
+            tokio::time::sleep(Duration::MAX).<span class="kw">await</span>;
+        } <span class="kw">else </span>{
+            <span class="kw">loop </span>{
+                <span class="kw">match </span>flag.load(Ordering::Relaxed) {
+                    <span class="number">0 </span>=&gt; {
+                        <span class="comment">// No signal
+                    </span>}
+                    GRACEFUL_SHUTDOWN =&gt; {
+                        <span class="kw">let </span><span class="kw-2">mut </span>state = <span class="macro">fast_async_lock!</span>(shutdown_state);
+                        <span class="kw">match </span><span class="kw-2">*</span>state {
+                            SignalShutdownState::Running =&gt; {
                                 <span class="macro">log::error!</span>(<span class="string">&quot;Interrupt signal received. Shutting down gracefully.&quot;</span>);
-                                <span class="kw">let</span> <span class="ident">task_server</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span>();
-                                <span class="kw">let</span> (<span class="ident">shutdown_sender</span>, <span class="ident">shutdown_receiver</span>) <span class="op">=</span> <span class="ident">flume::bounded</span>(<span class="number">1</span>);
-                                <span class="ident">tokio::task::spawn</span>(<span class="kw">async</span> <span class="kw">move</span> {
-                                    <span class="ident">task_server</span>.<span class="ident">shutdown</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">30</span>))).<span class="kw">await</span><span class="question-mark">?</span>;
-                                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">shutdown_sender</span>.<span class="ident">send</span>(());
-                                    <span class="prelude-ty">Result</span>::<span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span><span class="ident">::Ok</span>(())
+                                <span class="kw">let </span>task_server = <span class="self">self</span>.clone();
+                                <span class="kw">let </span>(shutdown_sender, shutdown_receiver) = flume::bounded(<span class="number">1</span>);
+                                tokio::task::spawn(<span class="kw">async move </span>{
+                                    task_server.shutdown(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">30</span>))).<span class="kw">await</span><span class="question-mark">?</span>;
+                                    <span class="kw">let _ </span>= shutdown_sender.send(());
+                                    <span class="prelude-ty">Result</span>::&lt;(), Error&gt;::Ok(())
                                 });
-                                <span class="kw-2">*</span><span class="ident">state</span> <span class="op">=</span> <span class="ident">SignalShutdownState::ShuttingDown</span>(<span class="ident">shutdown_receiver</span>);
+                                <span class="kw-2">*</span>state = SignalShutdownState::ShuttingDown(shutdown_receiver);
                             }
-                            <span class="ident">SignalShutdownState::ShuttingDown</span>(<span class="kw">_</span>) =&gt; {
-                                <span class="comment">// Two interrupts, go ahead and force the shutdown</span>
-                                <span class="kw">break</span>;
+                            SignalShutdownState::ShuttingDown(<span class="kw">_</span>) =&gt; {
+                                <span class="comment">// Two interrupts, go ahead and force the shutdown
+                                </span><span class="kw">break</span>;
                             }
                         }
                     }
-                    <span class="ident">TERMINATE</span> =&gt; {
+                    TERMINATE =&gt; {
                         <span class="macro">log::error!</span>(<span class="string">&quot;Quit signal received. Shutting down.&quot;</span>);
                         <span class="kw">break</span>;
                     }
-                    <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
+                    <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
                 }
 
-                <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="macro">fast_async_lock!</span>(<span class="ident">shutdown_state</span>);
-                <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SignalShutdownState::ShuttingDown</span>(<span class="ident">receiver</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">state</span> {
-                    <span class="kw">if</span> <span class="ident">receiver</span>.<span class="ident">try_recv</span>().<span class="ident">is_ok</span>() {
-                        <span class="comment">// Fully shut down.</span>
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                <span class="kw">let </span>state = <span class="macro">fast_async_lock!</span>(shutdown_state);
+                <span class="kw">if let </span>SignalShutdownState::ShuttingDown(receiver) = <span class="kw-2">&amp;*</span>state {
+                    <span class="kw">if </span>receiver.try_recv().is_ok() {
+                        <span class="comment">// Fully shut down.
+                        </span><span class="kw">return </span><span class="prelude-val">Ok</span>(());
                     }
                 }
 
-                <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">300</span>)).<span class="kw">await</span>;
+                tokio::time::sleep(Duration::from_millis(<span class="number">300</span>)).<span class="kw">await</span>;
             }
-            <span class="self">self</span>.<span class="ident">shutdown</span>(<span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="self">self</span>.shutdown(<span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">AsyncStorage</span>;
+<span class="kw">impl</span>&lt;B: Backend&gt; Deref <span class="kw">for </span>CustomServer&lt;B&gt; {
+    <span class="kw">type </span>Target = AsyncStorage;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">storage</span>
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.storage
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ClientRequest</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> {
-    <span class="ident">request</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
-    <span class="ident">client</span>: <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    <span class="ident">session</span>: <span class="ident">Session</span>,
-    <span class="ident">server</span>: <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    <span class="ident">result_sender</span>: <span class="ident">oneshot::Sender</span><span class="op">&lt;</span>(<span class="ident">ApiName</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>)<span class="op">&gt;</span>,
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>ClientRequest&lt;B: Backend&gt; {
+    request: <span class="prelude-ty">Option</span>&lt;Payload&gt;,
+    client: ConnectedClient&lt;B&gt;,
+    session: Session,
+    server: CustomServer&lt;B&gt;,
+    result_sender: oneshot::Sender&lt;(ApiName, <span class="prelude-ty">Result</span>&lt;Bytes, bonsaidb_core::Error&gt;)&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">ClientRequest</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">request</span>: <span class="ident">Payload</span>,
-        <span class="ident">server</span>: <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">client</span>: <span class="ident">ConnectedClient</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-        <span class="ident">session</span>: <span class="ident">Session</span>,
-        <span class="ident">result_sender</span>: <span class="ident">oneshot::Sender</span><span class="op">&lt;</span>(<span class="ident">ApiName</span>, <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span>)<span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">request</span>: <span class="prelude-val">Some</span>(<span class="ident">request</span>),
-            <span class="ident">server</span>,
-            <span class="ident">client</span>,
-            <span class="ident">session</span>,
-            <span class="ident">result_sender</span>,
+<span class="kw">impl</span>&lt;B: Backend&gt; ClientRequest&lt;B&gt; {
+    <span class="kw">pub fn </span>new(
+        request: Payload,
+        server: CustomServer&lt;B&gt;,
+        client: ConnectedClient&lt;B&gt;,
+        session: Session,
+        result_sender: oneshot::Sender&lt;(ApiName, <span class="prelude-ty">Result</span>&lt;Bytes, bonsaidb_core::Error&gt;)&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            request: <span class="prelude-val">Some</span>(request),
+            server,
+            client,
+            session,
+            result_sender,
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">HasSession</span> <span class="kw">for</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">session</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Session</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">session</span>()
+<span class="kw">impl</span>&lt;B: Backend&gt; HasSession <span class="kw">for </span>CustomServer&lt;B&gt; {
+    <span class="kw">fn </span>session(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Session&gt; {
+        <span class="self">self</span>.storage.session()
     }
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">AsyncStorageConnection</span> <span class="kw">for</span> <span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Database</span> <span class="op">=</span> <span class="ident">ServerDatabase</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Authenticated</span> <span class="op">=</span> <span class="self">Self</span>;
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; AsyncStorageConnection <span class="kw">for </span>CustomServer&lt;B&gt; {
+    <span class="kw">type </span>Database = ServerDatabase&lt;B&gt;;
+    <span class="kw">type </span>Authenticated = <span class="self">Self</span>;
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">admin</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Database</span> {
-        <span class="self">self</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">Admin</span><span class="op">&gt;</span>(<span class="ident">ADMIN_DATABASE_NAME</span>).<span class="kw">await</span>.<span class="ident">unwrap</span>()
+    <span class="kw">async fn </span>admin(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Database {
+        <span class="self">self</span>.database::&lt;Admin&gt;(ADMIN_DATABASE_NAME).<span class="kw">await</span>.unwrap()
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_database_with_schema</span>(
+    <span class="kw">async fn </span>create_database_with_schema(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">schema</span>: <span class="ident">SchemaName</span>,
-        <span class="ident">only_if_needed</span>: <span class="ident">bool</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>
-            .<span class="ident">create_database_with_schema</span>(<span class="ident">name</span>, <span class="ident">schema</span>, <span class="ident">only_if_needed</span>)
-            .<span class="kw">await</span>
-    }
+        name: <span class="kw-2">&amp;</span>str,
+        schema: SchemaName,
+        only_if_needed: bool,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage
+            .create_database_with_schema(name, schema, only_if_needed)
+            .<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">database</span><span class="op">&lt;</span><span class="ident">DB</span>: <span class="ident">Schema</span><span class="op">&gt;</span>(
+    <span class="kw">async fn </span>database&lt;DB: Schema&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Database</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">database</span>::<span class="op">&lt;</span><span class="ident">DB</span><span class="op">&gt;</span>(<span class="ident">name</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">ServerDatabase</span> {
-            <span class="ident">server</span>: <span class="self">self</span>.<span class="ident">clone</span>(),
-            <span class="ident">db</span>,
+        name: <span class="kw-2">&amp;</span>str,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Database, bonsaidb_core::Error&gt; {
+        <span class="kw">let </span>db = <span class="self">self</span>.storage.database::&lt;DB&gt;(name).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(ServerDatabase {
+            server: <span class="self">self</span>.clone(),
+            db,
         })
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_database</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">delete_database</span>(<span class="ident">name</span>).<span class="kw">await</span>
-    }
+    <span class="kw">async fn </span>delete_database(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.delete_database(name).<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_databases</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">connection::Database</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">list_databases</span>().<span class="kw">await</span>
-    }
+    <span class="kw">async fn </span>list_databases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;connection::Database&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.list_databases().<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">list_available_schemas</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SchemaName</span><span class="op">&gt;</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">list_available_schemas</span>().<span class="kw">await</span>
-    }
+    <span class="kw">async fn </span>list_available_schemas(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;SchemaName&gt;, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.list_available_schemas().<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_user</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">username</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">create_user</span>(<span class="ident">username</span>).<span class="kw">await</span>
-    }
+    <span class="kw">async fn </span>create_user(<span class="kw-2">&amp;</span><span class="self">self</span>, username: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;u64, bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.create_user(username).<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_user</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="kw">async fn </span>delete_user&lt;<span class="lifetime">&#39;user</span>, U: Nameable&lt;<span class="lifetime">&#39;user</span>, u64&gt; + Send + Sync&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">user</span>: <span class="ident">U</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">delete_user</span>(<span class="ident">user</span>).<span class="kw">await</span>
-    }
+        user: U,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.delete_user(user).<span class="kw">await
+    </span>}
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_user_password</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+    </span><span class="kw">async fn </span>set_user_password&lt;<span class="lifetime">&#39;user</span>, U: Nameable&lt;<span class="lifetime">&#39;user</span>, u64&gt; + Send + Sync&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">password</span>: <span class="ident">bonsaidb_core::connection::SensitiveString</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">set_user_password</span>(<span class="ident">user</span>, <span class="ident">password</span>).<span class="kw">await</span>
-    }
+        user: U,
+        password: bonsaidb_core::connection::SensitiveString,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.set_user_password(user, password).<span class="kw">await
+    </span>}
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>))]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">authenticate</span>(
+    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;token-authentication&quot;</span>, feature = <span class="string">&quot;password-hashing&quot;</span>))]
+    </span><span class="kw">async fn </span>authenticate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">authentication</span>: <span class="ident">bonsaidb_core::connection::Authentication</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">storage</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">authenticate</span>(<span class="ident">authentication</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clone</span>(),
-            <span class="ident">storage</span>,
+        authentication: bonsaidb_core::connection::Authentication,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Authenticated, bonsaidb_core::Error&gt; {
+        <span class="kw">let </span>storage = <span class="self">self</span>.storage.authenticate(authentication).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            data: <span class="self">self</span>.data.clone(),
+            storage,
         })
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">assume_identity</span>(
+    <span class="kw">async fn </span>assume_identity(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">identity</span>: <span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Authenticated</span>, <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">storage</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">assume_identity</span>(<span class="ident">identity</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">clone</span>(),
-            <span class="ident">storage</span>,
+        identity: IdentityReference&lt;<span class="lifetime">&#39;_</span>&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Authenticated, bonsaidb_core::Error&gt; {
+        <span class="kw">let </span>storage = <span class="self">self</span>.storage.assume_identity(identity).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            data: <span class="self">self</span>.data.clone(),
+            storage,
         })
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">add_permission_group_to_user</span><span class="op">&lt;</span>
+    <span class="kw">async fn </span>add_permission_group_to_user&lt;
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-    <span class="op">&gt;</span>(
+        U: Nameable&lt;<span class="lifetime">&#39;user</span>, u64&gt; + Send + Sync,
+        G: Nameable&lt;<span class="lifetime">&#39;group</span>, u64&gt; + Send + Sync,
+    &gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">permission_group</span>: <span class="ident">G</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>
-            .<span class="ident">add_permission_group_to_user</span>(<span class="ident">user</span>, <span class="ident">permission_group</span>)
-            .<span class="kw">await</span>
-    }
+        user: U,
+        permission_group: G,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage
+            .add_permission_group_to_user(user, permission_group)
+            .<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">remove_permission_group_from_user</span><span class="op">&lt;</span>
+    <span class="kw">async fn </span>remove_permission_group_from_user&lt;
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-    <span class="op">&gt;</span>(
+        U: Nameable&lt;<span class="lifetime">&#39;user</span>, u64&gt; + Send + Sync,
+        G: Nameable&lt;<span class="lifetime">&#39;group</span>, u64&gt; + Send + Sync,
+    &gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">permission_group</span>: <span class="ident">G</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>
-            .<span class="ident">remove_permission_group_from_user</span>(<span class="ident">user</span>, <span class="ident">permission_group</span>)
-            .<span class="kw">await</span>
-    }
+        user: U,
+        permission_group: G,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage
+            .remove_permission_group_from_user(user, permission_group)
+            .<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">add_role_to_user</span><span class="op">&lt;</span>
+    <span class="kw">async fn </span>add_role_to_user&lt;
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-    <span class="op">&gt;</span>(
+        U: Nameable&lt;<span class="lifetime">&#39;user</span>, u64&gt; + Send + Sync,
+        G: Nameable&lt;<span class="lifetime">&#39;group</span>, u64&gt; + Send + Sync,
+    &gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">role</span>: <span class="ident">G</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">add_role_to_user</span>(<span class="ident">user</span>, <span class="ident">role</span>).<span class="kw">await</span>
-    }
+        user: U,
+        role: G,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.add_role_to_user(user, role).<span class="kw">await
+    </span>}
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">remove_role_from_user</span><span class="op">&lt;</span>
+    <span class="kw">async fn </span>remove_role_from_user&lt;
         <span class="lifetime">&#39;user</span>,
         <span class="lifetime">&#39;group</span>,
-        <span class="ident">U</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;user</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-        <span class="ident">G</span>: <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;group</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span>,
-    <span class="op">&gt;</span>(
+        U: Nameable&lt;<span class="lifetime">&#39;user</span>, u64&gt; + Send + Sync,
+        G: Nameable&lt;<span class="lifetime">&#39;group</span>, u64&gt; + Send + Sync,
+    &gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">user</span>: <span class="ident">U</span>,
-        <span class="ident">role</span>: <span class="ident">G</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">bonsaidb_core::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">remove_role_from_user</span>(<span class="ident">user</span>, <span class="ident">role</span>).<span class="kw">await</span>
+        user: U,
+        role: G,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), bonsaidb_core::Error&gt; {
+        <span class="self">self</span>.storage.remove_role_from_user(user, role).<span class="kw">await
+    </span>}
+}
+
+<span class="attribute">#[derive(Default)]
+</span><span class="kw">struct </span>AlpnKeys(Arc&lt;std::sync::Mutex&lt;HashMap&lt;String, Arc&lt;rustls::sign::CertifiedKey&gt;&gt;&gt;&gt;);
+
+<span class="kw">impl </span>Debug <span class="kw">for </span>AlpnKeys {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_tuple(<span class="string">&quot;AlpnKeys&quot;</span>).finish()
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">struct</span> <span class="ident">AlpnKeys</span>(<span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">std::sync::Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">rustls::sign::CertifiedKey</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="kw">impl </span>Deref <span class="kw">for </span>AlpnKeys {
+    <span class="kw">type </span>Target = Arc&lt;std::sync::Mutex&lt;HashMap&lt;String, Arc&lt;rustls::sign::CertifiedKey&gt;&gt;&gt;&gt;;
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">AlpnKeys</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_tuple</span>(<span class="string">&quot;AlpnKeys&quot;</span>).<span class="ident">finish</span>()
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">AlpnKeys</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">std::sync::Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">rustls::sign::CertifiedKey</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
-    }
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
+    </span>}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_server" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

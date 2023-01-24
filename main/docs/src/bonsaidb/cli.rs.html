@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb/src/cli.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cli.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb/src/cli.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cli.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -242,95 +236,99 @@
 <span id="236">236</span>
 <span id="237">237</span>
 <span id="238">238</span>
-</pre><pre class="rust"><code><span class="doccomment">//! BonsaiDb command line tools.</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+</pre><pre class="rust"><code><span class="doccomment">//! BonsaiDb command line tools.
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">ffi::OsString</span>, <span class="ident">fmt::Debug</span>, <span class="ident">path::PathBuf</span>};
+</span><span class="kw">use </span>std::{ffi::OsString, fmt::Debug, path::PathBuf};
 
-<span class="kw">use</span> <span class="ident">bonsaidb_client</span>::{<span class="ident">fabruic::Certificate</span>, <span class="ident">Client</span>};
-<span class="kw">use</span> <span class="ident">bonsaidb_core::async_trait::async_trait</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident">bonsaidb_core::connection::AsyncStorageConnection</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_local::cli::admin</span>;
-<span class="kw">use</span> <span class="ident">bonsaidb_server</span>::{<span class="ident">Backend</span>, <span class="ident">CustomServer</span>, <span class="ident">NoBackend</span>, <span class="ident">ServerConfiguration</span>};
-<span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">Parser</span>, <span class="ident">Subcommand</span>};
-<span class="kw">use</span> <span class="ident">url::Url</span>;
+<span class="kw">use </span>bonsaidb_client::{fabruic::Certificate, Client};
+<span class="kw">use </span>bonsaidb_core::async_trait::async_trait;
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;password-hashing&quot;</span>, feature = <span class="string">&quot;token-authentication&quot;</span>))]
+</span><span class="kw">use </span>bonsaidb_core::connection::AsyncStorageConnection;
+<span class="kw">use </span>bonsaidb_local::cli::admin;
+<span class="kw">use </span>bonsaidb_server::{Backend, CustomServer, NoBackend, ServerConfiguration};
+<span class="kw">use </span>clap::{Parser, Subcommand};
+<span class="kw">use </span>url::Url;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::AnyServerConnection</span>;
+<span class="kw">use </span><span class="kw">crate</span>::AnyServerConnection;
 
-<span class="doccomment">/// All available command line commands.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Subcommand</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">Cli</span>: <span class="ident">CommandLine</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Execute a BonsaiDb server command.</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
-    <span class="ident">Server</span>(<span class="ident">bonsaidb_server::cli::Command</span><span class="op">&lt;</span><span class="ident">Cli::Backend</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// Executes an administrative command.</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
-    <span class="ident">Admin</span>(<span class="ident">admin::Command</span>),
-    <span class="doccomment">/// An external command.</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">flatten</span>)]</span>
-    <span class="ident">External</span>(<span class="ident">Cli::Subcommand</span>),
+<span class="doccomment">/// All available command line commands.
+</span><span class="attribute">#[derive(Subcommand, Debug)]
+</span><span class="kw">pub enum </span>Command&lt;Cli: CommandLine&gt; {
+    <span class="doccomment">/// Execute a BonsaiDb server command.
+    </span><span class="attribute">#[clap(subcommand)]
+    </span>Server(bonsaidb_server::cli::Command&lt;Cli::Backend&gt;),
+    <span class="doccomment">/// Executes an administrative command.
+    </span><span class="attribute">#[clap(subcommand)]
+    </span>Admin(admin::Command),
+    <span class="doccomment">/// An external command.
+    </span><span class="attribute">#[clap(flatten)]
+    </span>External(Cli::Subcommand),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Cli</span><span class="op">&gt;</span> <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">Cli</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">Cli</span>: <span class="ident">CommandLine</span>,
+<span class="kw">impl</span>&lt;Cli&gt; Command&lt;Cli&gt;
+<span class="kw">where
+    </span>Cli: CommandLine,
 {
-    <span class="doccomment">/// Executes the command.</span>
-    <span class="comment">// TODO add client builder insetad of server_url</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute</span>(
+    <span class="doccomment">/// Executes the command.
+    </span><span class="comment">// TODO add client builder insetad of server_url
+    </span><span class="kw">pub async fn </span>execute(
         <span class="self">self</span>,
-        <span class="ident">server_url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span>,
-        <span class="ident">pinned_certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Certificate</span><span class="op">&gt;</span>,
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span> <span class="ident">username</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span> <span class="ident">token_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="kw-2">mut</span> <span class="ident">cli</span>: <span class="ident">Cli</span>,
-    ) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Command::Server</span>(<span class="ident">server</span>) =&gt; {
-                <span class="kw">if</span> <span class="ident">server_url</span>.<span class="ident">is_some</span>() {
+        server_url: <span class="prelude-ty">Option</span>&lt;Url&gt;,
+        pinned_certificate: <span class="prelude-ty">Option</span>&lt;Certificate&gt;,
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)] </span>username: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;token-authentication&quot;</span>)] </span>token_id: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+        <span class="kw-2">mut </span>cli: Cli,
+    ) -&gt; anyhow::Result&lt;()&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            Command::Server(server) =&gt; {
+                <span class="kw">if </span>server_url.is_some() {
                     <span class="macro">anyhow::bail!</span>(<span class="string">&quot;server url provided for local-only command.&quot;</span>)
                 }
 
-                <span class="ident">server</span>.<span class="ident">execute_on</span>(<span class="ident">cli</span>.<span class="ident">open_server</span>().<span class="kw">await</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                server.execute_on(cli.open_server().<span class="kw">await</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             }
-            <span class="ident">other</span> =&gt; {
-                <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">server_url</span>) <span class="op">=</span> <span class="ident">server_url</span> {
-                    <span class="comment">// TODO how does custom API handling work here?</span>
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client::build</span>(<span class="ident">server_url</span>);
+            other =&gt; {
+                <span class="kw">let </span>connection = <span class="kw">if let </span><span class="prelude-val">Some</span>(server_url) = server_url {
+                    <span class="comment">// TODO how does custom API handling work here?
+                    </span><span class="kw">let </span><span class="kw-2">mut </span>client = Client::build(server_url);
 
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">certificate</span>) <span class="op">=</span> <span class="ident">pinned_certificate</span> {
-                        <span class="ident">client</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">with_certificate</span>(<span class="ident">certificate</span>);
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(certificate) = pinned_certificate {
+                        client = client.with_certificate(certificate);
                     }
 
-                    <span class="ident">AnyServerConnection::Networked</span>(<span class="ident">client</span>.<span class="ident">finish</span>()<span class="question-mark">?</span>)
-                } <span class="kw">else</span> {
-                    <span class="ident">AnyServerConnection::Local</span>(<span class="ident">cli</span>.<span class="ident">open_server</span>().<span class="kw">await</span><span class="question-mark">?</span>)
+                    AnyServerConnection::Networked(client.finish()<span class="question-mark">?</span>)
+                } <span class="kw">else </span>{
+                    AnyServerConnection::Local(cli.open_server().<span class="kw">await</span><span class="question-mark">?</span>)
                 };
 
-                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-                <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">username</span>) <span class="op">=</span> <span class="ident">username</span> {
-                    <span class="kw">let</span> <span class="ident">password</span> <span class="op">=</span> <span class="ident">bonsaidb_local::cli::read_password_from_stdin</span>(<span class="bool-val">false</span>)<span class="question-mark">?</span>;
-                    <span class="ident">connection</span>
-                        .<span class="ident">authenticate_with_password</span>(<span class="kw-2">&amp;</span><span class="ident">username</span>, <span class="ident">password</span>)
-                        .<span class="kw">await</span><span class="question-mark">?</span>
-                } <span class="kw">else</span> {
-                    <span class="ident">connection</span>
+                <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+                </span><span class="kw">let </span>connection = <span class="kw">if let </span><span class="prelude-val">Some</span>(username) = username {
+                    <span class="kw">let </span>password = bonsaidb_local::cli::read_password_from_stdin(<span class="bool-val">false</span>)<span class="question-mark">?</span>;
+                    connection
+                        .authenticate_with_password(<span class="kw-2">&amp;</span>username, password)
+                        .<span class="kw">await</span><span class="question-mark">?
+                </span>} <span class="kw">else </span>{
+                    connection
                 };
 
-                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span>
-                <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">token_id</span>) <span class="op">=</span> <span class="ident">token_id</span> {
-                    <span class="kw">let</span> <span class="ident">token</span> <span class="op">=</span> <span class="ident">bonsaidb_core::connection::SensitiveString</span>(<span class="ident">std::env::var</span>(
+                <span class="attribute">#[cfg(feature = <span class="string">&quot;token-authentication&quot;</span>)]
+                </span><span class="kw">let </span>connection = <span class="kw">if let </span><span class="prelude-val">Some</span>(token_id) = token_id {
+                    <span class="kw">let </span>token = bonsaidb_core::connection::SensitiveString(std::env::var(
                         <span class="string">&quot;BONSAIDB_TOKEN_SECRET&quot;</span>,
                     )<span class="question-mark">?</span>);
-                    <span class="ident">connection</span>.<span class="ident">authenticate_with_token</span>(<span class="ident">token_id</span>, <span class="kw-2">&amp;</span><span class="ident">token</span>).<span class="kw">await</span><span class="question-mark">?</span>
-                } <span class="kw">else</span> {
-                    <span class="ident">connection</span>
+                    connection.authenticate_with_token(token_id, <span class="kw-2">&amp;</span>token).<span class="kw">await</span><span class="question-mark">?
+                </span>} <span class="kw">else </span>{
+                    connection
                 };
 
-                <span class="kw">match</span> <span class="ident">other</span> {
-                    <span class="ident">Command::Admin</span>(<span class="ident">admin</span>) =&gt; <span class="ident">admin</span>.<span class="ident">execute_async</span>(<span class="kw-2">&amp;</span><span class="ident">connection</span>).<span class="kw">await</span><span class="question-mark">?</span>,
-                    <span class="ident">Command::External</span>(<span class="ident">external</span>) =&gt; <span class="ident">cli</span>.<span class="ident">execute</span>(<span class="ident">external</span>, <span class="ident">connection</span>).<span class="kw">await</span><span class="question-mark">?</span>,
-                    <span class="ident">Command::Server</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
+                <span class="kw">match </span>other {
+                    Command::Admin(admin) =&gt; admin.execute_async(<span class="kw-2">&amp;</span>connection).<span class="kw">await</span><span class="question-mark">?</span>,
+                    Command::External(external) =&gt; cli.execute(external, connection).<span class="kw">await</span><span class="question-mark">?</span>,
+                    Command::Server(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
                 }
             }
         }
@@ -338,148 +336,151 @@
     }
 }
 
-<span class="doccomment">/// The command line interface for `bonsaidb`.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Parser</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Args</span><span class="op">&lt;</span><span class="ident">Cli</span>: <span class="ident">CommandLine</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// A url to a remote server.</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">url</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// A pinned certificate to use when connecting to `url`.</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;c&#39;</span>, <span class="ident">long</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">pinned_certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathBuf</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// A token ID to authenticate as before executing the command. Use</span>
-    <span class="doccomment">/// environment variable `BONSAIDB_TOKEN_SECRET` to provide the</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span> <span class="op">=</span> <span class="string">&quot;token&quot;</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;t&#39;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">token_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// A user to authenticate as before executing the command. The password</span>
-    <span class="doccomment">/// will be prompted for over stdin. When writing a script for headless</span>
-    <span class="doccomment">/// automation, token authentication should be preferred.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span> <span class="op">=</span> <span class="string">&quot;username&quot;</span>, <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;u&#39;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">username</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The command to execute on the connection specified.</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">subcommand</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">command</span>: <span class="ident">Command</span><span class="op">&lt;</span><span class="ident">Cli</span><span class="op">&gt;</span>,
+<span class="doccomment">/// The command line interface for `bonsaidb`.
+</span><span class="attribute">#[derive(Parser, Debug)]
+</span><span class="kw">pub struct </span>Args&lt;Cli: CommandLine&gt; {
+    <span class="doccomment">/// A url to a remote server.
+    </span><span class="attribute">#[clap(long)]
+    </span><span class="kw">pub </span>url: <span class="prelude-ty">Option</span>&lt;Url&gt;,
+    <span class="doccomment">/// A pinned certificate to use when connecting to `url`.
+    </span><span class="attribute">#[clap(short = <span class="string">&#39;c&#39;</span>, long)]
+    </span><span class="kw">pub </span>pinned_certificate: <span class="prelude-ty">Option</span>&lt;PathBuf&gt;,
+    <span class="doccomment">/// A token ID to authenticate as before executing the command. Use
+    /// environment variable `BONSAIDB_TOKEN_SECRET` to provide the
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;token-authentication&quot;</span>)]
+    #[clap(long = <span class="string">&quot;token&quot;</span>, short = <span class="string">&#39;t&#39;</span>)]
+    </span><span class="kw">pub </span>token_id: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+    <span class="doccomment">/// A user to authenticate as before executing the command. The password
+    /// will be prompted for over stdin. When writing a script for headless
+    /// automation, token authentication should be preferred.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+    #[clap(long = <span class="string">&quot;username&quot;</span>, short = <span class="string">&#39;u&#39;</span>)]
+    </span><span class="kw">pub </span>username: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="doccomment">/// The command to execute on the connection specified.
+    </span><span class="attribute">#[clap(subcommand)]
+    </span><span class="kw">pub </span>command: Command&lt;Cli&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Cli</span>: <span class="ident">CommandLine</span><span class="op">&gt;</span> <span class="ident">Args</span><span class="op">&lt;</span><span class="ident">Cli</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Executes the command.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute</span>(<span class="self">self</span>, <span class="ident">cli</span>: <span class="ident">Cli</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">pinned_certificate</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cert_path</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">pinned_certificate</span> {
-            <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">tokio::fs::read</span>(<span class="ident">cert_path</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="prelude-val">Some</span>(<span class="ident">Certificate::from_der</span>(<span class="ident">bytes</span>)<span class="question-mark">?</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        };
-        <span class="self">self</span>.<span class="ident">command</span>
-            .<span class="ident">execute</span>(
-                <span class="self">self</span>.<span class="ident">url</span>,
-                <span class="ident">pinned_certificate</span>,
-                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;password-hashing&quot;</span>)]</span>
-                <span class="self">self</span>.<span class="ident">username</span>,
-                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span>
-                <span class="self">self</span>.<span class="ident">token_id</span>,
-                <span class="ident">cli</span>,
+<span class="kw">impl</span>&lt;Cli: CommandLine&gt; Args&lt;Cli&gt; {
+    <span class="doccomment">/// Executes the command.
+    </span><span class="kw">pub async fn </span>execute(<span class="self">self</span>, cli: Cli) -&gt; anyhow::Result&lt;()&gt; {
+        <span class="kw">let </span>pinned_certificate = <span class="kw">if let </span><span class="prelude-val">Some</span>(cert_path) = <span class="self">self</span>.pinned_certificate {
+            <span class="kw">let </span>bytes = tokio::fs::read(cert_path).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="prelude-val">Some</span>(Certificate::from_der(bytes)<span class="question-mark">?</span>)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>};
+        <span class="self">self</span>.command
+            .execute(
+                <span class="self">self</span>.url,
+                pinned_certificate,
+                <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
+                </span><span class="self">self</span>.username,
+                <span class="attribute">#[cfg(feature = <span class="string">&quot;token-authentication&quot;</span>)]
+                </span><span class="self">self</span>.token_id,
+                cli,
             )
-            .<span class="kw">await</span>
-    }
+            .<span class="kw">await
+    </span>}
 }
 
-<span class="doccomment">/// A command line interface that can be executed with either a remote or local</span>
-<span class="doccomment">/// connection to a server.</span>
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">CommandLine</span>: <span class="ident">Sized</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> {
-    <span class="doccomment">/// The Backend for this command line.</span>
-    <span class="kw">type</span> <span class="ident">Backend</span>: <span class="ident">Backend</span>;
-    <span class="doccomment">/// The [`Subcommand`] which is embedded next to the built-in BonsaiDb</span>
-    <span class="doccomment">/// commands.</span>
-    <span class="kw">type</span> <span class="ident">Subcommand</span>: <span class="ident">Subcommand</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span>;
+<span class="doccomment">/// A command line interface that can be executed with either a remote or local
+/// connection to a server.
+</span><span class="attribute">#[async_trait]
+</span><span class="kw">pub trait </span>CommandLine: Sized + Send + Sync {
+    <span class="doccomment">/// The Backend for this command line.
+    </span><span class="kw">type </span>Backend: Backend;
+    <span class="doccomment">/// The [`Subcommand`] which is embedded next to the built-in BonsaiDb
+    /// commands.
+    </span><span class="kw">type </span>Subcommand: Subcommand + Send + Sync + Debug;
 
-    <span class="doccomment">/// Runs the command-line interface using command-line arguments from the</span>
-    <span class="doccomment">/// environment.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span>(<span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">Args</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="ident">::parse</span>().<span class="ident">execute</span>(<span class="self">self</span>).<span class="kw">await</span>
-    }
+    <span class="doccomment">/// Runs the command-line interface using command-line arguments from the
+    /// environment.
+    </span><span class="kw">async fn </span>run(<span class="self">self</span>) -&gt; anyhow::Result&lt;()&gt; {
+        Args::&lt;<span class="self">Self</span>&gt;::parse().execute(<span class="self">self</span>).<span class="kw">await
+    </span>}
 
-    <span class="doccomment">/// Runs the command-line interface using the specified list of arguments.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run_from</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">itr</span>: <span class="ident">I</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-        <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="doccomment">/// Runs the command-line interface using the specified list of arguments.
+    </span><span class="kw">async fn </span>run_from&lt;I, T&gt;(<span class="self">self</span>, itr: I) -&gt; anyhow::Result&lt;()&gt;
+    <span class="kw">where
+        </span>I: IntoIterator&lt;Item = T&gt; + Send,
+        T: Into&lt;OsString&gt; + Clone + Send,
     {
-        <span class="ident">Args</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="ident">::parse_from</span>(<span class="ident">itr</span>).<span class="ident">execute</span>(<span class="self">self</span>).<span class="kw">await</span>
+        Args::&lt;<span class="self">Self</span>&gt;::parse_from(itr).execute(<span class="self">self</span>).<span class="kw">await
+    </span>}
+
+    <span class="doccomment">/// Returns a new server initialized based on the same configuration used
+    /// for [`CommandLine`].
+    </span><span class="kw">async fn </span>open_server(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; anyhow::Result&lt;CustomServer&lt;<span class="self">Self</span>::Backend&gt;&gt; {
+        <span class="prelude-val">Ok</span>(CustomServer::&lt;<span class="self">Self</span>::Backend&gt;::open(<span class="self">self</span>.configuration().<span class="kw">await</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>)
     }
 
-    <span class="doccomment">/// Returns a new server initialized based on the same configuration used</span>
-    <span class="doccomment">/// for [`CommandLine`].</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">open_server</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">CustomServer</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Backend</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">CustomServer</span>::<span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Backend</span><span class="op">&gt;</span><span class="ident">::open</span>(<span class="self">self</span>.<span class="ident">configuration</span>().<span class="kw">await</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span>)
-    }
+    <span class="doccomment">/// Returns the server configuration to use when initializing a local server.
+    </span><span class="kw">async fn </span>configuration(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; anyhow::Result&lt;ServerConfiguration&lt;<span class="self">Self</span>::Backend&gt;&gt;;
 
-    <span class="doccomment">/// Returns the server configuration to use when initializing a local server.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">configuration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Backend</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// Execute the command on `connection`.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">command</span>: <span class="ident"><span class="self">Self</span>::Subcommand</span>,
-        <span class="ident">connection</span>: <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Backend</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="doccomment">/// Execute the command on `connection`.
+    </span><span class="kw">async fn </span>execute(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        command: <span class="self">Self</span>::Subcommand,
+        connection: AnyServerConnection&lt;<span class="self">Self</span>::Backend&gt;,
+    ) -&gt; anyhow::Result&lt;()&gt;;
 }
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span> <span class="ident">CommandLine</span> <span class="kw">for</span> <span class="ident">NoBackend</span> {
-    <span class="kw">type</span> <span class="ident">Backend</span> <span class="op">=</span> <span class="self">Self</span>;
-    <span class="kw">type</span> <span class="ident">Subcommand</span> <span class="op">=</span> <span class="self">Self</span>;
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl </span>CommandLine <span class="kw">for </span>NoBackend {
+    <span class="kw">type </span>Backend = <span class="self">Self</span>;
+    <span class="kw">type </span>Subcommand = NoSubcommand;
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">configuration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">ServerConfiguration::default</span>())
+    <span class="kw">async fn </span>configuration(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; anyhow::Result&lt;ServerConfiguration&gt; {
+        <span class="prelude-val">Ok</span>(ServerConfiguration::default())
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">_command</span>: <span class="ident"><span class="self">Self</span>::Subcommand</span>,
-        <span class="ident">_connection</span>: <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">async fn </span>execute(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        _command: <span class="self">Self</span>::Subcommand,
+        _connection: AnyServerConnection&lt;<span class="self">Self</span>&gt;,
+    ) -&gt; anyhow::Result&lt;()&gt; {
         <span class="macro">unreachable!</span>()
     }
 }
 
-<span class="doccomment">/// Runs the command-line interface with only the built-in commands, using</span>
-<span class="doccomment">/// `configuration` to launch a server if running a local command.</span>
-<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span>(<span class="ident">configuration</span>: <span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="ident">Args::parse</span>()
-        .<span class="ident">execute</span>(<span class="ident">NoCommandLine</span>::<span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-            <span class="ident">configuration</span>: <span class="prelude-val">Some</span>(<span class="ident">configuration</span>),
+<span class="doccomment">/// Runs the command-line interface with only the built-in commands, using
+/// `configuration` to launch a server if running a local command.
+</span><span class="kw">pub async fn </span>run&lt;B: Backend&gt;(configuration: ServerConfiguration&lt;B&gt;) -&gt; anyhow::Result&lt;()&gt; {
+    Args::parse()
+        .execute(NoCommandLine::&lt;B&gt; {
+            configuration: <span class="prelude-val">Some</span>(configuration),
         })
-        .<span class="kw">await</span>
+        .<span class="kw">await
+</span>}
+
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>NoCommandLine&lt;B: Backend&gt; {
+    configuration: <span class="prelude-ty">Option</span>&lt;ServerConfiguration&lt;B&gt;&gt;,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">NoCommandLine</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> {
-    <span class="ident">configuration</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-}
+<span class="attribute">#[async_trait]
+</span><span class="kw">impl</span>&lt;B: Backend&gt; CommandLine <span class="kw">for </span>NoCommandLine&lt;B&gt; {
+    <span class="kw">type </span>Backend = B;
+    <span class="kw">type </span>Subcommand = NoSubcommand;
 
-<span class="attribute">#[<span class="ident">async_trait</span>]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Backend</span><span class="op">&gt;</span> <span class="ident">CommandLine</span> <span class="kw">for</span> <span class="ident">NoCommandLine</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">B</span>;
-    <span class="kw">type</span> <span class="ident">Subcommand</span> <span class="op">=</span> <span class="ident">NoBackend</span>;
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">configuration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span><span class="ident">ServerConfiguration</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">configuration</span>
-            .<span class="ident">take</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">anyhow::anyhow!</span>(<span class="string">&quot;configuration already consumed&quot;</span>))
+    <span class="kw">async fn </span>configuration(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; anyhow::Result&lt;ServerConfiguration&lt;B&gt;&gt; {
+        <span class="self">self</span>.configuration
+            .take()
+            .ok_or_else(|| <span class="macro">anyhow::anyhow!</span>(<span class="string">&quot;configuration already consumed&quot;</span>))
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">execute</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">_command</span>: <span class="ident"><span class="self">Self</span>::Subcommand</span>,
-        <span class="ident">_connection</span>: <span class="ident">AnyServerConnection</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">anyhow::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">async fn </span>execute(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        _command: <span class="self">Self</span>::Subcommand,
+        _connection: AnyServerConnection&lt;B&gt;,
+    ) -&gt; anyhow::Result&lt;()&gt; {
         <span class="macro">unreachable!</span>()
     }
 }
+
+<span class="doccomment">/// A [`Subcommand`] implementor that has no options.
+</span><span class="attribute">#[derive(clap::Subcommand, Debug)]
+</span><span class="kw">pub enum </span>NoSubcommand {}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

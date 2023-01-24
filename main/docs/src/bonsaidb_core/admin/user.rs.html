@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/admin/user.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>user.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/admin/user.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>user.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -118,120 +112,119 @@
 <span id="112">112</span>
 <span id="113">113</span>
 <span id="114">114</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">itertools::Itertools</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">admin</span>::{<span class="ident">group</span>, <span class="ident">role</span>},
-    <span class="ident">connection</span>::{
-        <span class="ident">AsyncStorageConnection</span>, <span class="ident">Connection</span>, <span class="ident">IdentityReference</span>, <span class="ident">SensitiveString</span>, <span class="ident">StorageConnection</span>,
+<span class="kw">use crate</span>::{
+    admin::{group, role},
+    connection::{
+        AsyncStorageConnection, Connection, IdentityReference, SensitiveString, StorageConnection,
     },
-    <span class="ident">define_basic_unique_mapped_view</span>,
-    <span class="ident">document</span>::{<span class="ident">CollectionDocument</span>, <span class="ident">Emit</span>, <span class="ident">KeyId</span>},
-    <span class="ident">permissions::Permissions</span>,
-    <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">Nameable</span>, <span class="ident">NamedCollection</span>, <span class="ident">SerializedCollection</span>},
+    define_basic_unique_mapped_view,
+    document::{CollectionDocument, Emit, KeyId},
+    permissions::Permissions,
+    schema::{Collection, Nameable, NamedCollection, SerializedCollection},
 };
 
-<span class="doccomment">/// A user that can authenticate with BonsaiDb.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Collection</span>)]</span>
-<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;user&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;khonsulabs&quot;</span>, <span class="ident">views</span> <span class="op">=</span> [<span class="ident">ByName</span>]</span>)]
-<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">encryption_key</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">KeyId::Master</span>), <span class="ident">encryption_optional</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">User</span> {
-    <span class="doccomment">/// The name of the role. Must be unique.</span>
-    <span class="kw">pub</span> <span class="ident">username</span>: <span class="ident">String</span>,
-    <span class="doccomment">/// The IDs of the user groups this user belongs to.</span>
-    <span class="kw">pub</span> <span class="ident">groups</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The IDs of the roles this user has been assigned.</span>
-    <span class="kw">pub</span> <span class="ident">roles</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A user that can authenticate with BonsaiDb.
+</span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize, Default, Collection)]
+#[collection(name = <span class="string">&quot;user&quot;</span>, authority = <span class="string">&quot;khonsulabs&quot;</span>, views = [ByName]</span>)]
+<span class="attribute">#[collection(encryption_key = <span class="prelude-val">Some</span>(KeyId::Master), encryption_optional, core = <span class="kw">crate</span>)]
+</span><span class="kw">pub struct </span>User {
+    <span class="doccomment">/// The name of the role. Must be unique.
+    </span><span class="kw">pub </span>username: String,
+    <span class="doccomment">/// The IDs of the user groups this user belongs to.
+    </span><span class="kw">pub </span>groups: Vec&lt;u64&gt;,
+    <span class="doccomment">/// The IDs of the roles this user has been assigned.
+    </span><span class="kw">pub </span>roles: Vec&lt;u64&gt;,
 
-    <span class="doccomment">/// The user&#39;s stored password hash.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This field is not feature gated to prevent losing stored passwords if</span>
-    <span class="doccomment">/// the `password-hashing` feature is disabled and then re-enabled and user</span>
-    <span class="doccomment">/// records are updated in the meantime.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">argon_hash</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SensitiveString</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The user&#39;s stored password hash.
+    ///
+    /// This field is not feature gated to prevent losing stored passwords if
+    /// the `password-hashing` feature is disabled and then re-enabled and user
+    /// records are updated in the meantime.
+    </span><span class="attribute">#[serde(default)]
+    </span><span class="kw">pub </span>argon_hash: <span class="prelude-ty">Option</span>&lt;SensitiveString&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">User</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">assume_identity</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span>, <span class="ident">Storage</span>: <span class="ident">StorageConnection</span><span class="op">&gt;</span>(
-        <span class="ident">name_or_id</span>: <span class="kw">impl</span> <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span>, <span class="ident">u64</span><span class="op">&gt;</span>,
-        <span class="ident">storage</span>: <span class="kw-2">&amp;</span><span class="ident">Storage</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Storage::Authenticated</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="ident">storage</span>.<span class="ident">assume_identity</span>(<span class="ident">IdentityReference::User</span>(<span class="ident">name_or_id</span>.<span class="ident">name</span>()<span class="question-mark">?</span>))
+<span class="kw">impl </span>User {
+    <span class="kw">pub fn </span>assume_identity&lt;<span class="lifetime">&#39;name</span>, Storage: StorageConnection&gt;(
+        name_or_id: <span class="kw">impl </span>Nameable&lt;<span class="lifetime">&#39;name</span>, u64&gt;,
+        storage: <span class="kw-2">&amp;</span>Storage,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Storage::Authenticated, <span class="kw">crate</span>::Error&gt; {
+        storage.assume_identity(IdentityReference::User(name_or_id.name()<span class="question-mark">?</span>))
     }
 
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">assume_identity_async</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span>, <span class="ident">Storage</span>: <span class="ident">AsyncStorageConnection</span><span class="op">&gt;</span>(
-        <span class="ident">name_or_id</span>: <span class="kw">impl</span> <span class="ident">Nameable</span><span class="op">&lt;</span><span class="lifetime">&#39;name</span>, <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
-        <span class="ident">storage</span>: <span class="kw-2">&amp;</span><span class="ident">Storage</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Storage::Authenticated</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="ident">storage</span>
-            .<span class="ident">assume_identity</span>(<span class="ident">IdentityReference::User</span>(<span class="ident">name_or_id</span>.<span class="ident">name</span>()<span class="question-mark">?</span>))
-            .<span class="kw">await</span>
-    }
+    <span class="kw">pub async fn </span>assume_identity_async&lt;<span class="lifetime">&#39;name</span>, Storage: AsyncStorageConnection&gt;(
+        name_or_id: <span class="kw">impl </span>Nameable&lt;<span class="lifetime">&#39;name</span>, u64&gt; + Send,
+        storage: <span class="kw-2">&amp;</span>Storage,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Storage::Authenticated, <span class="kw">crate</span>::Error&gt; {
+        storage
+            .assume_identity(IdentityReference::User(name_or_id.name()<span class="question-mark">?</span>))
+            .<span class="kw">await
+    </span>}
 
-    <span class="doccomment">/// Returns a default user with the given username.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_with_username</span>(<span class="ident">username</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">username</span>: <span class="ident">username</span>.<span class="ident">into</span>(),
-            ..<span class="ident"><span class="self">Self</span>::default</span>()
+    <span class="doccomment">/// Returns a default user with the given username.
+    </span><span class="kw">pub fn </span>default_with_username(username: <span class="kw">impl </span>Into&lt;String&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            username: username.into(),
+            ..<span class="self">Self</span>::default()
         }
     }
 
-    <span class="doccomment">/// Calculates the effective permissions based on the groups and roles this</span>
-    <span class="doccomment">/// user is assigned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">effective_permissions</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Calculates the effective permissions based on the groups and roles this
+    /// user is assigned.
+    </span><span class="kw">pub fn </span>effective_permissions&lt;C: Connection&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">admin</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
-        <span class="ident">inherit_permissions</span>: <span class="kw-2">&amp;</span><span class="ident">Permissions</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Permissions</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="comment">// List all of the groups that this user belongs to because of role associations.</span>
-        <span class="kw">let</span> <span class="ident">role_groups</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">roles</span>.<span class="ident">is_empty</span>() {
-            <span class="ident">Vec::default</span>()
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">roles</span> <span class="op">=</span> <span class="ident">role::Role::get_multiple</span>(<span class="self">self</span>.<span class="ident">groups</span>.<span class="ident">iter</span>(), <span class="ident">admin</span>)<span class="question-mark">?</span>;
-            <span class="ident">roles</span>
-                .<span class="ident">into_iter</span>()
-                .<span class="ident">flat_map</span>(<span class="op">|</span><span class="ident">doc</span><span class="op">|</span> <span class="ident">doc</span>.<span class="ident">contents</span>.<span class="ident">groups</span>)
-                .<span class="ident">unique</span>()
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
+        admin: <span class="kw-2">&amp;</span>C,
+        inherit_permissions: <span class="kw-2">&amp;</span>Permissions,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Permissions, <span class="kw">crate</span>::Error&gt; {
+        <span class="comment">// List all of the groups that this user belongs to because of role associations.
+        </span><span class="kw">let </span>role_groups = <span class="kw">if </span><span class="self">self</span>.roles.is_empty() {
+            Vec::default()
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>roles = role::Role::get_multiple(<span class="self">self</span>.groups.iter(), admin)<span class="question-mark">?</span>;
+            roles
+                .into_iter()
+                .flat_map(|doc| doc.contents.groups)
+                .unique()
+                .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()
         };
-        <span class="comment">// Retrieve all of the groups.</span>
-        <span class="kw">let</span> <span class="ident">groups</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">role_groups</span>.<span class="ident">is_empty</span>() {
-            <span class="ident">group::PermissionGroup::get_multiple</span>(<span class="self">self</span>.<span class="ident">groups</span>.<span class="ident">iter</span>(), <span class="ident">admin</span>)<span class="question-mark">?</span>
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">all_groups</span> <span class="op">=</span> <span class="ident">role_groups</span>;
-            <span class="ident">all_groups</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">groups</span>.<span class="ident">iter</span>().<span class="ident">copied</span>());
-            <span class="ident">all_groups</span>.<span class="ident">dedup</span>();
-            <span class="ident">group::PermissionGroup::get_multiple</span>(<span class="kw-2">&amp;</span><span class="ident">all_groups</span>, <span class="ident">admin</span>)<span class="question-mark">?</span>
-        };
+        <span class="comment">// Retrieve all of the groups.
+        </span><span class="kw">let </span>groups = <span class="kw">if </span>role_groups.is_empty() {
+            group::PermissionGroup::get_multiple(<span class="self">self</span>.groups.iter(), admin)<span class="question-mark">?
+        </span>} <span class="kw">else </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>all_groups = role_groups;
+            all_groups.extend(<span class="self">self</span>.groups.iter().copied());
+            all_groups.dedup();
+            group::PermissionGroup::get_multiple(<span class="kw-2">&amp;</span>all_groups, admin)<span class="question-mark">?
+        </span>};
 
-        <span class="comment">// Combine the permissions from all the groups into one.</span>
-        <span class="kw">let</span> <span class="ident">merged_permissions</span> <span class="op">=</span> <span class="ident">Permissions::merged</span>(
-            <span class="ident">groups</span>
-                .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">group</span><span class="op">|</span> <span class="ident">Permissions::from</span>(<span class="ident">group</span>.<span class="ident">contents</span>.<span class="ident">statements</span>))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
-                .<span class="ident">iter</span>()
-                .<span class="ident">chain</span>(<span class="ident">std::iter::once</span>(<span class="ident">inherit_permissions</span>)),
+        <span class="comment">// Combine the permissions from all the groups into one.
+        </span><span class="kw">let </span>merged_permissions = Permissions::merged(
+            groups
+                .into_iter()
+                .map(|group| Permissions::from(group.contents.statements))
+                .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()
+                .iter()
+                .chain(std::iter::once(inherit_permissions)),
         );
 
-        <span class="prelude-val">Ok</span>(<span class="ident">merged_permissions</span>)
+        <span class="prelude-val">Ok</span>(merged_permissions)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">NamedCollection</span> <span class="kw">for</span> <span class="ident">User</span> {
-    <span class="kw">type</span> <span class="ident">ByNameView</span> <span class="op">=</span> <span class="ident">ByName</span>;
+<span class="kw">impl </span>NamedCollection <span class="kw">for </span>User {
+    <span class="kw">type </span>ByNameView = ByName;
 }
 
 <span class="macro">define_basic_unique_mapped_view!</span>(
-    <span class="ident">ByName</span>,
-    <span class="ident">User</span>,
+    ByName,
+    User,
     <span class="number">1</span>,
     <span class="string">&quot;by-name&quot;</span>,
-    <span class="ident">String</span>,
-    <span class="op">|</span><span class="ident">document</span>: <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span><span class="op">|</span> { <span class="ident">document</span>.<span class="ident">header</span>.<span class="ident">emit_key</span>(<span class="ident">document</span>.<span class="ident">contents</span>.<span class="ident">username</span>) }
+    String,
+    |document: CollectionDocument&lt;User&gt;| { document.header.emit_key(document.contents.username) }
 );
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

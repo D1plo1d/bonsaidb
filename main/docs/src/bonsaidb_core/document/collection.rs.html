@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/document/collection.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>collection.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/document/collection.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>collection.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -276,278 +270,277 @@
 <span id="270">270</span>
 <span id="271">271</span>
 <span id="272">272</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::Debug;
 
-<span class="kw">use</span> <span class="ident">arc_bytes::serde</span>::{<span class="ident">Bytes</span>, <span class="ident">CowBytes</span>};
+<span class="kw">use </span>arc_bytes::serde::{Bytes, CowBytes};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection</span>::{<span class="ident">AsyncConnection</span>, <span class="ident">Connection</span>},
-    <span class="ident">document</span>::{<span class="ident">BorrowedDocument</span>, <span class="ident">CollectionHeader</span>, <span class="ident">DocumentId</span>, <span class="ident">Header</span>, <span class="ident">OwnedDocument</span>},
-    <span class="ident">schema::SerializedCollection</span>,
-    <span class="ident">Error</span>,
+<span class="kw">use crate</span>::{
+    connection::{AsyncConnection, Connection},
+    document::{BorrowedDocument, CollectionHeader, DocumentId, Header, OwnedDocument},
+    schema::SerializedCollection,
+    Error,
 };
 
-<span class="doccomment">/// A document with serializable contents.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">SerializedCollection</span>,
+<span class="doccomment">/// A document with serializable contents.
+</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]
+</span><span class="kw">pub struct </span>CollectionDocument&lt;C&gt;
+<span class="kw">where
+    </span>C: SerializedCollection,
 {
-    <span class="doccomment">/// The header of the document, which contains the id and `Revision`.</span>
-    <span class="kw">pub</span> <span class="ident">header</span>: <span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The header of the document, which contains the id and `Revision`.
+    </span><span class="kw">pub </span>header: CollectionHeader&lt;C::PrimaryKey&gt;,
 
-    <span class="doccomment">/// The document&#39;s contents.</span>
-    <span class="kw">pub</span> <span class="ident">contents</span>: <span class="ident">C::Contents</span>,
+    <span class="doccomment">/// The document&#39;s contents.
+    </span><span class="kw">pub </span>contents: C::Contents,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">SerializedCollection</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, C&gt; TryFrom&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>BorrowedDocument&lt;<span class="lifetime">&#39;a</span>&gt;&gt; <span class="kw">for </span>CollectionDocument&lt;C&gt;
+<span class="kw">where
+    </span>C: SerializedCollection,
 {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
+    <span class="kw">type </span>Error = Error;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">contents</span>: <span class="ident">C::deserialize</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>.<span class="ident">contents</span>)<span class="question-mark">?</span>,
-            <span class="ident">header</span>: <span class="ident">CollectionHeader::try_from</span>(<span class="ident">value</span>.<span class="ident">header</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>,
+    <span class="kw">fn </span>try_from(value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>BorrowedDocument&lt;<span class="lifetime">&#39;a</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            contents: C::deserialize(<span class="kw-2">&amp;</span>value.contents)<span class="question-mark">?</span>,
+            header: CollectionHeader::try_from(value.header.clone())<span class="question-mark">?</span>,
         })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">OwnedDocument</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">SerializedCollection</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, C&gt; TryFrom&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>OwnedDocument&gt; <span class="kw">for </span>CollectionDocument&lt;C&gt;
+<span class="kw">where
+    </span>C: SerializedCollection,
 {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
+    <span class="kw">type </span>Error = Error;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">OwnedDocument</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">contents</span>: <span class="ident">C::deserialize</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>.<span class="ident">contents</span>)<span class="question-mark">?</span>,
-            <span class="ident">header</span>: <span class="ident">CollectionHeader::try_from</span>(<span class="ident">value</span>.<span class="ident">header</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>,
+    <span class="kw">fn </span>try_from(value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>OwnedDocument) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            contents: C::deserialize(<span class="kw-2">&amp;</span>value.contents)<span class="question-mark">?</span>,
+            header: CollectionHeader::try_from(value.header.clone())<span class="question-mark">?</span>,
         })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">SerializedCollection</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span>, C&gt; TryFrom&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;b </span>CollectionDocument&lt;C&gt;&gt; <span class="kw">for </span>BorrowedDocument&lt;<span class="lifetime">&#39;a</span>&gt;
+<span class="kw">where
+    </span>C: SerializedCollection,
 {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
+    <span class="kw">type </span>Error = <span class="kw">crate</span>::Error;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">contents</span>: <span class="ident">CowBytes::from</span>(<span class="ident">C::serialize</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>.<span class="ident">contents</span>)<span class="question-mark">?</span>),
-            <span class="ident">header</span>: <span class="ident">Header::try_from</span>(<span class="ident">value</span>.<span class="ident">header</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>,
+    <span class="kw">fn </span>try_from(value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b </span>CollectionDocument&lt;C&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            contents: CowBytes::from(C::serialize(<span class="kw-2">&amp;</span>value.contents)<span class="question-mark">?</span>),
+            header: Header::try_from(value.header.clone())<span class="question-mark">?</span>,
         })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">SerializedCollection</span>,
+<span class="kw">impl</span>&lt;C&gt; CollectionDocument&lt;C&gt;
+<span class="kw">where
+    </span>C: SerializedCollection,
 {
-    <span class="doccomment">/// Stores the new value of `contents` in the document.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-    <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
-    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// if let Some(mut document) = MyCollection::get(&amp;42, &amp;db)? {</span>
-    <span class="doccomment">///     // modify the document</span>
-    <span class="doccomment">///     document.update(&amp;db)?;</span>
-    <span class="doccomment">///     println!(&quot;Updated revision: {:?}&quot;, document.header.revision);</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// # Ok(())</span>
-    <span class="doccomment">/// # }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">to_document</span>()<span class="question-mark">?</span>;
+    <span class="doccomment">/// Stores the new value of `contents` in the document.
+    ///
+    /// ```rust
+    /// # bonsaidb_core::__doctest_prelude!();
+    /// # use bonsaidb_core::connection::Connection;
+    /// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {
+    /// if let Some(mut document) = MyCollection::get(&amp;42, &amp;db)? {
+    ///     // modify the document
+    ///     document.update(&amp;db)?;
+    ///     println!(&quot;Updated revision: {:?}&quot;, document.header.revision);
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
+    </span><span class="kw">pub fn </span>update&lt;Cn: Connection&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, connection: <span class="kw-2">&amp;</span>Cn) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>doc = <span class="self">self</span>.to_document()<span class="question-mark">?</span>;
 
-        <span class="ident">connection</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>)<span class="question-mark">?</span>;
+        connection.update::&lt;C, <span class="kw">_</span>&gt;(<span class="kw-2">&amp;mut </span>doc)<span class="question-mark">?</span>;
 
-        <span class="self">self</span>.<span class="ident">header</span> <span class="op">=</span> <span class="ident">CollectionHeader::try_from</span>(<span class="ident">doc</span>.<span class="ident">header</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.header = CollectionHeader::try_from(doc.header)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Stores the new value of `contents` in the document.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-    <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
-    <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// if let Some(mut document) = MyCollection::get_async(&amp;42, &amp;db).await? {</span>
-    <span class="doccomment">///     // modify the document</span>
-    <span class="doccomment">///     document.update_async(&amp;db).await?;</span>
-    <span class="doccomment">///     println!(&quot;Updated revision: {:?}&quot;, document.header.revision);</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// # Ok(())</span>
-    <span class="doccomment">/// # })</span>
-    <span class="doccomment">/// # }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">update_async</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">doc</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">to_document</span>()<span class="question-mark">?</span>;
+    <span class="doccomment">/// Stores the new value of `contents` in the document.
+    ///
+    /// ```rust
+    /// # bonsaidb_core::__doctest_prelude!();
+    /// # use bonsaidb_core::connection::AsyncConnection;
+    /// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {
+    /// # tokio::runtime::Runtime::new().unwrap().block_on(async {
+    /// if let Some(mut document) = MyCollection::get_async(&amp;42, &amp;db).await? {
+    ///     // modify the document
+    ///     document.update_async(&amp;db).await?;
+    ///     println!(&quot;Updated revision: {:?}&quot;, document.header.revision);
+    /// }
+    /// # Ok(())
+    /// # })
+    /// # }
+    /// ```
+    </span><span class="kw">pub async fn </span>update_async&lt;Cn: AsyncConnection&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        connection: <span class="kw-2">&amp;</span>Cn,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>doc = <span class="self">self</span>.to_document()<span class="question-mark">?</span>;
 
-        <span class="ident">connection</span>.<span class="ident">update</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="ident">doc</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        connection.update::&lt;C, <span class="kw">_</span>&gt;(<span class="kw-2">&amp;mut </span>doc).<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="self">self</span>.<span class="ident">header</span> <span class="op">=</span> <span class="ident">CollectionHeader::try_from</span>(<span class="ident">doc</span>.<span class="ident">header</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.header = CollectionHeader::try_from(doc.header)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Modifies `self`, automatically retrying the modification if the document</span>
-    <span class="doccomment">/// has been updated on the server.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ## Data loss warning</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If you&#39;ve modified `self` before calling this function and a conflict</span>
-    <span class="doccomment">/// occurs, all changes to self will be lost when the current document is</span>
-    <span class="doccomment">/// fetched before retrying the process again. When you use this function,</span>
-    <span class="doccomment">/// you should limit the edits to the value to within the `modifier`</span>
-    <span class="doccomment">/// callback.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">modify</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">Connection</span>, <span class="ident">Modifier</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;mut</span> <span class="self">Self</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
-        <span class="kw-2">mut</span> <span class="ident">modifier</span>: <span class="ident">Modifier</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">C::Contents</span>: <span class="ident">Clone</span>,
+    <span class="doccomment">/// Modifies `self`, automatically retrying the modification if the document
+    /// has been updated on the server.
+    ///
+    /// ## Data loss warning
+    ///
+    /// If you&#39;ve modified `self` before calling this function and a conflict
+    /// occurs, all changes to self will be lost when the current document is
+    /// fetched before retrying the process again. When you use this function,
+    /// you should limit the edits to the value to within the `modifier`
+    /// callback.
+    </span><span class="kw">pub fn </span>modify&lt;Cn: Connection, Modifier: FnMut(<span class="kw-2">&amp;mut </span><span class="self">Self</span>) + Send + Sync&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        connection: <span class="kw-2">&amp;</span>Cn,
+        <span class="kw-2">mut </span>modifier: Modifier,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt;
+    <span class="kw">where
+        </span>C::Contents: Clone,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">is_first_loop</span> <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="comment">// TODO this should have a retry-limit.</span>
-        <span class="kw">loop</span> {
-            <span class="comment">// On the first attempt, we want to try sending the update to the</span>
-            <span class="comment">// database without fetching new contents. If we receive a conflict,</span>
-            <span class="comment">// on future iterations we will first re-load the data.</span>
-            <span class="kw">if</span> <span class="ident">is_first_loop</span> {
-                <span class="ident">is_first_loop</span> <span class="op">=</span> <span class="bool-val">false</span>;
-            } <span class="kw">else</span> {
-                <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span>
-                    <span class="ident">C::get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">connection</span>)<span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                        <span class="kw">match</span> <span class="ident">DocumentId::new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>) {
-                            <span class="prelude-val">Ok</span>(<span class="ident">id</span>) =&gt; <span class="ident">Error::DocumentNotFound</span>(<span class="ident">C::collection_name</span>(), <span class="ident">Box::new</span>(<span class="ident">id</span>)),
-                            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
+        <span class="kw">let </span><span class="kw-2">mut </span>is_first_loop = <span class="bool-val">true</span>;
+        <span class="comment">// TODO this should have a retry-limit.
+        </span><span class="kw">loop </span>{
+            <span class="comment">// On the first attempt, we want to try sending the update to the
+            // database without fetching new contents. If we receive a conflict,
+            // on future iterations we will first re-load the data.
+            </span><span class="kw">if </span>is_first_loop {
+                is_first_loop = <span class="bool-val">false</span>;
+            } <span class="kw">else </span>{
+                <span class="kw-2">*</span><span class="self">self </span>=
+                    C::get(<span class="kw-2">&amp;</span><span class="self">self</span>.header.id, connection)<span class="question-mark">?</span>.ok_or_else(|| {
+                        <span class="kw">match </span>DocumentId::new(<span class="kw-2">&amp;</span><span class="self">self</span>.header.id) {
+                            <span class="prelude-val">Ok</span>(id) =&gt; Error::DocumentNotFound(C::collection_name(), Box::new(id)),
+                            <span class="prelude-val">Err</span>(err) =&gt; err,
                         }
                     })<span class="question-mark">?</span>;
             }
-            <span class="ident">modifier</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>);
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">update</span>(<span class="ident">connection</span>) {
-                <span class="prelude-val">Err</span>(<span class="ident">Error::DocumentConflict</span>(..)) =&gt; {}
-                <span class="ident">other</span> =&gt; <span class="kw">return</span> <span class="ident">other</span>,
+            modifier(<span class="kw-2">&amp;mut *</span><span class="self">self</span>);
+            <span class="kw">match </span><span class="self">self</span>.update(connection) {
+                <span class="prelude-val">Err</span>(Error::DocumentConflict(..)) =&gt; {}
+                other =&gt; <span class="kw">return </span>other,
             }
         }
     }
 
-    <span class="doccomment">/// Modifies `self`, automatically retrying the modification if the document</span>
-    <span class="doccomment">/// has been updated on the server.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ## Data loss warning</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If you&#39;ve modified `self` before calling this function and a conflict</span>
-    <span class="doccomment">/// occurs, all changes to self will be lost when the current document is</span>
-    <span class="doccomment">/// fetched before retrying the process again. When you use this function,</span>
-    <span class="doccomment">/// you should limit the edits to the value to within the `modifier`</span>
-    <span class="doccomment">/// callback.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">modify_async</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">AsyncConnection</span>, <span class="ident">Modifier</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;mut</span> <span class="self">Self</span>) <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-        <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>,
-        <span class="kw-2">mut</span> <span class="ident">modifier</span>: <span class="ident">Modifier</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">C::Contents</span>: <span class="ident">Clone</span>,
+    <span class="doccomment">/// Modifies `self`, automatically retrying the modification if the document
+    /// has been updated on the server.
+    ///
+    /// ## Data loss warning
+    ///
+    /// If you&#39;ve modified `self` before calling this function and a conflict
+    /// occurs, all changes to self will be lost when the current document is
+    /// fetched before retrying the process again. When you use this function,
+    /// you should limit the edits to the value to within the `modifier`
+    /// callback.
+    </span><span class="kw">pub async fn </span>modify_async&lt;Cn: AsyncConnection, Modifier: FnMut(<span class="kw-2">&amp;mut </span><span class="self">Self</span>) + Send + Sync&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        connection: <span class="kw-2">&amp;</span>Cn,
+        <span class="kw-2">mut </span>modifier: Modifier,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt;
+    <span class="kw">where
+        </span>C::Contents: Clone,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">is_first_loop</span> <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="comment">// TODO this should have a retry-limit.</span>
-        <span class="kw">loop</span> {
-            <span class="comment">// On the first attempt, we want to try sending the update to the</span>
-            <span class="comment">// database without fetching new contents. If we receive a conflict,</span>
-            <span class="comment">// on future iterations we will first re-load the data.</span>
-            <span class="kw">if</span> <span class="ident">is_first_loop</span> {
-                <span class="ident">is_first_loop</span> <span class="op">=</span> <span class="bool-val">false</span>;
-            } <span class="kw">else</span> {
-                <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">C::get_async</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>, <span class="ident">connection</span>)
-                    .<span class="kw">await</span><span class="question-mark">?</span>
-                    .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">DocumentId::new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">header</span>.<span class="ident">id</span>) {
-                        <span class="prelude-val">Ok</span>(<span class="ident">id</span>) =&gt; <span class="ident">Error::DocumentNotFound</span>(<span class="ident">C::collection_name</span>(), <span class="ident">Box::new</span>(<span class="ident">id</span>)),
-                        <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="ident">err</span>,
+        <span class="kw">let </span><span class="kw-2">mut </span>is_first_loop = <span class="bool-val">true</span>;
+        <span class="comment">// TODO this should have a retry-limit.
+        </span><span class="kw">loop </span>{
+            <span class="comment">// On the first attempt, we want to try sending the update to the
+            // database without fetching new contents. If we receive a conflict,
+            // on future iterations we will first re-load the data.
+            </span><span class="kw">if </span>is_first_loop {
+                is_first_loop = <span class="bool-val">false</span>;
+            } <span class="kw">else </span>{
+                <span class="kw-2">*</span><span class="self">self </span>= C::get_async(<span class="kw-2">&amp;</span><span class="self">self</span>.header.id, connection)
+                    .<span class="kw">await</span><span class="question-mark">?
+                    </span>.ok_or_else(|| <span class="kw">match </span>DocumentId::new(<span class="kw-2">&amp;</span><span class="self">self</span>.header.id) {
+                        <span class="prelude-val">Ok</span>(id) =&gt; Error::DocumentNotFound(C::collection_name(), Box::new(id)),
+                        <span class="prelude-val">Err</span>(err) =&gt; err,
                     })<span class="question-mark">?</span>;
             }
-            <span class="ident">modifier</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>);
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">update_async</span>(<span class="ident">connection</span>).<span class="kw">await</span> {
-                <span class="prelude-val">Err</span>(<span class="ident">Error::DocumentConflict</span>(..)) =&gt; {}
-                <span class="ident">other</span> =&gt; <span class="kw">return</span> <span class="ident">other</span>,
+            modifier(<span class="kw-2">&amp;mut *</span><span class="self">self</span>);
+            <span class="kw">match </span><span class="self">self</span>.update_async(connection).<span class="kw">await </span>{
+                <span class="prelude-val">Err</span>(Error::DocumentConflict(..)) =&gt; {}
+                other =&gt; <span class="kw">return </span>other,
             }
         }
     }
 
-    <span class="doccomment">/// Removes the document from the collection.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-    <span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
-    <span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// if let Some(document) = MyCollection::get(&amp;42, &amp;db)? {</span>
-    <span class="doccomment">///     document.delete(&amp;db)?;</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// # Ok(())</span>
-    <span class="doccomment">/// # })</span>
-    <span class="doccomment">/// # }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>().<span class="ident">delete</span>(<span class="self">self</span>)<span class="question-mark">?</span>;
+    <span class="doccomment">/// Removes the document from the collection.
+    ///
+    /// ```rust
+    /// # bonsaidb_core::__doctest_prelude!();
+    /// # use bonsaidb_core::connection::Connection;
+    /// # fn test_fn&lt;C: Connection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {
+    /// # tokio::runtime::Runtime::new().unwrap().block_on(async {
+    /// if let Some(document) = MyCollection::get(&amp;42, &amp;db)? {
+    ///     document.delete(&amp;db)?;
+    /// }
+    /// # Ok(())
+    /// # })
+    /// # }
+    /// ```
+    </span><span class="kw">pub fn </span>delete&lt;Cn: Connection&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, connection: <span class="kw-2">&amp;</span>Cn) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        connection.collection::&lt;C&gt;().delete(<span class="self">self</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Removes the document from the collection.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-    <span class="doccomment">/// # use bonsaidb_core::connection::AsyncConnection;</span>
-    <span class="doccomment">/// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {</span>
-    <span class="doccomment">/// # tokio::runtime::Runtime::new().unwrap().block_on(async {</span>
-    <span class="doccomment">/// if let Some(document) = MyCollection::get_async(&amp;42, &amp;db).await? {</span>
-    <span class="doccomment">///     document.delete_async(&amp;db).await?;</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// # Ok(())</span>
-    <span class="doccomment">/// # })</span>
-    <span class="doccomment">/// # }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_async</span><span class="op">&lt;</span><span class="ident">Cn</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">connection</span>: <span class="kw-2">&amp;</span><span class="ident">Cn</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">connection</span>.<span class="ident">collection</span>::<span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>().<span class="ident">delete</span>(<span class="self">self</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="doccomment">/// Removes the document from the collection.
+    ///
+    /// ```rust
+    /// # bonsaidb_core::__doctest_prelude!();
+    /// # use bonsaidb_core::connection::AsyncConnection;
+    /// # fn test_fn&lt;C: AsyncConnection&gt;(db: C) -&gt; Result&lt;(), Error&gt; {
+    /// # tokio::runtime::Runtime::new().unwrap().block_on(async {
+    /// if let Some(document) = MyCollection::get_async(&amp;42, &amp;db).await? {
+    ///     document.delete_async(&amp;db).await?;
+    /// }
+    /// # Ok(())
+    /// # })
+    /// # }
+    /// ```
+    </span><span class="kw">pub async fn </span>delete_async&lt;Cn: AsyncConnection&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, connection: <span class="kw-2">&amp;</span>Cn) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        connection.collection::&lt;C&gt;().delete(<span class="self">self</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Converts this value to a serialized `Document`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_document</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OwnedDocument</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">OwnedDocument</span> {
-            <span class="ident">contents</span>: <span class="ident">Bytes::from</span>(<span class="ident">C::serialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">contents</span>)<span class="question-mark">?</span>),
-            <span class="ident">header</span>: <span class="ident">Header::try_from</span>(<span class="self">self</span>.<span class="ident">header</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>,
+    <span class="doccomment">/// Converts this value to a serialized `Document`.
+    </span><span class="kw">pub fn </span>to_document(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;OwnedDocument, Error&gt; {
+        <span class="prelude-val">Ok</span>(OwnedDocument {
+            contents: Bytes::from(C::serialize(<span class="kw-2">&amp;</span><span class="self">self</span>.contents)<span class="question-mark">?</span>),
+            header: Header::try_from(<span class="self">self</span>.header.clone())<span class="question-mark">?</span>,
         })
     }
 }
 
-<span class="doccomment">/// Helper functions for a slice of [`OwnedDocument`]s.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">OwnedDocuments</span> {
-    <span class="doccomment">/// Returns a list of deserialized documents.</span>
-    <span class="kw">fn</span> <span class="ident">collection_documents</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">SerializedCollection</span><span class="op">&gt;</span>(
+<span class="doccomment">/// Helper functions for a slice of [`OwnedDocument`]s.
+</span><span class="kw">pub trait </span>OwnedDocuments {
+    <span class="doccomment">/// Returns a list of deserialized documents.
+    </span><span class="kw">fn </span>collection_documents&lt;C: SerializedCollection&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;CollectionDocument&lt;C&gt;&gt;, Error&gt;;
 }
 
-<span class="kw">impl</span> <span class="ident">OwnedDocuments</span> <span class="kw">for</span> [<span class="ident">OwnedDocument</span>] {
-    <span class="kw">fn</span> <span class="ident">collection_documents</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">SerializedCollection</span><span class="op">&gt;</span>(
+<span class="kw">impl </span>OwnedDocuments <span class="kw">for </span>[OwnedDocument] {
+    <span class="kw">fn </span>collection_documents&lt;C: SerializedCollection&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">CollectionDocument::try_from</span>).<span class="ident">collect</span>()
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;CollectionDocument&lt;C&gt;&gt;, Error&gt; {
+        <span class="self">self</span>.iter().map(CollectionDocument::try_from).collect()
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

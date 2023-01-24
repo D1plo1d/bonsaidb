@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/document/header.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>header.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/document/header.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>header.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -243,245 +237,244 @@
 <span id="237">237</span>
 <span id="238">238</span>
 <span id="239">239</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="ident">Display</span>, <span class="ident">Write</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::{Display, Write};
 
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">document</span>::{<span class="ident">BorrowedDocument</span>, <span class="ident">CollectionDocument</span>, <span class="ident">DocumentId</span>, <span class="ident">OwnedDocument</span>, <span class="ident">Revision</span>},
-    <span class="ident">key::Key</span>,
-    <span class="ident">schema</span>::{<span class="ident">view::map::Mappings</span>, <span class="ident">Map</span>, <span class="ident">SerializedCollection</span>},
+<span class="kw">use crate</span>::{
+    document::{BorrowedDocument, CollectionDocument, DocumentId, OwnedDocument, Revision},
+    key::Key,
+    schema::{view::map::Mappings, Map, SerializedCollection},
 };
 
-<span class="doccomment">/// The header of a `Document`.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Header</span> {
-    <span class="doccomment">/// The id of the Document. Unique across the collection the document is</span>
-    <span class="doccomment">/// contained within.</span>
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">DocumentId</span>,
+<span class="doccomment">/// The header of a `Document`.
+</span><span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>Header {
+    <span class="doccomment">/// The id of the Document. Unique across the collection the document is
+    /// contained within.
+    </span><span class="kw">pub </span>id: DocumentId,
 
-    <span class="doccomment">/// The revision of the stored document.</span>
-    <span class="kw">pub</span> <span class="ident">revision</span>: <span class="ident">Revision</span>,
+    <span class="doccomment">/// The revision of the stored document.
+    </span><span class="kw">pub </span>revision: Revision,
 }
 
-<span class="doccomment">/// A type that can return a [`Header`].</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">HasHeader</span> {
-    <span class="doccomment">/// Returns the header for this instance.</span>
-    <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
+<span class="doccomment">/// A type that can return a [`Header`].
+</span><span class="kw">pub trait </span>HasHeader {
+    <span class="doccomment">/// Returns the header for this instance.
+    </span><span class="kw">fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Header, <span class="kw">crate</span>::Error&gt;;
 }
 
-<span class="kw">impl</span> <span class="ident">HasHeader</span> <span class="kw">for</span> <span class="ident">Header</span> {
-    <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">clone</span>())
+<span class="kw">impl </span>HasHeader <span class="kw">for </span>Header {
+    <span class="kw">fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Header, <span class="kw">crate</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">self</span>.clone())
     }
 }
 
-<span class="doccomment">/// View mapping emit functions. Used when implementing a view&#39;s `map()`</span>
-<span class="doccomment">/// function.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Emit</span> {
-    <span class="doccomment">/// Creates a `Map` result with an empty key and value.</span>
-    <span class="kw">fn</span> <span class="ident">emit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">emit_key_and_value</span>((), ())
+<span class="doccomment">/// View mapping emit functions. Used when implementing a view&#39;s `map()`
+/// function.
+</span><span class="kw">pub trait </span>Emit {
+    <span class="doccomment">/// Creates a `Map` result with an empty key and value.
+    </span><span class="kw">fn </span>emit(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Mappings&lt;(), ()&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="self">self</span>.emit_key_and_value((), ())
     }
 
-    <span class="doccomment">/// Creates a `Map` result with a `key` and an empty value.</span>
-    <span class="kw">fn</span> <span class="ident">emit_key</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, ()<span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">emit_key_and_value</span>(<span class="ident">key</span>, ())
+    <span class="doccomment">/// Creates a `Map` result with a `key` and an empty value.
+    </span><span class="kw">fn </span>emit_key&lt;K: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; Key&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, key: K) -&gt; <span class="prelude-ty">Result</span>&lt;Mappings&lt;K, ()&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="self">self</span>.emit_key_and_value(key, ())
     }
 
-    <span class="doccomment">/// Creates a `Map` result with `value` and an empty key.</span>
-    <span class="kw">fn</span> <span class="ident">emit_value</span><span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="ident">Value</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span>(), <span class="ident">Value</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">emit_key_and_value</span>((), <span class="ident">value</span>)
+    <span class="doccomment">/// Creates a `Map` result with `value` and an empty key.
+    </span><span class="kw">fn </span>emit_value&lt;Value&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, value: Value) -&gt; <span class="prelude-ty">Result</span>&lt;Mappings&lt;(), Value&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="self">self</span>.emit_key_and_value((), value)
     }
 
-    <span class="doccomment">/// Creates a `Map` result with a `key` and `value`.</span>
-    <span class="kw">fn</span> <span class="ident">emit_key_and_value</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">Value</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Creates a `Map` result with a `key` and `value`.
+    </span><span class="kw">fn </span>emit_key_and_value&lt;K: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; Key&lt;<span class="lifetime">&#39;a</span>&gt;, Value&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="ident">K</span>,
-        <span class="ident">value</span>: <span class="ident">Value</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">Value</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span>;
+        key: K,
+        value: Value,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Mappings&lt;K, Value&gt;, <span class="kw">crate</span>::Error&gt;;
 }
 
-<span class="kw">impl</span> <span class="ident">Emit</span> <span class="kw">for</span> <span class="ident">Header</span> {
-    <span class="kw">fn</span> <span class="ident">emit_key_and_value</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">Value</span><span class="op">&gt;</span>(
+<span class="kw">impl </span>Emit <span class="kw">for </span>Header {
+    <span class="kw">fn </span>emit_key_and_value&lt;K: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; Key&lt;<span class="lifetime">&#39;a</span>&gt;, Value&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="ident">K</span>,
-        <span class="ident">value</span>: <span class="ident">Value</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">Value</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">Mappings::Simple</span>(<span class="prelude-val">Some</span>(<span class="ident">Map::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">key</span>, <span class="ident">value</span>))))
+        key: K,
+        value: Value,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Mappings&lt;K, Value&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(Mappings::Simple(<span class="prelude-val">Some</span>(Map::new(<span class="self">self</span>.clone(), key, value))))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Header</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="self">self</span>.<span class="ident">id</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
-        <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;@&#39;</span>)<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">revision</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)
+<span class="kw">impl </span>Display <span class="kw">for </span>Header {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="self">self</span>.id.fmt(f)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">&#39;@&#39;</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.revision.fmt(f)
     }
 }
 
-<span class="doccomment">/// A header for a [`CollectionDocument`].</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The unique id of the document.</span>
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">PrimaryKey</span>,
-    <span class="doccomment">/// The revision of the document.</span>
-    <span class="kw">pub</span> <span class="ident">revision</span>: <span class="ident">Revision</span>,
+<span class="doccomment">/// A header for a [`CollectionDocument`].
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>CollectionHeader&lt;PrimaryKey&gt; {
+    <span class="doccomment">/// The unique id of the document.
+    </span><span class="kw">pub </span>id: PrimaryKey,
+    <span class="doccomment">/// The revision of the document.
+    </span><span class="kw">pub </span>revision: Revision,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">Emit</span> <span class="kw">for</span> <span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;PrimaryKey&gt; Emit <span class="kw">for </span>CollectionHeader&lt;PrimaryKey&gt;
+<span class="kw">where
+    </span>PrimaryKey: <span class="kw">for</span>&lt;<span class="lifetime">&#39;k</span>&gt; Key&lt;<span class="lifetime">&#39;k</span>&gt;,
 {
-    <span class="kw">fn</span> <span class="ident">emit_key_and_value</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">Value</span><span class="op">&gt;</span>(
+    <span class="kw">fn </span>emit_key_and_value&lt;K: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; Key&lt;<span class="lifetime">&#39;a</span>&gt;, Value&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key</span>: <span class="ident">K</span>,
-        <span class="ident">value</span>: <span class="ident">Value</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Mappings</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">Value</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">Header::try_from</span>(<span class="self">self</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">Mappings::Simple</span>(<span class="prelude-val">Some</span>(<span class="ident">Map::new</span>(<span class="ident">header</span>, <span class="ident">key</span>, <span class="ident">value</span>))))
+        key: K,
+        value: Value,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Mappings&lt;K, Value&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">let </span>header = Header::try_from(<span class="self">self</span>.clone())<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(Mappings::Simple(<span class="prelude-val">Some</span>(Map::new(header, key, value))))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">HasHeader</span> <span class="kw">for</span> <span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;PrimaryKey&gt; HasHeader <span class="kw">for </span>CollectionHeader&lt;PrimaryKey&gt;
+<span class="kw">where
+    </span>PrimaryKey: <span class="kw">for</span>&lt;<span class="lifetime">&#39;k</span>&gt; Key&lt;<span class="lifetime">&#39;k</span>&gt;,
 {
-    <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="ident">Header::try_from</span>(<span class="self">self</span>.<span class="ident">clone</span>())
+    <span class="kw">fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Header, <span class="kw">crate</span>::Error&gt; {
+        Header::try_from(<span class="self">self</span>.clone())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">HasHeader</span> <span class="kw">for</span> <span class="ident">OwnedDocument</span> {
-    <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">header</span>()
+<span class="kw">impl </span>HasHeader <span class="kw">for </span>OwnedDocument {
+    <span class="kw">fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Header, <span class="kw">crate</span>::Error&gt; {
+        <span class="self">self</span>.header.header()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">HasHeader</span> <span class="kw">for</span> <span class="ident">BorrowedDocument</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">header</span>()
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; HasHeader <span class="kw">for </span>BorrowedDocument&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Header, <span class="kw">crate</span>::Error&gt; {
+        <span class="self">self</span>.header.header()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">HasHeader</span> <span class="kw">for</span> <span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">SerializedCollection</span>,
+<span class="kw">impl</span>&lt;C&gt; HasHeader <span class="kw">for </span>CollectionDocument&lt;C&gt;
+<span class="kw">where
+    </span>C: SerializedCollection,
 {
-    <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">header</span>.<span class="ident">header</span>()
+    <span class="kw">fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Header, <span class="kw">crate</span>::Error&gt; {
+        <span class="self">self</span>.header.header()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;PrimaryKey&gt; TryFrom&lt;Header&gt; <span class="kw">for </span>CollectionHeader&lt;PrimaryKey&gt;
+<span class="kw">where
+    </span>PrimaryKey: <span class="kw">for</span>&lt;<span class="lifetime">&#39;k</span>&gt; Key&lt;<span class="lifetime">&#39;k</span>&gt;,
 {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
+    <span class="kw">type </span>Error = <span class="kw">crate</span>::Error;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="ident">Header</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">id</span>: <span class="ident">value</span>.<span class="ident">id</span>.<span class="ident">deserialize</span>::<span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>()<span class="question-mark">?</span>,
-            <span class="ident">revision</span>: <span class="ident">value</span>.<span class="ident">revision</span>,
+    <span class="kw">fn </span>try_from(value: Header) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            id: value.id.deserialize::&lt;PrimaryKey&gt;()<span class="question-mark">?</span>,
+            revision: value.revision,
         })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Header</span>
-<span class="kw">where</span>
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;PrimaryKey&gt; TryFrom&lt;CollectionHeader&lt;PrimaryKey&gt;&gt; <span class="kw">for </span>Header
+<span class="kw">where
+    </span>PrimaryKey: <span class="kw">for</span>&lt;<span class="lifetime">&#39;k</span>&gt; Key&lt;<span class="lifetime">&#39;k</span>&gt;,
 {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::Error</span>;
+    <span class="kw">type </span>Error = <span class="kw">crate</span>::Error;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">value</span>: <span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">id</span>: <span class="ident">DocumentId::new</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>.<span class="ident">id</span>)<span class="question-mark">?</span>,
-            <span class="ident">revision</span>: <span class="ident">value</span>.<span class="ident">revision</span>,
+    <span class="kw">fn </span>try_from(value: CollectionHeader&lt;PrimaryKey&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            id: DocumentId::new(<span class="kw-2">&amp;</span>value.id)<span class="question-mark">?</span>,
+            revision: value.revision,
         })
     }
 }
 
-<span class="doccomment">/// A header with either a serialized or deserialized primary key.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AnyHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// A serialized header.</span>
-    <span class="ident">Serialized</span>(<span class="ident">Header</span>),
-    <span class="doccomment">/// A deserialized header.</span>
-    <span class="ident">Collection</span>(<span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>),
+<span class="doccomment">/// A header with either a serialized or deserialized primary key.
+</span><span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">pub enum </span>AnyHeader&lt;PrimaryKey&gt; {
+    <span class="doccomment">/// A serialized header.
+    </span>Serialized(Header),
+    <span class="doccomment">/// A deserialized header.
+    </span>Collection(CollectionHeader&lt;PrimaryKey&gt;),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span> <span class="ident">AnyHeader</span><span class="op">&lt;</span><span class="ident">PrimaryKey</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">PrimaryKey</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="lifetime">&#39;k</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;PrimaryKey&gt; AnyHeader&lt;PrimaryKey&gt;
+<span class="kw">where
+    </span>PrimaryKey: <span class="kw">for</span>&lt;<span class="lifetime">&#39;k</span>&gt; Key&lt;<span class="lifetime">&#39;k</span>&gt;,
 {
-    <span class="doccomment">/// Returns the contained header as a [`Header`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_header</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">AnyHeader::Serialized</span>(<span class="ident">header</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">header</span>),
-            <span class="ident">AnyHeader::Collection</span>(<span class="ident">header</span>) =&gt; <span class="ident">Header::try_from</span>(<span class="ident">header</span>),
+    <span class="doccomment">/// Returns the contained header as a [`Header`].
+    </span><span class="kw">pub fn </span>into_header(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Header, <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            AnyHeader::Serialized(header) =&gt; <span class="prelude-val">Ok</span>(header),
+            AnyHeader::Collection(header) =&gt; Header::try_from(header),
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">emissions_tests</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">schema::Map</span>, <span class="ident">test_util::Basic</span>};
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>emissions_tests() -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+    <span class="kw">use crate</span>::{schema::Map, test_util::Basic};
 
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::default</span>())<span class="question-mark">?</span>;
+    <span class="kw">let </span>doc = BorrowedDocument::with_contents::&lt;Basic, <span class="kw">_</span>&gt;(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span>Basic::default())<span class="question-mark">?</span>;
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">emit</span>()<span class="question-mark">?</span>,
-        <span class="ident">Mappings::Simple</span>(<span class="prelude-val">Some</span>(<span class="ident">Map::new</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">clone</span>(), (), ())))
+        doc.header.emit()<span class="question-mark">?</span>,
+        Mappings::Simple(<span class="prelude-val">Some</span>(Map::new(doc.header.clone(), (), ())))
     );
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">emit_key</span>(<span class="number">1</span>)<span class="question-mark">?</span>,
-        <span class="ident">Mappings::Simple</span>(<span class="prelude-val">Some</span>(<span class="ident">Map::new</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">clone</span>(), <span class="number">1</span>, ())))
+        doc.header.emit_key(<span class="number">1</span>)<span class="question-mark">?</span>,
+        Mappings::Simple(<span class="prelude-val">Some</span>(Map::new(doc.header.clone(), <span class="number">1</span>, ())))
     );
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">emit_value</span>(<span class="number">1</span>)<span class="question-mark">?</span>,
-        <span class="ident">Mappings::Simple</span>(<span class="prelude-val">Some</span>(<span class="ident">Map::new</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">clone</span>(), (), <span class="number">1</span>)))
+        doc.header.emit_value(<span class="number">1</span>)<span class="question-mark">?</span>,
+        Mappings::Simple(<span class="prelude-val">Some</span>(Map::new(doc.header.clone(), (), <span class="number">1</span>)))
     );
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">emit_key_and_value</span>(<span class="number">1</span>, <span class="number">2</span>)<span class="question-mark">?</span>,
-        <span class="ident">Mappings::Simple</span>(<span class="prelude-val">Some</span>(<span class="ident">Map::new</span>(<span class="ident">doc</span>.<span class="ident">header</span>, <span class="number">1</span>, <span class="number">2</span>)))
+        doc.header.emit_key_and_value(<span class="number">1</span>, <span class="number">2</span>)<span class="question-mark">?</span>,
+        Mappings::Simple(<span class="prelude-val">Some</span>(Map::new(doc.header, <span class="number">1</span>, <span class="number">2</span>)))
     );
 
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">chained_mappings_test</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">schema::Map</span>, <span class="ident">test_util::Basic</span>};
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>chained_mappings_test() -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+    <span class="kw">use crate</span>::{schema::Map, test_util::Basic};
 
-    <span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">BorrowedDocument::with_contents</span>::<span class="op">&lt;</span><span class="ident">Basic</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">Basic::default</span>())<span class="question-mark">?</span>;
+    <span class="kw">let </span>doc = BorrowedDocument::with_contents::&lt;Basic, <span class="kw">_</span>&gt;(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span>Basic::default())<span class="question-mark">?</span>;
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">emit</span>()<span class="question-mark">?</span>.<span class="ident">and</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">emit</span>()<span class="question-mark">?</span>),
-        <span class="ident">Mappings::List</span>(<span class="macro">vec!</span>[
-            <span class="ident">Map::new</span>(<span class="ident">doc</span>.<span class="ident">header</span>.<span class="ident">clone</span>(), (), ()),
-            <span class="ident">Map::new</span>(<span class="ident">doc</span>.<span class="ident">header</span>, (), ())
+        doc.header.emit()<span class="question-mark">?</span>.and(doc.header.emit()<span class="question-mark">?</span>),
+        Mappings::List(<span class="macro">vec!</span>[
+            Map::new(doc.header.clone(), (), ()),
+            Map::new(doc.header, (), ())
         ])
     );
 
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">header_display_test</span>() {
-    <span class="kw">let</span> <span class="ident">original_contents</span> <span class="op">=</span> <span class="string">b&quot;one&quot;</span>;
-    <span class="kw">let</span> <span class="ident">revision</span> <span class="op">=</span> <span class="ident">Revision::new</span>(<span class="ident">original_contents</span>);
-    <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">Header</span> {
-        <span class="ident">id</span>: <span class="ident">DocumentId::new</span>(<span class="kw-2">&amp;</span><span class="number">42_u64</span>).<span class="ident">unwrap</span>(),
-        <span class="ident">revision</span>,
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>header_display_test() {
+    <span class="kw">let </span>original_contents = <span class="string">b&quot;one&quot;</span>;
+    <span class="kw">let </span>revision = Revision::new(original_contents);
+    <span class="kw">let </span>header = Header {
+        id: DocumentId::new(<span class="kw-2">&amp;</span><span class="number">42_u64</span>).unwrap(),
+        revision,
     };
     <span class="macro">assert_eq!</span>(
-        <span class="ident">header</span>.<span class="ident">to_string</span>(),
-        <span class="string">&quot;7$2a@0-7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed&quot;</span>
-    );
+        header.to_string(),
+        <span class="string">&quot;7$2a@0-7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed&quot;
+    </span>);
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/permissions/bonsai.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bonsai.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/permissions/bonsai.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bonsai.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -293,295 +287,294 @@
 <span id="287">287</span>
 <span id="288">288</span>
 <span id="289">289</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">actionable</span>::{<span class="ident">Action</span>, <span class="ident">Identifier</span>, <span class="ident">ResourceName</span>};
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>actionable::{Action, Identifier, ResourceName};
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection::AuthenticationMethod</span>,
-    <span class="ident">document</span>::{<span class="ident">DocumentId</span>, <span class="ident">KeyId</span>},
-    <span class="ident">schema</span>::{<span class="ident">CollectionName</span>, <span class="ident">ViewName</span>},
+<span class="kw">use crate</span>::{
+    connection::AuthenticationMethod,
+    document::{DocumentId, KeyId},
+    schema::{CollectionName, ViewName},
 };
 
-<span class="doccomment">/// The base BonsaiDb resource namespace. All database objects have this as</span>
-<span class="doccomment">/// their first name segment.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bonsaidb_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>() -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">ResourceName::named</span>(<span class="string">&quot;bonsaidb&quot;</span>)
+<span class="doccomment">/// The base BonsaiDb resource namespace. All database objects have this as
+/// their first name segment.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>bonsaidb_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;() -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    ResourceName::named(<span class="string">&quot;bonsaidb&quot;</span>)
 }
 
-<span class="doccomment">/// Creates a resource name with the database `name`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">database_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Identifier</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="ident">name</span>)
+<span class="doccomment">/// Creates a resource name with the database `name`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>database_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(name: <span class="kw">impl </span>Into&lt;Identifier&lt;<span class="lifetime">&#39;a</span>&gt;&gt;) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    bonsaidb_resource_name().and(name)
 }
 
-<span class="doccomment">/// Creates a resource name for a `collection` within a `database`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">collection_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
-    <span class="ident">database</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Identifier</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">database_resource_name</span>(<span class="ident">database</span>).<span class="ident">and</span>(<span class="ident">collection</span>.<span class="ident">to_string</span>())
+<span class="doccomment">/// Creates a resource name for a `collection` within a `database`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>collection_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(
+    database: <span class="kw">impl </span>Into&lt;Identifier&lt;<span class="lifetime">&#39;a</span>&gt;&gt;,
+    collection: <span class="kw-2">&amp;</span>CollectionName,
+) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    database_resource_name(database).and(collection.to_string())
 }
 
-<span class="doccomment">/// Creates a resource name for a document `id` within `collection` within `database`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">document_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
-    <span class="ident">database</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Identifier</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">collection</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionName</span>,
-    <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DocumentId</span>,
-) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">collection_resource_name</span>(<span class="ident">database</span>, <span class="ident">collection</span>)
-        .<span class="ident">and</span>(<span class="string">&quot;document&quot;</span>)
-        .<span class="ident">and</span>(<span class="ident">id</span>)
+<span class="doccomment">/// Creates a resource name for a document `id` within `collection` within `database`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>document_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(
+    database: <span class="kw">impl </span>Into&lt;Identifier&lt;<span class="lifetime">&#39;a</span>&gt;&gt;,
+    collection: <span class="kw-2">&amp;</span>CollectionName,
+    id: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>DocumentId,
+) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    collection_resource_name(database, collection)
+        .and(<span class="string">&quot;document&quot;</span>)
+        .and(id)
 }
 
-<span class="doccomment">/// Creaets a resource name for a `view` within `database`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">view_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>, <span class="ident">view</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ViewName</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">database_resource_name</span>(<span class="ident">database</span>)
-        .<span class="ident">and</span>(<span class="ident">view</span>.<span class="ident">collection</span>.<span class="ident">to_string</span>())
-        .<span class="ident">and</span>(<span class="string">&quot;view&quot;</span>)
-        .<span class="ident">and</span>(<span class="ident">view</span>.<span class="ident">name</span>.<span class="ident">as_ref</span>())
+<span class="doccomment">/// Creaets a resource name for a `view` within `database`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>view_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(database: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str, view: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>ViewName) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    database_resource_name(database)
+        .and(view.collection.to_string())
+        .and(<span class="string">&quot;view&quot;</span>)
+        .and(view.name.as_ref())
 }
 
-<span class="doccomment">/// Creates a resource name for `PubSub` `topic` within `database`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pubsub_topic_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>, <span class="ident">topic</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">database_resource_name</span>(<span class="ident">database</span>).<span class="ident">and</span>(<span class="string">&quot;pubsub&quot;</span>).<span class="ident">and</span>(<span class="ident">topic</span>)
+<span class="doccomment">/// Creates a resource name for `PubSub` `topic` within `database`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>pubsub_topic_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(database: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str, topic: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>[u8]) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    database_resource_name(database).and(<span class="string">&quot;pubsub&quot;</span>).and(topic)
 }
 
-<span class="doccomment">/// Creates a resource name for the key-value store in `database`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kv_resource_name</span>(<span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="ident">database_resource_name</span>(<span class="ident">database</span>).<span class="ident">and</span>(<span class="string">&quot;keyvalue&quot;</span>)
+<span class="doccomment">/// Creates a resource name for the key-value store in `database`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>kv_resource_name(database: <span class="kw-2">&amp;</span>str) -&gt; ResourceName&lt;<span class="lifetime">&#39;_</span>&gt; {
+    database_resource_name(database).and(<span class="string">&quot;keyvalue&quot;</span>)
 }
 
-<span class="doccomment">/// Creates a resource name for `key` within `namespace` within the key-value store of `database`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keyvalue_key_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
-    <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-    <span class="ident">namespace</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span>,
-    <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
-) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">kv_resource_name</span>(<span class="ident">database</span>)
-        .<span class="ident">and</span>(<span class="ident">namespace</span>.<span class="ident">unwrap_or</span>(<span class="string">&quot;&quot;</span>))
-        .<span class="ident">and</span>(<span class="ident">key</span>)
+<span class="doccomment">/// Creates a resource name for `key` within `namespace` within the key-value store of `database`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>keyvalue_key_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(
+    database: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
+    namespace: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt;,
+    key: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
+) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    kv_resource_name(database)
+        .and(namespace.unwrap_or(<span class="string">&quot;&quot;</span>))
+        .and(key)
 }
 
-<span class="doccomment">/// Creates a resource name for encryption key `key_id`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encryption_key_resource_name</span>(<span class="ident">key_id</span>: <span class="kw-2">&amp;</span><span class="ident">KeyId</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="ident">bonsaidb_resource_name</span>()
-        .<span class="ident">and</span>(<span class="string">&quot;vault&quot;</span>)
-        .<span class="ident">and</span>(<span class="string">&quot;key&quot;</span>)
-        .<span class="ident">and</span>(<span class="kw">match</span> <span class="ident">key_id</span> {
-            <span class="ident">KeyId::Master</span> =&gt; <span class="string">&quot;_master&quot;</span>,
-            <span class="ident">KeyId::Id</span>(<span class="ident">id</span>) =&gt; <span class="ident">id</span>.<span class="ident">as_ref</span>(),
-            <span class="ident">KeyId::None</span> =&gt; <span class="macro">unreachable!</span>(),
+<span class="doccomment">/// Creates a resource name for encryption key `key_id`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>encryption_key_resource_name(key_id: <span class="kw-2">&amp;</span>KeyId) -&gt; ResourceName&lt;<span class="lifetime">&#39;_</span>&gt; {
+    bonsaidb_resource_name()
+        .and(<span class="string">&quot;vault&quot;</span>)
+        .and(<span class="string">&quot;key&quot;</span>)
+        .and(<span class="kw">match </span>key_id {
+            KeyId::Master =&gt; <span class="string">&quot;_master&quot;</span>,
+            KeyId::Id(id) =&gt; id.as_ref(),
+            KeyId::None =&gt; <span class="macro">unreachable!</span>(),
         })
 }
 
-<span class="doccomment">/// Creates a resource name for `user_id`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">user_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">user_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="string">&quot;user&quot;</span>).<span class="ident">and</span>(<span class="ident">user_id</span>)
+<span class="doccomment">/// Creates a resource name for `user_id`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>user_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(user_id: u64) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    bonsaidb_resource_name().and(<span class="string">&quot;user&quot;</span>).and(user_id)
 }
 
-<span class="doccomment">/// Creates a resource name for `role_id`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">role_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">role_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">bonsaidb_resource_name</span>().<span class="ident">and</span>(<span class="string">&quot;role&quot;</span>).<span class="ident">and</span>(<span class="ident">role_id</span>)
+<span class="doccomment">/// Creates a resource name for `role_id`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>role_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(role_id: u64) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    bonsaidb_resource_name().and(<span class="string">&quot;role&quot;</span>).and(role_id)
 }
 
-<span class="doccomment">/// Creates a resource name for `token_id`.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">authentication_token_resource_name</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">token_id</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ResourceName</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">bonsaidb_resource_name</span>()
-        .<span class="ident">and</span>(<span class="string">&quot;authentication-token&quot;</span>)
-        .<span class="ident">and</span>(<span class="ident">token_id</span>)
+<span class="doccomment">/// Creates a resource name for `token_id`.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub fn </span>authentication_token_resource_name&lt;<span class="lifetime">&#39;a</span>&gt;(token_id: u64) -&gt; ResourceName&lt;<span class="lifetime">&#39;a</span>&gt; {
+    bonsaidb_resource_name()
+        .and(<span class="string">&quot;authentication-token&quot;</span>)
+        .and(token_id)
 }
 
-<span class="doccomment">/// Actions that can be permitted within BonsaiDb.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BonsaiAction</span> {
-    <span class="doccomment">/// Actions that operate on a server</span>
-    <span class="ident">Server</span>(<span class="ident">ServerAction</span>),
-    <span class="doccomment">/// Actions that operate on a specific database.</span>
-    <span class="ident">Database</span>(<span class="ident">DatabaseAction</span>),
+<span class="doccomment">/// Actions that can be permitted within BonsaiDb.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>BonsaiAction {
+    <span class="doccomment">/// Actions that operate on a server
+    </span>Server(ServerAction),
+    <span class="doccomment">/// Actions that operate on a specific database.
+    </span>Database(DatabaseAction),
 }
 
-<span class="doccomment">/// Actions that operate on a server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ServerAction</span> {
-    <span class="doccomment">/// Permits connecting to the server. Upon negotiating authentication, the</span>
-    <span class="doccomment">/// effective permissions of the connected party will be checked for</span>
-    <span class="doccomment">/// permissions to `Connect`. If not allowed, the connection will be</span>
-    <span class="doccomment">/// terminated.</span>
-    <span class="ident">Connect</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::list_available_schemas`](crate::connection::StorageConnection::list_available_schemas).</span>
-    <span class="ident">ListAvailableSchemas</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::list_databases`](crate::connection::StorageConnection::list_databases).</span>
-    <span class="ident">ListDatabases</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::create_database`](crate::connection::StorageConnection::create_database).</span>
-    <span class="ident">CreateDatabase</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::delete_database`](crate::connection::StorageConnection::delete_database).</span>
-    <span class="ident">DeleteDatabase</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::create_user`](crate::connection::StorageConnection::create_user).</span>
-    <span class="ident">CreateUser</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::delete_user`](crate::connection::StorageConnection::delete_user).</span>
-    <span class="ident">DeleteUser</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::set_user_password`](crate::connection::StorageConnection::set_user_password).</span>
-    <span class="ident">SetPassword</span>,
-    <span class="doccomment">/// Permits the ability to log in with a password.</span>
-    <span class="ident">Authenticate</span>(<span class="ident">AuthenticationMethod</span>),
-    <span class="doccomment">/// Permits the ability to assume an identity without authenticating that</span>
-    <span class="doccomment">/// they are the identity in question.</span>
-    <span class="ident">AssumeIdentity</span>,
-    <span class="doccomment">/// Permits [`StorageConnection::add_permission_group_to_user`](crate::connection::StorageConnection::add_permission_group_to_user) and [`StorageConnection::remove_permission_group_from_user`](crate::connection::StorageConnection::remove_permission_group_from_user).</span>
-    <span class="ident">ModifyUserPermissionGroups</span>,
-    <span class="doccomment">/// Permits .</span>
-    <span class="doccomment">/// Permits [`StorageConnection::add_role_to_user`](crate::connection::StorageConnection::add_role_to_user) and [`StorageConnection::remove_role_from_user`](crate::connection::StorageConnection::remove_role_from_user).</span>
-    <span class="ident">ModifyUserRoles</span>,
+<span class="doccomment">/// Actions that operate on a server.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>ServerAction {
+    <span class="doccomment">/// Permits connecting to the server. Upon negotiating authentication, the
+    /// effective permissions of the connected party will be checked for
+    /// permissions to `Connect`. If not allowed, the connection will be
+    /// terminated.
+    </span>Connect,
+    <span class="doccomment">/// Permits [`StorageConnection::list_available_schemas`](crate::connection::StorageConnection::list_available_schemas).
+    </span>ListAvailableSchemas,
+    <span class="doccomment">/// Permits [`StorageConnection::list_databases`](crate::connection::StorageConnection::list_databases).
+    </span>ListDatabases,
+    <span class="doccomment">/// Permits [`StorageConnection::create_database`](crate::connection::StorageConnection::create_database).
+    </span>CreateDatabase,
+    <span class="doccomment">/// Permits [`StorageConnection::delete_database`](crate::connection::StorageConnection::delete_database).
+    </span>DeleteDatabase,
+    <span class="doccomment">/// Permits [`StorageConnection::create_user`](crate::connection::StorageConnection::create_user).
+    </span>CreateUser,
+    <span class="doccomment">/// Permits [`StorageConnection::delete_user`](crate::connection::StorageConnection::delete_user).
+    </span>DeleteUser,
+    <span class="doccomment">/// Permits [`StorageConnection::set_user_password`](crate::connection::StorageConnection::set_user_password).
+    </span>SetPassword,
+    <span class="doccomment">/// Permits the ability to log in with a password.
+    </span>Authenticate(AuthenticationMethod),
+    <span class="doccomment">/// Permits the ability to assume an identity without authenticating that
+    /// they are the identity in question.
+    </span>AssumeIdentity,
+    <span class="doccomment">/// Permits [`StorageConnection::add_permission_group_to_user`](crate::connection::StorageConnection::add_permission_group_to_user) and [`StorageConnection::remove_permission_group_from_user`](crate::connection::StorageConnection::remove_permission_group_from_user).
+    </span>ModifyUserPermissionGroups,
+    <span class="doccomment">/// Permits .
+    /// Permits [`StorageConnection::add_role_to_user`](crate::connection::StorageConnection::add_role_to_user) and [`StorageConnection::remove_role_from_user`](crate::connection::StorageConnection::remove_role_from_user).
+    </span>ModifyUserRoles,
 }
 
-<span class="doccomment">/// Actions that operate on a specific database.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DatabaseAction</span> {
-    <span class="doccomment">/// The ability to compact data to reclaim space.</span>
-    <span class="ident">Compact</span>,
-    <span class="doccomment">/// Actions that operate on a document.</span>
-    <span class="ident">Document</span>(<span class="ident">DocumentAction</span>),
-    <span class="doccomment">/// Actions that operate on a view.</span>
-    <span class="ident">View</span>(<span class="ident">ViewAction</span>),
-    <span class="doccomment">/// Actions that operate on transactions.</span>
-    <span class="ident">Transaction</span>(<span class="ident">TransactionAction</span>),
-    <span class="doccomment">/// Actions that operate on the `PubSub` system.</span>
-    <span class="ident">PubSub</span>(<span class="ident">PubSubAction</span>),
-    <span class="doccomment">/// Actions that operate on the key-value store.</span>
-    <span class="ident">KeyValue</span>(<span class="ident">KeyValueAction</span>),
+<span class="doccomment">/// Actions that operate on a specific database.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>DatabaseAction {
+    <span class="doccomment">/// The ability to compact data to reclaim space.
+    </span>Compact,
+    <span class="doccomment">/// Actions that operate on a document.
+    </span>Document(DocumentAction),
+    <span class="doccomment">/// Actions that operate on a view.
+    </span>View(ViewAction),
+    <span class="doccomment">/// Actions that operate on transactions.
+    </span>Transaction(TransactionAction),
+    <span class="doccomment">/// Actions that operate on the `PubSub` system.
+    </span>PubSub(PubSubAction),
+    <span class="doccomment">/// Actions that operate on the key-value store.
+    </span>KeyValue(KeyValueAction),
 }
 
-<span class="doccomment">/// Actions that operate on a document.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DocumentAction</span> {
-    <span class="doccomment">/// Allows document retrieval through</span>
-    <span class="doccomment">/// [`Connection::get()`](crate::connection::LowLevelConnection::get) and</span>
-    <span class="doccomment">/// [`Connection::get_multiple()`](crate::connection::LowLevelConnection::get_multiple).</span>
-    <span class="doccomment">/// See [`document_resource_name()`] for the format of document resource</span>
-    <span class="doccomment">/// names.</span>
-    <span class="ident">Get</span>,
-    <span class="doccomment">/// Allows listing documents through</span>
-    <span class="doccomment">/// [`Connection::list()`](crate::connection::LowLevelConnection::list). See</span>
-    <span class="doccomment">/// [`collection_resource_name()`] for the format of collection resource</span>
-    <span class="doccomment">/// names.</span>
-    <span class="ident">List</span>,
-    <span class="doccomment">/// Allows listing documents through</span>
-    <span class="doccomment">/// [`Connection::list_headers()`](crate::connection::LowLevelConnection::list_headers). See</span>
-    <span class="doccomment">/// [`collection_resource_name()`] for the format of collection resource</span>
-    <span class="doccomment">/// names.</span>
-    <span class="ident">ListHeaders</span>,
-    <span class="doccomment">/// Allows counting documents through</span>
-    <span class="doccomment">/// [`Connection::count()`](crate::connection::LowLevelConnection::count). See</span>
-    <span class="doccomment">/// [`collection_resource_name()`] for the format of collection resource</span>
-    <span class="doccomment">/// names.</span>
-    <span class="ident">Count</span>,
-    <span class="doccomment">/// Allows inserting a document through</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
-    <span class="doccomment">/// See [`collection_resource_name()`] for the format of collection resource</span>
-    <span class="doccomment">/// names.</span>
-    <span class="ident">Insert</span>,
-    <span class="doccomment">/// Allows updating a document through</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
-    <span class="doccomment">/// See [`document_resource_name()`] for the format of document resource</span>
-    <span class="doccomment">/// names.</span>
-    <span class="ident">Update</span>,
-    <span class="doccomment">/// Allows overwriting a document by id with</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
-    <span class="doccomment">/// No revision information will be checked. See</span>
-    <span class="doccomment">/// [`document_resource_name()`] for the format of document resource names.</span>
-    <span class="ident">Overwrite</span>,
-    <span class="doccomment">/// Allows deleting a document through</span>
-    <span class="doccomment">/// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).</span>
-    <span class="doccomment">/// See [`document_resource_name()`] for the format of document resource</span>
-    <span class="doccomment">/// names.</span>
-    <span class="ident">Delete</span>,
+<span class="doccomment">/// Actions that operate on a document.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>DocumentAction {
+    <span class="doccomment">/// Allows document retrieval through
+    /// [`Connection::get()`](crate::connection::LowLevelConnection::get) and
+    /// [`Connection::get_multiple()`](crate::connection::LowLevelConnection::get_multiple).
+    /// See [`document_resource_name()`] for the format of document resource
+    /// names.
+    </span>Get,
+    <span class="doccomment">/// Allows listing documents through
+    /// [`Connection::list()`](crate::connection::LowLevelConnection::list). See
+    /// [`collection_resource_name()`] for the format of collection resource
+    /// names.
+    </span>List,
+    <span class="doccomment">/// Allows listing documents through
+    /// [`Connection::list_headers()`](crate::connection::LowLevelConnection::list_headers). See
+    /// [`collection_resource_name()`] for the format of collection resource
+    /// names.
+    </span>ListHeaders,
+    <span class="doccomment">/// Allows counting documents through
+    /// [`Connection::count()`](crate::connection::LowLevelConnection::count). See
+    /// [`collection_resource_name()`] for the format of collection resource
+    /// names.
+    </span>Count,
+    <span class="doccomment">/// Allows inserting a document through
+    /// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).
+    /// See [`collection_resource_name()`] for the format of collection resource
+    /// names.
+    </span>Insert,
+    <span class="doccomment">/// Allows updating a document through
+    /// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).
+    /// See [`document_resource_name()`] for the format of document resource
+    /// names.
+    </span>Update,
+    <span class="doccomment">/// Allows overwriting a document by id with
+    /// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).
+    /// No revision information will be checked. See
+    /// [`document_resource_name()`] for the format of document resource names.
+    </span>Overwrite,
+    <span class="doccomment">/// Allows deleting a document through
+    /// [`Connection::apply_transaction()`](crate::connection::LowLevelConnection::apply_transaction).
+    /// See [`document_resource_name()`] for the format of document resource
+    /// names.
+    </span>Delete,
 }
 
-<span class="doccomment">/// Actions that operate on a view.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ViewAction</span> {
-    <span class="doccomment">/// Allows querying a view with</span>
-    <span class="doccomment">/// [`Connection::query()`](crate::connection::LowLevelConnection::query). See</span>
-    <span class="doccomment">/// [`view_resource_name`] for the format of view resource names.</span>
-    <span class="ident">Query</span>,
-    <span class="doccomment">/// Allows reducing a view with</span>
-    <span class="doccomment">/// [`Connection::reduce()`](crate::connection::LowLevelConnection::reduce). See</span>
-    <span class="doccomment">/// [`view_resource_name`] for the format of view resource names.</span>
-    <span class="ident">Reduce</span>,
-    <span class="doccomment">/// Allows deleting associated docs with</span>
-    <span class="doccomment">/// [`Connection::delete_docs()`](crate::connection::LowLevelConnection::delete_docs).</span>
-    <span class="doccomment">/// See [`view_resource_name`] for the format of view resource names.</span>
-    <span class="ident">DeleteDocs</span>,
+<span class="doccomment">/// Actions that operate on a view.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>ViewAction {
+    <span class="doccomment">/// Allows querying a view with
+    /// [`Connection::query()`](crate::connection::LowLevelConnection::query). See
+    /// [`view_resource_name`] for the format of view resource names.
+    </span>Query,
+    <span class="doccomment">/// Allows reducing a view with
+    /// [`Connection::reduce()`](crate::connection::LowLevelConnection::reduce). See
+    /// [`view_resource_name`] for the format of view resource names.
+    </span>Reduce,
+    <span class="doccomment">/// Allows deleting associated docs with
+    /// [`Connection::delete_docs()`](crate::connection::LowLevelConnection::delete_docs).
+    /// See [`view_resource_name`] for the format of view resource names.
+    </span>DeleteDocs,
 }
 
-<span class="doccomment">/// Actions that operate on transactions.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TransactionAction</span> {
-    <span class="doccomment">/// Allows listing executed transactions with</span>
-    <span class="doccomment">/// [`Connection::list_executed_transactions()`](crate::connection::Connection::list_executed_transactions).</span>
-    <span class="doccomment">/// This action is checked against the database&#39;s resource name. See</span>
-    <span class="doccomment">/// [`database_resource_name()`] for the format of database resource names.</span>
-    <span class="ident">ListExecuted</span>,
-    <span class="doccomment">/// Allows retrieving the last executed transaction id with</span>
-    <span class="doccomment">/// [`Connection::last_transaction_id()`](crate::connection::Connection::last_transaction_id).</span>
-    <span class="doccomment">/// This action is checked against the database&#39;s resource name. See</span>
-    <span class="doccomment">/// [`database_resource_name()`] for the format of database resource names.</span>
-    <span class="ident">GetLastId</span>,
+<span class="doccomment">/// Actions that operate on transactions.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>TransactionAction {
+    <span class="doccomment">/// Allows listing executed transactions with
+    /// [`Connection::list_executed_transactions()`](crate::connection::Connection::list_executed_transactions).
+    /// This action is checked against the database&#39;s resource name. See
+    /// [`database_resource_name()`] for the format of database resource names.
+    </span>ListExecuted,
+    <span class="doccomment">/// Allows retrieving the last executed transaction id with
+    /// [`Connection::last_transaction_id()`](crate::connection::Connection::last_transaction_id).
+    /// This action is checked against the database&#39;s resource name. See
+    /// [`database_resource_name()`] for the format of database resource names.
+    </span>GetLastId,
 }
 
-<span class="doccomment">/// Actions that operate on the `PubSub` system.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PubSubAction</span> {
-    <span class="doccomment">/// Allows creating a subscriber with</span>
-    <span class="doccomment">/// [`PubSub::create_subscriber()`](crate::pubsub::PubSub::create_subscriber).</span>
-    <span class="doccomment">/// This action is checked against the database&#39;s resource name. See</span>
-    <span class="doccomment">/// [`database_resource_name()`] for the format of database resource names.</span>
-    <span class="ident">CreateSuscriber</span>,
-    <span class="doccomment">/// Allows publishing a payload to a `PubSub` topic with</span>
-    <span class="doccomment">/// [`PubSub::publish()`](crate::pubsub::PubSub::publish). See</span>
-    <span class="doccomment">/// [`pubsub_topic_resource_name()`] for the format of `PubSub` topic</span>
-    <span class="doccomment">/// resource names.</span>
-    <span class="ident">Publish</span>,
-    <span class="doccomment">/// Allows subscribing to a `PubSub` topic with</span>
-    <span class="doccomment">/// [`PubSub::subscribe_to()`](crate::pubsub::Subscriber::subscribe_to). See</span>
-    <span class="doccomment">/// [`pubsub_topic_resource_name()`] for the format of `PubSub` topic</span>
-    <span class="doccomment">/// resource names.</span>
-    <span class="ident">SubscribeTo</span>,
-    <span class="doccomment">/// Allows unsubscribing from a `PubSub` topic with</span>
-    <span class="doccomment">/// [`PubSub::unsubscribe_from()`](crate::pubsub::Subscriber::unsubscribe_from). See</span>
-    <span class="doccomment">/// [`pubsub_topic_resource_name()`] for the format of `PubSub` topic</span>
-    <span class="doccomment">/// resource names.</span>
-    <span class="ident">UnsubscribeFrom</span>,
+<span class="doccomment">/// Actions that operate on the `PubSub` system.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>PubSubAction {
+    <span class="doccomment">/// Allows creating a subscriber with
+    /// [`PubSub::create_subscriber()`](crate::pubsub::PubSub::create_subscriber).
+    /// This action is checked against the database&#39;s resource name. See
+    /// [`database_resource_name()`] for the format of database resource names.
+    </span>CreateSuscriber,
+    <span class="doccomment">/// Allows publishing a payload to a `PubSub` topic with
+    /// [`PubSub::publish()`](crate::pubsub::PubSub::publish). See
+    /// [`pubsub_topic_resource_name()`] for the format of `PubSub` topic
+    /// resource names.
+    </span>Publish,
+    <span class="doccomment">/// Allows subscribing to a `PubSub` topic with
+    /// [`PubSub::subscribe_to()`](crate::pubsub::Subscriber::subscribe_to). See
+    /// [`pubsub_topic_resource_name()`] for the format of `PubSub` topic
+    /// resource names.
+    </span>SubscribeTo,
+    <span class="doccomment">/// Allows unsubscribing from a `PubSub` topic with
+    /// [`PubSub::unsubscribe_from()`](crate::pubsub::Subscriber::unsubscribe_from). See
+    /// [`pubsub_topic_resource_name()`] for the format of `PubSub` topic
+    /// resource names.
+    </span>UnsubscribeFrom,
 }
 
-<span class="doccomment">/// Actions that operate on the key-value store.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">KeyValueAction</span> {
-    <span class="doccomment">/// Allows executing a key-value store operation with</span>
-    <span class="doccomment">/// [`KeyValue::execute_key_operation()`](crate::keyvalue::KeyValue::execute_key_operation).</span>
-    <span class="doccomment">/// See [`keyvalue_key_resource_name()`] for the format of key resource names.</span>
-    <span class="ident">ExecuteOperation</span>,
+<span class="doccomment">/// Actions that operate on the key-value store.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>KeyValueAction {
+    <span class="doccomment">/// Allows executing a key-value store operation with
+    /// [`KeyValue::execute_key_operation()`](crate::keyvalue::KeyValue::execute_key_operation).
+    /// See [`keyvalue_key_resource_name()`] for the format of key resource names.
+    </span>ExecuteOperation,
 }
 
-<span class="doccomment">/// Actions that use encryption keys.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Action</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">EncryptionKeyAction</span> {
-    <span class="doccomment">/// Uses a key to encrypt data.</span>
-    <span class="ident">Encrypt</span>,
-    <span class="doccomment">/// Uses a key to decrypt data.</span>
-    <span class="ident">Decrypt</span>,
+<span class="doccomment">/// Actions that use encryption keys.
+</span><span class="attribute">#[derive(Action, Serialize, Deserialize, Clone, Copy, Debug)]
+</span><span class="kw">pub enum </span>EncryptionKeyAction {
+    <span class="doccomment">/// Uses a key to encrypt data.
+    </span>Encrypt,
+    <span class="doccomment">/// Uses a key to decrypt data.
+    </span>Decrypt,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

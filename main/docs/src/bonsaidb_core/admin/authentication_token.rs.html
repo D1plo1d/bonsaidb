@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/admin/authentication_token.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>authentication_token.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/admin/authentication_token.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>authentication_token.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -162,164 +156,163 @@
 <span id="156">156</span>
 <span id="157">157</span>
 <span id="158">158</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection</span>::{<span class="ident">IdentityId</span>, <span class="ident">SensitiveString</span>},
-    <span class="ident">key::time::TimestampAsNanoseconds</span>,
-    <span class="ident">schema::Collection</span>,
+<span class="kw">use crate</span>::{
+    connection::{IdentityId, SensitiveString},
+    key::time::TimestampAsNanoseconds,
+    schema::Collection,
 };
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Collection</span>, <span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">collection</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;authentication-tokens&quot;</span>, <span class="ident">authority</span> <span class="op">=</span> <span class="string">&quot;bonsaidb&quot;</span>, <span class="ident">core</span> <span class="op">=</span> <span class="kw">crate</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AuthenticationToken</span> {
-    <span class="kw">pub</span> <span class="ident">identity</span>: <span class="ident">IdentityId</span>,
-    <span class="kw">pub</span> <span class="ident">token</span>: <span class="ident">SensitiveString</span>,
-    <span class="kw">pub</span> <span class="ident">created_at</span>: <span class="ident">TimestampAsNanoseconds</span>,
+<span class="attribute">#[derive(Collection, Clone, Serialize, Deserialize, Debug)]
+#[collection(name = <span class="string">&quot;authentication-tokens&quot;</span>, authority = <span class="string">&quot;bonsaidb&quot;</span>, core = <span class="kw">crate</span>)]
+</span><span class="kw">pub struct </span>AuthenticationToken {
+    <span class="kw">pub </span>identity: IdentityId,
+    <span class="kw">pub </span>token: SensitiveString,
+    <span class="kw">pub </span>created_at: TimestampAsNanoseconds,
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;token-authentication&quot;</span>)]</span>
-<span class="kw">mod</span> <span class="ident">implementation</span> {
-    <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">seq::SliceRandom</span>, <span class="ident">thread_rng</span>, <span class="ident">Rng</span>};
-    <span class="kw">use</span> <span class="ident">zeroize::Zeroize</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;token-authentication&quot;</span>)]
+</span><span class="kw">mod </span>implementation {
+    <span class="kw">use </span>rand::{seq::SliceRandom, thread_rng, Rng};
+    <span class="kw">use </span>zeroize::Zeroize;
 
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::AuthenticationToken</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::{
-        <span class="ident">connection</span>::{
-            <span class="ident">AsyncConnection</span>, <span class="ident">Connection</span>, <span class="ident">IdentityId</span>, <span class="ident">IdentityReference</span>, <span class="ident">SensitiveString</span>,
-            <span class="ident">TokenChallengeAlgorithm</span>,
+    <span class="kw">use </span><span class="kw">super</span>::AuthenticationToken;
+    <span class="kw">use crate</span>::{
+        connection::{
+            AsyncConnection, Connection, IdentityId, IdentityReference, SensitiveString,
+            TokenChallengeAlgorithm,
         },
-        <span class="ident">document::CollectionDocument</span>,
-        <span class="ident">key::time::TimestampAsNanoseconds</span>,
-        <span class="ident">schema::SerializedCollection</span>,
+        document::CollectionDocument,
+        key::time::TimestampAsNanoseconds,
+        schema::SerializedCollection,
     };
 
-    <span class="kw">impl</span> <span class="ident">AuthenticationToken</span> {
-        <span class="kw">fn</span> <span class="ident">random</span>(<span class="ident">identity</span>: <span class="ident">IdentityId</span>) -&gt; (<span class="ident">u64</span>, <span class="self">Self</span>) {
-            <span class="kw">const</span> <span class="ident">ALPHABET</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span>
+    <span class="kw">impl </span>AuthenticationToken {
+        <span class="kw">fn </span>random(identity: IdentityId) -&gt; (u64, <span class="self">Self</span>) {
+            <span class="kw">const </span>ALPHABET: <span class="kw-2">&amp;</span>[u8] =
                 <span class="string">b&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.+/#&quot;</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">thread_rng</span>();
-            <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>();
-            <span class="kw">let</span> <span class="ident">token</span> <span class="op">=</span> <span class="ident">SensitiveString</span>(
-                <span class="ident">std::iter::repeat_with</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ALPHABET</span>.<span class="ident">choose</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>))
-                    .<span class="ident">take</span>(<span class="number">32</span>)
-                    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">c</span>.<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">char</span>)
-                    .<span class="ident">collect</span>(),
+            <span class="kw">let </span><span class="kw-2">mut </span>rng = thread_rng();
+            <span class="kw">let </span>id = rng.gen();
+            <span class="kw">let </span>token = SensitiveString(
+                std::iter::repeat_with(|| ALPHABET.choose(<span class="kw-2">&amp;mut </span>rng))
+                    .take(<span class="number">32</span>)
+                    .map(|c| <span class="kw-2">*</span>c.unwrap() <span class="kw">as </span>char)
+                    .collect(),
             );
             (
-                <span class="ident">id</span>,
-                <span class="self">Self</span> {
-                    <span class="ident">identity</span>,
-                    <span class="ident">token</span>,
-                    <span class="ident">created_at</span>: <span class="ident">TimestampAsNanoseconds::now</span>(),
+                id,
+                <span class="self">Self </span>{
+                    identity,
+                    token,
+                    created_at: TimestampAsNanoseconds::now(),
                 },
             )
         }
 
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Connection</span><span class="op">&gt;</span>(
-            <span class="ident">identity</span>: <span class="kw-2">&amp;</span><span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-            <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
-        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">identity_id</span> <span class="op">=</span> <span class="ident">identity</span>
-                .<span class="ident">resolve</span>(<span class="ident">database</span>)<span class="question-mark">?</span>
-                .<span class="ident">ok_or</span>(<span class="ident"><span class="kw">crate</span>::Error::InvalidCredentials</span>)<span class="question-mark">?</span>;
-            <span class="kw">loop</span> {
-                <span class="kw">let</span> (<span class="ident">id</span>, <span class="ident">token</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::random</span>(<span class="ident">identity_id</span>);
-                <span class="kw">match</span> <span class="ident">token</span>.<span class="ident">insert_into</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>, <span class="ident">database</span>) {
-                    <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">error</span>.<span class="ident">conflicting_document</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">is_some</span>() =&gt; <span class="kw">continue</span>,
-                    <span class="ident">other</span> =&gt; <span class="kw">break</span> <span class="ident">other</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">error</span>),
+        <span class="kw">pub fn </span>create&lt;C: Connection&gt;(
+            identity: <span class="kw-2">&amp;</span>IdentityReference&lt;<span class="lifetime">&#39;_</span>&gt;,
+            database: <span class="kw-2">&amp;</span>C,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;CollectionDocument&lt;<span class="self">Self</span>&gt;, <span class="kw">crate</span>::Error&gt; {
+            <span class="kw">let </span>identity_id = identity
+                .resolve(database)<span class="question-mark">?
+                </span>.ok_or(<span class="kw">crate</span>::Error::InvalidCredentials)<span class="question-mark">?</span>;
+            <span class="kw">loop </span>{
+                <span class="kw">let </span>(id, token) = <span class="self">Self</span>::random(identity_id);
+                <span class="kw">match </span>token.insert_into(<span class="kw-2">&amp;</span>id, database) {
+                    <span class="prelude-val">Err</span>(err) <span class="kw">if </span>err.error.conflicting_document::&lt;<span class="self">Self</span>&gt;().is_some() =&gt; <span class="kw">continue</span>,
+                    other =&gt; <span class="kw">break </span>other.map_err(|err| err.error),
                 }
             }
         }
 
-        <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_async</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">AsyncConnection</span><span class="op">&gt;</span>(
-            <span class="ident">identity</span>: <span class="ident">IdentityReference</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-            <span class="ident">database</span>: <span class="kw-2">&amp;</span><span class="ident">C</span>,
-        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CollectionDocument</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">identity_id</span> <span class="op">=</span> <span class="ident">identity</span>
-                .<span class="ident">resolve_async</span>(<span class="ident">database</span>)
-                .<span class="kw">await</span><span class="question-mark">?</span>
-                .<span class="ident">ok_or</span>(<span class="ident"><span class="kw">crate</span>::Error::InvalidCredentials</span>)<span class="question-mark">?</span>;
-            <span class="kw">loop</span> {
-                <span class="kw">let</span> (<span class="ident">id</span>, <span class="ident">token</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::random</span>(<span class="ident">identity_id</span>);
-                <span class="kw">match</span> <span class="ident">token</span>.<span class="ident">insert_into_async</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>, <span class="ident">database</span>).<span class="kw">await</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">error</span>.<span class="ident">conflicting_document</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>().<span class="ident">is_some</span>() =&gt; <span class="kw">continue</span>,
-                    <span class="ident">other</span> =&gt; <span class="kw">break</span> <span class="ident">other</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">err</span>.<span class="ident">error</span>),
+        <span class="kw">pub async fn </span>create_async&lt;C: AsyncConnection&gt;(
+            identity: IdentityReference&lt;<span class="lifetime">&#39;_</span>&gt;,
+            database: <span class="kw-2">&amp;</span>C,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;CollectionDocument&lt;<span class="self">Self</span>&gt;, <span class="kw">crate</span>::Error&gt; {
+            <span class="kw">let </span>identity_id = identity
+                .resolve_async(database)
+                .<span class="kw">await</span><span class="question-mark">?
+                </span>.ok_or(<span class="kw">crate</span>::Error::InvalidCredentials)<span class="question-mark">?</span>;
+            <span class="kw">loop </span>{
+                <span class="kw">let </span>(id, token) = <span class="self">Self</span>::random(identity_id);
+                <span class="kw">match </span>token.insert_into_async(<span class="kw-2">&amp;</span>id, database).<span class="kw">await </span>{
+                    <span class="prelude-val">Err</span>(err) <span class="kw">if </span>err.error.conflicting_document::&lt;<span class="self">Self</span>&gt;().is_some() =&gt; <span class="kw">continue</span>,
+                    other =&gt; <span class="kw">break </span>other.map_err(|err| err.error),
                 }
             }
         }
 
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">validate_challenge</span>(
+        <span class="kw">pub fn </span>validate_challenge(
             <span class="kw-2">&amp;</span><span class="self">self</span>,
-            <span class="ident">algorithm</span>: <span class="ident">TokenChallengeAlgorithm</span>,
-            <span class="ident">server_timestamp</span>: <span class="ident">TimestampAsNanoseconds</span>,
-            <span class="ident">nonce</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-            <span class="ident">hash</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">TokenChallengeAlgorithm::Blake3</span> <span class="op">=</span> <span class="ident">algorithm</span>;
-            <span class="kw">let</span> <span class="ident">computed_hash</span> <span class="op">=</span>
-                <span class="ident"><span class="self">Self</span>::compute_challenge_response_blake3</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">token</span>, <span class="ident">nonce</span>, <span class="ident">server_timestamp</span>);
-            <span class="kw">let</span> <span class="ident">hash</span>: [<span class="ident">u8</span>; <span class="ident">blake3::OUT_LEN</span>] <span class="op">=</span> <span class="ident">hash</span>
-                .<span class="ident">try_into</span>()
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident"><span class="kw">crate</span>::Error::InvalidCredentials</span>)<span class="question-mark">?</span>;
+            algorithm: TokenChallengeAlgorithm,
+            server_timestamp: TimestampAsNanoseconds,
+            nonce: <span class="kw-2">&amp;</span>[u8],
+            hash: <span class="kw-2">&amp;</span>[u8],
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+            <span class="kw">let </span>TokenChallengeAlgorithm::Blake3 = algorithm;
+            <span class="kw">let </span>computed_hash =
+                <span class="self">Self</span>::compute_challenge_response_blake3(<span class="kw-2">&amp;</span><span class="self">self</span>.token, nonce, server_timestamp);
+            <span class="kw">let </span>hash: [u8; blake3::OUT_LEN] = hash
+                .try_into()
+                .map_err(|<span class="kw">_</span>| <span class="kw">crate</span>::Error::InvalidCredentials)<span class="question-mark">?</span>;
 
-            <span class="kw">if</span> <span class="ident">computed_hash</span> <span class="op">==</span> <span class="ident">hash</span> {
+            <span class="kw">if </span>computed_hash == hash {
                 <span class="prelude-val">Ok</span>(())
-            } <span class="kw">else</span> {
-                <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::Error::InvalidCredentials</span>)
+            } <span class="kw">else </span>{
+                <span class="prelude-val">Err</span>(<span class="kw">crate</span>::Error::InvalidCredentials)
             }
         }
 
-        <span class="attribute">#[<span class="ident">must_use</span>]</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">compute_challenge_response_blake3</span>(
-            <span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">SensitiveString</span>,
-            <span class="ident">nonce</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-            <span class="ident">timestamp</span>: <span class="ident">TimestampAsNanoseconds</span>,
-        ) -&gt; <span class="ident">blake3::Hash</span> {
-            <span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;bonsaidb {timestamp} token-challenge&quot;</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">blake3::derive_key</span>(<span class="kw-2">&amp;</span><span class="ident">context</span>, <span class="ident">token</span>.<span class="number">0</span>.<span class="ident">as_bytes</span>());
-            <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">blake3::keyed_hash</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="ident">nonce</span>);
-            <span class="ident">key</span>.<span class="ident">zeroize</span>();
-            <span class="ident">hash</span>
+        <span class="attribute">#[must_use]
+        </span><span class="kw">pub fn </span>compute_challenge_response_blake3(
+            token: <span class="kw-2">&amp;</span>SensitiveString,
+            nonce: <span class="kw-2">&amp;</span>[u8],
+            timestamp: TimestampAsNanoseconds,
+        ) -&gt; blake3::Hash {
+            <span class="kw">let </span>context = <span class="macro">format!</span>(<span class="string">&quot;bonsaidb {timestamp} token-challenge&quot;</span>);
+            <span class="kw">let </span><span class="kw-2">mut </span>key = blake3::derive_key(<span class="kw-2">&amp;</span>context, token.<span class="number">0</span>.as_bytes());
+            <span class="kw">let </span>hash = blake3::keyed_hash(<span class="kw-2">&amp;</span>key, nonce);
+            key.zeroize();
+            hash
         }
 
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_request_time</span>(
-            <span class="ident">request_time</span>: <span class="ident">TimestampAsNanoseconds</span>,
-            <span class="ident">request_time_check</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-            <span class="ident">algorithm</span>: <span class="ident">TokenChallengeAlgorithm</span>,
-            <span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">SensitiveString</span>,
-        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-            <span class="kw">match</span> <span class="ident">algorithm</span> {
-                <span class="ident">TokenChallengeAlgorithm::Blake3</span> =&gt; {
-                    <span class="kw">let</span> <span class="ident">request_time_check</span>: [<span class="ident">u8</span>; <span class="ident">blake3::OUT_LEN</span>] <span class="op">=</span>
-                        <span class="ident">request_time_check</span>
-                            .<span class="ident">try_into</span>()
-                            .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident"><span class="kw">crate</span>::Error::InvalidCredentials</span>)<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="ident"><span class="self">Self</span>::compute_request_time_hash_blake3</span>(<span class="ident">request_time</span>, <span class="ident">token</span>)
-                        <span class="op">==</span> <span class="ident">request_time_check</span>
+        <span class="kw">pub fn </span>check_request_time(
+            request_time: TimestampAsNanoseconds,
+            request_time_check: <span class="kw-2">&amp;</span>[u8],
+            algorithm: TokenChallengeAlgorithm,
+            token: <span class="kw-2">&amp;</span>SensitiveString,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
+            <span class="kw">match </span>algorithm {
+                TokenChallengeAlgorithm::Blake3 =&gt; {
+                    <span class="kw">let </span>request_time_check: [u8; blake3::OUT_LEN] =
+                        request_time_check
+                            .try_into()
+                            .map_err(|<span class="kw">_</span>| <span class="kw">crate</span>::Error::InvalidCredentials)<span class="question-mark">?</span>;
+                    <span class="kw">if </span><span class="self">Self</span>::compute_request_time_hash_blake3(request_time, token)
+                        == request_time_check
                     {
                         <span class="prelude-val">Ok</span>(())
-                    } <span class="kw">else</span> {
-                        <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::Error::InvalidCredentials</span>)
+                    } <span class="kw">else </span>{
+                        <span class="prelude-val">Err</span>(<span class="kw">crate</span>::Error::InvalidCredentials)
                     }
                 }
             }
         }
 
-        <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">compute_request_time_hash_blake3</span>(
-            <span class="ident">request_time</span>: <span class="ident">TimestampAsNanoseconds</span>,
-            <span class="ident">private_token</span>: <span class="kw-2">&amp;</span><span class="ident">SensitiveString</span>,
-        ) -&gt; <span class="ident">blake3::Hash</span> {
-            <span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;bonsaidb {request_time} token-authentication&quot;</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">blake3::derive_key</span>(<span class="kw-2">&amp;</span><span class="ident">context</span>, <span class="ident">private_token</span>.<span class="number">0</span>.<span class="ident">as_bytes</span>());
-            <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">blake3::keyed_hash</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>, <span class="kw-2">&amp;</span><span class="ident">request_time</span>.<span class="ident">representation</span>().<span class="ident">to_be_bytes</span>());
-            <span class="ident">key</span>.<span class="ident">zeroize</span>();
-            <span class="ident">hash</span>
+        <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>compute_request_time_hash_blake3(
+            request_time: TimestampAsNanoseconds,
+            private_token: <span class="kw-2">&amp;</span>SensitiveString,
+        ) -&gt; blake3::Hash {
+            <span class="kw">let </span>context = <span class="macro">format!</span>(<span class="string">&quot;bonsaidb {request_time} token-authentication&quot;</span>);
+            <span class="kw">let </span><span class="kw-2">mut </span>key = blake3::derive_key(<span class="kw-2">&amp;</span>context, private_token.<span class="number">0</span>.as_bytes());
+            <span class="kw">let </span>hash = blake3::keyed_hash(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>request_time.representation().to_be_bytes());
+            key.zeroize();
+            hash
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">AuthenticationToken</span> {}
+<span class="kw">impl </span>AuthenticationToken {}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

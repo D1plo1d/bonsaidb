@@ -1,12 +1,13 @@
-var sourcesIndex = {};
-sourcesIndex["bonsaidb"] = {"name":"","files":["any_connection.rs","cli.rs","lib.rs"]};
-sourcesIndex["bonsaidb_client"] = {"name":"","dirs":[{"name":"client","dirs":[{"name":"remote_database","files":["keyvalue.rs","pubsub.rs"]}],"files":["quic_worker.rs","remote_database.rs","sync.rs","tungstenite_worker.rs"]}],"files":["builder.rs","client.rs","error.rs","lib.rs"]};
-sourcesIndex["bonsaidb_core"] = {"name":"","dirs":[{"name":"admin","files":["authentication_token.rs","database.rs","group.rs","mod.rs","role.rs","user.rs"]},{"name":"connection","files":["has_session.rs","lowlevel.rs"]},{"name":"document","files":["collection.rs","header.rs","id.rs","revision.rs"]},{"name":"key","files":["deprecated.rs","time.rs"]},{"name":"keyvalue","dirs":[{"name":"implementation","files":["get.rs","increment.rs","namespaced.rs","set.rs"]}],"files":["timestamp.rs"]},{"name":"permissions","files":["bonsai.rs","mod.rs"]},{"name":"schema","dirs":[{"name":"view","files":["map.rs"]}],"files":["collection.rs","mod.rs","names.rs","schematic.rs","view.rs"]}],"files":["api.rs","connection.rs","document.rs","key.rs","keyvalue.rs","lib.rs","limits.rs","networking.rs","pubsub.rs","test_util.rs","transaction.rs"]};
-sourcesIndex["bonsaidb_files"] = {"name":"","dirs":[{"name":"schema","files":["block.rs","file.rs"]}],"files":["direct.rs","lib.rs","schema.rs"]};
-sourcesIndex["bonsaidb_keystorage_s3"] = {"name":"","files":["lib.rs"]};
-sourcesIndex["bonsaidb_local"] = {"name":"","dirs":[{"name":"cli","files":["admin.rs"]},{"name":"config","files":["argon.rs"]},{"name":"database","files":["compat.rs","keyvalue.rs","pubsub.rs"]},{"name":"storage","files":["argon.rs","backup.rs","pubsub.rs","token_authentication.rs"]},{"name":"tasks","dirs":[{"name":"manager","files":["jobs.rs","managed_job.rs"]}],"files":["compactor.rs","handle.rs","manager.rs","task.rs","traits.rs"]},{"name":"views","files":["integrity_scanner.rs","mapper.rs"]}],"files":["async.rs","cli.rs","config.rs","database.rs","error.rs","lib.rs","open_trees.rs","storage.rs","tasks.rs","vault.rs","views.rs"]};
-sourcesIndex["bonsaidb_macros"] = {"name":"","files":["lib.rs"]};
-sourcesIndex["bonsaidb_server"] = {"name":"","dirs":[{"name":"cli","files":["certificate.rs","mod.rs","serve.rs"]},{"name":"server","files":["acme.rs","connected_client.rs","database.rs","shutdown.rs","tcp.rs","websockets.rs"]}],"files":["api.rs","backend.rs","config.rs","dispatch.rs","error.rs","hosted.rs","lib.rs","server.rs","test_util.rs"]};
-sourcesIndex["bonsaidb_utils"] = {"name":"","files":["lib.rs","lock_macros.rs"]};
-sourcesIndex["xtask"] = {"name":"","files":["main.rs"]};
+var sourcesIndex = JSON.parse('{\
+"bonsaidb":["",[],["any_connection.rs","cli.rs","lib.rs"]],\
+"bonsaidb_client":["",[["client",[["remote_database",[],["keyvalue.rs","pubsub.rs"]]],["quic_worker.rs","remote_database.rs","sync.rs","tungstenite_worker.rs"]]],["builder.rs","client.rs","error.rs","lib.rs"]],\
+"bonsaidb_core":["",[["admin",[],["authentication_token.rs","database.rs","group.rs","mod.rs","role.rs","user.rs"]],["connection",[],["has_session.rs","lowlevel.rs"]],["document",[],["collection.rs","header.rs","id.rs","revision.rs"]],["key",[],["deprecated.rs","time.rs"]],["keyvalue",[["implementation",[],["get.rs","increment.rs","namespaced.rs","set.rs"]]],["timestamp.rs"]],["permissions",[],["bonsai.rs","mod.rs"]],["schema",[["view",[],["map.rs"]]],["collection.rs","mod.rs","names.rs","schematic.rs","view.rs"]]],["api.rs","connection.rs","document.rs","key.rs","keyvalue.rs","lib.rs","limits.rs","networking.rs","pubsub.rs","test_util.rs","transaction.rs"]],\
+"bonsaidb_files":["",[["schema",[],["block.rs","file.rs"]]],["direct.rs","lib.rs","schema.rs"]],\
+"bonsaidb_keystorage_s3":["",[],["lib.rs"]],\
+"bonsaidb_local":["",[["cli",[],["admin.rs"]],["config",[],["argon.rs"]],["database",[],["compat.rs","keyvalue.rs","pubsub.rs"]],["storage",[],["argon.rs","backup.rs","pubsub.rs","token_authentication.rs"]],["tasks",[["manager",[],["jobs.rs","managed_job.rs"]]],["compactor.rs","handle.rs","manager.rs","task.rs","traits.rs"]],["views",[],["integrity_scanner.rs","mapper.rs"]]],["async.rs","cli.rs","config.rs","database.rs","error.rs","lib.rs","open_trees.rs","storage.rs","tasks.rs","vault.rs","views.rs"]],\
+"bonsaidb_macros":["",[],["lib.rs"]],\
+"bonsaidb_server":["",[["cli",[],["certificate.rs","mod.rs","serve.rs"]],["server",[],["acme.rs","connected_client.rs","database.rs","shutdown.rs","tcp.rs","websockets.rs"]]],["api.rs","backend.rs","config.rs","dispatch.rs","error.rs","hosted.rs","lib.rs","server.rs","test_util.rs"]],\
+"bonsaidb_utils":["",[],["lib.rs","lock_macros.rs"]],\
+"xtask":["",[],["main.rs"]]\
+}');
 createSourceSidebar();

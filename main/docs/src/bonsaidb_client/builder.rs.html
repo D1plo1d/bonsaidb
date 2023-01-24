@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-client/src/builder.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>builder.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_client/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_client/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_client/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-client/src/builder.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>builder.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_client/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -99,101 +93,100 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">sync::Arc</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, sync::Arc};
 
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{<span class="ident">api</span>, <span class="ident">api::ApiName</span>, <span class="ident">networking::CURRENT_PROTOCOL_VERSION</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident">fabruic::Certificate</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident">tokio::runtime::Handle</span>;
-<span class="kw">use</span> <span class="ident">url::Url</span>;
+<span class="kw">use </span>bonsaidb_core::{api, api::ApiName, networking::CURRENT_PROTOCOL_VERSION};
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+</span><span class="kw">use </span>fabruic::Certificate;
+<span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+</span><span class="kw">use </span>tokio::runtime::Handle;
+<span class="kw">use </span>url::Url;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">client</span>::{<span class="ident">AnyApiCallback</span>, <span class="ident">ApiCallback</span>},
-    <span class="ident">Client</span>, <span class="ident">Error</span>,
+<span class="kw">use crate</span>::{
+    client::{AnyApiCallback, ApiCallback},
+    Client, Error,
 };
 
-<span class="doccomment">/// Builds a new [`Client`] with custom settings.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Builder</span> {
-    <span class="ident">url</span>: <span class="ident">Url</span>,
-    <span class="ident">protocol_version</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-    <span class="ident">custom_apis</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">ApiName</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyApiCallback</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-    <span class="ident">certificate</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">fabruic::Certificate</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-    <span class="ident">tokio</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Handle</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Builds a new [`Client`] with custom settings.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub struct </span>Builder {
+    url: Url,
+    protocol_version: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str,
+    custom_apis: HashMap&lt;ApiName, <span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>AnyApiCallback&gt;&gt;&gt;,
+    <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+    </span>certificate: <span class="prelude-ty">Option</span>&lt;fabruic::Certificate&gt;,
+    <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+    </span>tokio: <span class="prelude-ty">Option</span>&lt;Handle&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">Builder</span> {
-    <span class="doccomment">/// Creates a new builder for a client connecting to `url`.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">url</span>: <span class="ident">Url</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">url</span>,
-            <span class="ident">protocol_version</span>: <span class="ident">CURRENT_PROTOCOL_VERSION</span>,
-            <span class="ident">custom_apis</span>: <span class="ident">HashMap::new</span>(),
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-            <span class="ident">certificate</span>: <span class="prelude-val">None</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-            <span class="ident">tokio</span>: <span class="ident">Handle::try_current</span>().<span class="ident">ok</span>(),
+<span class="kw">impl </span>Builder {
+    <span class="doccomment">/// Creates a new builder for a client connecting to `url`.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(url: Url) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            url,
+            protocol_version: CURRENT_PROTOCOL_VERSION,
+            custom_apis: HashMap::new(),
+            <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+            </span>certificate: <span class="prelude-val">None</span>,
+            <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+            </span>tokio: Handle::try_current().ok(),
         }
     }
 
-    <span class="doccomment">/// Specifies the tokio runtime this client should use for its async tasks.</span>
-    <span class="doccomment">/// If not specified, `Client` will try to acquire a handle via</span>
-    <span class="doccomment">/// `tokio::runtime::Handle::try_current()`.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_runtime</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">handle</span>: <span class="ident">Handle</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">tokio</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">handle</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Specifies the tokio runtime this client should use for its async tasks.
+    /// If not specified, `Client` will try to acquire a handle via
+    /// `tokio::runtime::Handle::try_current()`.
+    </span><span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+    #[allow(clippy::missing_const_for_fn)]
+    </span><span class="kw">pub fn </span>with_runtime(<span class="kw-2">mut </span><span class="self">self</span>, handle: Handle) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.tokio = <span class="prelude-val">Some</span>(handle);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Enables using a [`Api`](api::Api) with this client. If you want to</span>
-    <span class="doccomment">/// receive out-of-band API requests, set a callback using</span>
-    <span class="doccomment">/// `with_custom_api_callback` instead.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_api</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">custom_apis</span>.<span class="ident">insert</span>(<span class="ident">Api::name</span>(), <span class="prelude-val">None</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Enables using a [`Api`](api::Api) with this client. If you want to
+    /// receive out-of-band API requests, set a callback using
+    /// `with_custom_api_callback` instead.
+    </span><span class="kw">pub fn </span>with_api&lt;Api: api::Api&gt;(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.custom_apis.insert(Api::name(), <span class="prelude-val">None</span>);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Enables using a [`Api`](api::Api) with this client. `callback` will be</span>
-    <span class="doccomment">/// invoked when custom API responses are received from the server.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_api_callback</span><span class="op">&lt;</span><span class="ident">Api</span>: <span class="ident">api::Api</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">ApiCallback</span><span class="op">&lt;</span><span class="ident">Api</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">custom_apis</span>
-            .<span class="ident">insert</span>(<span class="ident">Api::name</span>(), <span class="prelude-val">Some</span>(<span class="ident">Arc::new</span>(<span class="ident">callback</span>)));
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Enables using a [`Api`](api::Api) with this client. `callback` will be
+    /// invoked when custom API responses are received from the server.
+    </span><span class="kw">pub fn </span>with_api_callback&lt;Api: api::Api&gt;(<span class="kw-2">mut </span><span class="self">self</span>, callback: ApiCallback&lt;Api&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.custom_apis
+            .insert(Api::name(), <span class="prelude-val">Some</span>(Arc::new(callback)));
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Connects to a server using a pinned `certificate`. Only supported with BonsaiDb protocol-based connections.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_certificate</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">certificate</span>: <span class="ident">Certificate</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">certificate</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">certificate</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Connects to a server using a pinned `certificate`. Only supported with BonsaiDb protocol-based connections.
+    </span><span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+    #[allow(clippy::missing_const_for_fn)]
+    </span><span class="kw">pub fn </span>with_certificate(<span class="kw-2">mut </span><span class="self">self</span>, certificate: Certificate) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.certificate = <span class="prelude-val">Some</span>(certificate);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Overrides the protocol version. Only for testing purposes.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;test-util&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::missing_const_for_fn</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_protocol_version</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">version</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">protocol_version</span> <span class="op">=</span> <span class="ident">version</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Overrides the protocol version. Only for testing purposes.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;test-util&quot;</span>)]
+    #[allow(clippy::missing_const_for_fn)]
+    </span><span class="kw">pub fn </span>with_protocol_version(<span class="kw-2">mut </span><span class="self">self</span>, version: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.protocol_version = version;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Finishes building the client.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Client</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">Client::new_from_parts</span>(
-            <span class="self">self</span>.<span class="ident">url</span>,
-            <span class="self">self</span>.<span class="ident">protocol_version</span>,
-            <span class="self">self</span>.<span class="ident">custom_apis</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-            <span class="self">self</span>.<span class="ident">certificate</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
-            <span class="self">self</span>.<span class="ident">tokio</span>,
+    <span class="doccomment">/// Finishes building the client.
+    </span><span class="kw">pub fn </span>finish(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Client, Error&gt; {
+        Client::new_from_parts(
+            <span class="self">self</span>.url,
+            <span class="self">self</span>.protocol_version,
+            <span class="self">self</span>.custom_apis,
+            <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+            </span><span class="self">self</span>.certificate,
+            <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
+            </span><span class="self">self</span>.tokio,
         )
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_client" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_client" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

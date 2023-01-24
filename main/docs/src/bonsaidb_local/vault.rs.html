@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/vault.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vault.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_local/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/vault.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>vault.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_local/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -707,709 +701,708 @@
 <span id="701">701</span>
 <span id="702">702</span>
 <span id="703">703</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Encryption and secret management.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! BonsaiDb&#39;s vault is the core of encryption and secret management. To offer</span>
-<span class="doccomment">//! this security, BonsaiDb relies on external [`VaultKeyStorage`] to provide</span>
-<span class="doccomment">//! the key needed to decrypt the master keys. After the master keys have been</span>
-<span class="doccomment">//! decrypted, the vault is able to function without [`VaultKeyStorage`]. This</span>
-<span class="doccomment">//! design ensures that if a copy of a database was stolen, the data that is</span>
-<span class="doccomment">//! stored at-rest cannot be decrypted without gaining access to</span>
-<span class="doccomment">//! [`VaultKeyStorage`].</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## At-Rest Encryption</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! At-rest encryption only ensures that if the database files are stolen that</span>
-<span class="doccomment">//! an attacker cannot access the data without the encryption key. BonsaiDb</span>
-<span class="doccomment">//! will regularly decrypt data to process it, and while the data is in-memory,</span>
-<span class="doccomment">//! it is subject to the security of the machine running it. If using BonsaiDb</span>
-<span class="doccomment">//! over a network, the network transport layer&#39;s encryption is what ensures</span>
-<span class="doccomment">//! your data&#39;s safety.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Security Best Practices</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Vault Key Storage</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! In most situations, do not use [`LocalVaultKeyStorage`] in a production</span>
-<span class="doccomment">//! environment. If you store the vault keys on the same disk as the database,</span>
-<span class="doccomment">//! it&#39;s similar to hiding a key to your house under your doormat. It might stop</span>
-<span class="doccomment">//! the casual person from entering your house, but give any attacker a few</span>
-<span class="doccomment">//! minutes, and they&#39;ll find the key.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Instead, you should use a storage location that provides authentication and</span>
-<span class="doccomment">//! encryption. Our recommendation for production enviroments is to find an</span>
-<span class="doccomment">//! Amazon S3-compatible storage service and use</span>
-<span class="doccomment">//! [`S3VaultKeyStorage`](https://dev.bonsaidb.io/main/docs/bonsaidb_keystorage_s3/struct.S3VaultKeyStorage.html).</span>
-<span class="doccomment">//! Eventually, other BonsaiDb servers will be able to operate as key storage</span>
-<span class="doccomment">//! for each other.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Encryption Algorithms Used</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! BonsaiDb uses the [`hpke`](https://github.com/rozbb/rust-hpke) crate to</span>
-<span class="doccomment">//! provide Hybrid Public Key Encryption (HPKE) when public key encryption is</span>
-<span class="doccomment">//! being used. This is currently only utilized for encrypting the master keys</span>
-<span class="doccomment">//! with the vault key. Our HPKE uses `P256+HKDF-SHA256+ChaCha20Poly1305`.</span>
-<span class="doccomment">//! Long term, we plan to offer public key encryption APIs on top of these same</span>
-<span class="doccomment">//! choices.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For at-rest data encryption, the [`AEAD`</span>
-<span class="doccomment">//! `XChaCha20Poly1305`](https://github.com/RustCrypto/AEADs) implementation is</span>
-<span class="doccomment">//! used directly. This variant of `ChaCha20Poly1305` extends the nonce from 12</span>
-<span class="doccomment">//! bytes to 24 bytes, which allows for random nonces to be used.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Encryption and secret management.
+//!
+//! BonsaiDb&#39;s vault is the core of encryption and secret management. To offer
+//! this security, BonsaiDb relies on external [`VaultKeyStorage`] to provide
+//! the key needed to decrypt the master keys. After the master keys have been
+//! decrypted, the vault is able to function without [`VaultKeyStorage`]. This
+//! design ensures that if a copy of a database was stolen, the data that is
+//! stored at-rest cannot be decrypted without gaining access to
+//! [`VaultKeyStorage`].
+//!
+//! ## At-Rest Encryption
+//!
+//! At-rest encryption only ensures that if the database files are stolen that
+//! an attacker cannot access the data without the encryption key. BonsaiDb
+//! will regularly decrypt data to process it, and while the data is in-memory,
+//! it is subject to the security of the machine running it. If using BonsaiDb
+//! over a network, the network transport layer&#39;s encryption is what ensures
+//! your data&#39;s safety.
+//!
+//! ## Security Best Practices
+//!
+//! ### Vault Key Storage
+//!
+//! In most situations, do not use [`LocalVaultKeyStorage`] in a production
+//! environment. If you store the vault keys on the same disk as the database,
+//! it&#39;s similar to hiding a key to your house under your doormat. It might stop
+//! the casual person from entering your house, but give any attacker a few
+//! minutes, and they&#39;ll find the key.
+//!
+//! Instead, you should use a storage location that provides authentication and
+//! encryption. Our recommendation for production enviroments is to find an
+//! Amazon S3-compatible storage service and use
+//! [`S3VaultKeyStorage`](https://dev.bonsaidb.io/main/docs/bonsaidb_keystorage_s3/struct.S3VaultKeyStorage.html).
+//! Eventually, other BonsaiDb servers will be able to operate as key storage
+//! for each other.
+//!
+//! ## Encryption Algorithms Used
+//!
+//! BonsaiDb uses the [`hpke`](https://github.com/rozbb/rust-hpke) crate to
+//! provide Hybrid Public Key Encryption (HPKE) when public key encryption is
+//! being used. This is currently only utilized for encrypting the master keys
+//! with the vault key. Our HPKE uses `P256+HKDF-SHA256+ChaCha20Poly1305`.
+//! Long term, we plan to offer public key encryption APIs on top of these same
+//! choices.
+//!
+//! For at-rest data encryption, the [`AEAD`
+//! `XChaCha20Poly1305`](https://github.com/RustCrypto/AEADs) implementation is
+//! used directly. This variant of `ChaCha20Poly1305` extends the nonce from 12
+//! bytes to 24 bytes, which allows for random nonces to be used.
 
-<span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">borrow::Cow</span>,
-    <span class="ident">collections::HashMap</span>,
-    <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Display</span>},
-    <span class="ident">fs</span>::{<span class="self">self</span>, <span class="ident">File</span>},
-    <span class="ident">io</span>::{<span class="ident">Read</span>, <span class="ident">Write</span>},
-    <span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>},
-    <span class="ident">sync::Arc</span>,
+</span><span class="kw">use </span>std::{
+    borrow::Cow,
+    collections::HashMap,
+    fmt::{Debug, Display},
+    fs::{<span class="self">self</span>, File},
+    io::{Read, Write},
+    path::{Path, PathBuf},
+    sync::Arc,
 };
 
-<span class="kw">use</span> <span class="ident">bonsaidb_core</span>::{
-    <span class="ident">arc_bytes::serde::Bytes</span>,
-    <span class="ident">document::KeyId</span>,
-    <span class="ident">permissions</span>::{
-        <span class="ident">bonsai</span>::{<span class="ident">encryption_key_resource_name</span>, <span class="ident">EncryptionKeyAction</span>},
-        <span class="ident">Permissions</span>,
+<span class="kw">use </span>bonsaidb_core::{
+    arc_bytes::serde::Bytes,
+    document::KeyId,
+    permissions::{
+        bonsai::{encryption_key_resource_name, EncryptionKeyAction},
+        Permissions,
     },
 };
-<span class="kw">use</span> <span class="ident">chacha20poly1305</span>::{
-    <span class="ident">aead</span>::{<span class="ident">generic_array::GenericArray</span>, <span class="ident">Aead</span>, <span class="ident">NewAead</span>, <span class="ident">Payload</span>},
-    <span class="ident">XChaCha20Poly1305</span>,
+<span class="kw">use </span>chacha20poly1305::{
+    aead::{generic_array::GenericArray, Aead, NewAead, Payload},
+    XChaCha20Poly1305,
 };
-<span class="kw">use</span> <span class="ident">hpke</span>::{
+<span class="kw">use </span>hpke::{
     <span class="self">self</span>,
-    <span class="ident">aead</span>::{<span class="ident">AeadTag</span>, <span class="ident">ChaCha20Poly1305</span>},
-    <span class="ident">kdf::HkdfSha256</span>,
-    <span class="ident">kem::DhP256HkdfSha256</span>,
-    <span class="ident">Deserializable</span>, <span class="ident">Kem</span>, <span class="ident">OpModeS</span>, <span class="ident">Serializable</span>,
+    aead::{AeadTag, ChaCha20Poly1305},
+    kdf::HkdfSha256,
+    kem::DhP256HkdfSha256,
+    Deserializable, Kem, OpModeS, Serializable,
 };
-<span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">thread_rng</span>, <span class="ident">Rng</span>};
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="kw">use</span> <span class="ident">zeroize</span>::{<span class="ident">Zeroize</span>, <span class="ident">Zeroizing</span>};
+<span class="kw">use </span>rand::{thread_rng, Rng};
+<span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="kw">use </span>zeroize::{Zeroize, Zeroizing};
 
-<span class="doccomment">/// A private encryption key.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">KeyPair</span> {
-    <span class="doccomment">/// A P256 keypair.</span>
-    <span class="ident">P256</span> {
-        <span class="doccomment">/// The private key.</span>
-        <span class="ident">private</span>: <span class="op">&lt;</span><span class="ident">DhP256HkdfSha256</span> <span class="kw">as</span> <span class="ident">Kem</span><span class="op">&gt;</span><span class="ident">::PrivateKey</span>,
-        <span class="doccomment">/// The public key.</span>
-        <span class="ident">public</span>: <span class="op">&lt;</span><span class="ident">DhP256HkdfSha256</span> <span class="kw">as</span> <span class="ident">Kem</span><span class="op">&gt;</span><span class="ident">::PublicKey</span>,
+<span class="doccomment">/// A private encryption key.
+</span><span class="attribute">#[derive(Serialize, Deserialize)]
+</span><span class="kw">pub enum </span>KeyPair {
+    <span class="doccomment">/// A P256 keypair.
+    </span>P256 {
+        <span class="doccomment">/// The private key.
+        </span>private: &lt;DhP256HkdfSha256 <span class="kw">as </span>Kem&gt;::PrivateKey,
+        <span class="doccomment">/// The public key.
+        </span>public: &lt;DhP256HkdfSha256 <span class="kw">as </span>Kem&gt;::PublicKey,
     },
 }
 
-<span class="kw">impl</span> <span class="ident">KeyPair</span> {
-    <span class="doccomment">/// Serializes the private key into bytes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Zeroizing</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">Zeroizing::new</span>(<span class="ident">bincode::serialize</span>(<span class="self">self</span>)<span class="question-mark">?</span>))
+<span class="kw">impl </span>KeyPair {
+    <span class="doccomment">/// Serializes the private key into bytes.
+    </span><span class="kw">pub fn </span>to_bytes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Zeroizing&lt;Vec&lt;u8&gt;&gt;, Error&gt; {
+        <span class="prelude-val">Ok</span>(Zeroizing::new(bincode::serialize(<span class="self">self</span>)<span class="question-mark">?</span>))
     }
 
-    <span class="doccomment">/// Deserializes the private key.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">bincode::deserialize</span>(<span class="ident">bytes</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)
-    }
-}
-
-<span class="doccomment">/// A public key corresponding to a [`KeyPair`].</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PublicKey</span> {
-    <span class="doccomment">/// A P256 public key.</span>
-    <span class="ident">P256</span>(<span class="op">&lt;</span><span class="ident">DhP256HkdfSha256</span> <span class="kw">as</span> <span class="ident">Kem</span><span class="op">&gt;</span><span class="ident">::PublicKey</span>),
-}
-
-<span class="kw">impl</span> <span class="ident">PublicKey</span> {
-    <span class="doccomment">/// Serializes the public key into bytes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Zeroizing</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">Zeroizing::new</span>(<span class="ident">bincode::serialize</span>(<span class="self">self</span>)<span class="question-mark">?</span>))
-    }
-
-    <span class="doccomment">/// Deserializes the public key.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">bincode::deserialize</span>(<span class="ident">bytes</span>).<span class="ident">map_err</span>(<span class="ident">Error::from</span>)
+    <span class="doccomment">/// Deserializes the private key.
+    </span><span class="kw">pub fn </span>from_bytes(bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        bincode::deserialize(bytes).map_err(Error::from)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">KeyPair</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PublicKey</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">KeyPair</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="ident">key</span> {
-            <span class="ident">KeyPair::P256</span> { <span class="ident">public</span>, .. } =&gt; <span class="ident">PublicKey::P256</span>(<span class="ident">public</span>.<span class="ident">clone</span>()),
+<span class="doccomment">/// A public key corresponding to a [`KeyPair`].
+</span><span class="attribute">#[derive(Serialize, Deserialize)]
+</span><span class="kw">pub enum </span>PublicKey {
+    <span class="doccomment">/// A P256 public key.
+    </span>P256(&lt;DhP256HkdfSha256 <span class="kw">as </span>Kem&gt;::PublicKey),
+}
+
+<span class="kw">impl </span>PublicKey {
+    <span class="doccomment">/// Serializes the public key into bytes.
+    </span><span class="kw">pub fn </span>to_bytes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Zeroizing&lt;Vec&lt;u8&gt;&gt;, Error&gt; {
+        <span class="prelude-val">Ok</span>(Zeroizing::new(bincode::serialize(<span class="self">self</span>)<span class="question-mark">?</span>))
+    }
+
+    <span class="doccomment">/// Deserializes the public key.
+    </span><span class="kw">pub fn </span>from_bytes(bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        bincode::deserialize(bytes).map_err(Error::from)
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>KeyPair&gt; <span class="kw">for </span>PublicKey {
+    <span class="kw">fn </span>from(key: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>KeyPair) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>key {
+            KeyPair::P256 { public, .. } =&gt; PublicKey::P256(public.clone()),
         }
     }
 }
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::storage::StorageId</span>;
+<span class="kw">use </span><span class="kw">crate</span>::storage::StorageId;
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Vault</span> {
-    <span class="ident">_vault_public_key</span>: <span class="ident">PublicKey</span>,
-    <span class="ident">master_keys</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">EncryptionKey</span><span class="op">&gt;</span>,
-    <span class="ident">current_master_key_id</span>: <span class="ident">u32</span>,
-    <span class="ident">master_key_storage</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span>,
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>Vault {
+    _vault_public_key: PublicKey,
+    master_keys: HashMap&lt;u32, EncryptionKey&gt;,
+    current_master_key_id: u32,
+    master_key_storage: Arc&lt;<span class="kw">dyn </span>AnyVaultKeyStorage&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Vault</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Vault&quot;</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;master_keys&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">master_keys</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;current_master_key_id&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">current_master_key_id</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;master_key_storage&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">master_key_storage</span>)
-            .<span class="ident">finish_non_exhaustive</span>()
+<span class="kw">impl </span>Debug <span class="kw">for </span>Vault {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">&quot;Vault&quot;</span>)
+            .field(<span class="string">&quot;master_keys&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.master_keys)
+            .field(<span class="string">&quot;current_master_key_id&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.current_master_key_id)
+            .field(<span class="string">&quot;master_key_storage&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.master_key_storage)
+            .finish_non_exhaustive()
     }
 }
 
-<span class="doccomment">/// Errors relating to encryption and/or secret storage.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// An error occurred during encryption or decryption.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error with encryption: {0}&quot;</span>)]</span>
-    <span class="ident">Encryption</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// An error occurred within the vault key storage.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error from vault key storage: {0}&quot;</span>)]</span>
-    <span class="ident">VaultKeyStorage</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// An error occurred initializing the vault.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error occurred while initializing: {0}&quot;</span>)]</span>
-    <span class="ident">Initializing</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// A previously initialized vault was found, but the vault key storage</span>
-    <span class="doccomment">/// doesn&#39;t contain the key.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;vault key not found&quot;</span>)]</span>
-    <span class="ident">VaultKeyNotFound</span>,
+<span class="doccomment">/// Errors relating to encryption and/or secret storage.
+</span><span class="attribute">#[derive(thiserror::Error, Debug)]
+</span><span class="kw">pub enum </span>Error {
+    <span class="doccomment">/// An error occurred during encryption or decryption.
+    </span><span class="attribute">#[error(<span class="string">&quot;error with encryption: {0}&quot;</span>)]
+    </span>Encryption(String),
+    <span class="doccomment">/// An error occurred within the vault key storage.
+    </span><span class="attribute">#[error(<span class="string">&quot;error from vault key storage: {0}&quot;</span>)]
+    </span>VaultKeyStorage(String),
+    <span class="doccomment">/// An error occurred initializing the vault.
+    </span><span class="attribute">#[error(<span class="string">&quot;error occurred while initializing: {0}&quot;</span>)]
+    </span>Initializing(String),
+    <span class="doccomment">/// A previously initialized vault was found, but the vault key storage
+    /// doesn&#39;t contain the key.
+    </span><span class="attribute">#[error(<span class="string">&quot;vault key not found&quot;</span>)]
+    </span>VaultKeyNotFound,
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">chacha20poly1305::aead::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">chacha20poly1305::aead::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Encryption</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
+<span class="kw">impl </span>From&lt;chacha20poly1305::aead::Error&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(err: chacha20poly1305::aead::Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Encryption(err.to_string())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">hpke::HpkeError</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">hpke::HpkeError</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Encryption</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
+<span class="kw">impl </span>From&lt;hpke::HpkeError&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(err: hpke::HpkeError) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Encryption(err.to_string())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bincode::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">bincode::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Initializing</span>(<span class="ident">err</span>.<span class="ident">to_string</span>())
+<span class="kw">impl </span>From&lt;bincode::Error&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(err: bincode::Error) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Initializing(err.to_string())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Vault</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initialize</span>(
-        <span class="ident">server_id</span>: <span class="ident">StorageId</span>,
-        <span class="ident">server_directory</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
-        <span class="ident">master_key_storage</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">master_keys_path</span> <span class="op">=</span> <span class="ident">server_directory</span>.<span class="ident">join</span>(<span class="string">&quot;master-keys&quot;</span>);
-        <span class="kw">if</span> <span class="ident">master_keys_path</span>.<span class="ident">exists</span>() {
-            <span class="ident"><span class="self">Self</span>::unseal</span>(<span class="kw-2">&amp;</span><span class="ident">master_keys_path</span>, <span class="ident">server_id</span>, <span class="ident">master_key_storage</span>)
-        } <span class="kw">else</span> {
-            <span class="ident"><span class="self">Self</span>::initialize_vault_key_storage</span>(<span class="kw-2">&amp;</span><span class="ident">master_keys_path</span>, <span class="ident">server_id</span>, <span class="ident">master_key_storage</span>)
+<span class="kw">impl </span>Vault {
+    <span class="kw">pub fn </span>initialize(
+        server_id: StorageId,
+        server_directory: <span class="kw-2">&amp;</span>Path,
+        master_key_storage: Arc&lt;<span class="kw">dyn </span>AnyVaultKeyStorage&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>master_keys_path = server_directory.join(<span class="string">&quot;master-keys&quot;</span>);
+        <span class="kw">if </span>master_keys_path.exists() {
+            <span class="self">Self</span>::unseal(<span class="kw-2">&amp;</span>master_keys_path, server_id, master_key_storage)
+        } <span class="kw">else </span>{
+            <span class="self">Self</span>::initialize_vault_key_storage(<span class="kw-2">&amp;</span>master_keys_path, server_id, master_key_storage)
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">initialize_vault_key_storage</span>(
-        <span class="ident">master_keys_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
-        <span class="ident">server_id</span>: <span class="ident">StorageId</span>,
-        <span class="ident">master_key_storage</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">master_key</span> <span class="op">=</span> <span class="ident">EncryptionKey::random</span>();
-        <span class="kw">let</span> (<span class="ident">private</span>, <span class="ident">public</span>) <span class="op">=</span> <span class="ident">DhP256HkdfSha256::gen_keypair</span>(<span class="kw-2">&amp;mut</span> <span class="ident">thread_rng</span>());
+    <span class="kw">fn </span>initialize_vault_key_storage(
+        master_keys_path: <span class="kw-2">&amp;</span>Path,
+        server_id: StorageId,
+        master_key_storage: Arc&lt;<span class="kw">dyn </span>AnyVaultKeyStorage&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>master_key = EncryptionKey::random();
+        <span class="kw">let </span>(private, public) = DhP256HkdfSha256::gen_keypair(<span class="kw-2">&amp;mut </span>thread_rng());
 
-        <span class="ident">master_key_storage</span>
-            .<span class="ident">set_vault_key_for</span>(
-                <span class="ident">server_id</span>,
-                <span class="ident">KeyPair::P256</span> {
-                    <span class="ident">private</span>,
-                    <span class="ident">public</span>: <span class="ident">public</span>.<span class="ident">clone</span>(),
+        master_key_storage
+            .set_vault_key_for(
+                server_id,
+                KeyPair::P256 {
+                    private,
+                    public: public.clone(),
                 },
             )
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::VaultKeyStorage</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">master_keys</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="ident">master_keys</span>.<span class="ident">insert</span>(<span class="number">0_u32</span>, <span class="ident">master_key</span>);
-        <span class="comment">// Beacuse this is such a critical step, let&#39;s verify that we can</span>
-        <span class="comment">// retrieve the key before we store the sealing key.</span>
-        <span class="kw">let</span> <span class="ident">retrieved</span> <span class="op">=</span> <span class="ident">master_key_storage</span>
-            .<span class="ident">vault_key_for</span>(<span class="ident">server_id</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::VaultKeyStorage</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">expected_public_key_bytes</span> <span class="op">=</span> <span class="ident">PublicKey::P256</span>(<span class="ident">public</span>.<span class="ident">clone</span>()).<span class="ident">to_bytes</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">retrieved_key_matches</span> <span class="op">=</span> <span class="ident">retrieved</span>
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">PublicKey::from</span>(<span class="kw-2">&amp;</span><span class="ident">r</span>).<span class="ident">to_bytes</span>().<span class="ident">ok</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">expected_public_key_bytes</span>))
-            .<span class="ident">unwrap_or_default</span>();
-        <span class="kw">if</span> <span class="ident">retrieved_key_matches</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">serialized_master_keys</span> <span class="op">=</span> <span class="ident">bincode::serialize</span>(<span class="kw-2">&amp;</span><span class="ident">master_keys</span>)<span class="question-mark">?</span>;
+            .map_err(|err| Error::VaultKeyStorage(err.to_string()))<span class="question-mark">?</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>master_keys = HashMap::new();
+        master_keys.insert(<span class="number">0_u32</span>, master_key);
+        <span class="comment">// Beacuse this is such a critical step, let&#39;s verify that we can
+        // retrieve the key before we store the sealing key.
+        </span><span class="kw">let </span>retrieved = master_key_storage
+            .vault_key_for(server_id)
+            .map_err(|err| Error::VaultKeyStorage(err.to_string()))<span class="question-mark">?</span>;
+        <span class="kw">let </span>expected_public_key_bytes = PublicKey::P256(public.clone()).to_bytes().unwrap();
+        <span class="kw">let </span>retrieved_key_matches = retrieved
+            .map(|r| PublicKey::from(<span class="kw-2">&amp;</span>r).to_bytes().ok() == <span class="prelude-val">Some</span>(expected_public_key_bytes))
+            .unwrap_or_default();
+        <span class="kw">if </span>retrieved_key_matches {
+            <span class="kw">let </span><span class="kw-2">mut </span>serialized_master_keys = bincode::serialize(<span class="kw-2">&amp;</span>master_keys)<span class="question-mark">?</span>;
 
-            <span class="kw">let</span> (<span class="ident">encapsulated_key</span>, <span class="ident">aead_tag</span>) <span class="op">=</span> <span class="ident">hpke::single_shot_seal_in_place_detached</span>::<span class="op">&lt;</span>
-                <span class="ident">ChaCha20Poly1305</span>,
-                <span class="ident">HkdfSha256</span>,
-                <span class="ident">DhP256HkdfSha256</span>,
+            <span class="kw">let </span>(encapsulated_key, aead_tag) = hpke::single_shot_seal_in_place_detached::&lt;
+                ChaCha20Poly1305,
+                HkdfSha256,
+                DhP256HkdfSha256,
                 <span class="kw">_</span>,
-            <span class="op">&gt;</span>(
-                <span class="kw-2">&amp;</span><span class="ident">OpModeS::Base</span>,
-                <span class="kw-2">&amp;</span><span class="ident">public</span>,
+            &gt;(
+                <span class="kw-2">&amp;</span>OpModeS::Base,
+                <span class="kw-2">&amp;</span>public,
                 <span class="string">b&quot;&quot;</span>,
-                <span class="kw-2">&amp;mut</span> <span class="ident">serialized_master_keys</span>,
+                <span class="kw-2">&amp;mut </span>serialized_master_keys,
                 <span class="string">b&quot;&quot;</span>,
-                <span class="kw-2">&amp;mut</span> <span class="ident">thread_rng</span>(),
+                <span class="kw-2">&amp;mut </span>thread_rng(),
             )<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tag</span> <span class="op">=</span> [<span class="number">0_u8</span>; <span class="number">16</span>];
-            <span class="ident">tag</span>.<span class="ident">copy_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">aead_tag</span>.<span class="ident">to_bytes</span>());
+            <span class="kw">let </span><span class="kw-2">mut </span>tag = [<span class="number">0_u8</span>; <span class="number">16</span>];
+            tag.copy_from_slice(<span class="kw-2">&amp;</span>aead_tag.to_bytes());
 
-            <span class="kw">let</span> <span class="ident">encrypted_master_keys_payload</span> <span class="op">=</span> <span class="ident">bincode::serialize</span>(<span class="kw-2">&amp;</span><span class="ident">HpkePayload</span> {
-                <span class="ident">encryption</span>: <span class="ident">PublicKeyEncryption::DhP256HkdfSha256ChaCha20</span>,
-                <span class="ident">payload</span>: <span class="ident">Bytes::from</span>(<span class="ident">serialized_master_keys</span>),
-                <span class="ident">encapsulated_key</span>,
-                <span class="ident">tag</span>,
+            <span class="kw">let </span>encrypted_master_keys_payload = bincode::serialize(<span class="kw-2">&amp;</span>HpkePayload {
+                encryption: PublicKeyEncryption::DhP256HkdfSha256ChaCha20,
+                payload: Bytes::from(serialized_master_keys),
+                encapsulated_key,
+                tag,
             })<span class="question-mark">?</span>;
 
-            <span class="ident">File::create</span>(<span class="ident">master_keys_path</span>)
-                .<span class="ident">and_then</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">file</span><span class="op">|</span> <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys_payload</span>))
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Initializing</span>(<span class="macro">format!</span>(<span class="string">&quot;error saving vault key: {:?}&quot;</span>, <span class="ident">err</span>)))<span class="question-mark">?</span>;
+            File::create(master_keys_path)
+                .and_then(<span class="kw">move </span>|<span class="kw-2">mut </span>file| file.write_all(<span class="kw-2">&amp;</span>encrypted_master_keys_payload))
+                .map_err(|err| Error::Initializing(<span class="macro">format!</span>(<span class="string">&quot;error saving vault key: {err:?}&quot;</span>)))<span class="question-mark">?</span>;
 
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-                <span class="ident">_vault_public_key</span>: <span class="ident">PublicKey::P256</span>(<span class="ident">public</span>),
-                <span class="ident">master_keys</span>,
-                <span class="ident">current_master_key_id</span>: <span class="number">0</span>,
-                <span class="ident">master_key_storage</span>,
+            <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+                _vault_public_key: PublicKey::P256(public),
+                master_keys,
+                current_master_key_id: <span class="number">0</span>,
+                master_key_storage,
             })
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::VaultKeyStorage</span>(<span class="ident">String::from</span>(
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::VaultKeyStorage(String::from(
                 <span class="string">&quot;vault key storage failed to return the same stored key during initialization&quot;</span>,
             )))
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">unseal</span>(
-        <span class="ident">master_keys_path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
-        <span class="ident">server_id</span>: <span class="ident">StorageId</span>,
-        <span class="ident">master_key_storage</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">AnyVaultKeyStorage</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="comment">// The vault has been initilized previously. Do not overwrite this file voluntarily.</span>
-        <span class="kw">let</span> <span class="ident">encrypted_master_keys</span> <span class="op">=</span> <span class="ident">std::fs::read</span>(<span class="ident">master_keys_path</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::Initializing</span>(<span class="macro">format!</span>(<span class="string">&quot;error reading master keys: {:?}&quot;</span>, <span class="ident">err</span>)))<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encrypted_master_keys</span> <span class="op">=</span>
-            <span class="ident">bincode::deserialize</span>::<span class="op">&lt;</span><span class="ident">HpkePayload</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">PublicKeyEncryption::DhP256HkdfSha256ChaCha20</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys</span>.<span class="ident">encryption</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">vault_key</span>) <span class="op">=</span> <span class="ident">master_key_storage</span>
-            .<span class="ident">vault_key_for</span>(<span class="ident">server_id</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::VaultKeyStorage</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>
-        {
-            <span class="kw">let</span> <span class="ident">master_keys</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">vault_key</span> {
-                <span class="ident">KeyPair::P256</span> { <span class="ident">private</span>, .. } =&gt; {
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">decryption_context</span> <span class="op">=</span>
-                        <span class="ident">hpke::setup_receiver</span>::<span class="op">&lt;</span><span class="ident">ChaCha20Poly1305</span>, <span class="ident">HkdfSha256</span>, <span class="ident">DhP256HkdfSha256</span><span class="op">&gt;</span>(
-                            <span class="kw-2">&amp;</span><span class="ident">hpke::OpModeR::Base</span>,
-                            <span class="ident">private</span>,
-                            <span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys</span>.<span class="ident">encapsulated_key</span>,
+    <span class="kw">fn </span>unseal(
+        master_keys_path: <span class="kw-2">&amp;</span>Path,
+        server_id: StorageId,
+        master_key_storage: Arc&lt;<span class="kw">dyn </span>AnyVaultKeyStorage&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="comment">// The vault has been initilized previously. Do not overwrite this file voluntarily.
+        </span><span class="kw">let </span>encrypted_master_keys = std::fs::read(master_keys_path)
+            .map_err(|err| Error::Initializing(<span class="macro">format!</span>(<span class="string">&quot;error reading master keys: {err:?}&quot;</span>)))<span class="question-mark">?</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>encrypted_master_keys =
+            bincode::deserialize::&lt;HpkePayload&gt;(<span class="kw-2">&amp;</span>encrypted_master_keys)<span class="question-mark">?</span>;
+        <span class="kw">let </span>PublicKeyEncryption::DhP256HkdfSha256ChaCha20 = <span class="kw-2">&amp;</span>encrypted_master_keys.encryption;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(vault_key) = master_key_storage
+            .vault_key_for(server_id)
+            .map_err(|err| Error::VaultKeyStorage(err.to_string()))<span class="question-mark">?
+        </span>{
+            <span class="kw">let </span>master_keys = <span class="kw">match </span><span class="kw-2">&amp;</span>vault_key {
+                KeyPair::P256 { private, .. } =&gt; {
+                    <span class="kw">let </span><span class="kw-2">mut </span>decryption_context =
+                        hpke::setup_receiver::&lt;ChaCha20Poly1305, HkdfSha256, DhP256HkdfSha256&gt;(
+                            <span class="kw-2">&amp;</span>hpke::OpModeR::Base,
+                            private,
+                            <span class="kw-2">&amp;</span>encrypted_master_keys.encapsulated_key,
                             <span class="string">b&quot;&quot;</span>,
                         )
-                        .<span class="ident">unwrap</span>();
+                        .unwrap();
 
-                    <span class="ident">decryption_context</span>
-                        .<span class="ident">open_in_place_detached</span>(
-                            <span class="kw-2">&amp;mut</span> <span class="ident">encrypted_master_keys</span>.<span class="ident">payload</span>.<span class="number">0</span>,
+                    decryption_context
+                        .open_in_place_detached(
+                            <span class="kw-2">&amp;mut </span>encrypted_master_keys.payload.<span class="number">0</span>,
                             <span class="string">b&quot;&quot;</span>,
-                            <span class="kw-2">&amp;</span><span class="ident">AeadTag</span>::<span class="op">&lt;</span><span class="ident">ChaCha20Poly1305</span><span class="op">&gt;</span><span class="ident">::from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys</span>.<span class="ident">tag</span>)
-                                .<span class="ident">unwrap</span>(),
+                            <span class="kw-2">&amp;</span>AeadTag::&lt;ChaCha20Poly1305&gt;::from_bytes(<span class="kw-2">&amp;</span>encrypted_master_keys.tag)
+                                .unwrap(),
                         )
-                        .<span class="ident">unwrap</span>();
+                        .unwrap();
 
-                    <span class="ident">bincode::deserialize</span>::<span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">EncryptionKey</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-                        <span class="kw-2">&amp;</span><span class="ident">encrypted_master_keys</span>.<span class="ident">payload</span>,
-                    )<span class="question-mark">?</span>
-                }
+                    bincode::deserialize::&lt;HashMap&lt;u32, EncryptionKey&gt;&gt;(
+                        <span class="kw-2">&amp;</span>encrypted_master_keys.payload,
+                    )<span class="question-mark">?
+                </span>}
             };
 
-            <span class="kw">let</span> <span class="ident">current_master_key_id</span> <span class="op">=</span> <span class="kw-2">*</span><span class="ident">master_keys</span>.<span class="ident">keys</span>().<span class="ident">max</span>().<span class="ident">unwrap</span>();
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-                <span class="ident">_vault_public_key</span>: <span class="ident">PublicKey::from</span>(<span class="kw-2">&amp;</span><span class="ident">vault_key</span>),
-                <span class="ident">master_keys</span>,
-                <span class="ident">current_master_key_id</span>,
-                <span class="ident">master_key_storage</span>,
+            <span class="kw">let </span>current_master_key_id = <span class="kw-2">*</span>master_keys.keys().max().unwrap();
+            <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+                _vault_public_key: PublicKey::from(<span class="kw-2">&amp;</span>vault_key),
+                master_keys,
+                current_master_key_id,
+                master_key_storage,
             })
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::VaultKeyNotFound</span>)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::VaultKeyNotFound)
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">current_master_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">EncryptionKey</span> {
-        <span class="self">self</span>.<span class="ident">master_keys</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">current_master_key_id</span>).<span class="ident">unwrap</span>()
+    <span class="kw">fn </span>current_master_key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>EncryptionKey {
+        <span class="self">self</span>.master_keys.get(<span class="kw-2">&amp;</span><span class="self">self</span>.current_master_key_id).unwrap()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encrypt_payload</span>(
+    <span class="kw">pub fn </span>encrypt_payload(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key_id</span>: <span class="kw-2">&amp;</span><span class="ident">KeyId</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">permissions</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">permissions</span>) <span class="op">=</span> <span class="ident">permissions</span> {
-            <span class="ident">permissions</span>.<span class="ident">check</span>(
-                <span class="ident">encryption_key_resource_name</span>(<span class="ident">key_id</span>),
-                <span class="kw-2">&amp;</span><span class="ident">EncryptionKeyAction::Encrypt</span>,
+        key_id: <span class="kw-2">&amp;</span>KeyId,
+        payload: <span class="kw-2">&amp;</span>[u8],
+        permissions: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Permissions&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(permissions) = permissions {
+            permissions.check(
+                encryption_key_resource_name(key_id),
+                <span class="kw-2">&amp;</span>EncryptionKeyAction::Encrypt,
             )<span class="question-mark">?</span>;
         }
 
-        <span class="kw">let</span> (<span class="ident">key</span>, <span class="ident">version</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">key_id</span> {
-            <span class="ident">KeyId::Master</span> =&gt; (<span class="self">self</span>.<span class="ident">current_master_key</span>(), <span class="self">self</span>.<span class="ident">current_master_key_id</span>),
-            <span class="ident">KeyId::Id</span>(<span class="kw">_</span>) =&gt; <span class="macro">todo!</span>(),
-            <span class="ident">KeyId::None</span> =&gt; <span class="macro">unreachable!</span>(),
+        <span class="kw">let </span>(key, version) = <span class="kw">match </span>key_id {
+            KeyId::Master =&gt; (<span class="self">self</span>.current_master_key(), <span class="self">self</span>.current_master_key_id),
+            KeyId::Id(<span class="kw">_</span>) =&gt; <span class="macro">todo!</span>(),
+            KeyId::None =&gt; <span class="macro">unreachable!</span>(),
         };
-        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">key</span>.<span class="ident">encrypt_payload</span>(<span class="ident">key_id</span>.<span class="ident">clone</span>(), <span class="ident">version</span>, <span class="ident">payload</span>);
-        <span class="prelude-val">Ok</span>(<span class="ident">payload</span>.<span class="ident">to_vec</span>())
+        <span class="kw">let </span>payload = key.encrypt_payload(key_id.clone(), version, payload);
+        <span class="prelude-val">Ok</span>(payload.to_vec())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decrypt_payload</span>(
+    <span class="kw">pub fn </span>decrypt_payload(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">permissions</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">payload</span>) <span class="op">=</span> <span class="ident">VaultPayload::from_slice</span>(<span class="ident">payload</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
-            <span class="ident">Error::Encryption</span>(<span class="macro">format!</span>(<span class="string">&quot;error deserializing encrypted payload: {:?}&quot;</span>, <span class="ident">err</span>))
+        payload: <span class="kw-2">&amp;</span>[u8],
+        permissions: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Permissions&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(payload) = VaultPayload::from_slice(payload).map_err(|err| {
+            Error::Encryption(<span class="macro">format!</span>(<span class="string">&quot;error deserializing encrypted payload: {err:?}&quot;</span>))
         }) {
-            <span class="self">self</span>.<span class="ident">decrypt</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>, <span class="ident">permissions</span>)
-        } <span class="kw">else</span> {
-            <span class="comment">// If we can&#39;t parse it as a VaultPayload, it might have been stored</span>
-            <span class="comment">// decrypted originally.</span>
-            <span class="prelude-val">Ok</span>(<span class="ident">payload</span>.<span class="ident">to_vec</span>())
+            <span class="self">self</span>.decrypt(<span class="kw-2">&amp;</span>payload, permissions)
+        } <span class="kw">else </span>{
+            <span class="comment">// If we can&#39;t parse it as a VaultPayload, it might have been stored
+            // decrypted originally.
+            </span><span class="prelude-val">Ok</span>(payload.to_vec())
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">decrypt</span>(
+    <span class="kw">fn </span>decrypt(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">VaultPayload</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-        <span class="ident">permissions</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Permissions</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident"><span class="kw">crate</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">permissions</span>) <span class="op">=</span> <span class="ident">permissions</span> {
-            <span class="ident">permissions</span>.<span class="ident">check</span>(
-                <span class="ident">encryption_key_resource_name</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>.<span class="ident">key_id</span>),
-                <span class="kw-2">&amp;</span><span class="ident">EncryptionKeyAction::Decrypt</span>,
+        payload: <span class="kw-2">&amp;</span>VaultPayload&lt;<span class="lifetime">&#39;_</span>&gt;,
+        permissions: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Permissions&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, <span class="kw">crate</span>::Error&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(permissions) = permissions {
+            permissions.check(
+                encryption_key_resource_name(<span class="kw-2">&amp;</span>payload.key_id),
+                <span class="kw-2">&amp;</span>EncryptionKeyAction::Decrypt,
             )<span class="question-mark">?</span>;
         }
 
-        <span class="comment">// TODO handle key version</span>
-        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">payload</span>.<span class="ident">key_id</span> {
-            <span class="ident">KeyId::Master</span> =&gt; <span class="self">self</span>.<span class="ident">current_master_key</span>(),
-            <span class="ident">KeyId::Id</span>(<span class="kw">_</span>) =&gt; <span class="macro">todo!</span>(),
-            <span class="ident">KeyId::None</span> =&gt; <span class="macro">unreachable!</span>(),
+        <span class="comment">// TODO handle key version
+        </span><span class="kw">let </span>key = <span class="kw">match </span><span class="kw-2">&amp;</span>payload.key_id {
+            KeyId::Master =&gt; <span class="self">self</span>.current_master_key(),
+            KeyId::Id(<span class="kw">_</span>) =&gt; <span class="macro">todo!</span>(),
+            KeyId::None =&gt; <span class="macro">unreachable!</span>(),
         };
-        <span class="prelude-val">Ok</span>(<span class="ident">key</span>.<span class="ident">decrypt_payload</span>(<span class="ident">payload</span>)<span class="question-mark">?</span>)
+        <span class="prelude-val">Ok</span>(key.decrypt_payload(payload)<span class="question-mark">?</span>)
     }
 }
 
-<span class="doccomment">/// Stores encrypted keys for a vault.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">VaultKeyStorage</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
-    <span class="doccomment">/// The error type that the functions return.</span>
-    <span class="kw">type</span> <span class="ident">Error</span>: <span class="ident">Display</span>;
-    <span class="doccomment">/// Store a key. Each server id should have unique storage.</span>
-    <span class="kw">fn</span> <span class="ident">set_vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>, <span class="ident">key</span>: <span class="ident">KeyPair</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span>;
+<span class="doccomment">/// Stores encrypted keys for a vault.
+</span><span class="kw">pub trait </span>VaultKeyStorage: Send + Sync + Debug + <span class="lifetime">&#39;static </span>{
+    <span class="doccomment">/// The error type that the functions return.
+    </span><span class="kw">type </span>Error: Display;
+    <span class="doccomment">/// Store a key. Each server id should have unique storage.
+    </span><span class="kw">fn </span>set_vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, storage_id: StorageId, key: KeyPair) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="self">Self</span>::Error&gt;;
 
-    <span class="doccomment">/// Retrieve all previously stored vault key for a given storage id.</span>
-    <span class="kw">fn</span> <span class="ident">vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span>;
+    <span class="doccomment">/// Retrieve all previously stored vault key for a given storage id.
+    </span><span class="kw">fn </span>vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, storage_id: StorageId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;KeyPair&gt;, <span class="self">Self</span>::Error&gt;;
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">struct</span> <span class="ident">EncryptionKey</span>(<span class="ident">Box</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">32</span>]<span class="op">&gt;</span>, <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip</span>)]</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">region::LockGuard</span><span class="op">&gt;</span>);
+<span class="attribute">#[derive(Serialize, Deserialize)]
+</span><span class="kw">struct </span>EncryptionKey(Box&lt;[u8; <span class="number">32</span>]&gt;, <span class="attribute">#[serde(skip)] </span><span class="prelude-ty">Option</span>&lt;region::LockGuard&gt;);
 
-<span class="kw">impl</span> <span class="ident">EncryptionKey</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">secret</span>: [<span class="ident">u8</span>; <span class="number">32</span>]) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_key</span> <span class="op">=</span> <span class="self">Self</span>(<span class="ident">Box::new</span>(<span class="ident">secret</span>), <span class="prelude-val">None</span>);
-        <span class="ident">new_key</span>.<span class="ident">lock_memory</span>();
-        <span class="ident">new_key</span>
+<span class="kw">impl </span>EncryptionKey {
+    <span class="kw">pub fn </span>new(secret: [u8; <span class="number">32</span>]) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>new_key = <span class="self">Self</span>(Box::new(secret), <span class="prelude-val">None</span>);
+        new_key.lock_memory();
+        new_key
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-        <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="number">0</span>
-    }
+    <span class="kw">pub fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[u8] {
+        <span class="kw-2">&amp;*</span><span class="self">self</span>.<span class="number">0
+    </span>}
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lock_memory</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="number">1</span>.<span class="ident">is_none</span>() {
-            <span class="kw">match</span> <span class="ident">region::lock</span>(<span class="self">self</span>.<span class="ident">key</span>().<span class="ident">as_ptr</span>(), <span class="self">self</span>.<span class="ident">key</span>().<span class="ident">len</span>()) {
-                <span class="prelude-val">Ok</span>(<span class="ident">guard</span>) =&gt; <span class="self">self</span>.<span class="number">1</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">guard</span>),
-                <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; <span class="macro">log::error!</span>(<span class="string">&quot;Security Warning: Unable to lock memory {:?}&quot;</span>, <span class="ident">err</span>),
+    <span class="kw">pub fn </span>lock_memory(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">if </span><span class="self">self</span>.<span class="number">1</span>.is_none() {
+            <span class="kw">match </span>region::lock(<span class="self">self</span>.key().as_ptr(), <span class="self">self</span>.key().len()) {
+                <span class="prelude-val">Ok</span>(guard) =&gt; <span class="self">self</span>.<span class="number">1 </span>= <span class="prelude-val">Some</span>(guard),
+                <span class="prelude-val">Err</span>(err) =&gt; <span class="macro">log::error!</span>(<span class="string">&quot;Security Warning: Unable to lock memory {:?}&quot;</span>, err),
             }
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">random</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">thread_rng</span>().<span class="ident">gen</span>())
+    <span class="kw">pub fn </span>random() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new(thread_rng().gen())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encrypt_payload</span>(
+    <span class="kw">pub fn </span>encrypt_payload(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key_id</span>: <span class="ident">KeyId</span>,
-        <span class="ident">key_version</span>: <span class="ident">u32</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-    ) -&gt; <span class="ident">VaultPayload</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">thread_rng</span>();
-        <span class="kw">let</span> <span class="ident">nonce</span>: [<span class="ident">u8</span>; <span class="number">24</span>] <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen</span>();
-        <span class="self">self</span>.<span class="ident">encrypt_payload_with_nonce</span>(<span class="ident">key_id</span>, <span class="ident">key_version</span>, <span class="ident">payload</span>, <span class="kw-2">&amp;</span><span class="ident">nonce</span>)
+        key_id: KeyId,
+        key_version: u32,
+        payload: <span class="kw-2">&amp;</span>[u8],
+    ) -&gt; VaultPayload&lt;<span class="lifetime">&#39;static</span>&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = thread_rng();
+        <span class="kw">let </span>nonce: [u8; <span class="number">24</span>] = rng.gen();
+        <span class="self">self</span>.encrypt_payload_with_nonce(key_id, key_version, payload, <span class="kw-2">&amp;</span>nonce)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encrypt_payload_with_nonce</span>(
+    <span class="kw">pub fn </span>encrypt_payload_with_nonce(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">key_id</span>: <span class="ident">KeyId</span>,
-        <span class="ident">key_version</span>: <span class="ident">u32</span>,
-        <span class="ident">payload</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-    ) -&gt; <span class="ident">VaultPayload</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">encrypted</span> <span class="op">=</span> <span class="ident">XChaCha20Poly1305::new</span>(<span class="ident">GenericArray::from_slice</span>(<span class="self">self</span>.<span class="ident">key</span>()))
-            .<span class="ident">encrypt</span>(
-                <span class="ident">GenericArray::from_slice</span>(<span class="ident">nonce</span>),
-                <span class="ident">Payload</span> {
-                    <span class="ident">msg</span>: <span class="ident">payload</span>,
-                    <span class="ident">aad</span>: <span class="string">b&quot;&quot;</span>,
+        key_id: KeyId,
+        key_version: u32,
+        payload: <span class="kw-2">&amp;</span>[u8],
+        nonce: <span class="kw-2">&amp;</span>[u8],
+    ) -&gt; VaultPayload&lt;<span class="lifetime">&#39;static</span>&gt; {
+        <span class="kw">let </span>encrypted = XChaCha20Poly1305::new(GenericArray::from_slice(<span class="self">self</span>.key()))
+            .encrypt(
+                GenericArray::from_slice(nonce),
+                Payload {
+                    msg: payload,
+                    aad: <span class="string">b&quot;&quot;</span>,
                 },
             )
-            .<span class="ident">unwrap</span>();
-        <span class="ident">VaultPayload</span> {
-            <span class="ident">key_id</span>,
-            <span class="ident">encryption</span>: <span class="ident">Encryption::XChaCha20Poly1305</span>,
-            <span class="ident">payload</span>: <span class="ident">Cow::Owned</span>(<span class="ident">encrypted</span>),
-            <span class="ident">nonce</span>: <span class="ident">Cow::Owned</span>(<span class="ident">nonce</span>.<span class="ident">to_vec</span>()),
-            <span class="ident">key_version</span>,
+            .unwrap();
+        VaultPayload {
+            key_id,
+            encryption: Encryption::XChaCha20Poly1305,
+            payload: Cow::Owned(encrypted),
+            nonce: Cow::Owned(nonce.to_vec()),
+            key_version,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decrypt_payload</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">VaultPayload</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="comment">// This is a no-op, but it will cause a compiler error if we introduce additional encryption methods</span>
-        <span class="kw">let</span> <span class="ident">encrypted</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">payload</span>.<span class="ident">encryption</span> {
-            <span class="ident">Encryption::XChaCha20Poly1305</span> =&gt; {
-                <span class="ident">XChaCha20Poly1305::new</span>(<span class="ident">GenericArray::from_slice</span>(<span class="self">self</span>.<span class="ident">key</span>())).<span class="ident">decrypt</span>(
-                    <span class="ident">GenericArray::from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">payload</span>.<span class="ident">nonce</span>),
-                    <span class="ident">Payload</span> {
-                        <span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="ident">payload</span>.<span class="ident">payload</span>,
-                        <span class="ident">aad</span>: <span class="string">b&quot;&quot;</span>,
+    <span class="kw">pub fn </span>decrypt_payload(<span class="kw-2">&amp;</span><span class="self">self</span>, payload: <span class="kw-2">&amp;</span>VaultPayload&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, Error&gt; {
+        <span class="comment">// This is a no-op, but it will cause a compiler error if we introduce additional encryption methods
+        </span><span class="kw">let </span>encrypted = <span class="kw">match </span>payload.encryption {
+            Encryption::XChaCha20Poly1305 =&gt; {
+                XChaCha20Poly1305::new(GenericArray::from_slice(<span class="self">self</span>.key())).decrypt(
+                    GenericArray::from_slice(<span class="kw-2">&amp;</span>payload.nonce),
+                    Payload {
+                        msg: <span class="kw-2">&amp;</span>payload.payload,
+                        aad: <span class="string">b&quot;&quot;</span>,
                     },
-                )<span class="question-mark">?</span>
-            }
+                )<span class="question-mark">?
+            </span>}
         };
-        <span class="prelude-val">Ok</span>(<span class="ident">encrypted</span>)
+        <span class="prelude-val">Ok</span>(encrypted)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">EncryptionKey</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">zeroize</span>();
+<span class="kw">impl </span>Drop <span class="kw">for </span>EncryptionKey {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.<span class="number">0</span>.zeroize();
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">EncryptionKey</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;PrivateKey&quot;</span>).<span class="ident">finish_non_exhaustive</span>()
+<span class="kw">impl </span>Debug <span class="kw">for </span>EncryptionKey {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">&quot;PrivateKey&quot;</span>).finish_non_exhaustive()
     }
 }
 
-<span class="doccomment">/// A [`VaultKeyStorage`] trait that wraps the Error type before returning. This</span>
-<span class="doccomment">/// type is used to allow the Vault to operate without any generic parameters.</span>
-<span class="doccomment">/// This trait is auto-implemented for all [`VaultKeyStorage`] implementors.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AnyVaultKeyStorage</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
-    <span class="doccomment">/// Retrieve all previously stored master keys for a given storage id.</span>
-    <span class="kw">fn</span> <span class="ident">vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+<span class="doccomment">/// A [`VaultKeyStorage`] trait that wraps the Error type before returning. This
+/// type is used to allow the Vault to operate without any generic parameters.
+/// This trait is auto-implemented for all [`VaultKeyStorage`] implementors.
+</span><span class="kw">pub trait </span>AnyVaultKeyStorage: Send + Sync + Debug + <span class="lifetime">&#39;static </span>{
+    <span class="doccomment">/// Retrieve all previously stored master keys for a given storage id.
+    </span><span class="kw">fn </span>vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, storage_id: StorageId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;KeyPair&gt;, Error&gt;;
 
-    <span class="doccomment">/// Store a key. Each server id should have unique storage. The keys are</span>
-    <span class="doccomment">/// uniquely encrypted per storage id and can only be decrypted by keys</span>
-    <span class="doccomment">/// contained in the storage itself.</span>
-    <span class="kw">fn</span> <span class="ident">set_vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">storage_id</span>: <span class="ident">StorageId</span>, <span class="ident">key</span>: <span class="ident">KeyPair</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="doccomment">/// Store a key. Each server id should have unique storage. The keys are
+    /// uniquely encrypted per storage id and can only be decrypted by keys
+    /// contained in the storage itself.
+    </span><span class="kw">fn </span>set_vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, storage_id: StorageId, key: KeyPair) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt;;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">AnyVaultKeyStorage</span> <span class="kw">for</span> <span class="ident">T</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">VaultKeyStorage</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+<span class="kw">impl</span>&lt;T&gt; AnyVaultKeyStorage <span class="kw">for </span>T
+<span class="kw">where
+    </span>T: VaultKeyStorage + <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">server_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">VaultKeyStorage::vault_key_for</span>(<span class="self">self</span>, <span class="ident">server_id</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::VaultKeyStorage</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))
+    <span class="kw">fn </span>vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, server_id: StorageId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;KeyPair&gt;, Error&gt; {
+        VaultKeyStorage::vault_key_for(<span class="self">self</span>, server_id)
+            .map_err(|err| Error::VaultKeyStorage(err.to_string()))
     }
 
-    <span class="kw">fn</span> <span class="ident">set_vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">server_id</span>: <span class="ident">StorageId</span>, <span class="ident">key</span>: <span class="ident">KeyPair</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">VaultKeyStorage::set_vault_key_for</span>(<span class="self">self</span>, <span class="ident">server_id</span>, <span class="ident">key</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">Error::VaultKeyStorage</span>(<span class="ident">err</span>.<span class="ident">to_string</span>()))
+    <span class="kw">fn </span>set_vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, server_id: StorageId, key: KeyPair) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        VaultKeyStorage::set_vault_key_for(<span class="self">self</span>, server_id, key)
+            .map_err(|err| Error::VaultKeyStorage(err.to_string()))
     }
 }
 
-<span class="doccomment">/// Stores vault key locally on disk. This is in general considered insecure,</span>
-<span class="doccomment">/// and shouldn&#39;t be used without careful consideration.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The primary goal of encryption within BonsaiDb is to offer limited</span>
-<span class="doccomment">/// encryption at-rest. Within these goals, the primary attack vector being</span>
-<span class="doccomment">/// protected against is an attacker being able to copy the data off of the</span>
-<span class="doccomment">/// disks, either by physically gaining access to the drives or having</span>
-<span class="doccomment">/// filesystem access. By storing the vault key on the same physical media, the</span>
-<span class="doccomment">/// encryption should be considered insecure because if you can gain access to</span>
-<span class="doccomment">/// the data, you have access to the keys as well.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For production environments, it is much more secure to store the vault key</span>
-<span class="doccomment">/// in a separate location. We recommand any S3-compatible backend.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LocalVaultKeyStorage</span> {
-    <span class="ident">directory</span>: <span class="ident">PathBuf</span>,
+<span class="doccomment">/// Stores vault key locally on disk. This is in general considered insecure,
+/// and shouldn&#39;t be used without careful consideration.
+///
+/// The primary goal of encryption within BonsaiDb is to offer limited
+/// encryption at-rest. Within these goals, the primary attack vector being
+/// protected against is an attacker being able to copy the data off of the
+/// disks, either by physically gaining access to the drives or having
+/// filesystem access. By storing the vault key on the same physical media, the
+/// encryption should be considered insecure because if you can gain access to
+/// the data, you have access to the keys as well.
+///
+/// For production environments, it is much more secure to store the vault key
+/// in a separate location. We recommand any S3-compatible backend.
+</span><span class="attribute">#[derive(Debug, Clone)]
+</span><span class="kw">pub struct </span>LocalVaultKeyStorage {
+    directory: PathBuf,
 }
 
-<span class="kw">impl</span> <span class="ident">LocalVaultKeyStorage</span> {
-    <span class="doccomment">/// Creates a new file-based vaultr key storage, storing files within</span>
-    <span class="doccomment">/// `path`. The path provided shouod be a directory. If it doesn&#39;t exist, it</span>
-    <span class="doccomment">/// will be created.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">std::io::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">directory</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">as_ref</span>().<span class="ident">to_owned</span>();
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">directory</span>.<span class="ident">exists</span>() {
-            <span class="ident">fs::create_dir_all</span>(<span class="kw-2">&amp;</span><span class="ident">directory</span>)<span class="question-mark">?</span>;
+<span class="kw">impl </span>LocalVaultKeyStorage {
+    <span class="doccomment">/// Creates a new file-based vaultr key storage, storing files within
+    /// `path`. The path provided shouod be a directory. If it doesn&#39;t exist, it
+    /// will be created.
+    </span><span class="kw">pub fn </span>new&lt;P: AsRef&lt;Path&gt;&gt;(path: P) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, std::io::Error&gt; {
+        <span class="kw">let </span>directory = path.as_ref().to_owned();
+        <span class="kw">if </span>!directory.exists() {
+            fs::create_dir_all(<span class="kw-2">&amp;</span>directory)<span class="question-mark">?</span>;
         }
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">directory</span> })
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{ directory })
     }
 }
 
-<span class="doccomment">/// Errors from local vault key storage.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror::Error</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">LocalVaultKeyStorageError</span> {
-    <span class="doccomment">/// An error interacting with the filesystem.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;io error: {0}&quot;</span>)]</span>
-    <span class="ident">Io</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">std::io::Error</span>),
+<span class="doccomment">/// Errors from local vault key storage.
+</span><span class="attribute">#[derive(thiserror::Error, Debug)]
+</span><span class="kw">pub enum </span>LocalVaultKeyStorageError {
+    <span class="doccomment">/// An error interacting with the filesystem.
+    </span><span class="attribute">#[error(<span class="string">&quot;io error: {0}&quot;</span>)]
+    </span>Io(<span class="attribute">#[from] </span>std::io::Error),
 
-    <span class="doccomment">/// An error serializing or deserializing the keys.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;serialization error: {0}&quot;</span>)]</span>
-    <span class="ident">Serialization</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">bincode::Error</span>),
+    <span class="doccomment">/// An error serializing or deserializing the keys.
+    </span><span class="attribute">#[error(<span class="string">&quot;serialization error: {0}&quot;</span>)]
+    </span>Serialization(<span class="attribute">#[from] </span>bincode::Error),
 
-    <span class="doccomment">/// The file was not the correct size.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;file was not the correct size&quot;</span>)]</span>
-    <span class="ident">InvalidFile</span>,
+    <span class="doccomment">/// The file was not the correct size.
+    </span><span class="attribute">#[error(<span class="string">&quot;file was not the correct size&quot;</span>)]
+    </span>InvalidFile,
 }
 
-<span class="kw">impl</span> <span class="ident">VaultKeyStorage</span> <span class="kw">for</span> <span class="ident">LocalVaultKeyStorage</span> {
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">LocalVaultKeyStorageError</span>;
+<span class="kw">impl </span>VaultKeyStorage <span class="kw">for </span>LocalVaultKeyStorage {
+    <span class="kw">type </span>Error = LocalVaultKeyStorageError;
 
-    <span class="kw">fn</span> <span class="ident">vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">server_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">directory</span>.<span class="ident">join</span>(<span class="ident">server_id</span>.<span class="ident">to_string</span>());
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">server_file</span>.<span class="ident">exists</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
+    <span class="kw">fn </span>vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, server_id: StorageId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;KeyPair&gt;, <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>server_file = <span class="self">self</span>.directory.join(server_id.to_string());
+        <span class="kw">if </span>!server_file.exists() {
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
         }
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">File::open</span>(<span class="ident">server_file</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">f</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-            <span class="ident">f</span>.<span class="ident">read_to_end</span>(<span class="kw-2">&amp;mut</span> <span class="ident">bytes</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">bytes</span>)
+        <span class="kw">let </span><span class="kw-2">mut </span>contents = File::open(server_file).and_then(|<span class="kw-2">mut </span>f| {
+            <span class="kw">let </span><span class="kw-2">mut </span>bytes = Vec::new();
+            f.read_to_end(<span class="kw-2">&amp;mut </span>bytes).map(|<span class="kw">_</span>| bytes)
         })<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">bincode::deserialize</span>::<span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">contents</span>)<span class="question-mark">?</span>;
-        <span class="ident">contents</span>.<span class="ident">zeroize</span>();
+        <span class="kw">let </span>key = bincode::deserialize::&lt;KeyPair&gt;(<span class="kw-2">&amp;</span>contents)<span class="question-mark">?</span>;
+        contents.zeroize();
 
-        <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">key</span>))
+        <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(key))
     }
 
-    <span class="kw">fn</span> <span class="ident">set_vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">server_id</span>: <span class="ident">StorageId</span>, <span class="ident">key</span>: <span class="ident">KeyPair</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">server_file</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">directory</span>.<span class="ident">join</span>(<span class="ident">server_id</span>.<span class="ident">to_string</span>());
-        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">bincode::serialize</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>)<span class="question-mark">?</span>;
-        <span class="ident">File::create</span>(<span class="ident">server_file</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">file</span><span class="op">|</span> <span class="ident">file</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>))<span class="question-mark">?</span>;
+    <span class="kw">fn </span>set_vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, server_id: StorageId, key: KeyPair) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="self">Self</span>::Error&gt; {
+        <span class="kw">let </span>server_file = <span class="self">self</span>.directory.join(server_id.to_string());
+        <span class="kw">let </span>bytes = bincode::serialize(<span class="kw-2">&amp;</span>key)<span class="question-mark">?</span>;
+        File::create(server_file).and_then(|<span class="kw-2">mut </span>file| file.write_all(<span class="kw-2">&amp;</span>bytes))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">struct</span> <span class="ident">VaultPayload</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="comment">// TODO make key_id be the additional data</span>
-    <span class="ident">key_id</span>: <span class="ident">KeyId</span>,
-    <span class="ident">key_version</span>: <span class="ident">u32</span>,
-    <span class="ident">encryption</span>: <span class="ident">Encryption</span>,
-    <span class="ident">payload</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>,
-    <span class="ident">nonce</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>,
+<span class="attribute">#[derive(Serialize, Deserialize)]
+</span><span class="kw">struct </span>VaultPayload&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="comment">// TODO make key_id be the additional data
+    </span>key_id: KeyId,
+    key_version: u32,
+    encryption: Encryption,
+    payload: Cow&lt;<span class="lifetime">&#39;a</span>, [u8]&gt;,
+    nonce: Cow&lt;<span class="lifetime">&#39;a</span>, [u8]&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">VaultPayload</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from_slice</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">bincode::deserialize</span>(<span class="ident">bytes</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
-            <span class="ident">Error::Encryption</span>(<span class="macro">format!</span>(<span class="string">&quot;error deserializing encrypted payload: {:?}&quot;</span>, <span class="ident">err</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; VaultPayload&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>from_slice(bytes: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        bincode::deserialize(bytes).map_err(|err| {
+            Error::Encryption(<span class="macro">format!</span>(<span class="string">&quot;error deserializing encrypted payload: {err:?}&quot;</span>))
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">to_vec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="ident">bincode::serialize</span>(<span class="self">self</span>).<span class="ident">unwrap</span>()
+    <span class="kw">fn </span>to_vec(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        bincode::serialize(<span class="self">self</span>).unwrap()
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">struct</span> <span class="ident">HpkePayload</span> {
-    <span class="ident">encryption</span>: <span class="ident">PublicKeyEncryption</span>,
-    <span class="ident">payload</span>: <span class="ident">Bytes</span>,
-    <span class="ident">tag</span>: [<span class="ident">u8</span>; <span class="number">16</span>],
-    <span class="ident">encapsulated_key</span>: <span class="op">&lt;</span><span class="ident">DhP256HkdfSha256</span> <span class="kw">as</span> <span class="ident">Kem</span><span class="op">&gt;</span><span class="ident">::EncappedKey</span>,
+<span class="attribute">#[derive(Serialize, Deserialize)]
+</span><span class="kw">struct </span>HpkePayload {
+    encryption: PublicKeyEncryption,
+    payload: Bytes,
+    tag: [u8; <span class="number">16</span>],
+    encapsulated_key: &lt;DhP256HkdfSha256 <span class="kw">as </span>Kem&gt;::EncappedKey,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">enum</span> <span class="ident">Encryption</span> {
-    <span class="ident">XChaCha20Poly1305</span>,
+<span class="attribute">#[derive(Serialize, Deserialize)]
+</span><span class="kw">enum </span>Encryption {
+    XChaCha20Poly1305,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">enum</span> <span class="ident">PublicKeyEncryption</span> {
-    <span class="ident">DhP256HkdfSha256ChaCha20</span>,
+<span class="attribute">#[derive(Serialize, Deserialize)]
+</span><span class="kw">enum </span>PublicKeyEncryption {
+    DhP256HkdfSha256ChaCha20,
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-    <span class="kw">struct</span> <span class="ident">NullKeyStorage</span>;
-    <span class="kw">impl</span> <span class="ident">VaultKeyStorage</span> <span class="kw">for</span> <span class="ident">NullKeyStorage</span> {
-        <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">anyhow::Error</span>;
+    <span class="attribute">#[derive(Debug)]
+    </span><span class="kw">struct </span>NullKeyStorage;
+    <span class="kw">impl </span>VaultKeyStorage <span class="kw">for </span>NullKeyStorage {
+        <span class="kw">type </span>Error = anyhow::Error;
 
-        <span class="kw">fn</span> <span class="ident">set_vault_key_for</span>(
+        <span class="kw">fn </span>set_vault_key_for(
             <span class="kw-2">&amp;</span><span class="self">self</span>,
-            <span class="ident">_storage_id</span>: <span class="ident">StorageId</span>,
-            <span class="ident">_key</span>: <span class="ident">KeyPair</span>,
-        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+            _storage_id: StorageId,
+            _key: KeyPair,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="self">Self</span>::Error&gt; {
             <span class="macro">unreachable!</span>()
         }
 
-        <span class="kw">fn</span> <span class="ident">vault_key_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_storage_id</span>: <span class="ident">StorageId</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">KeyPair</span><span class="op">&gt;</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+        <span class="kw">fn </span>vault_key_for(<span class="kw-2">&amp;</span><span class="self">self</span>, _storage_id: StorageId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;KeyPair&gt;, <span class="self">Self</span>::Error&gt; {
             <span class="macro">unreachable!</span>()
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">random_null_vault</span>() -&gt; <span class="ident">Vault</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">master_keys</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="ident">master_keys</span>.<span class="ident">insert</span>(<span class="number">0</span>, <span class="ident">EncryptionKey::random</span>());
+    <span class="kw">fn </span>random_null_vault() -&gt; Vault {
+        <span class="kw">let </span><span class="kw-2">mut </span>master_keys = HashMap::new();
+        master_keys.insert(<span class="number">0</span>, EncryptionKey::random());
 
-        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">public_key</span>) <span class="op">=</span> <span class="op">&lt;</span><span class="ident">DhP256HkdfSha256</span> <span class="kw">as</span> <span class="ident">Kem</span><span class="op">&gt;</span><span class="ident">::gen_keypair</span>(<span class="kw-2">&amp;mut</span> <span class="ident">thread_rng</span>());
+        <span class="kw">let </span>(<span class="kw">_</span>, public_key) = &lt;DhP256HkdfSha256 <span class="kw">as </span>Kem&gt;::gen_keypair(<span class="kw-2">&amp;mut </span>thread_rng());
 
-        <span class="ident">Vault</span> {
-            <span class="ident">_vault_public_key</span>: <span class="ident">PublicKey::P256</span>(<span class="ident">public_key</span>),
-            <span class="ident">master_keys</span>,
-            <span class="ident">current_master_key_id</span>: <span class="number">0</span>,
-            <span class="ident">master_key_storage</span>: <span class="ident">Arc::new</span>(<span class="ident">NullKeyStorage</span>),
+        Vault {
+            _vault_public_key: PublicKey::P256(public_key),
+            master_keys,
+            current_master_key_id: <span class="number">0</span>,
+            master_key_storage: Arc::new(NullKeyStorage),
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">vault_encryption_test</span>() {
-        <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="ident">random_null_vault</span>();
-        <span class="kw">let</span> <span class="ident">encrypted</span> <span class="op">=</span> <span class="ident">vault</span>
-            .<span class="ident">encrypt_payload</span>(<span class="kw-2">&amp;</span><span class="ident">KeyId::Master</span>, <span class="string">b&quot;hello&quot;</span>, <span class="prelude-val">None</span>)
-            .<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">decrypted</span> <span class="op">=</span> <span class="ident">vault</span>.<span class="ident">decrypt_payload</span>(<span class="kw-2">&amp;</span><span class="ident">encrypted</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>();
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>vault_encryption_test() {
+        <span class="kw">let </span>vault = random_null_vault();
+        <span class="kw">let </span>encrypted = vault
+            .encrypt_payload(<span class="kw-2">&amp;</span>KeyId::Master, <span class="string">b&quot;hello&quot;</span>, <span class="prelude-val">None</span>)
+            .unwrap();
+        <span class="kw">let </span>decrypted = vault.decrypt_payload(<span class="kw-2">&amp;</span>encrypted, <span class="prelude-val">None</span>).unwrap();
 
-        <span class="macro">assert_eq!</span>(<span class="ident">decrypted</span>, <span class="string">b&quot;hello&quot;</span>);
+        <span class="macro">assert_eq!</span>(decrypted, <span class="string">b&quot;hello&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">vault_permissions_test</span>() {
-        <span class="kw">let</span> <span class="ident">vault</span> <span class="op">=</span> <span class="ident">random_null_vault</span>();
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>vault_permissions_test() {
+        <span class="kw">let </span>vault = random_null_vault();
         <span class="macro">assert!</span>(<span class="macro">matches!</span>(
-            <span class="ident">vault</span>.<span class="ident">encrypt_payload</span>(<span class="kw-2">&amp;</span><span class="ident">KeyId::Master</span>, <span class="string">b&quot;hello&quot;</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">Permissions::default</span>()),),
-            <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::Error::Core</span>(<span class="ident">bonsaidb_core::Error::PermissionDenied</span>(
-                <span class="kw">_</span>
-            )))
+            vault.encrypt_payload(<span class="kw-2">&amp;</span>KeyId::Master, <span class="string">b&quot;hello&quot;</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Permissions::default()),),
+            <span class="prelude-val">Err</span>(<span class="kw">crate</span>::Error::Core(bonsaidb_core::Error::PermissionDenied(
+                <span class="kw">_
+            </span>)))
         ));
-        <span class="kw">let</span> <span class="ident">encrypted</span> <span class="op">=</span> <span class="ident">vault</span>
-            .<span class="ident">encrypt_payload</span>(<span class="kw-2">&amp;</span><span class="ident">KeyId::Master</span>, <span class="string">b&quot;hello&quot;</span>, <span class="prelude-val">None</span>)
-            .<span class="ident">unwrap</span>();
+        <span class="kw">let </span>encrypted = vault
+            .encrypt_payload(<span class="kw-2">&amp;</span>KeyId::Master, <span class="string">b&quot;hello&quot;</span>, <span class="prelude-val">None</span>)
+            .unwrap();
         <span class="macro">assert!</span>(<span class="macro">matches!</span>(
-            <span class="ident">vault</span>.<span class="ident">decrypt_payload</span>(<span class="kw-2">&amp;</span><span class="ident">encrypted</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">Permissions::default</span>())),
-            <span class="prelude-val">Err</span>(<span class="ident"><span class="kw">crate</span>::Error::Core</span>(<span class="ident">bonsaidb_core::Error::PermissionDenied</span>(
-                <span class="kw">_</span>
-            )))
+            vault.decrypt_payload(<span class="kw-2">&amp;</span>encrypted, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Permissions::default())),
+            <span class="prelude-val">Err</span>(<span class="kw">crate</span>::Error::Core(bonsaidb_core::Error::PermissionDenied(
+                <span class="kw">_
+            </span>)))
         ));
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

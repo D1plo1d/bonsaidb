@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/transaction.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>transaction.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../bonsaidb_core/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/transaction.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>transaction.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../bonsaidb_core/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -636,638 +630,637 @@
 <span id="630">630</span>
 <span id="631">631</span>
 <span id="632">632</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">arc_bytes::serde::Bytes</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>arc_bytes::serde::Bytes;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">connection</span>::{<span class="ident">AsyncLowLevelConnection</span>, <span class="ident">LowLevelConnection</span>},
-    <span class="ident">document</span>::{<span class="ident">CollectionHeader</span>, <span class="ident">DocumentId</span>, <span class="ident">HasHeader</span>, <span class="ident">Header</span>, <span class="ident">Revision</span>},
-    <span class="ident">schema</span>::{<span class="ident">Collection</span>, <span class="ident">CollectionName</span>, <span class="ident">SerializedCollection</span>},
-    <span class="ident">Error</span>,
+<span class="kw">use crate</span>::{
+    connection::{AsyncLowLevelConnection, LowLevelConnection},
+    document::{CollectionHeader, DocumentId, HasHeader, Header, Revision},
+    schema::{Collection, CollectionName, SerializedCollection},
+    Error,
 };
 
-<span class="doccomment">/// A list of operations to execute as a single unit. If any operation fails,</span>
-<span class="doccomment">/// all changes are aborted. Transactions are ACID-compliant. ACID stands for:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Atomic: All transactions are atomically applied. Readers outside of the</span>
-<span class="doccomment">///   active transaction will never be able to read partially written data. In</span>
-<span class="doccomment">///   BonsaiDb, readers are not blocked while writes are happening -- reads will</span>
-<span class="doccomment">///   continue to read the existing value until the transaction is fully</span>
-<span class="doccomment">///   executed. Once the transaction is fully executed, all future queries will</span>
-<span class="doccomment">///   reflect the updated state immediately.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Consistent: All transactions will be applied only if the data model is</span>
-<span class="doccomment">///   able to remain fully consistent. This means that all constraints, such as</span>
-<span class="doccomment">///   unique view keys, are validated before a transaction is allowed to be</span>
-<span class="doccomment">///   committed.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Isolated: Each transaction is executed in an isolated environment.</span>
-<span class="doccomment">///   Currently, BonsaiDb does not offer interactive transactions, so this is</span>
-<span class="doccomment">///   easily guaranteed. When BonsaiDb eventually has interactive transactions,</span>
-<span class="doccomment">///   the transaction will have a fully isolated state until it is committed. No</span>
-<span class="doccomment">///   two transactions can be affected by each other&#39;s changes.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///   In the event of a transaction being aborted or a power outage occurs while</span>
-<span class="doccomment">///   a transaction is being applied, this isolation ensures that once BonsaiDb</span>
-<span class="doccomment">///   opens the database again, the database will reflect the most recently</span>
-<span class="doccomment">///   committed.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Durable: When the transaction apply function has finished exectuing,</span>
-<span class="doccomment">///   BonsaiDb guarantees that all data has been confirmed by the operating</span>
-<span class="doccomment">///   system as being fully written to disk. This ensures that in the event of a</span>
-<span class="doccomment">///   power outage, no data that has been confirmed will be lost.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// When using one of the high-level functions to push/insert/update/delete</span>
-<span class="doccomment">/// documents, behind the scenes single-[`Operation`] `Transaction`s are</span>
-<span class="doccomment">/// applied. To ensure multiple changes happen in the same database operation,</span>
-<span class="doccomment">/// multiple operations can be added to a `Transaction`:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # bonsaidb_core::__doctest_prelude!();</span>
-<span class="doccomment">/// # use bonsaidb_core::connection::Connection;</span>
-<span class="doccomment">/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {</span>
-<span class="doccomment">/// use bonsaidb_core::transaction::{Operation, Transaction};</span>
-<span class="doccomment">/// let mut tx = Transaction::new();</span>
-<span class="doccomment">/// tx.push(Operation::push_serialized::&lt;MyCollection&gt;(</span>
-<span class="doccomment">///     &amp;MyCollection::default(),</span>
-<span class="doccomment">/// )?);</span>
-<span class="doccomment">/// tx.push(Operation::push_serialized::&lt;MyCollection&gt;(</span>
-<span class="doccomment">///     &amp;MyCollection::default(),</span>
-<span class="doccomment">/// )?);</span>
-<span class="doccomment">/// let results = tx.apply(db)?;</span>
-<span class="doccomment">/// assert_eq!(results.len(), 2);</span>
-<span class="doccomment">/// println!(&quot;Two new documents inserted: {results:?}&quot;);</span>
-<span class="doccomment">/// # Ok(())</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Transaction</span> {
-    <span class="doccomment">/// The operations in this transaction.</span>
-    <span class="kw">pub</span> <span class="ident">operations</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Operation</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A list of operations to execute as a single unit. If any operation fails,
+/// all changes are aborted. Transactions are ACID-compliant. ACID stands for:
+///
+/// - Atomic: All transactions are atomically applied. Readers outside of the
+///   active transaction will never be able to read partially written data. In
+///   BonsaiDb, readers are not blocked while writes are happening -- reads will
+///   continue to read the existing value until the transaction is fully
+///   executed. Once the transaction is fully executed, all future queries will
+///   reflect the updated state immediately.
+///
+/// - Consistent: All transactions will be applied only if the data model is
+///   able to remain fully consistent. This means that all constraints, such as
+///   unique view keys, are validated before a transaction is allowed to be
+///   committed.
+///
+/// - Isolated: Each transaction is executed in an isolated environment.
+///   Currently, BonsaiDb does not offer interactive transactions, so this is
+///   easily guaranteed. When BonsaiDb eventually has interactive transactions,
+///   the transaction will have a fully isolated state until it is committed. No
+///   two transactions can be affected by each other&#39;s changes.
+///
+///   In the event of a transaction being aborted or a power outage occurs while
+///   a transaction is being applied, this isolation ensures that once BonsaiDb
+///   opens the database again, the database will reflect the most recently
+///   committed.
+///
+/// - Durable: When the transaction apply function has finished exectuing,
+///   BonsaiDb guarantees that all data has been confirmed by the operating
+///   system as being fully written to disk. This ensures that in the event of a
+///   power outage, no data that has been confirmed will be lost.
+///
+/// When using one of the high-level functions to push/insert/update/delete
+/// documents, behind the scenes single-[`Operation`] `Transaction`s are
+/// applied. To ensure multiple changes happen in the same database operation,
+/// multiple operations can be added to a `Transaction`:
+///
+/// ```rust
+/// # bonsaidb_core::__doctest_prelude!();
+/// # use bonsaidb_core::connection::Connection;
+/// # fn test_fn&lt;C: Connection&gt;(db: &amp;C) -&gt; Result&lt;(), Error&gt; {
+/// use bonsaidb_core::transaction::{Operation, Transaction};
+/// let mut tx = Transaction::new();
+/// tx.push(Operation::push_serialized::&lt;MyCollection&gt;(
+///     &amp;MyCollection::default(),
+/// )?);
+/// tx.push(Operation::push_serialized::&lt;MyCollection&gt;(
+///     &amp;MyCollection::default(),
+/// )?);
+/// let results = tx.apply(db)?;
+/// assert_eq!(results.len(), 2);
+/// println!(&quot;Two new documents inserted: {results:?}&quot;);
+/// # Ok(())
+/// # }
+/// ```
+</span><span class="attribute">#[derive(Clone, Serialize, Deserialize, Default, Debug)]
+#[must_use]
+</span><span class="kw">pub struct </span>Transaction {
+    <span class="doccomment">/// The operations in this transaction.
+    </span><span class="kw">pub </span>operations: Vec&lt;Operation&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">Transaction</span> {
-    <span class="doccomment">/// Returns a new, empty transaction.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::default</span>()
+<span class="kw">impl </span>Transaction {
+    <span class="doccomment">/// Returns a new, empty transaction.
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::default()
     }
 
-    <span class="doccomment">/// Adds an operation to the transaction.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">operation</span>: <span class="ident">Operation</span>) {
-        <span class="self">self</span>.<span class="ident">operations</span>.<span class="ident">push</span>(<span class="ident">operation</span>);
+    <span class="doccomment">/// Adds an operation to the transaction.
+    </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, operation: Operation) {
+        <span class="self">self</span>.operations.push(operation);
     }
 
-    <span class="doccomment">/// Appends an operation to the transaction and returns self.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">operation</span>: <span class="ident">Operation</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">push</span>(<span class="ident">operation</span>);
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Appends an operation to the transaction and returns self.
+    </span><span class="kw">pub fn </span>with(<span class="kw-2">mut </span><span class="self">self</span>, operation: Operation) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.push(operation);
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Applies the transaction to the `database`, returning the results of the</span>
-    <span class="doccomment">/// operations. All operations will succeed or none will be performed and an</span>
-    <span class="doccomment">/// error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="ident">Connection</span>: <span class="ident">LowLevelConnection</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Applies the transaction to the `database`, returning the results of the
+    /// operations. All operations will succeed or none will be performed and an
+    /// error will be returned.
+    </span><span class="kw">pub fn </span>apply&lt;Connection: LowLevelConnection&gt;(
         <span class="self">self</span>,
-        <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OperationResult</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">db</span>.<span class="ident">apply_transaction</span>(<span class="self">self</span>)
+        db: <span class="kw-2">&amp;</span>Connection,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;OperationResult&gt;, Error&gt; {
+        db.apply_transaction(<span class="self">self</span>)
     }
 
-    <span class="doccomment">/// Applies the transaction to the `database`, returning the results of the</span>
-    <span class="doccomment">/// operations. All operations will succeed or none will be performed and an</span>
-    <span class="doccomment">/// error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">apply_async</span><span class="op">&lt;</span><span class="ident">Connection</span>: <span class="ident">AsyncLowLevelConnection</span><span class="op">&gt;</span>(
+    <span class="doccomment">/// Applies the transaction to the `database`, returning the results of the
+    /// operations. All operations will succeed or none will be performed and an
+    /// error will be returned.
+    </span><span class="kw">pub async fn </span>apply_async&lt;Connection: AsyncLowLevelConnection&gt;(
         <span class="self">self</span>,
-        <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OperationResult</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">db</span>.<span class="ident">apply_transaction</span>(<span class="self">self</span>).<span class="kw">await</span>
-    }
+        db: <span class="kw-2">&amp;</span>Connection,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;OperationResult&gt;, Error&gt; {
+        db.apply_transaction(<span class="self">self</span>).<span class="kw">await
+    </span>}
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Operation</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Transaction</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">operation</span>: <span class="ident">Operation</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">operations</span>: <span class="macro">vec!</span>[<span class="ident">operation</span>],
+<span class="kw">impl </span>From&lt;Operation&gt; <span class="kw">for </span>Transaction {
+    <span class="kw">fn </span>from(operation: Operation) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            operations: <span class="macro">vec!</span>[operation],
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Transaction</span> {
-    <span class="doccomment">/// Inserts a new document with `contents` into `collection`.  If `id` is</span>
-    <span class="doccomment">/// `None` a unique id will be generated. If an id is provided and a</span>
-    <span class="doccomment">/// document already exists with that id, a conflict error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(
-        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-        <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
-        <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Operation::insert</span>(<span class="ident">collection</span>, <span class="ident">id</span>, <span class="ident">contents</span>))
+<span class="kw">impl </span>Transaction {
+    <span class="doccomment">/// Inserts a new document with `contents` into `collection`.  If `id` is
+    /// `None` a unique id will be generated. If an id is provided and a
+    /// document already exists with that id, a conflict error will be returned.
+    </span><span class="kw">pub fn </span>insert(
+        collection: CollectionName,
+        id: <span class="prelude-ty">Option</span>&lt;DocumentId&gt;,
+        contents: <span class="kw">impl </span>Into&lt;Bytes&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(Operation::insert(collection, id, contents))
     }
 
-    <span class="doccomment">/// Updates a document in `collection`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Operation::update</span>(<span class="ident">collection</span>, <span class="ident">header</span>, <span class="ident">contents</span>))
+    <span class="doccomment">/// Updates a document in `collection`.
+    </span><span class="kw">pub fn </span>update(collection: CollectionName, header: Header, contents: <span class="kw">impl </span>Into&lt;Bytes&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(Operation::update(collection, header, contents))
     }
 
-    <span class="doccomment">/// Overwrites a document in `collection`. If a document with `id` exists,</span>
-    <span class="doccomment">/// it will be overwritten. If a document with `id` doesn&#39;t exist, it will</span>
-    <span class="doccomment">/// be created.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">overwrite</span>(
-        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-        <span class="ident">id</span>: <span class="ident">DocumentId</span>,
-        <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Operation::overwrite</span>(<span class="ident">collection</span>, <span class="ident">id</span>, <span class="ident">contents</span>))
+    <span class="doccomment">/// Overwrites a document in `collection`. If a document with `id` exists,
+    /// it will be overwritten. If a document with `id` doesn&#39;t exist, it will
+    /// be created.
+    </span><span class="kw">pub fn </span>overwrite(
+        collection: CollectionName,
+        id: DocumentId,
+        contents: <span class="kw">impl </span>Into&lt;Bytes&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(Operation::overwrite(collection, id, contents))
     }
 
-    <span class="doccomment">/// Deletes a document from a `collection`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::from</span>(<span class="ident">Operation::delete</span>(<span class="ident">collection</span>, <span class="ident">header</span>))
+    <span class="doccomment">/// Deletes a document from a `collection`.
+    </span><span class="kw">pub fn </span>delete(collection: CollectionName, header: Header) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::from(Operation::delete(collection, header))
     }
 }
 
-<span class="doccomment">/// A single operation performed on a `Collection`.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Operation</span> {
-    <span class="doccomment">/// The id of the `Collection`.</span>
-    <span class="kw">pub</span> <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
+<span class="doccomment">/// A single operation performed on a `Collection`.
+</span><span class="attribute">#[derive(Clone, Serialize, Deserialize, Debug)]
+#[must_use]
+</span><span class="kw">pub struct </span>Operation {
+    <span class="doccomment">/// The id of the `Collection`.
+    </span><span class="kw">pub </span>collection: CollectionName,
 
-    <span class="doccomment">/// The command being performed.</span>
-    <span class="kw">pub</span> <span class="ident">command</span>: <span class="ident">Command</span>,
+    <span class="doccomment">/// The command being performed.
+    </span><span class="kw">pub </span>command: Command,
 }
 
-<span class="kw">impl</span> <span class="ident">Operation</span> {
-    <span class="doccomment">/// Inserts a new document with `contents` into `collection`.  If `id` is</span>
-    <span class="doccomment">/// `None` a unique id will be generated. If an id is provided and a</span>
-    <span class="doccomment">/// document already exists with that id, a conflict error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(
-        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-        <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
-        <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">collection</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Insert</span> {
-                <span class="ident">id</span>,
-                <span class="ident">contents</span>: <span class="ident">contents</span>.<span class="ident">into</span>(),
+<span class="kw">impl </span>Operation {
+    <span class="doccomment">/// Inserts a new document with `contents` into `collection`.  If `id` is
+    /// `None` a unique id will be generated. If an id is provided and a
+    /// document already exists with that id, a conflict error will be returned.
+    </span><span class="kw">pub fn </span>insert(
+        collection: CollectionName,
+        id: <span class="prelude-ty">Option</span>&lt;DocumentId&gt;,
+        contents: <span class="kw">impl </span>Into&lt;Bytes&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            collection,
+            command: Command::Insert {
+                id,
+                contents: contents.into(),
             },
         }
     }
 
-    <span class="doccomment">/// Inserts a new document with the serialized representation of `contents`</span>
-    <span class="doccomment">/// into `collection`. If `id` is `None` a unique id will be generated. If</span>
-    <span class="doccomment">/// an id is provided and a document already exists with that id, a conflict</span>
-    <span class="doccomment">/// error will be returned.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_serialized</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">SerializedCollection</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span>,
-        <span class="ident">contents</span>: <span class="kw-2">&amp;</span><span class="ident">C::Contents</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">id</span>.<span class="ident">map</span>(<span class="ident">DocumentId::new</span>).<span class="ident">transpose</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">C::serialize</span>(<span class="ident">contents</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::insert</span>(<span class="ident">C::collection_name</span>(), <span class="ident">id</span>, <span class="ident">contents</span>))
+    <span class="doccomment">/// Inserts a new document with the serialized representation of `contents`
+    /// into `collection`. If `id` is `None` a unique id will be generated. If
+    /// an id is provided and a document already exists with that id, a conflict
+    /// error will be returned.
+    </span><span class="kw">pub fn </span>insert_serialized&lt;C: SerializedCollection&gt;(
+        id: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>C::PrimaryKey&gt;,
+        contents: <span class="kw-2">&amp;</span>C::Contents,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>id = id.map(DocumentId::new).transpose()<span class="question-mark">?</span>;
+        <span class="kw">let </span>contents = C::serialize(contents)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::insert(C::collection_name(), id, contents))
     }
 
-    <span class="doccomment">/// Pushes a new document with the serialized representation of `contents`</span>
-    <span class="doccomment">/// into `collection`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ## Automatic ID Assignment</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This function calls [`SerializedCollection::natural_id()`] to try to</span>
-    <span class="doccomment">/// retrieve a primary key value from `contents`. If an id is returned, the</span>
-    <span class="doccomment">/// item is inserted with that id. If an id is not returned, an id will be</span>
-    <span class="doccomment">/// automatically assigned, if possible, by the storage backend, which uses</span>
-    <span class="doccomment">/// the [`Key`](crate::key::Key) trait to assign ids.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push_serialized</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">SerializedCollection</span><span class="op">&gt;</span>(<span class="ident">contents</span>: <span class="kw-2">&amp;</span><span class="ident">C::Contents</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">C::natural_id</span>(<span class="ident">contents</span>);
-        <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">id</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">DocumentId::new</span>).<span class="ident">transpose</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">C::serialize</span>(<span class="ident">contents</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::insert</span>(<span class="ident">C::collection_name</span>(), <span class="ident">id</span>, <span class="ident">contents</span>))
+    <span class="doccomment">/// Pushes a new document with the serialized representation of `contents`
+    /// into `collection`.
+    ///
+    /// ## Automatic ID Assignment
+    ///
+    /// This function calls [`SerializedCollection::natural_id()`] to try to
+    /// retrieve a primary key value from `contents`. If an id is returned, the
+    /// item is inserted with that id. If an id is not returned, an id will be
+    /// automatically assigned, if possible, by the storage backend, which uses
+    /// the [`Key`](crate::key::Key) trait to assign ids.
+    </span><span class="kw">pub fn </span>push_serialized&lt;C: SerializedCollection&gt;(contents: <span class="kw-2">&amp;</span>C::Contents) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>id = C::natural_id(contents);
+        <span class="kw">let </span>id = id.as_ref().map(DocumentId::new).transpose()<span class="question-mark">?</span>;
+        <span class="kw">let </span>contents = C::serialize(contents)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::insert(C::collection_name(), id, contents))
     }
 
-    <span class="doccomment">/// Updates a document in `collection`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>, <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">collection</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Update</span> {
-                <span class="ident">header</span>,
-                <span class="ident">contents</span>: <span class="ident">contents</span>.<span class="ident">into</span>(),
+    <span class="doccomment">/// Updates a document in `collection`.
+    </span><span class="kw">pub fn </span>update(collection: CollectionName, header: Header, contents: <span class="kw">impl </span>Into&lt;Bytes&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            collection,
+            command: Command::Update {
+                header,
+                contents: contents.into(),
             },
         }
     }
 
-    <span class="doccomment">/// Updates a document with the serialized representation of `contents` in</span>
-    <span class="doccomment">/// `collection`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_serialized</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">SerializedCollection</span><span class="op">&gt;</span>(
-        <span class="ident">header</span>: <span class="ident">CollectionHeader</span><span class="op">&lt;</span><span class="ident">C::PrimaryKey</span><span class="op">&gt;</span>,
-        <span class="ident">contents</span>: <span class="kw-2">&amp;</span><span class="ident">C::Contents</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">C::serialize</span>(<span class="ident">contents</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::update</span>(
-            <span class="ident">C::collection_name</span>(),
-            <span class="ident">Header::try_from</span>(<span class="ident">header</span>)<span class="question-mark">?</span>,
-            <span class="ident">contents</span>,
+    <span class="doccomment">/// Updates a document with the serialized representation of `contents` in
+    /// `collection`.
+    </span><span class="kw">pub fn </span>update_serialized&lt;C: SerializedCollection&gt;(
+        header: CollectionHeader&lt;C::PrimaryKey&gt;,
+        contents: <span class="kw-2">&amp;</span>C::Contents,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>contents = C::serialize(contents)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::update(
+            C::collection_name(),
+            Header::try_from(header)<span class="question-mark">?</span>,
+            contents,
         ))
     }
 
-    <span class="doccomment">/// Overwrites a document in `collection`. If a document with `id` exists,</span>
-    <span class="doccomment">/// it will be overwritten. If a document with `id` doesn&#39;t exist, it will</span>
-    <span class="doccomment">/// be created.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">overwrite</span>(
-        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-        <span class="ident">id</span>: <span class="ident">DocumentId</span>,
-        <span class="ident">contents</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">collection</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Overwrite</span> {
-                <span class="ident">id</span>,
-                <span class="ident">contents</span>: <span class="ident">contents</span>.<span class="ident">into</span>(),
+    <span class="doccomment">/// Overwrites a document in `collection`. If a document with `id` exists,
+    /// it will be overwritten. If a document with `id` doesn&#39;t exist, it will
+    /// be created.
+    </span><span class="kw">pub fn </span>overwrite(
+        collection: CollectionName,
+        id: DocumentId,
+        contents: <span class="kw">impl </span>Into&lt;Bytes&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            collection,
+            command: Command::Overwrite {
+                id,
+                contents: contents.into(),
             },
         }
     }
 
-    <span class="doccomment">/// Overwrites a document with the serialized representation of `contents`</span>
-    <span class="doccomment">/// in `collection`. If a document with `id` exists, it will be overwritten.</span>
-    <span class="doccomment">/// If a document with `id` doesn&#39;t exist, it will be created.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">overwrite_serialized</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">SerializedCollection</span>, <span class="ident">Key</span><span class="op">&gt;</span>(
-        <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">C::PrimaryKey</span>,
-        <span class="ident">contents</span>: <span class="kw-2">&amp;</span><span class="ident">C::Contents</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">C::serialize</span>(<span class="ident">contents</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::overwrite</span>(
-            <span class="ident">C::collection_name</span>(),
-            <span class="ident">DocumentId::new</span>(<span class="ident">id</span>)<span class="question-mark">?</span>,
-            <span class="ident">contents</span>,
+    <span class="doccomment">/// Overwrites a document with the serialized representation of `contents`
+    /// in `collection`. If a document with `id` exists, it will be overwritten.
+    /// If a document with `id` doesn&#39;t exist, it will be created.
+    </span><span class="kw">pub fn </span>overwrite_serialized&lt;C: SerializedCollection, Key&gt;(
+        id: <span class="kw-2">&amp;</span>C::PrimaryKey,
+        contents: <span class="kw-2">&amp;</span>C::Contents,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>contents = C::serialize(contents)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::overwrite(
+            C::collection_name(),
+            DocumentId::new(id)<span class="question-mark">?</span>,
+            contents,
         ))
     }
 
-    <span class="doccomment">/// Deletes a document from a `collection`.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">delete</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">header</span>: <span class="ident">Header</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">collection</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Delete</span> { <span class="ident">header</span> },
+    <span class="doccomment">/// Deletes a document from a `collection`.
+    </span><span class="kw">pub const fn </span>delete(collection: CollectionName, header: Header) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            collection,
+            command: Command::Delete { header },
         }
     }
 
-    <span class="doccomment">/// Check that the document `id` still exists in `collection`. If a document</span>
-    <span class="doccomment">/// with that id is not present, the transaction will not be applied and</span>
-    <span class="doccomment">/// [`Error::DocumentNotFound`] will be returned.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Upon success, [`OperationResult::Success`] will be included in the</span>
-    <span class="doccomment">/// transaction&#39;s results.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">check_document_id_exists</span>(<span class="ident">collection</span>: <span class="ident">CollectionName</span>, <span class="ident">id</span>: <span class="ident">DocumentId</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">collection</span>,
-            <span class="ident">command</span>: <span class="ident">Command::Check</span> { <span class="ident">id</span>, <span class="ident">revision</span>: <span class="prelude-val">None</span> },
+    <span class="doccomment">/// Check that the document `id` still exists in `collection`. If a document
+    /// with that id is not present, the transaction will not be applied and
+    /// [`Error::DocumentNotFound`] will be returned.
+    ///
+    /// Upon success, [`OperationResult::Success`] will be included in the
+    /// transaction&#39;s results.
+    </span><span class="kw">pub const fn </span>check_document_id_exists(collection: CollectionName, id: DocumentId) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            collection,
+            command: Command::Check { id, revision: <span class="prelude-val">None </span>},
         }
     }
 
-    <span class="doccomment">/// Check that the document `id` still exists in [`Collection`] `C`. If a</span>
-    <span class="doccomment">/// document with that id is not present, the transaction will not be</span>
-    <span class="doccomment">/// applied and [`Error::DocumentNotFound`] will be returned.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Upon success, [`OperationResult::Success`] will be included in the</span>
-    <span class="doccomment">/// transaction&#39;s results.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_document_exists</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Collection</span><span class="op">&gt;</span>(<span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">C::PrimaryKey</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::check_document_id_exists</span>(
-            <span class="ident">C::collection_name</span>(),
-            <span class="ident">DocumentId::new</span>(<span class="ident">id</span>)<span class="question-mark">?</span>,
+    <span class="doccomment">/// Check that the document `id` still exists in [`Collection`] `C`. If a
+    /// document with that id is not present, the transaction will not be
+    /// applied and [`Error::DocumentNotFound`] will be returned.
+    ///
+    /// Upon success, [`OperationResult::Success`] will be included in the
+    /// transaction&#39;s results.
+    </span><span class="kw">pub fn </span>check_document_exists&lt;C: Collection&gt;(id: <span class="kw-2">&amp;</span>C::PrimaryKey) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::check_document_id_exists(
+            C::collection_name(),
+            DocumentId::new(id)<span class="question-mark">?</span>,
         ))
     }
 
-    <span class="doccomment">/// Check that the header of `doc_or_header` is the current revision of the</span>
-    <span class="doccomment">/// stored document in [`Collection`] `C`. If a document with the header&#39;s</span>
-    <span class="doccomment">/// id is not present, the transaction will not be applied and</span>
-    <span class="doccomment">/// [`Error::DocumentNotFound`] will be returned. If a document with the</span>
-    <span class="doccomment">/// header&#39;s id is present and the revision does not match, the transaction</span>
-    <span class="doccomment">/// will not be applied and [`Error::DocumentConflict`] will be returned.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Upon success, [`OperationResult::Success`] will be included in the</span>
-    <span class="doccomment">/// transaction&#39;s results.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_document_is_current</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Collection</span>, <span class="ident">H</span>: <span class="ident">HasHeader</span><span class="op">&gt;</span>(
-        <span class="ident">doc_or_header</span>: <span class="kw-2">&amp;</span><span class="ident">H</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">doc_or_header</span>.<span class="ident">header</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">collection</span>: <span class="ident">C::collection_name</span>(),
-            <span class="ident">command</span>: <span class="ident">Command::Check</span> {
-                <span class="ident">id</span>: <span class="ident">header</span>.<span class="ident">id</span>,
-                <span class="ident">revision</span>: <span class="prelude-val">Some</span>(<span class="ident">header</span>.<span class="ident">revision</span>),
+    <span class="doccomment">/// Check that the header of `doc_or_header` is the current revision of the
+    /// stored document in [`Collection`] `C`. If a document with the header&#39;s
+    /// id is not present, the transaction will not be applied and
+    /// [`Error::DocumentNotFound`] will be returned. If a document with the
+    /// header&#39;s id is present and the revision does not match, the transaction
+    /// will not be applied and [`Error::DocumentConflict`] will be returned.
+    ///
+    /// Upon success, [`OperationResult::Success`] will be included in the
+    /// transaction&#39;s results.
+    </span><span class="kw">pub fn </span>check_document_is_current&lt;C: Collection, H: HasHeader&gt;(
+        doc_or_header: <span class="kw-2">&amp;</span>H,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>header = doc_or_header.header()<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            collection: C::collection_name(),
+            command: Command::Check {
+                id: header.id,
+                revision: <span class="prelude-val">Some</span>(header.revision),
             },
         })
     }
 }
 
-<span class="doccomment">/// A command to execute within a `Collection`.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Command</span> {
-    <span class="doccomment">/// Inserts a new document containing `contents`.</span>
-    <span class="ident">Insert</span> {
-        <span class="doccomment">/// An optional id for the document. If this is `None`, a unique id will</span>
-        <span class="doccomment">/// be generated. If this is `Some()` and a document already exists with</span>
-        <span class="doccomment">/// that id, a conflict error will be returned.</span>
-        <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DocumentId</span><span class="op">&gt;</span>,
-        <span class="doccomment">/// The initial contents of the document.</span>
-        <span class="ident">contents</span>: <span class="ident">Bytes</span>,
+<span class="doccomment">/// A command to execute within a `Collection`.
+</span><span class="attribute">#[derive(Clone, Serialize, Deserialize, Debug)]
+</span><span class="kw">pub enum </span>Command {
+    <span class="doccomment">/// Inserts a new document containing `contents`.
+    </span>Insert {
+        <span class="doccomment">/// An optional id for the document. If this is `None`, a unique id will
+        /// be generated. If this is `Some()` and a document already exists with
+        /// that id, a conflict error will be returned.
+        </span>id: <span class="prelude-ty">Option</span>&lt;DocumentId&gt;,
+        <span class="doccomment">/// The initial contents of the document.
+        </span>contents: Bytes,
     },
 
-    <span class="doccomment">/// Update an existing `Document` identified by `header`. `header.revision` must match</span>
-    <span class="doccomment">/// the currently stored revision on the `Document`. If it does not, the</span>
-    <span class="doccomment">/// command fill fail with a `DocumentConflict` error.</span>
-    <span class="ident">Update</span> {
-        <span class="doccomment">/// The header of the `Document`. The revision must match the current</span>
-        <span class="doccomment">/// document.</span>
-        <span class="ident">header</span>: <span class="ident">Header</span>,
+    <span class="doccomment">/// Update an existing `Document` identified by `header`. `header.revision` must match
+    /// the currently stored revision on the `Document`. If it does not, the
+    /// command fill fail with a `DocumentConflict` error.
+    </span>Update {
+        <span class="doccomment">/// The header of the `Document`. The revision must match the current
+        /// document.
+        </span>header: Header,
 
-        <span class="doccomment">/// The new contents to store within the `Document`.</span>
-        <span class="ident">contents</span>: <span class="ident">Bytes</span>,
+        <span class="doccomment">/// The new contents to store within the `Document`.
+        </span>contents: Bytes,
     },
 
-    <span class="doccomment">/// Overwrite an existing `Document` identified by `id`. The revision will</span>
-    <span class="doccomment">/// not be checked before the document is updated. If the document does not</span>
-    <span class="doccomment">/// exist, it will be created.</span>
-    <span class="ident">Overwrite</span> {
-        <span class="doccomment">/// The id of the document to overwrite.</span>
-        <span class="ident">id</span>: <span class="ident">DocumentId</span>,
+    <span class="doccomment">/// Overwrite an existing `Document` identified by `id`. The revision will
+    /// not be checked before the document is updated. If the document does not
+    /// exist, it will be created.
+    </span>Overwrite {
+        <span class="doccomment">/// The id of the document to overwrite.
+        </span>id: DocumentId,
 
-        <span class="doccomment">/// The new contents to store within the `Document`.</span>
-        <span class="ident">contents</span>: <span class="ident">Bytes</span>,
+        <span class="doccomment">/// The new contents to store within the `Document`.
+        </span>contents: Bytes,
     },
 
-    <span class="doccomment">/// Delete an existing `Document` identified by `id`. `revision` must match</span>
-    <span class="doccomment">/// the currently stored revision on the `Document`. If it does not, the</span>
-    <span class="doccomment">/// command fill fail with a `DocumentConflict` error.</span>
-    <span class="ident">Delete</span> {
-        <span class="doccomment">/// The current header of the `Document`.</span>
-        <span class="ident">header</span>: <span class="ident">Header</span>,
+    <span class="doccomment">/// Delete an existing `Document` identified by `id`. `revision` must match
+    /// the currently stored revision on the `Document`. If it does not, the
+    /// command fill fail with a `DocumentConflict` error.
+    </span>Delete {
+        <span class="doccomment">/// The current header of the `Document`.
+        </span>header: Header,
     },
 
-    <span class="doccomment">/// Checks whether a document exists, and optionally whether its revision is</span>
-    <span class="doccomment">/// still current. If the document is not found, a `DocumentNotFound` error</span>
-    <span class="doccomment">/// will be returned.  If the document revision is provided and does not</span>
-    <span class="doccomment">/// match, a `DocumentConflict` error will be returned.</span>
-    <span class="ident">Check</span> {
-        <span class="doccomment">/// The id of the document to check.</span>
-        <span class="ident">id</span>: <span class="ident">DocumentId</span>,
-        <span class="doccomment">/// The revision of the document to check.</span>
-        <span class="ident">revision</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Revision</span><span class="op">&gt;</span>,
-    },
-}
-
-<span class="doccomment">/// Information about the result of each `Operation` in a transaction.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">OperationResult</span> {
-    <span class="doccomment">/// An operation succeeded but had no information to output.</span>
-    <span class="ident">Success</span>,
-
-    <span class="doccomment">/// A `Document` was updated.</span>
-    <span class="ident">DocumentUpdated</span> {
-        <span class="doccomment">/// The id of the `Collection` of the updated `Document`.</span>
-        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-
-        <span class="doccomment">/// The header of the updated `Document`.</span>
-        <span class="ident">header</span>: <span class="ident">Header</span>,
-    },
-
-    <span class="doccomment">/// A `Document` was deleted.</span>
-    <span class="ident">DocumentDeleted</span> {
-        <span class="doccomment">/// The id of the `Collection` of the deleted `Document`.</span>
-        <span class="ident">collection</span>: <span class="ident">CollectionName</span>,
-
-        <span class="doccomment">/// The id of the deleted `Document`.</span>
-        <span class="ident">id</span>: <span class="ident">DocumentId</span>,
+    <span class="doccomment">/// Checks whether a document exists, and optionally whether its revision is
+    /// still current. If the document is not found, a `DocumentNotFound` error
+    /// will be returned.  If the document revision is provided and does not
+    /// match, a `DocumentConflict` error will be returned.
+    </span>Check {
+        <span class="doccomment">/// The id of the document to check.
+        </span>id: DocumentId,
+        <span class="doccomment">/// The revision of the document to check.
+        </span>revision: <span class="prelude-ty">Option</span>&lt;Revision&gt;,
     },
 }
 
-<span class="doccomment">/// Details about an executed transaction.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Executed</span> {
-    <span class="doccomment">/// The id of the transaction.</span>
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">u64</span>,
+<span class="doccomment">/// Information about the result of each `Operation` in a transaction.
+</span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize)]
+</span><span class="kw">pub enum </span>OperationResult {
+    <span class="doccomment">/// An operation succeeded but had no information to output.
+    </span>Success,
 
-    <span class="doccomment">/// A list of containing ids of `Documents` changed.</span>
-    <span class="kw">pub</span> <span class="ident">changes</span>: <span class="ident">Changes</span>,
+    <span class="doccomment">/// A `Document` was updated.
+    </span>DocumentUpdated {
+        <span class="doccomment">/// The id of the `Collection` of the updated `Document`.
+        </span>collection: CollectionName,
+
+        <span class="doccomment">/// The header of the updated `Document`.
+        </span>header: Header,
+    },
+
+    <span class="doccomment">/// A `Document` was deleted.
+    </span>DocumentDeleted {
+        <span class="doccomment">/// The id of the `Collection` of the deleted `Document`.
+        </span>collection: CollectionName,
+
+        <span class="doccomment">/// The id of the deleted `Document`.
+        </span>id: DocumentId,
+    },
 }
 
-<span class="doccomment">/// A list of changes.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Changes</span> {
-    <span class="doccomment">/// A list of changed documents.</span>
-    <span class="ident">Documents</span>(<span class="ident">DocumentChanges</span>),
-    <span class="doccomment">/// A list of changed keys.</span>
-    <span class="ident">Keys</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ChangedKey</span><span class="op">&gt;</span>),
+<span class="doccomment">/// Details about an executed transaction.
+</span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize)]
+</span><span class="kw">pub struct </span>Executed {
+    <span class="doccomment">/// The id of the transaction.
+    </span><span class="kw">pub </span>id: u64,
+
+    <span class="doccomment">/// A list of containing ids of `Documents` changed.
+    </span><span class="kw">pub </span>changes: Changes,
 }
 
-<span class="kw">impl</span> <span class="ident">Changes</span> {
-    <span class="doccomment">/// Returns the list of documents changed in this transaction, or None if</span>
-    <span class="doccomment">/// the transaction was not a document transaction.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">documents</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">DocumentChanges</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::Documents</span>(<span class="ident">changes</span>) <span class="op">=</span> <span class="self">self</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">changes</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+<span class="doccomment">/// A list of changes.
+</span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize)]
+</span><span class="kw">pub enum </span>Changes {
+    <span class="doccomment">/// A list of changed documents.
+    </span>Documents(DocumentChanges),
+    <span class="doccomment">/// A list of changed keys.
+    </span>Keys(Vec&lt;ChangedKey&gt;),
+}
+
+<span class="kw">impl </span>Changes {
+    <span class="doccomment">/// Returns the list of documents changed in this transaction, or None if
+    /// the transaction was not a document transaction.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub const fn </span>documents(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>DocumentChanges&gt; {
+        <span class="kw">if let </span><span class="self">Self</span>::Documents(changes) = <span class="self">self </span>{
+            <span class="prelude-val">Some</span>(changes)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 
-    <span class="doccomment">/// Returns the list of keys changed in this transaction, or None if the</span>
-    <span class="doccomment">/// transaction was not a `KeyValue` transaction.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">ChangedKey</span>]<span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::Keys</span>(<span class="ident">keys</span>) <span class="op">=</span> <span class="self">self</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">keys</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="doccomment">/// Returns the list of keys changed in this transaction, or None if the
+    /// transaction was not a `KeyValue` transaction.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>keys(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>[ChangedKey]&gt; {
+        <span class="kw">if let </span><span class="self">Self</span>::Keys(keys) = <span class="self">self </span>{
+            <span class="prelude-val">Some</span>(keys)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 }
 
-<span class="doccomment">/// A list of changed documents.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DocumentChanges</span> {
-    <span class="doccomment">/// All of the collections changed.</span>
-    <span class="kw">pub</span> <span class="ident">collections</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionName</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The individual document changes.</span>
-    <span class="kw">pub</span> <span class="ident">documents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ChangedDocument</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A list of changed documents.
+</span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize)]
+</span><span class="kw">pub struct </span>DocumentChanges {
+    <span class="doccomment">/// All of the collections changed.
+    </span><span class="kw">pub </span>collections: Vec&lt;CollectionName&gt;,
+    <span class="doccomment">/// The individual document changes.
+    </span><span class="kw">pub </span>documents: Vec&lt;ChangedDocument&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">DocumentChanges</span> {
-    <span class="doccomment">/// Returns the changed document and the name of the collection the change</span>
-    <span class="doccomment">/// happened to.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">usize</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="ident">CollectionName</span>, <span class="kw-2">&amp;</span><span class="ident">ChangedDocument</span>)<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">documents</span>.<span class="ident">get</span>(<span class="ident">index</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">doc</span><span class="op">|</span> {
-            <span class="self">self</span>.<span class="ident">collections</span>
-                .<span class="ident">get</span>(<span class="ident">usize::from</span>(<span class="ident">doc</span>.<span class="ident">collection</span>))
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">collection</span><span class="op">|</span> (<span class="ident">collection</span>, <span class="ident">doc</span>))
+<span class="kw">impl </span>DocumentChanges {
+    <span class="doccomment">/// Returns the changed document and the name of the collection the change
+    /// happened to.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, index: usize) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>CollectionName, <span class="kw-2">&amp;</span>ChangedDocument)&gt; {
+        <span class="self">self</span>.documents.get(index).and_then(|doc| {
+            <span class="self">self</span>.collections
+                .get(usize::from(doc.collection))
+                .map(|collection| (collection, doc))
         })
     }
 
-    <span class="doccomment">/// Returns the number of changes in this collection.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="ident">documents</span>.<span class="ident">len</span>()
+    <span class="doccomment">/// Returns the number of changes in this collection.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.documents.len()
     }
 
-    <span class="doccomment">/// Returns true if there are no changes.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">documents</span>.<span class="ident">is_empty</span>()
+    <span class="doccomment">/// Returns true if there are no changes.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.documents.is_empty()
     }
 
-    <span class="doccomment">/// Returns an interator over all of the changed documents.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">DocumentChangesIter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-        <span class="ident">DocumentChangesIter</span> {
-            <span class="ident">changes</span>: <span class="self">self</span>,
-            <span class="ident">index</span>: <span class="prelude-val">Some</span>(<span class="number">0</span>),
+    <span class="doccomment">/// Returns an interator over all of the changed documents.
+    </span><span class="kw">pub const fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; DocumentChangesIter&lt;<span class="lifetime">&#39;_</span>&gt; {
+        DocumentChangesIter {
+            changes: <span class="self">self</span>,
+            index: <span class="prelude-val">Some</span>(<span class="number">0</span>),
         }
     }
 }
 
-<span class="doccomment">/// An iterator over [`DocumentChanges`].</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DocumentChangesIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">changes</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DocumentChanges</span>,
-    <span class="ident">index</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+<span class="doccomment">/// An iterator over [`DocumentChanges`].
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub struct </span>DocumentChangesIter&lt;<span class="lifetime">&#39;a</span>&gt; {
+    changes: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>DocumentChanges,
+    index: <span class="prelude-ty">Option</span>&lt;usize&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">DocumentChangesIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> (<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CollectionName</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ChangedDocument</span>);
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>DocumentChangesIter&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">type </span>Item = (<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>CollectionName, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>ChangedDocument);
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">index</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">index</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">changes</span>.<span class="ident">get</span>(<span class="ident">index</span>);
-            <span class="kw">if</span> <span class="ident">result</span>.<span class="ident">is_some</span>() {
-                <span class="self">self</span>.<span class="ident">index</span> <span class="op">=</span> <span class="ident">index</span>.<span class="ident">checked_add</span>(<span class="number">1</span>);
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="self">self</span>.index.and_then(|index| {
+            <span class="kw">let </span>result = <span class="self">self</span>.changes.get(index);
+            <span class="kw">if </span>result.is_some() {
+                <span class="self">self</span>.index = index.checked_add(<span class="number">1</span>);
             }
-            <span class="ident">result</span>
+            result
         })
     }
 }
 
-<span class="doccomment">/// A draining iterator over [`ChangedDocument`]s.</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DocumentChangesIntoIter</span> {
-    <span class="ident">collections</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionName</span><span class="op">&gt;</span>,
-    <span class="ident">documents</span>: <span class="ident">std::vec::IntoIter</span><span class="op">&lt;</span><span class="ident">ChangedDocument</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A draining iterator over [`ChangedDocument`]s.
+</span><span class="attribute">#[must_use]
+</span><span class="kw">pub struct </span>DocumentChangesIntoIter {
+    collections: Vec&lt;CollectionName&gt;,
+    documents: std::vec::IntoIter&lt;ChangedDocument&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">DocumentChangesIntoIter</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> (<span class="ident">CollectionName</span>, <span class="ident">ChangedDocument</span>);
+<span class="kw">impl </span>Iterator <span class="kw">for </span>DocumentChangesIntoIter {
+    <span class="kw">type </span>Item = (CollectionName, ChangedDocument);
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">documents</span>.<span class="ident">next</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">doc</span><span class="op">|</span> {
-            <span class="self">self</span>.<span class="ident">collections</span>
-                .<span class="ident">get</span>(<span class="ident">usize::from</span>(<span class="ident">doc</span>.<span class="ident">collection</span>))
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">collection</span><span class="op">|</span> (<span class="ident">collection</span>.<span class="ident">clone</span>(), <span class="ident">doc</span>))
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="self">self</span>.documents.next().and_then(|doc| {
+            <span class="self">self</span>.collections
+                .get(usize::from(doc.collection))
+                .map(|collection| (collection.clone(), doc))
         })
     }
 }
 
-<span class="kw">impl</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="ident">DocumentChanges</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> (<span class="ident">CollectionName</span>, <span class="ident">ChangedDocument</span>);
+<span class="kw">impl </span>IntoIterator <span class="kw">for </span>DocumentChanges {
+    <span class="kw">type </span>Item = (CollectionName, ChangedDocument);
 
-    <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">DocumentChangesIntoIter</span>;
+    <span class="kw">type </span>IntoIter = DocumentChangesIntoIter;
 
-    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::IntoIter</span> {
-        <span class="ident">DocumentChangesIntoIter</span> {
-            <span class="ident">collections</span>: <span class="self">self</span>.<span class="ident">collections</span>,
-            <span class="ident">documents</span>: <span class="self">self</span>.<span class="ident">documents</span>.<span class="ident">into_iter</span>(),
+    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
+        DocumentChangesIntoIter {
+            collections: <span class="self">self</span>.collections,
+            documents: <span class="self">self</span>.documents.into_iter(),
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">document_changes_iter</span>() {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::schema::Qualified</span>;
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>document_changes_iter() {
+    <span class="kw">use </span><span class="kw">crate</span>::schema::Qualified;
 
-    <span class="kw">let</span> <span class="ident">changes</span> <span class="op">=</span> <span class="ident">DocumentChanges</span> {
-        <span class="ident">collections</span>: <span class="macro">vec!</span>[<span class="ident">CollectionName::private</span>(<span class="string">&quot;a&quot;</span>), <span class="ident">CollectionName::private</span>(<span class="string">&quot;b&quot;</span>)],
-        <span class="ident">documents</span>: <span class="macro">vec!</span>[
-            <span class="ident">ChangedDocument</span> {
-                <span class="ident">collection</span>: <span class="number">0</span>,
-                <span class="ident">id</span>: <span class="ident">DocumentId::from_u64</span>(<span class="number">0</span>),
-                <span class="ident">deleted</span>: <span class="bool-val">false</span>,
+    <span class="kw">let </span>changes = DocumentChanges {
+        collections: <span class="macro">vec!</span>[CollectionName::private(<span class="string">&quot;a&quot;</span>), CollectionName::private(<span class="string">&quot;b&quot;</span>)],
+        documents: <span class="macro">vec!</span>[
+            ChangedDocument {
+                collection: <span class="number">0</span>,
+                id: DocumentId::from_u64(<span class="number">0</span>),
+                deleted: <span class="bool-val">false</span>,
             },
-            <span class="ident">ChangedDocument</span> {
-                <span class="ident">collection</span>: <span class="number">0</span>,
-                <span class="ident">id</span>: <span class="ident">DocumentId::from_u64</span>(<span class="number">1</span>),
-                <span class="ident">deleted</span>: <span class="bool-val">false</span>,
+            ChangedDocument {
+                collection: <span class="number">0</span>,
+                id: DocumentId::from_u64(<span class="number">1</span>),
+                deleted: <span class="bool-val">false</span>,
             },
-            <span class="ident">ChangedDocument</span> {
-                <span class="ident">collection</span>: <span class="number">1</span>,
-                <span class="ident">id</span>: <span class="ident">DocumentId::from_u64</span>(<span class="number">2</span>),
-                <span class="ident">deleted</span>: <span class="bool-val">false</span>,
+            ChangedDocument {
+                collection: <span class="number">1</span>,
+                id: DocumentId::from_u64(<span class="number">2</span>),
+                deleted: <span class="bool-val">false</span>,
             },
-            <span class="ident">ChangedDocument</span> {
-                <span class="ident">collection</span>: <span class="number">2</span>,
-                <span class="ident">id</span>: <span class="ident">DocumentId::from_u64</span>(<span class="number">3</span>),
-                <span class="ident">deleted</span>: <span class="bool-val">false</span>,
+            ChangedDocument {
+                collection: <span class="number">2</span>,
+                id: DocumentId::from_u64(<span class="number">3</span>),
+                deleted: <span class="bool-val">false</span>,
             },
         ],
     };
 
-    <span class="macro">assert_eq!</span>(<span class="ident">changes</span>.<span class="ident">len</span>(), <span class="number">4</span>);
-    <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">changes</span>.<span class="ident">is_empty</span>());
+    <span class="macro">assert_eq!</span>(changes.len(), <span class="number">4</span>);
+    <span class="macro">assert!</span>(!changes.is_empty());
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">a_changes</span> <span class="op">=</span> <span class="number">0</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b_changes</span> <span class="op">=</span> <span class="number">0</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ids</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-    <span class="kw">for</span> (<span class="ident">collection</span>, <span class="ident">document</span>) <span class="kw">in</span> <span class="ident">changes</span>.<span class="ident">iter</span>() {
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">ids</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">document</span>.<span class="ident">id</span>));
-        <span class="ident">ids</span>.<span class="ident">push</span>(<span class="ident">document</span>.<span class="ident">id</span>.<span class="ident">clone</span>());
-        <span class="kw">match</span> <span class="ident">collection</span>.<span class="ident">name</span>.<span class="ident">as_ref</span>() {
-            <span class="string">&quot;a&quot;</span> =&gt; <span class="ident">a_changes</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
-            <span class="string">&quot;b&quot;</span> =&gt; <span class="ident">b_changes</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
-            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;invalid collection name {collection}&quot;</span>),
+    <span class="kw">let </span><span class="kw-2">mut </span>a_changes = <span class="number">0</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>b_changes = <span class="number">0</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>ids = Vec::new();
+    <span class="kw">for </span>(collection, document) <span class="kw">in </span>changes.iter() {
+        <span class="macro">assert!</span>(!ids.contains(<span class="kw-2">&amp;</span>document.id));
+        ids.push(document.id.clone());
+        <span class="kw">match </span>collection.name.as_ref() {
+            <span class="string">&quot;a&quot; </span>=&gt; a_changes += <span class="number">1</span>,
+            <span class="string">&quot;b&quot; </span>=&gt; b_changes += <span class="number">1</span>,
+            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;invalid collection name {collection}&quot;</span>),
         }
     }
-    <span class="macro">assert_eq!</span>(<span class="ident">a_changes</span>, <span class="number">2</span>);
-    <span class="macro">assert_eq!</span>(<span class="ident">b_changes</span>, <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(a_changes, <span class="number">2</span>);
+    <span class="macro">assert_eq!</span>(b_changes, <span class="number">1</span>);
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">a_changes</span> <span class="op">=</span> <span class="number">0</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b_changes</span> <span class="op">=</span> <span class="number">0</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ids</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-    <span class="kw">for</span> (<span class="ident">collection</span>, <span class="ident">document</span>) <span class="kw">in</span> <span class="ident">changes</span> {
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">ids</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">document</span>.<span class="ident">id</span>));
-        <span class="ident">ids</span>.<span class="ident">push</span>(<span class="ident">document</span>.<span class="ident">id</span>.<span class="ident">clone</span>());
-        <span class="kw">match</span> <span class="ident">collection</span>.<span class="ident">name</span>.<span class="ident">as_ref</span>() {
-            <span class="string">&quot;a&quot;</span> =&gt; <span class="ident">a_changes</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
-            <span class="string">&quot;b&quot;</span> =&gt; <span class="ident">b_changes</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
-            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;invalid collection name {collection}&quot;</span>),
+    <span class="kw">let </span><span class="kw-2">mut </span>a_changes = <span class="number">0</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>b_changes = <span class="number">0</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>ids = Vec::new();
+    <span class="kw">for </span>(collection, document) <span class="kw">in </span>changes {
+        <span class="macro">assert!</span>(!ids.contains(<span class="kw-2">&amp;</span>document.id));
+        ids.push(document.id.clone());
+        <span class="kw">match </span>collection.name.as_ref() {
+            <span class="string">&quot;a&quot; </span>=&gt; a_changes += <span class="number">1</span>,
+            <span class="string">&quot;b&quot; </span>=&gt; b_changes += <span class="number">1</span>,
+            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;invalid collection name {collection}&quot;</span>),
         }
     }
-    <span class="macro">assert_eq!</span>(<span class="ident">a_changes</span>, <span class="number">2</span>);
-    <span class="macro">assert_eq!</span>(<span class="ident">b_changes</span>, <span class="number">1</span>);
+    <span class="macro">assert_eq!</span>(a_changes, <span class="number">2</span>);
+    <span class="macro">assert_eq!</span>(b_changes, <span class="number">1</span>);
 }
 
-<span class="doccomment">/// A record of a changed document.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ChangedDocument</span> {
-    <span class="doccomment">/// The index of the `CollectionName` within the `collections` field of [`Changes::Documents`].</span>
-    <span class="kw">pub</span> <span class="ident">collection</span>: <span class="ident">u16</span>,
+<span class="doccomment">/// A record of a changed document.
+</span><span class="attribute">#[derive(Debug, Clone, Serialize, Deserialize)]
+</span><span class="kw">pub struct </span>ChangedDocument {
+    <span class="doccomment">/// The index of the `CollectionName` within the `collections` field of [`Changes::Documents`].
+    </span><span class="kw">pub </span>collection: u16,
 
-    <span class="doccomment">/// The id of the changed `Document`.</span>
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">DocumentId</span>,
+    <span class="doccomment">/// The id of the changed `Document`.
+    </span><span class="kw">pub </span>id: DocumentId,
 
-    <span class="doccomment">/// If the `Document` has been deleted, this will be `true`.</span>
-    <span class="kw">pub</span> <span class="ident">deleted</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// If the `Document` has been deleted, this will be `true`.
+    </span><span class="kw">pub </span>deleted: bool,
 }
 
-<span class="doccomment">/// A record of a changed `KeyValue` entry.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ChangedKey</span> {
-    <span class="doccomment">/// The namespace of the key.</span>
-    <span class="kw">pub</span> <span class="ident">namespace</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A record of a changed `KeyValue` entry.
+</span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize)]
+</span><span class="kw">pub struct </span>ChangedKey {
+    <span class="doccomment">/// The namespace of the key.
+    </span><span class="kw">pub </span>namespace: <span class="prelude-ty">Option</span>&lt;String&gt;,
 
-    <span class="doccomment">/// The key that was changed.</span>
-    <span class="kw">pub</span> <span class="ident">key</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// The key that was changed.
+    </span><span class="kw">pub </span>key: String,
 
-    <span class="doccomment">/// True if the key was deleted.</span>
-    <span class="kw">pub</span> <span class="ident">deleted</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// True if the key was deleted.
+    </span><span class="kw">pub </span>deleted: bool,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

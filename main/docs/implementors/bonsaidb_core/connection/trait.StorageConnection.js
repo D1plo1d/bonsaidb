@@ -1,5 +1,5 @@
-(function() {var implementors = {};
-implementors["bonsaidb"] = [];
-implementors["bonsaidb_client"] = [{"text":"impl <a class=\"trait\" href=\"bonsaidb_core/connection/trait.StorageConnection.html\" title=\"trait bonsaidb_core::connection::StorageConnection\">StorageConnection</a> for <a class=\"struct\" href=\"bonsaidb_client/struct.Client.html\" title=\"struct bonsaidb_client::Client\">Client</a>","synthetic":false,"types":["bonsaidb_client::client::Client"]}];
-implementors["bonsaidb_local"] = [{"text":"impl <a class=\"trait\" href=\"bonsaidb_core/connection/trait.StorageConnection.html\" title=\"trait bonsaidb_core::connection::StorageConnection\">StorageConnection</a> for <a class=\"struct\" href=\"bonsaidb_local/struct.Storage.html\" title=\"struct bonsaidb_local::Storage\">Storage</a>","synthetic":false,"types":["bonsaidb_local::storage::Storage"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {var implementors = {
+"bonsaidb":[],
+"bonsaidb_client":[["impl StorageConnection for <a class=\"struct\" href=\"bonsaidb_client/struct.Client.html\" title=\"struct bonsaidb_client::Client\">Client</a>"]],
+"bonsaidb_local":[["impl StorageConnection for <a class=\"struct\" href=\"bonsaidb_local/struct.Storage.html\" title=\"struct bonsaidb_local::Storage\">Storage</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

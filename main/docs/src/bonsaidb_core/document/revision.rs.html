@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/document/revision.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>revision.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-core/src/document/revision.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>revision.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -132,134 +126,133 @@
 <span id="126">126</span>
 <span id="127">127</span>
 <span id="128">128</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Write</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::{Debug, Display, Write};
 
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="kw">use</span> <span class="ident">sha2</span>::{<span class="ident">Digest</span>, <span class="ident">Sha256</span>};
+<span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="kw">use </span>sha2::{Digest, Sha256};
 
-<span class="doccomment">/// Information about a `Document`&#39;s revision history.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Revision</span> {
-    <span class="doccomment">/// The current revision id of the document. This value is sequentially incremented on each document update.</span>
-    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">u32</span>,
+<span class="doccomment">/// Information about a `Document`&#39;s revision history.
+</span><span class="attribute">#[derive(Clone, Copy, Eq, PartialEq, Serialize, Deserialize)]
+</span><span class="kw">pub struct </span>Revision {
+    <span class="doccomment">/// The current revision id of the document. This value is sequentially incremented on each document update.
+    </span><span class="kw">pub </span>id: u32,
 
-    <span class="doccomment">/// The SHA256 digest of the bytes contained within the `Document`.</span>
-    <span class="kw">pub</span> <span class="ident">sha256</span>: [<span class="ident">u8</span>; <span class="number">32</span>],
+    <span class="doccomment">/// The SHA256 digest of the bytes contained within the `Document`.
+    </span><span class="kw">pub </span>sha256: [u8; <span class="number">32</span>],
 }
 
-<span class="kw">impl</span> <span class="ident">Revision</span> {
-    <span class="doccomment">/// Creates the first revision for a document with the SHA256 digest of the passed bytes.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">contents</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::with_id</span>(<span class="number">0</span>, <span class="ident">contents</span>)
+<span class="kw">impl </span>Revision {
+    <span class="doccomment">/// Creates the first revision for a document with the SHA256 digest of the passed bytes.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>new(contents: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::with_id(<span class="number">0</span>, contents)
     }
 
-    <span class="doccomment">/// Creates a revision with `id` for a document with the SHA256 digest of the passed bytes.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_id</span>(<span class="ident">id</span>: <span class="ident">u32</span>, <span class="ident">contents</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">id</span>,
-            <span class="ident">sha256</span>: <span class="ident">digest</span>(<span class="ident">contents</span>),
+    <span class="doccomment">/// Creates a revision with `id` for a document with the SHA256 digest of the passed bytes.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>with_id(id: u32, contents: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            id,
+            sha256: digest(contents),
         }
     }
 
-    <span class="doccomment">/// Creates the next revision in sequence with an updated digest. If the digest doesn&#39;t change, None is returned.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Panics if `id` overflows.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_revision</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">new_contents</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">sha256</span> <span class="op">=</span> <span class="ident">digest</span>(<span class="ident">new_contents</span>);
-        <span class="kw">if</span> <span class="ident">sha256</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">sha256</span> {
-            <span class="prelude-val">None</span>
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Some</span>(<span class="self">Self</span> {
-                <span class="ident">id</span>: <span class="self">self</span>
-                    .<span class="ident">id</span>
-                    .<span class="ident">checked_add</span>(<span class="number">1</span>)
-                    .<span class="ident">expect</span>(<span class="string">&quot;need to implement revision id wrapping or increase revision id size&quot;</span>),
-                <span class="ident">sha256</span>,
+    <span class="doccomment">/// Creates the next revision in sequence with an updated digest. If the digest doesn&#39;t change, None is returned.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `id` overflows.
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>next_revision(<span class="kw-2">&amp;</span><span class="self">self</span>, new_contents: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>sha256 = digest(new_contents);
+        <span class="kw">if </span>sha256 == <span class="self">self</span>.sha256 {
+            <span class="prelude-val">None
+        </span>} <span class="kw">else </span>{
+            <span class="prelude-val">Some</span>(<span class="self">Self </span>{
+                id: <span class="self">self
+                    </span>.id
+                    .checked_add(<span class="number">1</span>)
+                    .expect(<span class="string">&quot;need to implement revision id wrapping or increase revision id size&quot;</span>),
+                sha256,
             })
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Revision</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;Revision({})&quot;</span>, <span class="self">self</span>)
+<span class="kw">impl </span>Debug <span class="kw">for </span>Revision {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">&quot;Revision({self})&quot;</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Revision</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::fmt::Result</span> {
-        <span class="op">&lt;</span><span class="ident">u32</span> <span class="kw">as</span> <span class="ident">Display</span><span class="op">&gt;</span><span class="ident">::fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">id</span>, <span class="ident">f</span>)<span class="question-mark">?</span>;
-        <span class="ident">f</span>.<span class="ident">write_char</span>(<span class="string">&#39;-&#39;</span>)<span class="question-mark">?</span>;
-        <span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">sha256</span> {
-            <span class="ident">f</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;{:02x}&quot;</span>, <span class="ident">byte</span>))<span class="question-mark">?</span>;
+<span class="kw">impl </span>Display <span class="kw">for </span>Revision {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+        &lt;u32 <span class="kw">as </span>Display&gt;::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.id, f)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">&#39;-&#39;</span>)<span class="question-mark">?</span>;
+        <span class="kw">for </span>byte <span class="kw">in </span><span class="self">self</span>.sha256 {
+            f.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;{byte:02x}&quot;</span>))<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">fn</span> <span class="ident">digest</span>(<span class="ident">payload</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; [<span class="ident">u8</span>; <span class="number">32</span>] {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">Sha256::default</span>();
-    <span class="ident">hasher</span>.<span class="ident">update</span>(<span class="ident">payload</span>);
-    <span class="ident">hasher</span>.<span class="ident">finalize</span>().<span class="ident">into</span>()
+<span class="kw">fn </span>digest(payload: <span class="kw-2">&amp;</span>[u8]) -&gt; [u8; <span class="number">32</span>] {
+    <span class="kw">let </span><span class="kw-2">mut </span>hasher = Sha256::default();
+    hasher.update(payload);
+    hasher.finalize().into()
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">revision_tests</span>() {
-    <span class="kw">let</span> <span class="ident">original_contents</span> <span class="op">=</span> <span class="string">b&quot;one&quot;</span>;
-    <span class="kw">let</span> <span class="ident">first_revision</span> <span class="op">=</span> <span class="ident">Revision::new</span>(<span class="ident">original_contents</span>);
-    <span class="kw">let</span> <span class="ident">original_digest</span> <span class="op">=</span>
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>revision_tests() {
+    <span class="kw">let </span>original_contents = <span class="string">b&quot;one&quot;</span>;
+    <span class="kw">let </span>first_revision = Revision::new(original_contents);
+    <span class="kw">let </span>original_digest =
         <span class="macro">hex_literal::hex!</span>(<span class="string">&quot;7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed&quot;</span>);
     <span class="macro">assert_eq!</span>(
-        <span class="ident">first_revision</span>,
-        <span class="ident">Revision</span> {
-            <span class="ident">id</span>: <span class="number">0</span>,
-            <span class="ident">sha256</span>: <span class="ident">original_digest</span>
+        first_revision,
+        Revision {
+            id: <span class="number">0</span>,
+            sha256: original_digest
         }
     );
-    <span class="macro">assert!</span>(<span class="ident">first_revision</span>.<span class="ident">next_revision</span>(<span class="ident">original_contents</span>).<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(first_revision.next_revision(original_contents).is_none());
 
-    <span class="kw">let</span> <span class="ident">updated_contents</span> <span class="op">=</span> <span class="string">b&quot;two&quot;</span>;
-    <span class="kw">let</span> <span class="ident">next_revision</span> <span class="op">=</span> <span class="ident">first_revision</span>
-        .<span class="ident">next_revision</span>(<span class="ident">updated_contents</span>)
-        .<span class="ident">expect</span>(<span class="string">&quot;new contents should create a new revision&quot;</span>);
+    <span class="kw">let </span>updated_contents = <span class="string">b&quot;two&quot;</span>;
+    <span class="kw">let </span>next_revision = first_revision
+        .next_revision(updated_contents)
+        .expect(<span class="string">&quot;new contents should create a new revision&quot;</span>);
     <span class="macro">assert_eq!</span>(
-        <span class="ident">next_revision</span>,
-        <span class="ident">Revision</span> {
-            <span class="ident">id</span>: <span class="number">1</span>,
-            <span class="ident">sha256</span>: <span class="macro">hex_literal::hex!</span>(
-                <span class="string">&quot;3fc4ccfe745870e2c0d99f71f30ff0656c8dedd41cc1d7d3d376b0dbe685e2f3&quot;</span>
-            )
+        next_revision,
+        Revision {
+            id: <span class="number">1</span>,
+            sha256: <span class="macro">hex_literal::hex!</span>(
+                <span class="string">&quot;3fc4ccfe745870e2c0d99f71f30ff0656c8dedd41cc1d7d3d376b0dbe685e2f3&quot;
+            </span>)
         }
     );
-    <span class="macro">assert!</span>(<span class="ident">next_revision</span>.<span class="ident">next_revision</span>(<span class="ident">updated_contents</span>).<span class="ident">is_none</span>());
+    <span class="macro">assert!</span>(next_revision.next_revision(updated_contents).is_none());
 
     <span class="macro">assert_eq!</span>(
-        <span class="ident">next_revision</span>.<span class="ident">next_revision</span>(<span class="ident">original_contents</span>),
-        <span class="prelude-val">Some</span>(<span class="ident">Revision</span> {
-            <span class="ident">id</span>: <span class="number">2</span>,
-            <span class="ident">sha256</span>: <span class="ident">original_digest</span>
+        next_revision.next_revision(original_contents),
+        <span class="prelude-val">Some</span>(Revision {
+            id: <span class="number">2</span>,
+            sha256: original_digest
         })
     );
 }
 
-<span class="attribute">#[<span class="ident">test</span>]</span>
-<span class="kw">fn</span> <span class="ident">revision_display_test</span>() {
-    <span class="kw">let</span> <span class="ident">original_contents</span> <span class="op">=</span> <span class="string">b&quot;one&quot;</span>;
-    <span class="kw">let</span> <span class="ident">first_revision</span> <span class="op">=</span> <span class="ident">Revision::new</span>(<span class="ident">original_contents</span>);
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>revision_display_test() {
+    <span class="kw">let </span>original_contents = <span class="string">b&quot;one&quot;</span>;
+    <span class="kw">let </span>first_revision = Revision::new(original_contents);
     <span class="macro">assert_eq!</span>(
-        <span class="ident">first_revision</span>.<span class="ident">to_string</span>(),
-        <span class="string">&quot;0-7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed&quot;</span>
-    );
+        first_revision.to_string(),
+        <span class="string">&quot;0-7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed&quot;
+    </span>);
     <span class="macro">assert_eq!</span>(
-        <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">first_revision</span>),
-        <span class="string">&quot;Revision(0-7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed)&quot;</span>
-    );
+        <span class="macro">format!</span>(<span class="string">&quot;{first_revision:?}&quot;</span>),
+        <span class="string">&quot;Revision(0-7692c3ad3540bb803c020b3aee66cd8887123234ea0c6e7143c0add73ff431ed)&quot;
+    </span>);
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

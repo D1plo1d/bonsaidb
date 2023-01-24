@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/config/argon.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>argon.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../../bonsaidb_local/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../bonsaidb_local/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/bonsaidb-local/src/config/argon.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>argon.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../bonsaidb_local/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -169,171 +163,170 @@
 <span id="163">163</span>
 <span id="164">164</span>
 <span id="165">165</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::time::Duration</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::time::Duration;
 
-<span class="kw">use</span> <span class="ident">argon2::Algorithm</span>;
-<span class="kw">use</span> <span class="ident">sysinfo</span>::{<span class="ident">System</span>, <span class="ident">SystemExt</span>};
+<span class="kw">use </span>argon2::Algorithm;
+<span class="kw">use </span>sysinfo::{System, SystemExt};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config::SystemDefault</span>;
+<span class="kw">use </span><span class="kw">crate</span>::config::SystemDefault;
 
-<span class="doccomment">/// Password hashing configuration.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// BonsaiDb uses [`argon2`](https://crates.io/crates/argon2) for its password hashing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ArgonConfiguration</span> {
-    <span class="doccomment">/// The number of concurrent hashing operations that are allowed to take place.</span>
-    <span class="kw">pub</span> <span class="ident">hashers</span>: <span class="ident">u32</span>,
-    <span class="doccomment">/// The algorithm variation to use. Most users should select</span>
-    <span class="doccomment">/// [`Algorithm::Argon2id`].</span>
-    <span class="kw">pub</span> <span class="ident">algorithm</span>: <span class="ident">Algorithm</span>,
-    <span class="doccomment">/// The parameters for each hasher.</span>
-    <span class="kw">pub</span> <span class="ident">params</span>: <span class="ident">ArgonParams</span>,
+<span class="doccomment">/// Password hashing configuration.
+///
+/// BonsaiDb uses [`argon2`](https://crates.io/crates/argon2) for its password hashing.
+</span><span class="attribute">#[derive(Debug, Clone)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>ArgonConfiguration {
+    <span class="doccomment">/// The number of concurrent hashing operations that are allowed to take place.
+    </span><span class="kw">pub </span>hashers: u32,
+    <span class="doccomment">/// The algorithm variation to use. Most users should select
+    /// [`Algorithm::Argon2id`].
+    </span><span class="kw">pub </span>algorithm: Algorithm,
+    <span class="doccomment">/// The parameters for each hasher.
+    </span><span class="kw">pub </span>params: ArgonParams,
 }
 
-<span class="kw">impl</span> <span class="ident">SystemDefault</span> <span class="kw">for</span> <span class="ident">ArgonConfiguration</span> {
-    <span class="kw">fn</span> <span class="ident">default_for</span>(<span class="ident">system</span>: <span class="kw-2">&amp;</span><span class="ident">System</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">cpu_count</span> <span class="op">=</span> <span class="ident">u32::try_from</span>(
-            <span class="ident">system</span>
-                .<span class="ident">physical_core_count</span>()
-                .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">system</span>.<span class="ident">processors</span>().<span class="ident">len</span>()),
+<span class="kw">impl </span>SystemDefault <span class="kw">for </span>ArgonConfiguration {
+    <span class="kw">fn </span>default_for(system: <span class="kw-2">&amp;</span>System) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>cpu_count = u32::try_from(
+            system
+                .physical_core_count()
+                .unwrap_or_else(|| system.processors().len()),
         )
-        .<span class="ident">expect</span>(<span class="string">&quot;cpu count returned unexpectedly large value&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hashers</span> <span class="op">=</span> (<span class="ident">cpu_count</span> <span class="op">+</span> <span class="number">3</span>) <span class="op">/</span> <span class="number">4</span>;
-        <span class="kw">let</span> <span class="ident">max_hashers</span> <span class="op">=</span> <span class="ident">u32::try_from</span>(
-            <span class="ident">system</span>.<span class="ident">total_memory</span>() <span class="op">/</span> <span class="ident">u64::from</span>(<span class="ident">TimedArgonParams::MINIMUM_RAM_PER_HASHER</span>),
+        .expect(<span class="string">&quot;cpu count returned unexpectedly large value&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>hashers = (cpu_count + <span class="number">3</span>) / <span class="number">4</span>;
+        <span class="kw">let </span>max_hashers = u32::try_from(
+            system.total_memory() / u64::from(TimedArgonParams::MINIMUM_RAM_PER_HASHER),
         )
-        .<span class="ident">unwrap_or</span>(<span class="ident">u32::MAX</span>);
-        <span class="comment">// total_memory() can return 0, so we need to ensure max_hashers isn&#39;t</span>
-        <span class="comment">// 0.</span>
-        <span class="kw">if</span> <span class="ident">max_hashers</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">hashers</span> <span class="op">&gt;</span> <span class="ident">max_hashers</span> {
-            <span class="ident">hashers</span> <span class="op">=</span> <span class="ident">max_hashers</span>;
+        .unwrap_or(u32::MAX);
+        <span class="comment">// total_memory() can return 0, so we need to ensure max_hashers isn&#39;t
+        // 0.
+        </span><span class="kw">if </span>max_hashers &gt; <span class="number">0 </span>&amp;&amp; hashers &gt; max_hashers {
+            hashers = max_hashers;
         }
 
-        <span class="ident">ArgonConfiguration</span> {
-            <span class="ident">hashers</span>,
-            <span class="ident">algorithm</span>: <span class="ident">Algorithm::Argon2id</span>,
-            <span class="ident">params</span>: <span class="ident">ArgonParams::default_for</span>(<span class="ident">system</span>, <span class="ident">hashers</span>),
-        }
-    }
-}
-
-<span class="doccomment">/// [Argon2id](https://crates.io/crates/argon2) base parameters.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ArgonParams</span> {
-    <span class="doccomment">/// Specific argon2 parameters.</span>
-    <span class="ident">Params</span>(<span class="ident">argon2::ParamsBuilder</span>),
-    <span class="doccomment">/// Automatic configuration based on execution time. This is measured during</span>
-    <span class="doccomment">/// the first `set_password` operation.</span>
-    <span class="ident">Timed</span>(<span class="ident">TimedArgonParams</span>),
-}
-
-<span class="kw">impl</span> <span class="ident">ArgonParams</span> {
-    <span class="doccomment">/// Returns the default configuration based on the system information and</span>
-    <span class="doccomment">/// number of hashers. See [`TimedArgonParams`] for more details.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_for</span>(<span class="ident">system</span>: <span class="kw-2">&amp;</span><span class="ident">System</span>, <span class="ident">hashers</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">ArgonParams::Timed</span>(<span class="ident">TimedArgonParams::default_for</span>(<span class="ident">system</span>, <span class="ident">hashers</span>))
-    }
-}
-
-<span class="doccomment">/// Automatic configuration based on execution time. This is measured during the</span>
-<span class="doccomment">/// first `set_password`</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TimedArgonParams</span> {
-    <span class="doccomment">/// The number of lanes (`p`) that the argon algorithm should use.</span>
-    <span class="kw">pub</span> <span class="ident">lanes</span>: <span class="ident">u32</span>,
-    <span class="doccomment">/// The amount of ram each hashing operation should utilize.</span>
-    <span class="kw">pub</span> <span class="ident">ram_per_hasher</span>: <span class="ident">u32</span>,
-    <span class="doccomment">/// The minimum execution time that hashing a password should consume.</span>
-    <span class="kw">pub</span> <span class="ident">minimum_duration</span>: <span class="ident">Duration</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">TimedArgonParams</span> {
-    <span class="doccomment">/// ## Default Values</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// When using `TimedArgonParams::default()`, the settings are 4 lanes,</span>
-    <span class="doccomment">/// [`Self::MINIMUM_RAM_PER_HASHER`] of RAM per hasher, and a minimum</span>
-    <span class="doccomment">/// duration of 1 second.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The strength of Argon2 is derived largely by the amount of RAM dedicated</span>
-    <span class="doccomment">/// to it, so the largest value acceptable should be chosen for</span>
-    <span class="doccomment">/// `ram_per_hasher`. For more guidance on parameter selection, see [RFC</span>
-    <span class="doccomment">/// 9106, section 4 &quot;Parameter Choice&quot;][rfc].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [rfc]: https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">lanes</span>: <span class="number">4</span>,
-            <span class="ident">ram_per_hasher</span>: <span class="ident"><span class="self">Self</span>::MINIMUM_RAM_PER_HASHER</span>,
-            <span class="ident">minimum_duration</span>: <span class="ident">Duration::from_secs</span>(<span class="number">1</span>),
+        ArgonConfiguration {
+            hashers,
+            algorithm: Algorithm::Argon2id,
+            params: ArgonParams::default_for(system, hashers),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">TimedArgonParams</span> {
-    <span class="doccomment">/// The minimum amount of ram to allocate per hasher. This value is</span>
-    <span class="doccomment">/// currently 64MB but will change as the [minimum recommendations][rfc] are</span>
-    <span class="doccomment">/// changed.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [rfc]: https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MINIMUM_RAM_PER_HASHER</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">64</span> <span class="op">*</span> <span class="number">1024</span> <span class="op">*</span> <span class="number">1024</span>;
+<span class="doccomment">/// [Argon2id](https://crates.io/crates/argon2) base parameters.
+</span><span class="attribute">#[derive(Debug, Clone)]
+#[non_exhaustive]
+#[must_use]
+</span><span class="kw">pub enum </span>ArgonParams {
+    <span class="doccomment">/// Specific argon2 parameters.
+    </span>Params(argon2::ParamsBuilder),
+    <span class="doccomment">/// Automatic configuration based on execution time. This is measured during
+    /// the first `set_password` operation.
+    </span>Timed(TimedArgonParams),
+}
 
-    <span class="doccomment">/// Returns the default configuration based on the system information and</span>
-    <span class="doccomment">/// number of hashers.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// - `ram_per_hasher`: The total amount of RAM allocated will be the total</span>
-    <span class="doccomment">///   system memory divided by 16. This allocated amount will be divided</span>
-    <span class="doccomment">///   equally between the hashers. If this number is less than</span>
-    <span class="doccomment">///   [`Self::MINIMUM_RAM_PER_HASHER`], [`Self::MINIMUM_RAM_PER_HASHER`]</span>
-    <span class="doccomment">///   will be used instead.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///   For example, if 4 hashers are used on a system with 16GB of RAM, a</span>
-    <span class="doccomment">///   total of 1GB of RAM will be used between 4 hashers, yielding a</span>
-    <span class="doccomment">///   `ram_per_hasher` value of 256MB.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// - `lanes`: defaults to 4.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// - `minimum_duration`: defaults to 1 second. The [RFC][rfc] suggests 0.5</span>
-    <span class="doccomment">///   seconds, but many in the community recommend 1 second.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The strength of Argon2 is derived largely by the amount of RAM dedicated</span>
-    <span class="doccomment">/// to it, so the largest value acceptable should be chosen for</span>
-    <span class="doccomment">/// `ram_per_hasher`. For more guidance on parameter selection, see [RFC</span>
-    <span class="doccomment">/// 9106, section 4 &quot;Parameter Choice&quot;][rfc].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ## Debug Mode</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// When running with `debug_assertions` the `ram_per_hasher` will be set to</span>
-    <span class="doccomment">/// 32kb. This is due to how slow debug mode is for the hashing algorithm.</span>
-    <span class="doccomment">/// These settings should not be used in production.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [rfc]: https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_for</span>(<span class="ident">system</span>: <span class="kw-2">&amp;</span><span class="ident">System</span>, <span class="ident">hashers</span>: <span class="ident">u32</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">total_memory</span> <span class="op">=</span> <span class="ident">u32::try_from</span>(<span class="ident">system</span>.<span class="ident">total_memory</span>()).<span class="ident">unwrap_or</span>(<span class="ident">u32::MAX</span>);
-        <span class="kw">let</span> <span class="ident">max_memory</span> <span class="op">=</span> <span class="ident">total_memory</span> <span class="op">/</span> <span class="number">32</span>;
+<span class="kw">impl </span>ArgonParams {
+    <span class="doccomment">/// Returns the default configuration based on the system information and
+    /// number of hashers. See [`TimedArgonParams`] for more details.
+    </span><span class="kw">pub fn </span>default_for(system: <span class="kw-2">&amp;</span>System, hashers: u32) -&gt; <span class="self">Self </span>{
+        ArgonParams::Timed(TimedArgonParams::default_for(system, hashers))
+    }
+}
 
-        <span class="kw">let</span> <span class="ident">ram_per_hasher</span> <span class="op">=</span> <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">debug_assertions</span>) {
-            <span class="number">32</span> <span class="op">*</span> <span class="number">1024</span>
-        } <span class="kw">else</span> {
-            (<span class="ident">max_memory</span> <span class="op">/</span> <span class="ident">hashers</span>).<span class="ident">max</span>(<span class="ident"><span class="self">Self</span>::MINIMUM_RAM_PER_HASHER</span>)
+<span class="doccomment">/// Automatic configuration based on execution time. This is measured during the
+/// first `set_password`
+</span><span class="attribute">#[derive(Debug, Clone)]
+#[must_use]
+</span><span class="kw">pub struct </span>TimedArgonParams {
+    <span class="doccomment">/// The number of lanes (`p`) that the argon algorithm should use.
+    </span><span class="kw">pub </span>lanes: u32,
+    <span class="doccomment">/// The amount of ram each hashing operation should utilize.
+    </span><span class="kw">pub </span>ram_per_hasher: u32,
+    <span class="doccomment">/// The minimum execution time that hashing a password should consume.
+    </span><span class="kw">pub </span>minimum_duration: Duration,
+}
+
+<span class="kw">impl </span>Default <span class="kw">for </span>TimedArgonParams {
+    <span class="doccomment">/// ## Default Values
+    ///
+    /// When using `TimedArgonParams::default()`, the settings are 4 lanes,
+    /// [`Self::MINIMUM_RAM_PER_HASHER`] of RAM per hasher, and a minimum
+    /// duration of 1 second.
+    ///
+    /// The strength of Argon2 is derived largely by the amount of RAM dedicated
+    /// to it, so the largest value acceptable should be chosen for
+    /// `ram_per_hasher`. For more guidance on parameter selection, see [RFC
+    /// 9106, section 4 &quot;Parameter Choice&quot;][rfc].
+    ///
+    /// [rfc]: https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice
+    </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            lanes: <span class="number">4</span>,
+            ram_per_hasher: <span class="self">Self</span>::MINIMUM_RAM_PER_HASHER,
+            minimum_duration: Duration::from_secs(<span class="number">1</span>),
+        }
+    }
+}
+
+<span class="kw">impl </span>TimedArgonParams {
+    <span class="doccomment">/// The minimum amount of ram to allocate per hasher. This value is
+    /// currently 64MB but will change as the [minimum recommendations][rfc] are
+    /// changed.
+    ///
+    /// [rfc]: https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice
+    </span><span class="kw">pub const </span>MINIMUM_RAM_PER_HASHER: u32 = <span class="number">64 </span>* <span class="number">1024 </span>* <span class="number">1024</span>;
+
+    <span class="doccomment">/// Returns the default configuration based on the system information and
+    /// number of hashers.
+    ///
+    /// - `ram_per_hasher`: The total amount of RAM allocated will be the total
+    ///   system memory divided by 16. This allocated amount will be divided
+    ///   equally between the hashers. If this number is less than
+    ///   [`Self::MINIMUM_RAM_PER_HASHER`], [`Self::MINIMUM_RAM_PER_HASHER`]
+    ///   will be used instead.
+    ///
+    ///   For example, if 4 hashers are used on a system with 16GB of RAM, a
+    ///   total of 1GB of RAM will be used between 4 hashers, yielding a
+    ///   `ram_per_hasher` value of 256MB.
+    ///
+    /// - `lanes`: defaults to 4.
+    ///
+    /// - `minimum_duration`: defaults to 1 second. The [RFC][rfc] suggests 0.5
+    ///   seconds, but many in the community recommend 1 second.
+    ///
+    /// The strength of Argon2 is derived largely by the amount of RAM dedicated
+    /// to it, so the largest value acceptable should be chosen for
+    /// `ram_per_hasher`. For more guidance on parameter selection, see [RFC
+    /// 9106, section 4 &quot;Parameter Choice&quot;][rfc].
+    ///
+    /// ## Debug Mode
+    ///
+    /// When running with `debug_assertions` the `ram_per_hasher` will be set to
+    /// 32kb. This is due to how slow debug mode is for the hashing algorithm.
+    /// These settings should not be used in production.
+    ///
+    /// [rfc]: https://www.rfc-editor.org/rfc/rfc9106.html#name-parameter-choice
+    </span><span class="kw">pub fn </span>default_for(system: <span class="kw-2">&amp;</span>System, hashers: u32) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>total_memory = u32::try_from(system.total_memory()).unwrap_or(u32::MAX);
+        <span class="kw">let </span>max_memory = total_memory / <span class="number">32</span>;
+
+        <span class="kw">let </span>ram_per_hasher = <span class="kw">if </span><span class="macro">cfg!</span>(debug_assertions) {
+            <span class="number">32 </span>* <span class="number">1024
+        </span>} <span class="kw">else </span>{
+            (max_memory / hashers).max(<span class="self">Self</span>::MINIMUM_RAM_PER_HASHER)
         };
 
-        <span class="comment">// Hypothetical Configurations used to determine these numbers:</span>
-        <span class="comment">//</span>
-        <span class="comment">// 1cpu, 512mb ram: 1 thread, 1 hasher, 32mb ram</span>
-        <span class="comment">// 2cpus, 1GB ram: 1 thread, 1 hasher, 64mb ram</span>
-        <span class="comment">// 16cpus, 16GB ram: 4 threads, 4 hashers, 64mb ram</span>
-        <span class="comment">// 96cpus, 192GB ram: 24 threads, 24 hashers, ~510mb ram</span>
-        <span class="self">Self</span> {
-            <span class="ident">lanes</span>: <span class="number">4</span>,
-            <span class="ident">ram_per_hasher</span>,
-            <span class="ident">minimum_duration</span>: <span class="ident">Duration::from_secs</span>(<span class="number">1</span>),
+        <span class="comment">// Hypothetical Configurations used to determine these numbers:
+        //
+        // 1cpu, 512mb ram: 1 thread, 1 hasher, 32mb ram
+        // 2cpus, 1GB ram: 1 thread, 1 hasher, 64mb ram
+        // 16cpus, 16GB ram: 4 threads, 4 hashers, 64mb ram
+        // 96cpus, 192GB ram: 24 threads, 24 hashers, ~510mb ram
+        </span><span class="self">Self </span>{
+            lanes: <span class="number">4</span>,
+            ram_per_hasher,
+            minimum_duration: Duration::from_secs(<span class="number">1</span>),
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="bonsaidb_local" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>
