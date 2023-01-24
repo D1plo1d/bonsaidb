@@ -153,16 +153,11 @@
 <span id="153">153</span>
 <span id="154">154</span>
 <span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
 </pre><pre class="rust"><code><span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use crate</span>::{
-    connection::{IdentityId, SensitiveString},
-    key::time::TimestampAsNanoseconds,
-    schema::Collection,
-};
+<span class="kw">use </span><span class="kw">crate</span>::connection::{IdentityId, SensitiveString};
+<span class="kw">use </span><span class="kw">crate</span>::key::time::TimestampAsNanoseconds;
+<span class="kw">use </span><span class="kw">crate</span>::schema::Collection;
 
 <span class="attribute">#[derive(Collection, Clone, Serialize, Deserialize, Debug)]
 #[collection(name = <span class="string">&quot;authentication-tokens&quot;</span>, authority = <span class="string">&quot;bonsaidb&quot;</span>, core = <span class="kw">crate</span>)]
@@ -174,19 +169,18 @@
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;token-authentication&quot;</span>)]
 </span><span class="kw">mod </span>implementation {
-    <span class="kw">use </span>rand::{seq::SliceRandom, thread_rng, Rng};
+    <span class="kw">use </span>rand::seq::SliceRandom;
+    <span class="kw">use </span>rand::{thread_rng, Rng};
     <span class="kw">use </span>zeroize::Zeroize;
 
     <span class="kw">use </span><span class="kw">super</span>::AuthenticationToken;
-    <span class="kw">use crate</span>::{
-        connection::{
-            AsyncConnection, Connection, IdentityId, IdentityReference, SensitiveString,
-            TokenChallengeAlgorithm,
-        },
-        document::CollectionDocument,
-        key::time::TimestampAsNanoseconds,
-        schema::SerializedCollection,
+    <span class="kw">use </span><span class="kw">crate</span>::connection::{
+        AsyncConnection, Connection, IdentityId, IdentityReference, SensitiveString,
+        TokenChallengeAlgorithm,
     };
+    <span class="kw">use </span><span class="kw">crate</span>::document::CollectionDocument;
+    <span class="kw">use </span><span class="kw">crate</span>::key::time::TimestampAsNanoseconds;
+    <span class="kw">use </span><span class="kw">crate</span>::schema::SerializedCollection;
 
     <span class="kw">impl </span>AuthenticationToken {
         <span class="kw">fn </span>random(identity: IdentityId) -&gt; (u64, <span class="self">Self</span>) {

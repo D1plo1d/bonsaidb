@@ -52,8 +52,6 @@
 <span id="52">52</span>
 <span id="53">53</span>
 <span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
 </pre><pre class="rust"><code><span class="attribute">#![doc = <span class="macro">include_str!</span>(<span class="string">&quot;.crate-docs.md&quot;</span>)]
 #![cfg_attr(not(feature = <span class="string">&quot;included-from-omnibus&quot;</span>), doc = <span class="macro">include_str!</span>(<span class="string">&quot;../server-feature-flags.md&quot;</span>))]
 #![forbid(unsafe_code)]
@@ -89,14 +87,12 @@
     AcmeConfiguration, LETS_ENCRYPT_PRODUCTION_DIRECTORY, LETS_ENCRYPT_STAGING_DIRECTORY,
 };
 
-<span class="kw">pub use </span><span class="self">self</span>::{
-    backend::{Backend, BackendError, ConnectionHandling, NoBackend},
-    config::{DefaultPermissions, ServerConfiguration},
-    error::Error,
-    server::{
-        ApplicationProtocols, ConnectedClient, CustomServer, HttpService, LockedClientDataGuard,
-        Peer, Server, ServerDatabase, StandardTcpProtocols, TcpService, Transport,
-    },
+<span class="kw">pub use </span><span class="self">self</span>::backend::{Backend, BackendError, ConnectionHandling, NoBackend};
+<span class="kw">pub use </span><span class="self">self</span>::config::{DefaultPermissions, ServerConfiguration};
+<span class="kw">pub use </span><span class="self">self</span>::error::Error;
+<span class="kw">pub use </span><span class="self">self</span>::server::{
+    ApplicationProtocols, ConnectedClient, CustomServer, HttpService, LockedClientDataGuard, Peer,
+    Server, ServerDatabase, StandardTcpProtocols, TcpService, Transport,
 };
 
 <span class="attribute">#[cfg(test)]

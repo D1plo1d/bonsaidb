@@ -473,33 +473,21 @@
 <span id="473">473</span>
 <span id="474">474</span>
 <span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    collections::HashMap,
-    path::{Path, PathBuf},
-    sync::Arc,
-    time::Duration,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::path::{Path, PathBuf};
+<span class="kw">use </span>std::sync::Arc;
+<span class="kw">use </span>std::time::Duration;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_core::document::KeyId;
-<span class="kw">use </span>bonsaidb_core::{
-    permissions::Permissions,
-    schema::{Schema, SchemaName},
-};
+<span class="kw">use </span>bonsaidb_core::permissions::Permissions;
+<span class="kw">use </span>bonsaidb_core::schema::{Schema, SchemaName};
 <span class="kw">use </span>sysinfo::{RefreshKind, System, SystemExt};
 
+<span class="kw">use </span><span class="kw">crate</span>::storage::{DatabaseOpener, StorageSchemaOpener};
 <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::vault::AnyVaultKeyStorage;
-<span class="kw">use crate</span>::{
-    storage::{DatabaseOpener, StorageSchemaOpener},
-    Error,
-};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
 </span><span class="kw">mod </span>argon;

@@ -691,16 +691,6 @@
 <span id="691">691</span>
 <span id="692">692</span>
 <span id="693">693</span>
-<span id="694">694</span>
-<span id="695">695</span>
-<span id="696">696</span>
-<span id="697">697</span>
-<span id="698">698</span>
-<span id="699">699</span>
-<span id="700">700</span>
-<span id="701">701</span>
-<span id="702">702</span>
-<span id="703">703</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Encryption and secret management.
 //!
 //! BonsaiDb&#39;s vault is the core of encryption and secret management. To offer
@@ -751,35 +741,25 @@
 //! used directly. This variant of `ChaCha20Poly1305` extends the nonce from 12
 //! bytes to 24 bytes, which allows for random nonces to be used.
 
-</span><span class="kw">use </span>std::{
-    borrow::Cow,
-    collections::HashMap,
-    fmt::{Debug, Display},
-    fs::{<span class="self">self</span>, File},
-    io::{Read, Write},
-    path::{Path, PathBuf},
-    sync::Arc,
-};
+</span><span class="kw">use </span>std::borrow::Cow;
+<span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::fmt::{Debug, Display};
+<span class="kw">use </span>std::fs::{<span class="self">self</span>, File};
+<span class="kw">use </span>std::io::{Read, Write};
+<span class="kw">use </span>std::path::{Path, PathBuf};
+<span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>bonsaidb_core::{
-    arc_bytes::serde::Bytes,
-    document::KeyId,
-    permissions::{
-        bonsai::{encryption_key_resource_name, EncryptionKeyAction},
-        Permissions,
-    },
-};
-<span class="kw">use </span>chacha20poly1305::{
-    aead::{generic_array::GenericArray, Aead, NewAead, Payload},
-    XChaCha20Poly1305,
-};
-<span class="kw">use </span>hpke::{
-    <span class="self">self</span>,
-    aead::{AeadTag, ChaCha20Poly1305},
-    kdf::HkdfSha256,
-    kem::DhP256HkdfSha256,
-    Deserializable, Kem, OpModeS, Serializable,
-};
+<span class="kw">use </span>bonsaidb_core::arc_bytes::serde::Bytes;
+<span class="kw">use </span>bonsaidb_core::document::KeyId;
+<span class="kw">use </span>bonsaidb_core::permissions::bonsai::{encryption_key_resource_name, EncryptionKeyAction};
+<span class="kw">use </span>bonsaidb_core::permissions::Permissions;
+<span class="kw">use </span>chacha20poly1305::aead::generic_array::GenericArray;
+<span class="kw">use </span>chacha20poly1305::aead::{Aead, NewAead, Payload};
+<span class="kw">use </span>chacha20poly1305::XChaCha20Poly1305;
+<span class="kw">use </span>hpke::aead::{AeadTag, ChaCha20Poly1305};
+<span class="kw">use </span>hpke::kdf::HkdfSha256;
+<span class="kw">use </span>hpke::kem::DhP256HkdfSha256;
+<span class="kw">use </span>hpke::{<span class="self">self</span>, Deserializable, Kem, OpModeS, Serializable};
 <span class="kw">use </span>rand::{thread_rng, Rng};
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>zeroize::{Zeroize, Zeroizing};

@@ -321,23 +321,23 @@
 <span id="321">321</span>
 <span id="322">322</span>
 <span id="323">323</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{ops::Deref, sync::Arc};
+</pre><pre class="rust"><code><span class="kw">use </span>std::ops::Deref;
+<span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>async_trait::async_trait;
-<span class="kw">use </span>bonsaidb_core::{
-    connection::{
-        AccessPolicy, AsyncConnection, AsyncLowLevelConnection, HasSchema, HasSession, Range,
-        SerializedQueryKey, Session, Sort,
-    },
-    document::{DocumentId, Header, OwnedDocument},
-    networking::{
-        ApplyTransaction, Compact, CompactCollection, CompactKeyValueStore, Count, DeleteDocs, Get,
-        GetMultiple, LastTransactionId, List, ListExecutedTransactions, ListHeaders, Query,
-        QueryWithDocs, Reduce, ReduceGrouped,
-    },
-    schema::{<span class="self">self</span>, view::map::MappedSerializedValue, CollectionName, Schematic, ViewName},
-    transaction::{Executed, OperationResult, Transaction},
+<span class="kw">use </span>bonsaidb_core::connection::{
+    AccessPolicy, AsyncConnection, AsyncLowLevelConnection, HasSchema, HasSession, Range,
+    SerializedQueryKey, Session, Sort,
 };
+<span class="kw">use </span>bonsaidb_core::document::{DocumentId, Header, OwnedDocument};
+<span class="kw">use </span>bonsaidb_core::networking::{
+    ApplyTransaction, Compact, CompactCollection, CompactKeyValueStore, Count, DeleteDocs, Get,
+    GetMultiple, LastTransactionId, List, ListExecutedTransactions, ListHeaders, Query,
+    QueryWithDocs, Reduce, ReduceGrouped,
+};
+<span class="kw">use </span>bonsaidb_core::schema::view::map::MappedSerializedValue;
+<span class="kw">use </span>bonsaidb_core::schema::{<span class="self">self</span>, CollectionName, Schematic, ViewName};
+<span class="kw">use </span>bonsaidb_core::transaction::{Executed, OperationResult, Transaction};
 
 <span class="kw">use </span><span class="kw">crate</span>::Client;
 

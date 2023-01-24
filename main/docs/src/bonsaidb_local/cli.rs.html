@@ -201,13 +201,12 @@
 <span id="201">201</span>
 <span id="202">202</span>
 <span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::path::PathBuf;
 
 <span class="kw">use </span>clap::Subcommand;
 
-<span class="kw">use crate</span>::{config::StorageConfiguration, Error, Storage};
+<span class="kw">use </span><span class="kw">crate</span>::config::StorageConfiguration;
+<span class="kw">use crate</span>::{Error, Storage};
 
 <span class="doccomment">/// Commands for administering the bonsaidb server.
 </span><span class="kw">pub mod </span>admin;
@@ -277,6 +276,7 @@
             Location::Path { path } =&gt; storage.restore(path),
         }
     }
+
     <span class="doccomment">/// Backs-up `storage` to `self`.
     </span><span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
     </span><span class="kw">pub async fn </span>backup_async(<span class="kw-2">&amp;</span><span class="self">self</span>, storage: <span class="kw-2">&amp;</span><span class="kw">crate</span>::AsyncStorage) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
@@ -334,11 +334,9 @@
 ) -&gt; <span class="prelude-ty">Result</span>&lt;bonsaidb_core::connection::SensitiveString, ReadPasswordError&gt; {
     <span class="kw">use </span>std::io::stdout;
 
-    <span class="kw">use </span>crossterm::{
-        cursor::MoveToColumn,
-        terminal::{Clear, ClearType},
-        ExecutableCommand,
-    };
+    <span class="kw">use </span>crossterm::cursor::MoveToColumn;
+    <span class="kw">use </span>crossterm::terminal::{Clear, ClearType};
+    <span class="kw">use </span>crossterm::ExecutableCommand;
 
     <span class="macro">println!</span>(<span class="string">&quot;{prompt} (input Enter or Return when done, or Escape to cancel)&quot;</span>);
 
@@ -369,12 +367,10 @@
 
     <span class="kw">use </span>std::io::Read;
 
-    <span class="kw">use </span>crossterm::{
-        cursor::{MoveLeft, MoveToColumn},
-        style::Print,
-        terminal::{Clear, ClearType},
-        ExecutableCommand,
-    };
+    <span class="kw">use </span>crossterm::cursor::{MoveLeft, MoveToColumn};
+    <span class="kw">use </span>crossterm::style::Print;
+    <span class="kw">use </span>crossterm::terminal::{Clear, ClearType};
+    <span class="kw">use </span>crossterm::ExecutableCommand;
     <span class="kw">let </span><span class="kw-2">mut </span>stdin = std::io::stdin();
     <span class="kw">let </span><span class="kw-2">mut </span>stdout = std::io::stdout();
     <span class="kw">let </span><span class="kw-2">mut </span>buffer = [<span class="number">0</span>; <span class="number">1</span>];

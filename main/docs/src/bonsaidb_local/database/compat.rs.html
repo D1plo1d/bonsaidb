@@ -149,14 +149,16 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{any::type_name, collections::HashMap, marker::PhantomData};
+<span id="152">152</span>
+<span id="153">153</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::any::type_name;
+<span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::marker::PhantomData;
 
-<span class="kw">use </span>bonsaidb_core::{
-    arc_bytes::serde::Bytes,
-    document::DocumentId,
-    schema::CollectionName,
-    transaction::{ChangedDocument, ChangedKey, Changes, DocumentChanges},
-};
+<span class="kw">use </span>bonsaidb_core::arc_bytes::serde::Bytes;
+<span class="kw">use </span>bonsaidb_core::document::DocumentId;
+<span class="kw">use </span>bonsaidb_core::schema::CollectionName;
+<span class="kw">use </span>bonsaidb_core::transaction::{ChangedDocument, ChangedKey, Changes, DocumentChanges};
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>transmog_versions::Versioned;
 
@@ -240,6 +242,7 @@
 
 <span class="kw">impl </span>TryFrom&lt;ChangesV0&gt; <span class="kw">for </span>Changes {
     <span class="kw">type </span>Error = bonsaidb_core::Error;
+
     <span class="kw">fn </span>try_from(legacy: ChangesV0) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
         <span class="kw">match </span>legacy {
             ChangesV0::Documents(legacy_documents) =&gt; {
@@ -293,6 +296,7 @@
 
 <span class="kw">impl </span>TryFrom&lt;LegacyDocumentId&gt; <span class="kw">for </span>DocumentId {
     <span class="kw">type </span>Error = bonsaidb_core::Error;
+
     <span class="kw">fn </span>try_from(id: LegacyDocumentId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
         <span class="kw">match </span>id {
             LegacyDocumentId::Document(id) =&gt; DocumentId::try_from(<span class="kw-2">&amp;</span>id[..]),

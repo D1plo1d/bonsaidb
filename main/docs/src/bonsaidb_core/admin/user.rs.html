@@ -110,21 +110,17 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
 </pre><pre class="rust"><code><span class="kw">use </span>itertools::Itertools;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use crate</span>::{
-    admin::{group, role},
-    connection::{
-        AsyncStorageConnection, Connection, IdentityReference, SensitiveString, StorageConnection,
-    },
-    define_basic_unique_mapped_view,
-    document::{CollectionDocument, Emit, KeyId},
-    permissions::Permissions,
-    schema::{Collection, Nameable, NamedCollection, SerializedCollection},
+<span class="kw">use </span><span class="kw">crate</span>::admin::{group, role};
+<span class="kw">use </span><span class="kw">crate</span>::connection::{
+    AsyncStorageConnection, Connection, IdentityReference, SensitiveString, StorageConnection,
 };
+<span class="kw">use </span><span class="kw">crate</span>::define_basic_unique_mapped_view;
+<span class="kw">use </span><span class="kw">crate</span>::document::{CollectionDocument, Emit, KeyId};
+<span class="kw">use </span><span class="kw">crate</span>::permissions::Permissions;
+<span class="kw">use </span><span class="kw">crate</span>::schema::{Collection, Nameable, NamedCollection, SerializedCollection};
 
 <span class="doccomment">/// A user that can authenticate with BonsaiDb.
 </span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize, Default, Collection)]

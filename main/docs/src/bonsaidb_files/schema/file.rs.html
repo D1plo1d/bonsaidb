@@ -559,37 +559,29 @@
 <span id="559">559</span>
 <span id="560">560</span>
 <span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    borrow::{Borrow, Cow},
-    marker::PhantomData,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::{Borrow, Cow};
+<span class="kw">use </span>std::marker::PhantomData;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_core::connection::AsyncConnection;
-<span class="kw">use </span>bonsaidb_core::{
-    connection::{Bound, BoundRef, Connection, RangeRef, ViewMappings},
-    document::{CollectionDocument, Emit},
-    key::{
-        time::TimestampAsNanoseconds, CompositeKeyDecoder, CompositeKeyEncoder, CompositeKeyError,
-        IntoPrefixRange, Key, KeyEncoding,
-    },
-    schema::{
-        Collection, CollectionName, CollectionViewSchema, DefaultSerialization,
-        SerializedCollection, View, ViewMapResult,
-    },
-    transaction::{Operation, Transaction},
+<span class="kw">use </span>bonsaidb_core::connection::{Bound, BoundRef, Connection, RangeRef, ViewMappings};
+<span class="kw">use </span>bonsaidb_core::document::{CollectionDocument, Emit};
+<span class="kw">use </span>bonsaidb_core::key::time::TimestampAsNanoseconds;
+<span class="kw">use </span>bonsaidb_core::key::{
+    CompositeKeyDecoder, CompositeKeyEncoder, CompositeKeyError, IntoPrefixRange, Key, KeyEncoding,
 };
+<span class="kw">use </span>bonsaidb_core::schema::{
+    Collection, CollectionName, CollectionViewSchema, DefaultSerialization, SerializedCollection,
+    View, ViewMapResult,
+};
+<span class="kw">use </span>bonsaidb_core::transaction::{Operation, Transaction};
 <span class="kw">use </span>bonsaidb_utils::next_string_sequence;
 <span class="kw">use </span>derive_where::derive_where;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use crate</span>::{
-    direct::BlockInfo, schema::block::Block, BonsaiFiles, Error, FileConfig, Statistics, Truncate,
-};
+<span class="kw">use </span><span class="kw">crate</span>::direct::BlockInfo;
+<span class="kw">use </span><span class="kw">crate</span>::schema::block::Block;
+<span class="kw">use crate</span>::{BonsaiFiles, Error, FileConfig, Statistics, Truncate};
 
 <span class="attribute">#[derive_where(Debug, Clone)]
 #[derive(Serialize, Deserialize)]

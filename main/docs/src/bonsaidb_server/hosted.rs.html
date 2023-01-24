@@ -96,14 +96,12 @@
 <span id="96">96</span>
 <span id="97">97</span>
 <span id="98">98</span>
-<span id="99">99</span>
-</pre><pre class="rust"><code><span class="kw">use </span>bonsaidb_core::{
-    define_basic_mapped_view, define_basic_unique_mapped_view,
-    document::{CollectionDocument, Emit, KeyId},
-    schema::{Collection, NamedCollection, Schema},
-};
+</pre><pre class="rust"><code><span class="kw">use </span>bonsaidb_core::document::{CollectionDocument, Emit, KeyId};
+<span class="kw">use </span>bonsaidb_core::schema::{Collection, NamedCollection, Schema};
+<span class="kw">use </span>bonsaidb_core::{define_basic_mapped_view, define_basic_unique_mapped_view};
 <span class="kw">use </span>fabruic::{CertificateChain, PrivateKey};
-<span class="kw">use </span>serde::{de::Visitor, Deserialize, Serialize};
+<span class="kw">use </span>serde::de::Visitor;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="attribute">#[derive(Debug, Schema)]
 #[schema(name = <span class="string">&quot;hosted&quot;</span>, authority = <span class="string">&quot;khonsulabs&quot;</span>, collections = [TlsCertificate]</span>, core = bonsaidb_core)]

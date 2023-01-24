@@ -1263,37 +1263,27 @@
 <span id="1263">1263</span>
 <span id="1264">1264</span>
 <span id="1265">1265</span>
-<span id="1266">1266</span>
-<span id="1267">1267</span>
-<span id="1268">1268</span>
-<span id="1269">1269</span>
-<span id="1270">1270</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{borrow::Borrow, collections::BTreeMap};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Borrow;
+<span class="kw">use </span>std::collections::BTreeMap;
 
 <span class="kw">use </span>arc_bytes::serde::Bytes;
 <span class="kw">use </span>async_trait::async_trait;
 
 <span class="kw">use </span><span class="kw">super</span>::GroupedReductions;
-<span class="kw">use crate</span>::{
-    connection::{
-        AccessPolicy, HasSession, QueryKey, Range, RangeRef, SerializedQueryKey, Sort, ViewMappings,
-    },
-    document::{
-        CollectionDocument, CollectionHeader, Document, DocumentId, HasHeader, Header,
-        OwnedDocument,
-    },
-    key::{<span class="self">self</span>, Key, KeyEncoding},
-    schema::{
-        <span class="self">self</span>,
-        view::{
-            <span class="self">self</span>,
-            map::{MappedDocuments, MappedSerializedValue},
-        },
-        CollectionName, Map, MappedValue, Schematic, SerializedCollection, ViewName,
-    },
-    transaction::{OperationResult, Transaction},
-    Error,
+<span class="kw">use </span><span class="kw">crate</span>::connection::{
+    AccessPolicy, HasSession, QueryKey, Range, RangeRef, SerializedQueryKey, Sort, ViewMappings,
 };
+<span class="kw">use </span><span class="kw">crate</span>::document::{
+    CollectionDocument, CollectionHeader, Document, DocumentId, HasHeader, Header, OwnedDocument,
+};
+<span class="kw">use </span><span class="kw">crate</span>::key::{<span class="self">self</span>, Key, KeyEncoding};
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::map::{MappedDocuments, MappedSerializedValue};
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::{<span class="self">self</span>};
+<span class="kw">use </span><span class="kw">crate</span>::schema::{
+    <span class="self">self</span>, CollectionName, Map, MappedValue, Schematic, SerializedCollection, ViewName,
+};
+<span class="kw">use </span><span class="kw">crate</span>::transaction::{OperationResult, Transaction};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="doccomment">/// The low-level interface to a database&#39;s [`schema::Schema`], giving access to
 /// [`Collection`s](crate::schema::Collection) and

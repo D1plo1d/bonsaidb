@@ -958,49 +958,31 @@
 <span id="958">958</span>
 <span id="959">959</span>
 <span id="960">960</span>
-<span id="961">961</span>
-<span id="962">962</span>
-<span id="963">963</span>
-<span id="964">964</span>
-<span id="965">965</span>
-<span id="966">966</span>
-<span id="967">967</span>
-<span id="968">968</span>
-<span id="969">969</span>
-<span id="970">970</span>
-<span id="971">971</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    collections::{hash_map, HashMap},
-    fmt::Debug,
-    net::SocketAddr,
-    ops::Deref,
-    path::PathBuf,
-    sync::{
-        atomic::{AtomicU32, AtomicUsize, Ordering},
-        Arc,
-    },
-    time::Duration,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::{hash_map, HashMap};
+<span class="kw">use </span>std::fmt::Debug;
+<span class="kw">use </span>std::net::SocketAddr;
+<span class="kw">use </span>std::ops::Deref;
+<span class="kw">use </span>std::path::PathBuf;
+<span class="kw">use </span>std::sync::atomic::{AtomicU32, AtomicUsize, Ordering};
+<span class="kw">use </span>std::sync::Arc;
+<span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span>async_lock::{Mutex, RwLock};
 <span class="kw">use </span>async_trait::async_trait;
-<span class="kw">use </span>bonsaidb_core::{
-    admin::{Admin, ADMIN_DATABASE_NAME},
-    api,
-    api::ApiName,
-    arc_bytes::serde::Bytes,
-    connection::{
-        <span class="self">self</span>, AsyncConnection, AsyncStorageConnection, HasSession, IdentityReference, Session,
-        SessionId,
-    },
-    networking::{<span class="self">self</span>, Payload, CURRENT_PROTOCOL_VERSION},
-    permissions::{
-        bonsai::{bonsaidb_resource_name, BonsaiAction, ServerAction},
-        Permissions,
-    },
-    schema::{<span class="self">self</span>, Nameable, NamedCollection, Schema},
+<span class="kw">use </span>bonsaidb_core::admin::{Admin, ADMIN_DATABASE_NAME};
+<span class="kw">use </span>bonsaidb_core::api;
+<span class="kw">use </span>bonsaidb_core::api::ApiName;
+<span class="kw">use </span>bonsaidb_core::arc_bytes::serde::Bytes;
+<span class="kw">use </span>bonsaidb_core::connection::{
+    <span class="self">self</span>, AsyncConnection, AsyncStorageConnection, HasSession, IdentityReference, Session,
+    SessionId,
 };
-<span class="kw">use </span>bonsaidb_local::{config::Builder, AsyncStorage, Storage, StorageNonBlocking};
+<span class="kw">use </span>bonsaidb_core::networking::{<span class="self">self</span>, Payload, CURRENT_PROTOCOL_VERSION};
+<span class="kw">use </span>bonsaidb_core::permissions::bonsai::{bonsaidb_resource_name, BonsaiAction, ServerAction};
+<span class="kw">use </span>bonsaidb_core::permissions::Permissions;
+<span class="kw">use </span>bonsaidb_core::schema::{<span class="self">self</span>, Nameable, NamedCollection, Schema};
+<span class="kw">use </span>bonsaidb_local::config::Builder;
+<span class="kw">use </span>bonsaidb_local::{AsyncStorage, Storage, StorageNonBlocking};
 <span class="kw">use </span>bonsaidb_utils::{fast_async_lock, fast_async_read, fast_async_write};
 <span class="kw">use </span>derive_where::derive_where;
 <span class="kw">use </span>fabruic::{<span class="self">self</span>, CertificateChain, Endpoint, KeyPair, PrivateKey};
@@ -1013,17 +995,15 @@
 <span class="kw">use </span>signal_hook::consts::{SIGINT, SIGTERM};
 <span class="kw">use </span>tokio::sync::{oneshot, Notify};
 
+<span class="kw">use </span><span class="kw">crate</span>::api::{AnyHandler, HandlerSession};
+<span class="kw">use </span><span class="kw">crate</span>::backend::ConnectionHandling;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::config::AcmeConfiguration;
-<span class="kw">use crate</span>::{
-    api::{AnyHandler, HandlerSession},
-    backend::ConnectionHandling,
-    dispatch::{register_api_handlers, ServerDispatcher},
-    error::Error,
-    hosted::{Hosted, SerializablePrivateKey, TlsCertificate, TlsCertificatesByDomain},
-    server::shutdown::{Shutdown, ShutdownState},
-    Backend, BackendError, NoBackend, ServerConfiguration,
-};
+<span class="kw">use </span><span class="kw">crate</span>::dispatch::{register_api_handlers, ServerDispatcher};
+<span class="kw">use </span><span class="kw">crate</span>::error::Error;
+<span class="kw">use </span><span class="kw">crate</span>::hosted::{Hosted, SerializablePrivateKey, TlsCertificate, TlsCertificatesByDomain};
+<span class="kw">use </span><span class="kw">crate</span>::server::shutdown::{Shutdown, ShutdownState};
+<span class="kw">use crate</span>::{Backend, BackendError, NoBackend, ServerConfiguration};
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;acme&quot;</span>)]
 </span><span class="kw">pub mod </span>acme;
@@ -1036,11 +1016,9 @@
 </span><span class="kw">mod </span>websockets;
 
 <span class="kw">use </span><span class="self">self</span>::connected_client::OwnedClient;
-<span class="kw">pub use </span><span class="self">self</span>::{
-    connected_client::{ConnectedClient, LockedClientDataGuard, Transport},
-    database::ServerDatabase,
-    tcp::{ApplicationProtocols, HttpService, Peer, StandardTcpProtocols, TcpService},
-};
+<span class="kw">pub use </span><span class="self">self</span>::connected_client::{ConnectedClient, LockedClientDataGuard, Transport};
+<span class="kw">pub use </span><span class="self">self</span>::database::ServerDatabase;
+<span class="kw">pub use </span><span class="self">self</span>::tcp::{ApplicationProtocols, HttpService, Peer, StandardTcpProtocols, TcpService};
 
 <span class="kw">static </span>CONNECTED_CLIENT_ID_COUNTER: AtomicU32 = AtomicU32::new(<span class="number">0</span>);
 
@@ -1783,8 +1761,8 @@
 
 <span class="attribute">#[async_trait]
 </span><span class="kw">impl</span>&lt;B: Backend&gt; AsyncStorageConnection <span class="kw">for </span>CustomServer&lt;B&gt; {
-    <span class="kw">type </span>Database = ServerDatabase&lt;B&gt;;
     <span class="kw">type </span>Authenticated = <span class="self">Self</span>;
+    <span class="kw">type </span>Database = ServerDatabase&lt;B&gt;;
 
     <span class="kw">async fn </span>admin(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Database {
         <span class="self">self</span>.database::&lt;Admin&gt;(ADMIN_DATABASE_NAME).<span class="kw">await</span>.unwrap()

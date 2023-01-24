@@ -144,21 +144,20 @@
 <span id="144">144</span>
 <span id="145">145</span>
 <span id="146">146</span>
-<span id="147">147</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
 
-<span class="kw">use </span>bonsaidb_core::{connection::Connection, schema::CollectionName};
+<span class="kw">use </span>bonsaidb_core::connection::Connection;
+<span class="kw">use </span>bonsaidb_core::schema::CollectionName;
 <span class="kw">use </span>nebari::tree::{Root, Unversioned, Versioned};
 
-<span class="kw">use crate</span>::{
-    database::{document_tree_name, keyvalue::KEY_TREE, DatabaseNonBlocking},
-    tasks::{Job, Keyed, Task},
-    views::{
-        view_document_map_tree_name, view_entries_tree_name, view_invalidated_docs_tree_name,
-        view_versions_tree_name,
-    },
-    Database, Error,
+<span class="kw">use </span><span class="kw">crate</span>::database::keyvalue::KEY_TREE;
+<span class="kw">use </span><span class="kw">crate</span>::database::{document_tree_name, DatabaseNonBlocking};
+<span class="kw">use </span><span class="kw">crate</span>::tasks::{Job, Keyed, Task};
+<span class="kw">use </span><span class="kw">crate</span>::views::{
+    view_document_map_tree_name, view_entries_tree_name, view_invalidated_docs_tree_name,
+    view_versions_tree_name,
 };
+<span class="kw">use crate</span>::{Database, Error};
 
 <span class="attribute">#[derive(Debug)]
 </span><span class="kw">pub struct </span>Compactor {
@@ -229,9 +228,8 @@
 }
 
 <span class="kw">impl </span>Job <span class="kw">for </span>Compactor {
-    <span class="kw">type </span>Output = ();
-
     <span class="kw">type </span>Error = Error;
+    <span class="kw">type </span>Output = ();
 
     <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;tracing&quot;</span>, tracing::instrument(level = <span class="string">&quot;trace&quot;</span>, skip_all))]
     </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, Error&gt; {

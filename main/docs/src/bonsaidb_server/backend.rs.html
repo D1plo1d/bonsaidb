@@ -163,16 +163,16 @@
 <span id="163">163</span>
 <span id="164">164</span>
 <span id="165">165</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{convert::Infallible, fmt::Debug};
+</pre><pre class="rust"><code><span class="kw">use </span>std::convert::Infallible;
+<span class="kw">use </span>std::fmt::Debug;
 
 <span class="kw">use </span>async_trait::async_trait;
-<span class="kw">use </span>bonsaidb_core::{
-    connection::Session,
-    permissions::PermissionDenied,
-    schema::{InsertError, InvalidNameError},
-};
+<span class="kw">use </span>bonsaidb_core::connection::Session;
+<span class="kw">use </span>bonsaidb_core::permissions::PermissionDenied;
+<span class="kw">use </span>bonsaidb_core::schema::{InsertError, InvalidNameError};
 
-<span class="kw">use crate</span>::{server::ConnectedClient, CustomServer, Error, ServerConfiguration};
+<span class="kw">use </span><span class="kw">crate</span>::server::ConnectedClient;
+<span class="kw">use crate</span>::{CustomServer, Error, ServerConfiguration};
 
 <span class="doccomment">/// Tailors the behavior of a server to your needs.
 </span><span class="attribute">#[async_trait]
@@ -257,8 +257,8 @@
 </span><span class="kw">pub struct </span>NoBackend;
 
 <span class="kw">impl </span>Backend <span class="kw">for </span>NoBackend {
-    <span class="kw">type </span>Error = Infallible;
     <span class="kw">type </span>ClientData = ();
+    <span class="kw">type </span>Error = Infallible;
 }
 
 <span class="doccomment">/// Controls how a server should handle a connection.

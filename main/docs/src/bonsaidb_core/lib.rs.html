@@ -291,10 +291,6 @@
 <span id="291">291</span>
 <span id="292">292</span>
 <span id="293">293</span>
-<span id="294">294</span>
-<span id="295">295</span>
-<span id="296">296</span>
-<span id="297">297</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Core functionality and types for BonsaiDb.
 
 </span><span class="attribute">#![forbid(unsafe_code)]
@@ -342,26 +338,22 @@
 <span class="doccomment">/// Types for Publish/Subscribe (`PubSub`) messaging.
 </span><span class="kw">pub mod </span>pubsub;
 
-<span class="kw">use </span>std::{fmt::Display, string::FromUtf8Error};
+<span class="kw">use </span>std::fmt::Display;
+<span class="kw">use </span>std::string::FromUtf8Error;
 
-<span class="kw">pub use </span>actionable;
-<span class="kw">pub use </span>arc_bytes;
-<span class="kw">pub use </span>async_trait;
-<span class="kw">pub use </span>circulate;
-<span class="kw">pub use </span>num_traits;
-<span class="kw">pub use </span>ordered_varint;
 <span class="kw">use </span>schema::{view, CollectionName, SchemaName, ViewName};
 <span class="kw">use </span>serde::{Deserialize, Serialize};
-<span class="kw">pub use </span>transmog;
-<span class="kw">pub use </span>transmog_pot;
-
-<span class="kw">use crate</span>::{
-    api::ApiName,
-    connection::HasSchema,
-    document::{DocumentId, Header, InvalidHexadecimal},
-    key::{time::TimeError, NextValueError},
-    schema::InsertError,
+<span class="kw">pub use </span>{
+    actionable, arc_bytes, async_trait, circulate, num_traits, ordered_varint, transmog,
+    transmog_pot,
 };
+
+<span class="kw">use </span><span class="kw">crate</span>::api::ApiName;
+<span class="kw">use </span><span class="kw">crate</span>::connection::HasSchema;
+<span class="kw">use </span><span class="kw">crate</span>::document::{DocumentId, Header, InvalidHexadecimal};
+<span class="kw">use </span><span class="kw">crate</span>::key::time::TimeError;
+<span class="kw">use </span><span class="kw">crate</span>::key::NextValueError;
+<span class="kw">use </span><span class="kw">crate</span>::schema::InsertError;
 
 <span class="doccomment">/// an enumeration of errors that this crate can produce
 </span><span class="attribute">#[derive(Clone, thiserror::Error, Debug, Serialize, Deserialize)]

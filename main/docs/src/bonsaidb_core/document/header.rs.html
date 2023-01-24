@@ -237,15 +237,15 @@
 <span id="237">237</span>
 <span id="238">238</span>
 <span id="239">239</span>
+<span id="240">240</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::fmt::{Display, Write};
 
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use crate</span>::{
-    document::{BorrowedDocument, CollectionDocument, DocumentId, OwnedDocument, Revision},
-    key::Key,
-    schema::{view::map::Mappings, Map, SerializedCollection},
-};
+<span class="kw">use </span><span class="kw">crate</span>::document::{BorrowedDocument, CollectionDocument, DocumentId, OwnedDocument, Revision};
+<span class="kw">use </span><span class="kw">crate</span>::key::Key;
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::map::Mappings;
+<span class="kw">use </span><span class="kw">crate</span>::schema::{Map, SerializedCollection};
 
 <span class="doccomment">/// The header of a `Document`.
 </span><span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -419,7 +419,8 @@
 
 <span class="attribute">#[test]
 </span><span class="kw">fn </span>emissions_tests() -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
-    <span class="kw">use crate</span>::{schema::Map, test_util::Basic};
+    <span class="kw">use </span><span class="kw">crate</span>::schema::Map;
+    <span class="kw">use </span><span class="kw">crate</span>::test_util::Basic;
 
     <span class="kw">let </span>doc = BorrowedDocument::with_contents::&lt;Basic, <span class="kw">_</span>&gt;(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span>Basic::default())<span class="question-mark">?</span>;
 
@@ -448,7 +449,8 @@
 
 <span class="attribute">#[test]
 </span><span class="kw">fn </span>chained_mappings_test() -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw">crate</span>::Error&gt; {
-    <span class="kw">use crate</span>::{schema::Map, test_util::Basic};
+    <span class="kw">use </span><span class="kw">crate</span>::schema::Map;
+    <span class="kw">use </span><span class="kw">crate</span>::test_util::Basic;
 
     <span class="kw">let </span>doc = BorrowedDocument::with_contents::&lt;Basic, <span class="kw">_</span>&gt;(<span class="kw-2">&amp;</span><span class="number">1</span>, <span class="kw-2">&amp;</span>Basic::default())<span class="question-mark">?</span>;
 

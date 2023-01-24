@@ -1743,81 +1743,50 @@
 <span id="1743">1743</span>
 <span id="1744">1744</span>
 <span id="1745">1745</span>
-<span id="1746">1746</span>
-<span id="1747">1747</span>
-<span id="1748">1748</span>
-<span id="1749">1749</span>
-<span id="1750">1750</span>
-<span id="1751">1751</span>
-<span id="1752">1752</span>
-<span id="1753">1753</span>
-<span id="1754">1754</span>
-<span id="1755">1755</span>
-<span id="1756">1756</span>
-<span id="1757">1757</span>
-<span id="1758">1758</span>
-<span id="1759">1759</span>
-<span id="1760">1760</span>
-<span id="1761">1761</span>
-<span id="1762">1762</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    borrow::Cow,
-    collections::{HashMap, HashSet},
-    fmt::{Debug, Display},
-    fs::{<span class="self">self</span>, File},
-    io::{Read, Write},
-    marker::PhantomData,
-    path::{Path, PathBuf},
-    sync::{Arc, Weak},
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
+<span class="kw">use </span>std::collections::{HashMap, HashSet};
+<span class="kw">use </span>std::fmt::{Debug, Display};
+<span class="kw">use </span>std::fs::{<span class="self">self</span>, File};
+<span class="kw">use </span>std::io::{Read, Write};
+<span class="kw">use </span>std::marker::PhantomData;
+<span class="kw">use </span>std::path::{Path, PathBuf};
+<span class="kw">use </span>std::sync::{Arc, Weak};
 
+<span class="kw">use </span>bonsaidb_core::admin::database::{<span class="self">self</span>, ByName, Database <span class="kw">as </span>DatabaseRecord};
+<span class="kw">use </span>bonsaidb_core::admin::user::User;
+<span class="kw">use </span>bonsaidb_core::admin::{<span class="self">self</span>, Admin, PermissionGroup, Role, ADMIN_DATABASE_NAME};
+<span class="kw">use </span>bonsaidb_core::circulate;
 <span class="kw">pub use </span>bonsaidb_core::circulate::Relay;
+<span class="kw">use </span>bonsaidb_core::connection::{
+    <span class="self">self</span>, Connection, HasSession, Identity, IdentityReference, LowLevelConnection, Session,
+    SessionAuthentication, SessionId, StorageConnection,
+};
+<span class="kw">use </span>bonsaidb_core::document::CollectionDocument;
 <span class="attribute">#[cfg(any(feature = <span class="string">&quot;encryption&quot;</span>, feature = <span class="string">&quot;compression&quot;</span>))]
 </span><span class="kw">use </span>bonsaidb_core::document::KeyId;
-<span class="kw">use </span>bonsaidb_core::{
-    admin::{
-        <span class="self">self</span>,
-        database::{<span class="self">self</span>, ByName, Database <span class="kw">as </span>DatabaseRecord},
-        user::User,
-        Admin, PermissionGroup, Role, ADMIN_DATABASE_NAME,
-    },
-    circulate,
-    connection::{
-        <span class="self">self</span>, Connection, HasSession, Identity, IdentityReference, LowLevelConnection, Session,
-        SessionAuthentication, SessionId, StorageConnection,
-    },
-    document::CollectionDocument,
-    permissions::{
-        bonsai::{
-            bonsaidb_resource_name, database_resource_name, role_resource_name, user_resource_name,
-            BonsaiAction, ServerAction,
-        },
-        Permissions,
-    },
-    schema::{Nameable, NamedCollection, Schema, SchemaName, Schematic},
+<span class="kw">use </span>bonsaidb_core::permissions::bonsai::{
+    bonsaidb_resource_name, database_resource_name, role_resource_name, user_resource_name,
+    BonsaiAction, ServerAction,
 };
+<span class="kw">use </span>bonsaidb_core::permissions::Permissions;
+<span class="kw">use </span>bonsaidb_core::schema::{Nameable, NamedCollection, Schema, SchemaName, Schematic};
 <span class="kw">use </span>fs2::FileExt;
 <span class="kw">use </span>itertools::Itertools;
-<span class="kw">use </span>nebari::{
-    io::{
-        any::{AnyFile, AnyFileManager},
-        FileManager,
-    },
-    ChunkCache, ThreadPool,
-};
+<span class="kw">use </span>nebari::io::any::{AnyFile, AnyFileManager};
+<span class="kw">use </span>nebari::io::FileManager;
+<span class="kw">use </span>nebari::{ChunkCache, ThreadPool};
 <span class="kw">use </span>parking_lot::{Mutex, RwLock};
 <span class="kw">use </span>rand::{thread_rng, Rng};
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;compression&quot;</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::config::Compression;
+<span class="kw">use </span><span class="kw">crate</span>::config::{KeyValuePersistence, StorageConfiguration};
+<span class="kw">use </span><span class="kw">crate</span>::database::Context;
+<span class="kw">use </span><span class="kw">crate</span>::tasks::manager::Manager;
+<span class="kw">use </span><span class="kw">crate</span>::tasks::TaskManager;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::vault::{<span class="self">self</span>, LocalVaultKeyStorage, Vault};
-<span class="kw">use crate</span>::{
-    config::{KeyValuePersistence, StorageConfiguration},
-    database::Context,
-    tasks::{manager::Manager, TaskManager},
-    Database, Error,
-};
+<span class="kw">use crate</span>::{Database, Error};
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;password-hashing&quot;</span>)]
 </span><span class="kw">mod </span>argon;
@@ -1853,7 +1822,8 @@
 ///
 /// ```rust
 /// // `bonsaidb_core` is re-exported to `bonsaidb::core` or `bonsaidb_local::core`.
-/// use bonsaidb_core::{connection::StorageConnection, schema::Schema};
+/// use bonsaidb_core::connection::StorageConnection;
+/// use bonsaidb_core::schema::Schema;
 /// // `bonsaidb_local` is re-exported to `bonsaidb::local` if using the omnibus crate.
 /// use bonsaidb_local::{
 ///     config::{Builder, StorageConfiguration},
@@ -1878,14 +1848,10 @@
 /// with multiple schemas:
 ///
 /// ```rust
-/// use bonsaidb_core::{
-///     connection::StorageConnection,
-///     schema::{Collection, Schema},
-/// };
-/// use bonsaidb_local::{
-///     config::{Builder, StorageConfiguration},
-///     Storage,
-/// };
+/// use bonsaidb_core::connection::StorageConnection;
+/// use bonsaidb_core::schema::{Collection, Schema};
+/// use bonsaidb_local::config::{Builder, StorageConfiguration};
+/// use bonsaidb_local::Storage;
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Debug, Schema)]
@@ -2689,8 +2655,8 @@
 }
 
 <span class="kw">impl </span>StorageConnection <span class="kw">for </span>StorageInstance {
-    <span class="kw">type </span>Database = Database;
     <span class="kw">type </span>Authenticated = Storage;
+    <span class="kw">type </span>Database = Database;
 
     <span class="kw">fn </span>admin(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Database {
         Database::new::&lt;Admin, <span class="kw">_</span>&gt;(
@@ -2949,8 +2915,8 @@
 }
 
 <span class="kw">impl </span>StorageConnection <span class="kw">for </span>Storage {
-    <span class="kw">type </span>Database = Database;
     <span class="kw">type </span>Authenticated = <span class="self">Self</span>;
+    <span class="kw">type </span>Database = Database;
 
     <span class="kw">fn </span>admin(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Database {
         <span class="self">self</span>.instance.admin()

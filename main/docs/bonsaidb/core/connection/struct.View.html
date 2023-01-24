@@ -7,13 +7,11 @@
 }</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Parameters to query a <a href="../schema/trait.View.html" title="schema::View"><code>schema::View</code></a>.</p>
 <p>The examples for this type use this view definition:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>bonsaidb_core::{
-    define_basic_unique_mapped_view,
-    document::{CollectionDocument, Emit},
-    schema::{
-        CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View,
-        ViewMapResult, ViewMappedValue,
-    },
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>bonsaidb_core::define_basic_unique_mapped_view;
+<span class="kw">use </span>bonsaidb_core::document::{CollectionDocument, Emit};
+<span class="kw">use </span>bonsaidb_core::schema::{
+    CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View, ViewMapResult,
+    ViewMappedValue,
 };
 
 <span class="attribute">#[derive(Debug, Clone, View)]
@@ -22,6 +20,7 @@
 
 <span class="kw">impl </span>CollectionViewSchema <span class="kw">for </span>ScoresByRank {
     <span class="kw">type </span>View = <span class="self">Self</span>;
+
     <span class="kw">fn </span>map(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         document: CollectionDocument&lt;&lt;<span class="self">Self</span>::View <span class="kw">as </span>View&gt;::Collection&gt;,

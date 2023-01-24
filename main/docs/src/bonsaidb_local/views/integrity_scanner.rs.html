@@ -227,32 +227,27 @@
 <span id="227">227</span>
 <span id="228">228</span>
 <span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, collections::HashSet, convert::Infallible, hash::Hash, sync::Arc};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
+<span class="kw">use </span>std::collections::HashSet;
+<span class="kw">use </span>std::convert::Infallible;
+<span class="kw">use </span>std::hash::Hash;
+<span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>bonsaidb_core::{
-    document::DocumentId,
-    schema::{CollectionName, ViewName},
-};
-<span class="kw">use </span>nebari::{
-    io::any::AnyFile,
-    tree::{Operation, ScanEvaluation, Unversioned, Versioned},
-    ArcBytes, Roots, Tree,
-};
+<span class="kw">use </span>bonsaidb_core::document::DocumentId;
+<span class="kw">use </span>bonsaidb_core::schema::{CollectionName, ViewName};
+<span class="kw">use </span>nebari::io::any::AnyFile;
+<span class="kw">use </span>nebari::tree::{Operation, ScanEvaluation, Unversioned, Versioned};
+<span class="kw">use </span>nebari::{ArcBytes, Roots, Tree};
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use super</span>::{
-    mapper::{Map, Mapper},
-    view_invalidated_docs_tree_name, view_versions_tree_name,
-};
-<span class="kw">use crate</span>::{
-    database::{document_tree_name, Database},
-    tasks::{handle::Handle, Job, Keyed, Task},
-    views::{view_document_map_tree_name, view_entries_tree_name},
-    Error,
-};
+<span class="kw">use </span><span class="kw">super</span>::mapper::{Map, Mapper};
+<span class="kw">use super</span>::{view_invalidated_docs_tree_name, view_versions_tree_name};
+<span class="kw">use </span><span class="kw">crate</span>::database::{document_tree_name, Database};
+<span class="kw">use </span><span class="kw">crate</span>::tasks::handle::Handle;
+<span class="kw">use </span><span class="kw">crate</span>::tasks::{Job, Keyed, Task};
+<span class="kw">use </span><span class="kw">crate</span>::views::{view_document_map_tree_name, view_entries_tree_name};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="attribute">#[derive(Debug)]
 </span><span class="kw">pub struct </span>IntegrityScanner {
@@ -271,8 +266,8 @@
 <span class="kw">pub type </span>OptionalViewMapHandle = <span class="prelude-ty">Option</span>&lt;Arc&lt;Mutex&lt;<span class="prelude-ty">Option</span>&lt;Handle&lt;u64, Error&gt;&gt;&gt;&gt;&gt;;
 
 <span class="kw">impl </span>Job <span class="kw">for </span>IntegrityScanner {
-    <span class="kw">type </span>Output = OptionalViewMapHandle;
     <span class="kw">type </span>Error = Error;
+    <span class="kw">type </span>Output = OptionalViewMapHandle;
 
     <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;tracing&quot;</span>, tracing::instrument(level = <span class="string">&quot;trace&quot;</span>, skip_all))]
     #[allow(clippy::too_many_lines)]
@@ -376,6 +371,7 @@
 
 <span class="kw">impl </span>ViewVersion {
     <span class="kw">const </span>CURRENT_VERSION: u8 = <span class="number">3</span>;
+
     <span class="kw">pub fn </span>from_bytes(bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="kw">crate</span>::Error&gt; {
         <span class="kw">match </span>pot::from_slice(bytes) {
             <span class="prelude-val">Ok</span>(version) =&gt; <span class="prelude-val">Ok</span>(version),

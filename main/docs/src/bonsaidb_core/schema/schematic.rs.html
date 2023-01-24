@@ -303,38 +303,20 @@
 <span id="303">303</span>
 <span id="304">304</span>
 <span id="305">305</span>
-<span id="306">306</span>
-<span id="307">307</span>
-<span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    any::TypeId,
-    collections::{HashMap, HashSet},
-    fmt::Debug,
-    marker::PhantomData,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::any::TypeId;
+<span class="kw">use </span>std::collections::{HashMap, HashSet};
+<span class="kw">use </span>std::fmt::Debug;
+<span class="kw">use </span>std::marker::PhantomData;
 
 <span class="kw">use </span>derive_where::derive_where;
 
-<span class="kw">use crate</span>::{
-    document::{BorrowedDocument, DocumentId, KeyId},
-    key::Key,
-    schema::{
-        collection::Collection,
-        view::{
-            <span class="self">self</span>,
-            map::{<span class="self">self</span>, MappedValue},
-            Serialized, SerializedView, ViewSchema,
-        },
-        CollectionName, Schema, SchemaName, View, ViewName,
-    },
-    Error,
-};
+<span class="kw">use </span><span class="kw">crate</span>::document::{BorrowedDocument, DocumentId, KeyId};
+<span class="kw">use </span><span class="kw">crate</span>::key::Key;
+<span class="kw">use </span><span class="kw">crate</span>::schema::collection::Collection;
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::map::{<span class="self">self</span>, MappedValue};
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::{<span class="self">self</span>, Serialized, SerializedView, ViewSchema};
+<span class="kw">use </span><span class="kw">crate</span>::schema::{CollectionName, Schema, SchemaName, View, ViewName};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="doccomment">/// A collection of defined collections and views.
 </span><span class="attribute">#[derive(Debug)]

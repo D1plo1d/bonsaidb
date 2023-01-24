@@ -347,15 +347,6 @@
 <span id="347">347</span>
 <span id="348">348</span>
 <span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
-<span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
-<span id="358">358</span>
 </pre><pre class="rust"><code><span class="doccomment">//! [`VaultKeyStorage`] using S3-compatible storage.
 //!
 //! This is the recommended method for securing your BonsaiDb database. There
@@ -405,18 +396,17 @@
     clippy::module_name_repetitions,
 )]
 
-</span><span class="kw">use </span>std::{fmt::Display, future::Future};
+</span><span class="kw">use </span>std::fmt::Display;
+<span class="kw">use </span>std::future::Future;
 
 <span class="kw">use </span>async_trait::async_trait;
 <span class="kw">use </span>aws_config::meta::region::RegionProviderChain;
-<span class="kw">pub use </span>aws_sdk_s3;
-<span class="kw">use </span>aws_sdk_s3::{types::ByteStream, Client, Endpoint, Region};
-<span class="kw">use </span>bonsaidb_local::{
-    vault::{KeyPair, VaultKeyStorage},
-    StorageId,
-};
-<span class="kw">pub use </span>http;
+<span class="kw">use </span>aws_sdk_s3::types::ByteStream;
+<span class="kw">use </span>aws_sdk_s3::{Client, Endpoint, Region};
+<span class="kw">use </span>bonsaidb_local::vault::{KeyPair, VaultKeyStorage};
+<span class="kw">use </span>bonsaidb_local::StorageId;
 <span class="kw">use </span>tokio::runtime::{<span class="self">self</span>, Handle, Runtime};
+<span class="kw">pub use </span>{aws_sdk_s3, http};
 
 <span class="doccomment">/// S3-compatible [`VaultKeyStorage`] implementor.
 </span><span class="attribute">#[derive(Default, Debug)]
@@ -593,16 +583,12 @@
 <span class="attribute">#[cfg(test)]
 #[tokio::test]
 </span><span class="kw">async fn </span>basic_test() {
-    <span class="kw">use </span>bonsaidb_core::{
-        connection::AsyncStorageConnection,
-        document::KeyId,
-        schema::SerializedCollection,
-        test_util::{Basic, BasicSchema, TestDirectory},
-    };
-    <span class="kw">use </span>bonsaidb_local::{
-        config::{Builder, StorageConfiguration},
-        AsyncStorage,
-    };
+    <span class="kw">use </span>bonsaidb_core::connection::AsyncStorageConnection;
+    <span class="kw">use </span>bonsaidb_core::document::KeyId;
+    <span class="kw">use </span>bonsaidb_core::schema::SerializedCollection;
+    <span class="kw">use </span>bonsaidb_core::test_util::{Basic, BasicSchema, TestDirectory};
+    <span class="kw">use </span>bonsaidb_local::config::{Builder, StorageConfiguration};
+    <span class="kw">use </span>bonsaidb_local::AsyncStorage;
     <span class="kw">use </span>http::Uri;
     drop(dotenv::dotenv());
 
@@ -658,16 +644,12 @@
 
 <span class="attribute">#[test]
 </span><span class="kw">fn </span>blocking_test() {
-    <span class="kw">use </span>bonsaidb_core::{
-        connection::StorageConnection,
-        document::KeyId,
-        schema::SerializedCollection,
-        test_util::{Basic, BasicSchema, TestDirectory},
-    };
-    <span class="kw">use </span>bonsaidb_local::{
-        config::{Builder, StorageConfiguration},
-        Storage,
-    };
+    <span class="kw">use </span>bonsaidb_core::connection::StorageConnection;
+    <span class="kw">use </span>bonsaidb_core::document::KeyId;
+    <span class="kw">use </span>bonsaidb_core::schema::SerializedCollection;
+    <span class="kw">use </span>bonsaidb_core::test_util::{Basic, BasicSchema, TestDirectory};
+    <span class="kw">use </span>bonsaidb_local::config::{Builder, StorageConfiguration};
+    <span class="kw">use </span>bonsaidb_local::Storage;
     <span class="kw">use </span>http::Uri;
     drop(dotenv::dotenv());
 

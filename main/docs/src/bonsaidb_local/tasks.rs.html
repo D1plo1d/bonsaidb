@@ -229,33 +229,23 @@
 <span id="229">229</span>
 <span id="230">230</span>
 <span id="231">231</span>
-<span id="232">232</span>
-<span id="233">233</span>
-<span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    borrow::Cow,
-    collections::{HashMap, HashSet},
-    sync::Arc,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
+<span class="kw">use </span>std::collections::{HashMap, HashSet};
+<span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>bonsaidb_core::{
-    connection::Connection,
-    keyvalue::Timestamp,
-    schema::{view, CollectionName, ViewName},
-};
+<span class="kw">use </span>bonsaidb_core::connection::Connection;
+<span class="kw">use </span>bonsaidb_core::keyvalue::Timestamp;
+<span class="kw">use </span>bonsaidb_core::schema::{view, CollectionName, ViewName};
 <span class="kw">use </span>parking_lot::RwLock;
 
-<span class="kw">use crate</span>::{
-    database::{keyvalue::ExpirationLoader, Database},
-    tasks::{compactor::Compactor, handle::Handle, manager::Manager},
-    views::{
-        integrity_scanner::{IntegrityScan, IntegrityScanner, OptionalViewMapHandle},
-        mapper::{Map, Mapper},
-    },
-    Error,
-};
+<span class="kw">use </span><span class="kw">crate</span>::database::keyvalue::ExpirationLoader;
+<span class="kw">use </span><span class="kw">crate</span>::database::Database;
+<span class="kw">use </span><span class="kw">crate</span>::tasks::compactor::Compactor;
+<span class="kw">use </span><span class="kw">crate</span>::tasks::handle::Handle;
+<span class="kw">use </span><span class="kw">crate</span>::tasks::manager::Manager;
+<span class="kw">use </span><span class="kw">crate</span>::views::integrity_scanner::{IntegrityScan, IntegrityScanner, OptionalViewMapHandle};
+<span class="kw">use </span><span class="kw">crate</span>::views::mapper::{Map, Mapper};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="doccomment">/// Types related to defining [`Job`]s.
 </span><span class="kw">pub mod </span>handle;

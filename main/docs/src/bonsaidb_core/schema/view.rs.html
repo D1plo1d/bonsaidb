@@ -403,25 +403,19 @@
 <span id="403">403</span>
 <span id="404">404</span>
 <span id="405">405</span>
-<span id="406">406</span>
-<span id="407">407</span>
-<span id="408">408</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::fmt::Debug;
 
-<span class="kw">use </span>serde::{de::DeserializeOwned, Serialize};
+<span class="kw">use </span>serde::de::DeserializeOwned;
+<span class="kw">use </span>serde::Serialize;
 <span class="kw">use </span>transmog::{Format, OwnedDeserializer};
 <span class="kw">use </span>transmog_pot::Pot;
 
-<span class="kw">use crate</span>::{
-    connection::{<span class="self">self</span>, AsyncConnection, Connection},
-    document::{BorrowedDocument, CollectionDocument},
-    key::Key,
-    schema::{
-        view::map::{Mappings, ViewMappedValue},
-        Collection, CollectionName, Name, SerializedCollection, ViewName,
-    },
-    AnyError,
-};
+<span class="kw">use </span><span class="kw">crate</span>::connection::{<span class="self">self</span>, AsyncConnection, Connection};
+<span class="kw">use </span><span class="kw">crate</span>::document::{BorrowedDocument, CollectionDocument};
+<span class="kw">use </span><span class="kw">crate</span>::key::Key;
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::map::{Mappings, ViewMappedValue};
+<span class="kw">use </span><span class="kw">crate</span>::schema::{Collection, CollectionName, Name, SerializedCollection, ViewName};
+<span class="kw">use </span><span class="kw">crate</span>::AnyError;
 
 <span class="doccomment">/// Types for defining a `Map` within a `View`.
 </span><span class="kw">pub mod </span>map;

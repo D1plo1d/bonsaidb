@@ -251,10 +251,6 @@
 <span id="251">251</span>
 <span id="252">252</span>
 <span id="253">253</span>
-<span id="254">254</span>
-<span id="255">255</span>
-<span id="256">256</span>
-<span id="257">257</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Types for interacting with `Document`s.
 //!
 //! A document is a stored value in a [`Collection`]. Each document has a
@@ -285,21 +281,17 @@
 <span class="kw">use </span>arc_bytes::serde::{Bytes, CowBytes};
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use crate</span>::{
-    key::KeyEncoding,
-    schema::{Collection, SerializedCollection},
-};
+<span class="kw">use </span><span class="kw">crate</span>::key::KeyEncoding;
+<span class="kw">use </span><span class="kw">crate</span>::schema::{Collection, SerializedCollection};
 
 <span class="kw">mod </span>collection;
 <span class="kw">mod </span>header;
 <span class="kw">mod </span>id;
 <span class="kw">mod </span>revision;
-<span class="kw">pub use </span><span class="self">self</span>::{
-    collection::{CollectionDocument, OwnedDocuments},
-    header::{AnyHeader, CollectionHeader, Emit, HasHeader, Header},
-    id::{DocumentId, InvalidHexadecimal},
-    revision::Revision,
-};
+<span class="kw">pub use </span><span class="self">self</span>::collection::{CollectionDocument, OwnedDocuments};
+<span class="kw">pub use </span><span class="self">self</span>::header::{AnyHeader, CollectionHeader, Emit, HasHeader, Header};
+<span class="kw">pub use </span><span class="self">self</span>::id::{DocumentId, InvalidHexadecimal};
+<span class="kw">pub use </span><span class="self">self</span>::revision::Revision;
 <span class="doccomment">/// Contains a serialized document in the database.
 </span><span class="attribute">#[derive(Clone, Debug, Serialize, Deserialize)]
 </span><span class="kw">pub struct </span>BorrowedDocument&lt;<span class="lifetime">&#39;a</span>&gt; {

@@ -93,19 +93,21 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, sync::Arc};
+<span id="96">96</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>bonsaidb_core::{api, api::ApiName, networking::CURRENT_PROTOCOL_VERSION};
+<span class="kw">use </span>bonsaidb_core::api;
+<span class="kw">use </span>bonsaidb_core::api::ApiName;
+<span class="kw">use </span>bonsaidb_core::networking::CURRENT_PROTOCOL_VERSION;
 <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
 </span><span class="kw">use </span>fabruic::Certificate;
 <span class="attribute">#[cfg(not(target_arch = <span class="string">&quot;wasm32&quot;</span>))]
 </span><span class="kw">use </span>tokio::runtime::Handle;
 <span class="kw">use </span>url::Url;
 
-<span class="kw">use crate</span>::{
-    client::{AnyApiCallback, ApiCallback},
-    Client, Error,
-};
+<span class="kw">use </span><span class="kw">crate</span>::client::{AnyApiCallback, ApiCallback};
+<span class="kw">use crate</span>::{Client, Error};
 
 <span class="doccomment">/// Builds a new [`Client`] with custom settings.
 </span><span class="attribute">#[must_use]

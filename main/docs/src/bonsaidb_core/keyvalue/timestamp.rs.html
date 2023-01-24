@@ -106,13 +106,8 @@
 <span id="106">106</span>
 <span id="107">107</span>
 <span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    borrow::Cow,
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
+<span class="kw">use </span>std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
@@ -128,16 +123,15 @@
 }
 
 <span class="kw">impl </span>Timestamp {
-    <span class="doccomment">/// The minimum representable Timestamp. This is equivalent to [`UNIX_EPOCH`].
-    </span><span class="kw">pub const </span>MIN: <span class="self">Self </span>= <span class="self">Self </span>{
-        seconds: <span class="number">0</span>,
-        nanos: <span class="number">0</span>,
-    };
-
     <span class="doccomment">/// The maximum valid value of Timestamp.
     </span><span class="kw">pub const </span>MAX: <span class="self">Self </span>= <span class="self">Self </span>{
         seconds: u64::MAX,
         nanos: <span class="number">999_999_999</span>,
+    };
+    <span class="doccomment">/// The minimum representable Timestamp. This is equivalent to [`UNIX_EPOCH`].
+    </span><span class="kw">pub const </span>MIN: <span class="self">Self </span>= <span class="self">Self </span>{
+        seconds: <span class="number">0</span>,
+        nanos: <span class="number">0</span>,
     };
 
     <span class="doccomment">/// Returns the current timestamp according to the OS. Uses [`SystemTime::now()`].

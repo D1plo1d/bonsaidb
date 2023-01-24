@@ -279,27 +279,25 @@
 <span id="279">279</span>
 <span id="280">280</span>
 <span id="281">281</span>
-<span id="282">282</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, marker::PhantomData, path::Path, sync::Arc};
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::marker::PhantomData;
+<span class="kw">use </span>std::path::Path;
+<span class="kw">use </span>std::sync::Arc;
 
+<span class="kw">use </span>bonsaidb_core::api;
+<span class="kw">use </span>bonsaidb_core::api::ApiName;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_core::document::KeyId;
-<span class="kw">use </span>bonsaidb_core::{
-    api,
-    api::ApiName,
-    permissions::{Permissions, Statement},
-    schema::Schema,
-};
+<span class="kw">use </span>bonsaidb_core::permissions::{Permissions, Statement};
+<span class="kw">use </span>bonsaidb_core::schema::Schema;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;compression&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_local::config::Compression;
 <span class="kw">use </span>bonsaidb_local::config::{Builder, KeyValuePersistence, StorageConfiguration};
 <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_local::vault::AnyVaultKeyStorage;
 
-<span class="kw">use crate</span>::{
-    api::{AnyHandler, AnyWrapper, Handler},
-    Backend, Error, NoBackend,
-};
+<span class="kw">use </span><span class="kw">crate</span>::api::{AnyHandler, AnyWrapper, Handler};
+<span class="kw">use crate</span>::{Backend, Error, NoBackend};
 
 <span class="doccomment">/// Configuration options for [`Server`](crate::Server)
 </span><span class="attribute">#[derive(Debug, Clone)]

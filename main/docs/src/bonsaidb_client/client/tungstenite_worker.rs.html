@@ -118,25 +118,23 @@
 <span id="118">118</span>
 <span id="119">119</span>
 <span id="120">120</span>
-<span id="121">121</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, sync::Arc};
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>bonsaidb_core::{api::ApiName, networking::Payload};
+<span class="kw">use </span>bonsaidb_core::api::ApiName;
+<span class="kw">use </span>bonsaidb_core::networking::Payload;
 <span class="kw">use </span>bonsaidb_utils::fast_async_lock;
 <span class="kw">use </span>flume::Receiver;
-<span class="kw">use </span>futures::{
-    stream::{SplitSink, SplitStream},
-    SinkExt, StreamExt,
-};
+<span class="kw">use </span>futures::stream::{SplitSink, SplitStream};
+<span class="kw">use </span>futures::{SinkExt, StreamExt};
 <span class="kw">use </span>tokio::net::TcpStream;
-<span class="kw">use </span>tokio_tungstenite::{tungstenite::Message, MaybeTlsStream, WebSocketStream};
+<span class="kw">use </span>tokio_tungstenite::tungstenite::Message;
+<span class="kw">use </span>tokio_tungstenite::{MaybeTlsStream, WebSocketStream};
 <span class="kw">use </span>url::Url;
 
 <span class="kw">use </span><span class="kw">super</span>::PendingRequest;
-<span class="kw">use crate</span>::{
-    client::{AnyApiCallback, OutstandingRequestMapHandle, SubscriberMap},
-    Error,
-};
+<span class="kw">use </span><span class="kw">crate</span>::client::{AnyApiCallback, OutstandingRequestMapHandle, SubscriberMap};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="kw">pub async fn </span>reconnecting_client_loop(
     url: Url,

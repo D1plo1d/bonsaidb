@@ -1392,39 +1392,29 @@
 <span id="1392">1392</span>
 <span id="1393">1393</span>
 <span id="1394">1394</span>
-<span id="1395">1395</span>
-<span id="1396">1396</span>
-<span id="1397">1397</span>
-<span id="1398">1398</span>
-<span id="1399">1399</span>
 </pre><pre class="rust"><code><span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>std::collections::BTreeMap;
+<span class="kw">use </span>std::collections::VecDeque;
+<span class="kw">use </span>std::io::{ErrorKind, Read, Seek, SeekFrom, Write};
+<span class="kw">use </span>std::marker::PhantomData;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>std::task::Poll;
-<span class="kw">use </span>std::{
-    collections::VecDeque,
-    io::{ErrorKind, Read, Seek, SeekFrom, Write},
-    marker::PhantomData,
-};
 
+<span class="kw">use </span>bonsaidb_core::connection::Connection;
+<span class="kw">use </span>bonsaidb_core::document::{CollectionDocument, DocumentId, Header};
+<span class="kw">use </span>bonsaidb_core::key::time::TimestampAsNanoseconds;
+<span class="kw">use </span>bonsaidb_core::schema::SerializedCollection;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_core::{circulate::flume, connection::AsyncConnection};
-<span class="kw">use </span>bonsaidb_core::{
-    connection::Connection,
-    document::{CollectionDocument, DocumentId, Header},
-    key::time::TimestampAsNanoseconds,
-    schema::SerializedCollection,
-};
 <span class="kw">use </span>derive_where::derive_where;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>futures::{future::BoxFuture, ready, FutureExt};
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>tokio::io::AsyncWriteExt;
 
-<span class="kw">use crate</span>::{
-    schema::{<span class="self">self</span>, block::BlockAppendInfo},
-    BonsaiFiles, Error, FileConfig, Statistics, Truncate,
-};
+<span class="kw">use </span><span class="kw">crate</span>::schema::block::BlockAppendInfo;
+<span class="kw">use </span><span class="kw">crate</span>::schema::{<span class="self">self</span>};
+<span class="kw">use crate</span>::{BonsaiFiles, Error, FileConfig, Statistics, Truncate};
 
 <span class="doccomment">/// A handle to a file stored in a database.
 </span><span class="attribute">#[derive_where(Debug, Clone)]

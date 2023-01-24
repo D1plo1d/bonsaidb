@@ -1764,80 +1764,62 @@
 <span id="1764">1764</span>
 <span id="1765">1765</span>
 <span id="1766">1766</span>
-<span id="1767">1767</span>
-<span id="1768">1768</span>
-<span id="1769">1769</span>
-<span id="1770">1770</span>
-<span id="1771">1771</span>
-<span id="1772">1772</span>
-<span id="1773">1773</span>
-<span id="1774">1774</span>
-<span id="1775">1775</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    borrow::{Borrow, Cow},
-    collections::{BTreeMap, HashMap, HashSet},
-    convert::Infallible,
-    ops::{<span class="self">self</span>, Deref},
-    sync::Arc,
-    u8,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::{Borrow, Cow};
+<span class="kw">use </span>std::collections::{BTreeMap, HashMap, HashSet};
+<span class="kw">use </span>std::convert::Infallible;
+<span class="kw">use </span>std::ops::{<span class="self">self</span>, Deref};
+<span class="kw">use </span>std::sync::Arc;
+<span class="kw">use </span>std::u8;
 
+<span class="kw">use </span>bonsaidb_core::arc_bytes::serde::CowBytes;
+<span class="kw">use </span>bonsaidb_core::arc_bytes::ArcBytes;
+<span class="kw">use </span>bonsaidb_core::connection::{
+    <span class="self">self</span>, AccessPolicy, Connection, HasSchema, HasSession, LowLevelConnection, Range,
+    SerializedQueryKey, Session, Sort, StorageConnection,
+};
 <span class="attribute">#[cfg(any(feature = <span class="string">&quot;encryption&quot;</span>, feature = <span class="string">&quot;compression&quot;</span>))]
 </span><span class="kw">use </span>bonsaidb_core::document::KeyId;
-<span class="kw">use </span>bonsaidb_core::{
-    arc_bytes::{serde::CowBytes, ArcBytes},
-    connection::{
-        <span class="self">self</span>, AccessPolicy, Connection, HasSchema, HasSession, LowLevelConnection, Range,
-        SerializedQueryKey, Session, Sort, StorageConnection,
-    },
-    document::{BorrowedDocument, DocumentId, Header, OwnedDocument, Revision},
-    keyvalue::{KeyOperation, Output, Timestamp},
-    limits::{LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT, LIST_TRANSACTIONS_MAX_RESULTS},
-    permissions::{
-        bonsai::{
-            collection_resource_name, database_resource_name, document_resource_name,
-            kv_resource_name, view_resource_name, BonsaiAction, DatabaseAction, DocumentAction,
-            TransactionAction, ViewAction,
-        },
-        Permissions,
-    },
-    schema::{
-        <span class="self">self</span>,
-        view::{<span class="self">self</span>, map::MappedSerializedValue},
-        CollectionName, Schema, Schematic, ViewName,
-    },
-    transaction::{
-        <span class="self">self</span>, ChangedDocument, Changes, Command, DocumentChanges, Operation, OperationResult,
-        Transaction,
-    },
+<span class="kw">use </span>bonsaidb_core::document::{BorrowedDocument, DocumentId, Header, OwnedDocument, Revision};
+<span class="kw">use </span>bonsaidb_core::keyvalue::{KeyOperation, Output, Timestamp};
+<span class="kw">use </span>bonsaidb_core::limits::{
+    LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT, LIST_TRANSACTIONS_MAX_RESULTS,
+};
+<span class="kw">use </span>bonsaidb_core::permissions::bonsai::{
+    collection_resource_name, database_resource_name, document_resource_name, kv_resource_name,
+    view_resource_name, BonsaiAction, DatabaseAction, DocumentAction, TransactionAction,
+    ViewAction,
+};
+<span class="kw">use </span>bonsaidb_core::permissions::Permissions;
+<span class="kw">use </span>bonsaidb_core::schema::view::map::MappedSerializedValue;
+<span class="kw">use </span>bonsaidb_core::schema::view::{<span class="self">self</span>};
+<span class="kw">use </span>bonsaidb_core::schema::{<span class="self">self</span>, CollectionName, Schema, Schematic, ViewName};
+<span class="kw">use </span>bonsaidb_core::transaction::{
+    <span class="self">self</span>, ChangedDocument, Changes, Command, DocumentChanges, Operation, OperationResult,
+    Transaction,
 };
 <span class="kw">use </span>itertools::Itertools;
-<span class="kw">use </span>nebari::{
-    io::any::AnyFile,
-    tree::{
-        AnyTreeRoot, BorrowByteRange, BorrowedRange, CompareSwap, Root, ScanEvaluation, TreeRoot,
-        Unversioned, Versioned,
-    },
-    AbortError, ExecutingTransaction, Roots, Tree,
+<span class="kw">use </span>nebari::io::any::AnyFile;
+<span class="kw">use </span>nebari::tree::{
+    AnyTreeRoot, BorrowByteRange, BorrowedRange, CompareSwap, Root, ScanEvaluation, TreeRoot,
+    Unversioned, Versioned,
 };
+<span class="kw">use </span>nebari::{AbortError, ExecutingTransaction, Roots, Tree};
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>watchable::Watchable;
 
+<span class="kw">use </span><span class="kw">crate</span>::config::{Builder, KeyValuePersistence, StorageConfiguration};
+<span class="kw">use </span><span class="kw">crate</span>::database::keyvalue::BackgroundWorkerProcessTarget;
+<span class="kw">use </span><span class="kw">crate</span>::error::Error;
+<span class="kw">use </span><span class="kw">crate</span>::open_trees::OpenTrees;
+<span class="kw">use </span><span class="kw">crate</span>::storage::StorageLock;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;encryption&quot;</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::storage::TreeVault;
-<span class="kw">use crate</span>::{
-    config::{Builder, KeyValuePersistence, StorageConfiguration},
-    database::keyvalue::BackgroundWorkerProcessTarget,
-    error::Error,
-    open_trees::OpenTrees,
-    storage::StorageLock,
-    views::{
-        mapper, view_document_map_tree_name, view_entries_tree_name,
-        view_invalidated_docs_tree_name, ViewEntry,
-    },
-    Storage,
+<span class="kw">use </span><span class="kw">crate</span>::views::{
+    mapper, view_document_map_tree_name, view_entries_tree_name, view_invalidated_docs_tree_name,
+    ViewEntry,
 };
+<span class="kw">use </span><span class="kw">crate</span>::Storage;
 
 <span class="kw">pub mod </span>keyvalue;
 

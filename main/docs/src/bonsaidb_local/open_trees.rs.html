@@ -77,21 +77,17 @@
 <span id="77">77</span>
 <span id="78">78</span>
 <span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 
 <span class="kw">use </span>bonsaidb_core::schema::{CollectionName, Schematic};
-<span class="kw">use </span>nebari::{
-    io::any::AnyFile,
-    tree::{AnyTreeRoot, Root, Unversioned, Versioned},
-};
+<span class="kw">use </span>nebari::io::any::AnyFile;
+<span class="kw">use </span>nebari::tree::{AnyTreeRoot, Root, Unversioned, Versioned};
 
+<span class="kw">use </span><span class="kw">crate</span>::database::document_tree_name;
 <span class="attribute">#[cfg(any(feature = <span class="string">&quot;encryption&quot;</span>, feature = <span class="string">&quot;compression&quot;</span>))]
 </span><span class="kw">use </span><span class="kw">crate</span>::storage::TreeVault;
-<span class="kw">use crate</span>::{
-    database::document_tree_name,
-    views::{view_document_map_tree_name, view_entries_tree_name, view_invalidated_docs_tree_name},
+<span class="kw">use </span><span class="kw">crate</span>::views::{
+    view_document_map_tree_name, view_entries_tree_name, view_invalidated_docs_tree_name,
 };
 
 <span class="attribute">#[derive(Default)]

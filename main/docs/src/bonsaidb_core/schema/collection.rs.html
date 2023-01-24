@@ -2181,34 +2181,28 @@
 <span id="2181">2181</span>
 <span id="2182">2182</span>
 <span id="2183">2183</span>
-<span id="2184">2184</span>
-<span id="2185">2185</span>
-<span id="2186">2186</span>
-<span id="2187">2187</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    borrow::{Borrow, Cow},
-    fmt::Debug,
-    marker::PhantomData,
-    task::Poll,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::{Borrow, Cow};
+<span class="kw">use </span>std::fmt::Debug;
+<span class="kw">use </span>std::marker::PhantomData;
+<span class="kw">use </span>std::task::Poll;
 
 <span class="kw">use </span>async_trait::async_trait;
-<span class="kw">use </span>futures::{future::BoxFuture, ready, Future, FutureExt};
-<span class="kw">use </span>serde::{de::DeserializeOwned, Deserialize, Serialize};
+<span class="kw">use </span>futures::future::BoxFuture;
+<span class="kw">use </span>futures::{ready, Future, FutureExt};
+<span class="kw">use </span>serde::de::DeserializeOwned;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>transmog::{Format, OwnedDeserializer};
 <span class="kw">use </span>transmog_pot::Pot;
 
-<span class="kw">use crate</span>::{
-    connection::{<span class="self">self</span>, AsyncConnection, Connection, RangeRef},
-    document::{
-        BorrowedDocument, CollectionDocument, CollectionHeader, Document, DocumentId, Header,
-        KeyId, OwnedDocument, OwnedDocuments, Revision,
-    },
-    key::{IntoPrefixRange, Key, KeyEncoding},
-    schema::{CollectionName, Schematic},
-    transaction::{Operation, OperationResult, Transaction},
-    Error,
+<span class="kw">use </span><span class="kw">crate</span>::connection::{<span class="self">self</span>, AsyncConnection, Connection, RangeRef};
+<span class="kw">use </span><span class="kw">crate</span>::document::{
+    BorrowedDocument, CollectionDocument, CollectionHeader, Document, DocumentId, Header, KeyId,
+    OwnedDocument, OwnedDocuments, Revision,
 };
+<span class="kw">use </span><span class="kw">crate</span>::key::{IntoPrefixRange, Key, KeyEncoding};
+<span class="kw">use </span><span class="kw">crate</span>::schema::{CollectionName, Schematic};
+<span class="kw">use </span><span class="kw">crate</span>::transaction::{Operation, OperationResult, Transaction};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="doccomment">/// A namespaced collection of `Document&lt;Self&gt;` items and views.
 ///
@@ -2325,7 +2319,8 @@
 /// By default, encryption will be required if an `encryption_key` is provided:
 ///
 /// ```rust
-/// use bonsaidb_core::{document::KeyId, schema::Collection};
+/// use bonsaidb_core::document::KeyId;
+/// use bonsaidb_core::schema::Collection;
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -2338,7 +2333,8 @@
 /// explicit:
 ///
 /// ```rust
-/// use bonsaidb_core::{document::KeyId, schema::Collection};
+/// use bonsaidb_core::document::KeyId;
+/// use bonsaidb_core::schema::Collection;
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -2353,7 +2349,8 @@
 /// `encryption_optional` parameter:
 ///
 /// ```rust
-/// use bonsaidb_core::{document::KeyId, schema::Collection};
+/// use bonsaidb_core::document::KeyId;
+/// use bonsaidb_core::schema::Collection;
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -2424,10 +2421,8 @@
 /// These examples for this type use this basic collection definition:
 ///
 /// ```rust
-/// use bonsaidb_core::{
-///     schema::{Collection, DefaultSerialization, Schematic},
-///     Error,
-/// };
+/// use bonsaidb_core::schema::{Collection, DefaultSerialization, Schematic};
+/// use bonsaidb_core::Error;
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -2694,12 +2689,10 @@
     <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.
     ///
     /// ```rust
-    /// use bonsaidb_core::{
-    ///     connection::Connection,
-    ///     document::CollectionDocument,
-    ///     schema::{Collection, Schematic, SerializedCollection},
-    ///     Error,
-    /// };
+    /// use bonsaidb_core::connection::Connection;
+    /// use bonsaidb_core::document::CollectionDocument;
+    /// use bonsaidb_core::schema::{Collection, Schematic, SerializedCollection};
+    /// use bonsaidb_core::Error;
     /// use serde::{Deserialize, Serialize};
     ///
     /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -2735,12 +2728,10 @@
     <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.
     ///
     /// ```rust
-    /// use bonsaidb_core::{
-    ///     connection::AsyncConnection,
-    ///     document::CollectionDocument,
-    ///     schema::{Collection, Schematic, SerializedCollection},
-    ///     Error,
-    /// };
+    /// use bonsaidb_core::connection::AsyncConnection;
+    /// use bonsaidb_core::document::CollectionDocument;
+    /// use bonsaidb_core::schema::{Collection, Schematic, SerializedCollection};
+    /// use bonsaidb_core::Error;
     /// use serde::{Deserialize, Serialize};
     ///
     /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -4009,6 +4000,7 @@
             <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         }
     }
+
     <span class="kw">fn </span>pending(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>EntryBuilder&lt;<span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;name</span>, Connection, Col, EI, EU&gt; {
         <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.state {
             EntryState::Pending(pending) =&gt; pending.as_mut().unwrap(),

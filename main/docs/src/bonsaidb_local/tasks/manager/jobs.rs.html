@@ -135,16 +135,18 @@
 <span id="135">135</span>
 <span id="136">136</span>
 <span id="137">137</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{any::Any, collections::HashMap, fmt::Debug, sync::Arc};
+<span id="138">138</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::any::Any;
+<span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::fmt::Debug;
+<span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>flume::{Receiver, Sender};
 
-<span class="kw">use </span><span class="kw">crate</span>::tasks::{
-    handle::{Handle, Id},
-    manager::{ManagedJob, Manager},
-    traits::Executable,
-    Job, Keyed,
-};
+<span class="kw">use </span><span class="kw">crate</span>::tasks::handle::{Handle, Id};
+<span class="kw">use </span><span class="kw">crate</span>::tasks::manager::{ManagedJob, Manager};
+<span class="kw">use </span><span class="kw">crate</span>::tasks::traits::Executable;
+<span class="kw">use </span><span class="kw">crate</span>::tasks::{Job, Keyed};
 
 <span class="kw">pub struct </span>Jobs&lt;Key&gt; {
     last_task_id: u64,

@@ -500,35 +500,19 @@
 <span id="500">500</span>
 <span id="501">501</span>
 <span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    fs::DirEntry,
-    io::ErrorKind,
-    path::{Path, PathBuf},
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::fs::DirEntry;
+<span class="kw">use </span>std::io::ErrorKind;
+<span class="kw">use </span>std::path::{Path, PathBuf};
 
-<span class="kw">use </span>bonsaidb_core::{
-    admin,
-    connection::{LowLevelConnection, Range, Sort, StorageConnection},
-    document::DocumentId,
-    schema::{Collection, Qualified, SchemaName},
-    transaction::{Operation, Transaction},
-    AnyError,
-};
+<span class="kw">use </span>bonsaidb_core::connection::{LowLevelConnection, Range, Sort, StorageConnection};
+<span class="kw">use </span>bonsaidb_core::document::DocumentId;
+<span class="kw">use </span>bonsaidb_core::schema::{Collection, Qualified, SchemaName};
+<span class="kw">use </span>bonsaidb_core::transaction::{Operation, Transaction};
+<span class="kw">use </span>bonsaidb_core::{admin, AnyError};
 
-<span class="kw">use crate</span>::{
-    database::{keyvalue::Entry, DatabaseNonBlocking},
-    Database, Error, Storage,
-};
+<span class="kw">use </span><span class="kw">crate</span>::database::keyvalue::Entry;
+<span class="kw">use </span><span class="kw">crate</span>::database::DatabaseNonBlocking;
+<span class="kw">use crate</span>::{Database, Error, Storage};
 
 <span class="doccomment">/// A location to store and restore a database from.
 </span><span class="kw">pub trait </span>BackupLocation: Send + Sync {
@@ -962,17 +946,13 @@
 
 <span class="attribute">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
-    <span class="kw">use </span>bonsaidb_core::{
-        connection::{Connection <span class="kw">as _</span>, StorageConnection <span class="kw">as _</span>},
-        keyvalue::KeyValue,
-        schema::SerializedCollection,
-        test_util::{Basic, TestDirectory},
-    };
+    <span class="kw">use </span>bonsaidb_core::connection::{Connection <span class="kw">as _</span>, StorageConnection <span class="kw">as _</span>};
+    <span class="kw">use </span>bonsaidb_core::keyvalue::KeyValue;
+    <span class="kw">use </span>bonsaidb_core::schema::SerializedCollection;
+    <span class="kw">use </span>bonsaidb_core::test_util::{Basic, TestDirectory};
 
-    <span class="kw">use crate</span>::{
-        config::{Builder, KeyValuePersistence, PersistenceThreshold, StorageConfiguration},
-        Storage,
-    };
+    <span class="kw">use </span><span class="kw">crate</span>::config::{Builder, KeyValuePersistence, PersistenceThreshold, StorageConfiguration};
+    <span class="kw">use </span><span class="kw">crate</span>::Storage;
 
     <span class="attribute">#[test]
     </span><span class="kw">fn </span>backup_restore() -&gt; anyhow::Result&lt;()&gt; {

@@ -3862,47 +3862,38 @@
 <span id="3862">3862</span>
 <span id="3863">3863</span>
 <span id="3864">3864</span>
-<span id="3865">3865</span>
-<span id="3866">3866</span>
-<span id="3867">3867</span>
-<span id="3868">3868</span>
-<span id="3869">3869</span>
-<span id="3870">3870</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    borrow::Borrow,
-    convert::Infallible,
-    marker::PhantomData,
-    ops::{Deref, DerefMut},
-    string::FromUtf8Error,
-    sync::Arc,
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::borrow::Borrow;
+<span class="kw">use </span>std::convert::Infallible;
+<span class="kw">use </span>std::marker::PhantomData;
+<span class="kw">use </span>std::ops::{Deref, DerefMut};
+<span class="kw">use </span>std::string::FromUtf8Error;
+<span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>actionable::{Action, Identifier};
 <span class="kw">use </span>arc_bytes::serde::Bytes;
 <span class="kw">use </span>async_trait::async_trait;
-<span class="kw">use </span>futures::{future::BoxFuture, Future, FutureExt};
+<span class="kw">use </span>futures::future::BoxFuture;
+<span class="kw">use </span>futures::{Future, FutureExt};
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>zeroize::Zeroize;
 
-<span class="kw">use crate</span>::{
-    admin::{Role, User},
-    document::{CollectionDocument, CollectionHeader, Document, HasHeader, Header, OwnedDocument},
-    key::{IntoPrefixRange, Key, KeyEncoding},
-    permissions::Permissions,
-    schema::{
-        <span class="self">self</span>, view::map::MappedDocuments, Map, MappedValue, Nameable, NamedReference, Schema,
-        SchemaName, SerializedCollection,
-    },
-    transaction, Error,
+<span class="kw">use </span><span class="kw">crate</span>::admin::{Role, User};
+<span class="kw">use </span><span class="kw">crate</span>::document::{
+    CollectionDocument, CollectionHeader, Document, HasHeader, Header, OwnedDocument,
 };
+<span class="kw">use </span><span class="kw">crate</span>::key::{IntoPrefixRange, Key, KeyEncoding};
+<span class="kw">use </span><span class="kw">crate</span>::permissions::Permissions;
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::map::MappedDocuments;
+<span class="kw">use </span><span class="kw">crate</span>::schema::{
+    <span class="self">self</span>, Map, MappedValue, Nameable, NamedReference, Schema, SchemaName, SerializedCollection,
+};
+<span class="kw">use crate</span>::{transaction, Error};
 
 <span class="kw">mod </span>has_session;
 <span class="kw">mod </span>lowlevel;
 
-<span class="kw">pub use </span><span class="self">self</span>::{
-    has_session::HasSession,
-    lowlevel::{AsyncLowLevelConnection, HasSchema, LowLevelConnection},
-};
+<span class="kw">pub use </span><span class="self">self</span>::has_session::HasSession;
+<span class="kw">pub use </span><span class="self">self</span>::lowlevel::{AsyncLowLevelConnection, HasSchema, LowLevelConnection};
 
 <span class="doccomment">/// A connection to a database&#39;s [`Schema`](schema::Schema), giving access to
 /// [`Collection`s](crate::schema::Collection) and
@@ -3986,7 +3977,8 @@
 /// These examples in this type use this basic collection definition:
 ///
 /// ```rust
-/// use bonsaidb_core::{schema::Collection, Error};
+/// use bonsaidb_core::schema::Collection;
+/// use bonsaidb_core::Error;
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -4266,12 +4258,10 @@
     <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.
     ///
     /// ```rust
-    /// use bonsaidb_core::{
-    ///     connection::Connection,
-    ///     document::OwnedDocument,
-    ///     schema::{Collection, Schematic, SerializedCollection},
-    ///     Error,
-    /// };
+    /// use bonsaidb_core::connection::Connection;
+    /// use bonsaidb_core::document::OwnedDocument;
+    /// use bonsaidb_core::schema::{Collection, Schematic, SerializedCollection};
+    /// use bonsaidb_core::Error;
     /// use serde::{Deserialize, Serialize};
     ///
     /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -4481,13 +4471,11 @@
 /// # bonsaidb_core::__doctest_prelude!();
 /// # }
 /// # use collection::MyCollection;
-/// use bonsaidb_core::{
-///     define_basic_unique_mapped_view,
-///     document::{CollectionDocument, Emit},
-///     schema::{
-///         CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View,
-///         ViewMapResult, ViewMappedValue,
-///     },
+/// use bonsaidb_core::define_basic_unique_mapped_view;
+/// use bonsaidb_core::document::{CollectionDocument, Emit};
+/// use bonsaidb_core::schema::{
+///     CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View, ViewMapResult,
+///     ViewMappedValue,
 /// };
 ///
 /// #[derive(Debug, Clone, View)]
@@ -4497,6 +4485,7 @@
 ///
 /// impl CollectionViewSchema for ScoresByRank {
 ///     type View = Self;
+///
 ///     fn map(
 ///         &amp;self,
 ///         document: CollectionDocument&lt;&lt;Self::View as View&gt;::Collection&gt;,
@@ -4998,7 +4987,8 @@
 /// These examples in this type use this basic collection definition:
 ///
 /// ```rust
-/// use bonsaidb_core::{schema::Collection, Error};
+/// use bonsaidb_core::schema::Collection;
+/// use bonsaidb_core::Error;
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -5310,12 +5300,10 @@
     <span class="doccomment">/// Retrieves all documents with ids that start with `prefix`.
     ///
     /// ```rust
-    /// use bonsaidb_core::{
-    ///     connection::AsyncConnection,
-    ///     document::OwnedDocument,
-    ///     schema::{Collection, Schematic, SerializedCollection},
-    ///     Error,
-    /// };
+    /// use bonsaidb_core::connection::AsyncConnection;
+    /// use bonsaidb_core::document::OwnedDocument;
+    /// use bonsaidb_core::schema::{Collection, Schematic, SerializedCollection};
+    /// use bonsaidb_core::Error;
     /// use serde::{Deserialize, Serialize};
     ///
     /// #[derive(Debug, Serialize, Deserialize, Default, Collection)]
@@ -5665,13 +5653,11 @@
 /// # bonsaidb_core::__doctest_prelude!();
 /// # }
 /// # use collection::MyCollection;
-/// use bonsaidb_core::{
-///     define_basic_unique_mapped_view,
-///     document::{CollectionDocument, Emit},
-///     schema::{
-///         CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View,
-///         ViewMapResult, ViewMappedValue,
-///     },
+/// use bonsaidb_core::define_basic_unique_mapped_view;
+/// use bonsaidb_core::document::{CollectionDocument, Emit};
+/// use bonsaidb_core::schema::{
+///     CollectionViewSchema, DefaultViewSerialization, Name, ReduceResult, View, ViewMapResult,
+///     ViewMappedValue,
 /// };
 ///
 /// #[derive(Debug, Clone, View)]
@@ -5681,6 +5667,7 @@
 ///
 /// impl CollectionViewSchema for ScoresByRank {
 ///     type View = Self;
+///
 ///     fn map(
 ///         &amp;self,
 ///         document: CollectionDocument&lt;&lt;Self::View as View&gt;::Collection&gt;,
@@ -6320,6 +6307,7 @@
             end: <span class="self">self</span>.end.map(<span class="kw-2">&amp;</span>map),
         }
     }
+
     <span class="doccomment">/// Maps each contained value with the function provided. The callback&#39;s
     /// return type is a Result, unlike with `map`.
     </span><span class="kw">pub fn </span>map_result&lt;U, E, F: Fn(T) -&gt; <span class="prelude-ty">Result</span>&lt;U, E&gt;&gt;(<span class="self">self</span>, map: F) -&gt; <span class="prelude-ty">Result</span>&lt;Range&lt;U&gt;, E&gt; {

@@ -331,21 +331,31 @@
 <span id="331">331</span>
 <span id="332">332</span>
 <span id="333">333</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::BTreeMap, marker::PhantomData, mem::size_of};
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::collections::BTreeMap;
+<span class="kw">use </span>std::marker::PhantomData;
+<span class="kw">use </span>std::mem::size_of;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_core::connection::AsyncConnection;
-<span class="kw">use </span>bonsaidb_core::{
-    connection::Connection,
-    document::{BorrowedDocument, Emit},
-    key::{time::TimestampAsNanoseconds, KeyEncoding},
-    schema::{Collection, CollectionName, View, ViewMapResult, ViewMappedValue, ViewSchema},
-    transaction::{Operation, Transaction},
+<span class="kw">use </span>bonsaidb_core::connection::Connection;
+<span class="kw">use </span>bonsaidb_core::document::{BorrowedDocument, Emit};
+<span class="kw">use </span>bonsaidb_core::key::time::TimestampAsNanoseconds;
+<span class="kw">use </span>bonsaidb_core::key::KeyEncoding;
+<span class="kw">use </span>bonsaidb_core::schema::{
+    Collection, CollectionName, View, ViewMapResult, ViewMappedValue, ViewSchema,
 };
+<span class="kw">use </span>bonsaidb_core::transaction::{Operation, Transaction};
 <span class="kw">use </span>derive_where::derive_where;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use crate</span>::{direct::BlockInfo, schema::file::File, FileConfig};
+<span class="kw">use </span><span class="kw">crate</span>::direct::BlockInfo;
+<span class="kw">use </span><span class="kw">crate</span>::schema::file::File;
+<span class="kw">use </span><span class="kw">crate</span>::FileConfig;
 
 <span class="attribute">#[derive_where(Debug, Default)]
 </span><span class="kw">pub struct </span>Block&lt;Config&gt;(PhantomData&lt;Config&gt;)

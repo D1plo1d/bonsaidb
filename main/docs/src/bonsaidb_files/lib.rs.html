@@ -542,6 +542,9 @@
 <span id="542">542</span>
 <span id="543">543</span>
 <span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Large file storage support for BonsaiDb.
 //!
 //! This crate provides support for storing large files in
@@ -588,21 +591,22 @@
     clippy::module_name_repetitions,
 )]
 
-</span><span class="kw">use </span>std::{fmt::Debug, marker::PhantomData};
+</span><span class="kw">use </span>std::fmt::Debug;
+<span class="kw">use </span>std::marker::PhantomData;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_core::async_trait::async_trait;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;async&quot;</span>)]
 </span><span class="kw">use </span>bonsaidb_core::connection::AsyncConnection;
-<span class="kw">use </span>bonsaidb_core::{
-    connection::Connection,
-    key::time::TimestampAsNanoseconds,
-    schema::{CollectionName, InsertError, Qualified, Schema, SchemaName, Schematic},
+<span class="kw">use </span>bonsaidb_core::connection::Connection;
+<span class="kw">use </span>bonsaidb_core::key::time::TimestampAsNanoseconds;
+<span class="kw">use </span>bonsaidb_core::schema::{
+    CollectionName, InsertError, Qualified, Schema, SchemaName, Schematic,
 };
-<span class="kw">use </span>derive_where::derive_where;
-<span class="kw">use </span>serde::{de::DeserializeOwned, Serialize};
-
 <span class="kw">pub use </span>bonsaidb_macros::FileConfig;
+<span class="kw">use </span>derive_where::derive_where;
+<span class="kw">use </span>serde::de::DeserializeOwned;
+<span class="kw">use </span>serde::Serialize;
 
 <span class="kw">mod </span>schema;
 
@@ -990,11 +994,13 @@
 
 <span class="kw">impl </span>FileConfig <span class="kw">for </span>BonsaiFiles {
     <span class="kw">type </span>Metadata = <span class="prelude-ty">Option</span>&lt;()&gt;;
+
     <span class="kw">const </span>BLOCK_SIZE: usize = <span class="number">65_536</span>;
 
     <span class="kw">fn </span>files_name() -&gt; CollectionName {
         CollectionName::new(<span class="string">&quot;bonsaidb&quot;</span>, <span class="string">&quot;files&quot;</span>)
     }
+
     <span class="kw">fn </span>blocks_name() -&gt; CollectionName {
         CollectionName::new(<span class="string">&quot;bonsaidb&quot;</span>, <span class="string">&quot;blocks&quot;</span>)
     }

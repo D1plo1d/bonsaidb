@@ -503,22 +503,18 @@
 <span id="503">503</span>
 <span id="504">504</span>
 <span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
 </pre><pre class="rust"><code><span class="kw">use </span>bonsaidb_client::{Client, RemoteDatabase};
-<span class="kw">use </span>bonsaidb_core::{
-    async_trait::async_trait,
-    connection::{
-        <span class="self">self</span>, AccessPolicy, AsyncConnection, AsyncLowLevelConnection, AsyncStorageConnection,
-        HasSchema, HasSession, IdentityReference, Range, SerializedQueryKey, Session, Sort,
-    },
-    document::{DocumentId, Header, OwnedDocument},
-    schema::{
-        <span class="self">self</span>, view::map::MappedSerializedValue, Collection, CollectionName, Nameable, Schema,
-        SchemaName, Schematic, ViewName,
-    },
-    transaction::{Executed, OperationResult, Transaction},
+<span class="kw">use </span>bonsaidb_core::async_trait::async_trait;
+<span class="kw">use </span>bonsaidb_core::connection::{
+    <span class="self">self</span>, AccessPolicy, AsyncConnection, AsyncLowLevelConnection, AsyncStorageConnection,
+    HasSchema, HasSession, IdentityReference, Range, SerializedQueryKey, Session, Sort,
 };
+<span class="kw">use </span>bonsaidb_core::document::{DocumentId, Header, OwnedDocument};
+<span class="kw">use </span>bonsaidb_core::schema::view::map::MappedSerializedValue;
+<span class="kw">use </span>bonsaidb_core::schema::{
+    <span class="self">self</span>, Collection, CollectionName, Nameable, Schema, SchemaName, Schematic, ViewName,
+};
+<span class="kw">use </span>bonsaidb_core::transaction::{Executed, OperationResult, Transaction};
 <span class="kw">use </span>bonsaidb_server::{Backend, CustomServer, NoBackend, ServerDatabase};
 <span class="kw">use </span>derive_where::derive_where;
 
@@ -542,8 +538,8 @@
 
 <span class="attribute">#[async_trait]
 </span><span class="kw">impl</span>&lt;B: Backend&gt; AsyncStorageConnection <span class="kw">for </span>AnyServerConnection&lt;B&gt; {
-    <span class="kw">type </span>Database = AnyDatabase&lt;B&gt;;
     <span class="kw">type </span>Authenticated = <span class="self">Self</span>;
+    <span class="kw">type </span>Database = AnyDatabase&lt;B&gt;;
 
     <span class="kw">async fn </span>admin(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Database {
         <span class="kw">match </span><span class="self">self </span>{

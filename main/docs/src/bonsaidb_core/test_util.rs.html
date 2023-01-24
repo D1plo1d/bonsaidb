@@ -3894,60 +3894,41 @@
 <span id="3894">3894</span>
 <span id="3895">3895</span>
 <span id="3896">3896</span>
-<span id="3897">3897</span>
-<span id="3898">3898</span>
-<span id="3899">3899</span>
-<span id="3900">3900</span>
-<span id="3901">3901</span>
-<span id="3902">3902</span>
-<span id="3903">3903</span>
-<span id="3904">3904</span>
-<span id="3905">3905</span>
-<span id="3906">3906</span>
-<span id="3907">3907</span>
 </pre><pre class="rust"><code><span class="attribute">#![allow(clippy::missing_panics_doc)]
 
-</span><span class="kw">use </span>std::{
-    fmt::{Debug, Display},
-    io::ErrorKind,
-    ops::Deref,
-    path::{Path, PathBuf},
-    sync::{
-        atomic::{AtomicU32, Ordering},
-        Arc,
-    },
-    time::{Duration, Instant},
-};
+</span><span class="kw">use </span>std::fmt::{Debug, Display};
+<span class="kw">use </span>std::io::ErrorKind;
+<span class="kw">use </span>std::ops::Deref;
+<span class="kw">use </span>std::path::{Path, PathBuf};
+<span class="kw">use </span>std::sync::atomic::{AtomicU32, Ordering};
+<span class="kw">use </span>std::sync::Arc;
+<span class="kw">use </span>std::time::{Duration, Instant};
 
 <span class="kw">use </span>itertools::Itertools;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>transmog_pot::Pot;
 
+<span class="kw">use </span><span class="kw">crate</span>::admin::{PermissionGroup, Role, User};
+<span class="kw">use </span><span class="kw">crate</span>::connection::{
+    AccessPolicy, AsyncConnection, AsyncStorageConnection, Connection, StorageConnection,
+};
+<span class="kw">use </span><span class="kw">crate</span>::document::{
+    BorrowedDocument, CollectionDocument, CollectionHeader, DocumentId, Emit, Header, KeyId,
+};
+<span class="kw">use </span><span class="kw">crate</span>::keyvalue::{AsyncKeyValue, KeyValue};
+<span class="kw">use </span><span class="kw">crate</span>::limits::{LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT, LIST_TRANSACTIONS_MAX_RESULTS};
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::map::{Mappings, ViewMappedValue};
+<span class="kw">use </span><span class="kw">crate</span>::schema::view::{ReduceResult, ViewSchema};
+<span class="kw">use </span><span class="kw">crate</span>::schema::{
+    Collection, CollectionName, MappedValue, NamedCollection, Qualified, Schema, SchemaName,
+    Schematic, SerializedCollection, View, ViewMapResult,
+};
+<span class="kw">use </span><span class="kw">crate</span>::transaction::{Operation, Transaction};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 <span class="attribute">#[cfg(feature = <span class="string">&quot;token-authentication&quot;</span>)]
 </span><span class="kw">use crate</span>::{
     admin::AuthenticationToken,
     connection::{HasSession, Identity, IdentityReference, Session},
-};
-<span class="kw">use crate</span>::{
-    admin::{PermissionGroup, Role, User},
-    connection::{
-        AccessPolicy, AsyncConnection, AsyncStorageConnection, Connection, StorageConnection,
-    },
-    document::{
-        BorrowedDocument, CollectionDocument, CollectionHeader, DocumentId, Emit, Header, KeyId,
-    },
-    keyvalue::{AsyncKeyValue, KeyValue},
-    limits::{LIST_TRANSACTIONS_DEFAULT_RESULT_COUNT, LIST_TRANSACTIONS_MAX_RESULTS},
-    schema::{
-        view::{
-            map::{Mappings, ViewMappedValue},
-            ReduceResult, ViewSchema,
-        },
-        Collection, CollectionName, MappedValue, NamedCollection, Qualified, Schema, SchemaName,
-        Schematic, SerializedCollection, View, ViewMapResult,
-    },
-    transaction::{Operation, Transaction},
-    Error,
 };
 
 <span class="attribute">#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Default, Clone, Collection)]
@@ -4273,6 +4254,7 @@
         }
         <span class="self">Self</span>(path)
     }
+
     <span class="kw">pub fn </span>new&lt;S: AsRef&lt;Path&gt;&gt;(name: S) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>path = std::env::temp_dir().join(name);
         <span class="kw">if </span>path.exists() {
@@ -7149,10 +7131,8 @@
             </span><span class="kw">async fn </span>kv_transaction_tests() -&gt; anyhow::Result&lt;()&gt; {
                 <span class="kw">use </span>std::time::Duration;
 
-                <span class="kw">use </span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::{
-                    <span class="macro-nonterminal">connection::AsyncConnection</span>,
-                    keyvalue::{AsyncKeyValue, KeyStatus},
-                };
+                <span class="kw">use </span><span class="macro-nonterminal">$crate::connection::AsyncConnection</span>;
+                <span class="kw">use </span><span class="macro-nonterminal">$crate::keyvalue</span>::{AsyncKeyValue, KeyStatus};
                 <span class="comment">// loop {
                 </span><span class="kw">let </span>harness = <span class="macro-nonterminal">$harness::new</span>(<span class="macro-nonterminal">$crate::test_util::HarnessTest::KvTransactions</span>).<span class="kw">await</span><span class="question-mark">?</span>;
                 <span class="kw">let </span>db = harness.connect().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -7615,10 +7595,8 @@
             </span><span class="kw">fn </span>kv_transaction_tests() -&gt; anyhow::Result&lt;()&gt; {
                 <span class="kw">use </span>std::time::Duration;
 
-                <span class="kw">use </span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::{
-                    <span class="macro-nonterminal">connection::Connection</span>,
-                    keyvalue::{KeyStatus, KeyValue},
-                };
+                <span class="kw">use </span><span class="macro-nonterminal">$crate::connection::Connection</span>;
+                <span class="kw">use </span><span class="macro-nonterminal">$crate::keyvalue</span>::{KeyStatus, KeyValue};
                 <span class="comment">// loop {
                 </span><span class="kw">let </span>harness = <span class="macro-nonterminal">$harness::new</span>(<span class="macro-nonterminal">$crate::test_util::HarnessTest::KvTransactions</span>)<span class="question-mark">?</span>;
                 <span class="kw">let </span>db = harness.connect()<span class="question-mark">?</span>;

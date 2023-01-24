@@ -304,30 +304,18 @@
 <span id="304">304</span>
 <span id="305">305</span>
 <span id="306">306</span>
-<span id="307">307</span>
-<span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{
-    sync::Arc,
-    thread::JoinHandle,
-    time::{Duration, Instant},
-};
+</pre><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
+<span class="kw">use </span>std::thread::JoinHandle;
+<span class="kw">use </span>std::time::{Duration, Instant};
 
-<span class="kw">use </span>argon2::{
-    password_hash::{ParamsString, SaltString},
-    Algorithm, Argon2, Block, ParamsBuilder, PasswordHash, Version,
-};
+<span class="kw">use </span>argon2::password_hash::{ParamsString, SaltString};
+<span class="kw">use </span>argon2::{Algorithm, Argon2, Block, ParamsBuilder, PasswordHash, Version};
 <span class="kw">use </span>bonsaidb_core::connection::SensitiveString;
 <span class="kw">use </span>once_cell::sync::OnceCell;
 <span class="kw">use </span>rand::{thread_rng, CryptoRng, Rng};
 
-<span class="kw">use crate</span>::{
-    config::{ArgonConfiguration, ArgonParams},
-    Error,
-};
+<span class="kw">use </span><span class="kw">crate</span>::config::{ArgonConfiguration, ArgonParams};
+<span class="kw">use </span><span class="kw">crate</span>::Error;
 
 <span class="attribute">#[derive(Debug)]
 #[cfg_attr(not(test), allow(dead_code))]
