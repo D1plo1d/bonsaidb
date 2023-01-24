@@ -8,7 +8,6 @@
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -34,13 +33,13 @@
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "../../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -56,7 +55,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -68,7 +67,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -99,7 +98,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -132,7 +131,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -152,8 +151,7 @@ pub struct BlogPost {
     pub title: String,
     pub body: String,
     pub category: Option&lt;String&gt;,
-}
-</code></pre>
+}</code></pre>
 <p>Let's insert this data for these examples:</p>
 <pre><code class="language-rust no_run noplayground">    BlogPost {
         title: String::from(&quot;New version of BonsaiDb released&quot;),
@@ -174,8 +172,7 @@ pub struct BlogPost {
         body: String::from(&quot;...&quot;),
         category: Some(String::from(&quot;Cooking&quot;)),
     }
-    .push_into(&amp;db)?;
-</code></pre>
+    .push_into(&amp;db)?;</code></pre>
 <blockquote>
 <p>All examples on this page are available in their full form in the repository at <a href="https://github.com/khonsulabs/bonsaidb/tree/main/book/book-examples/tests">book/book-examples/tests</a>.</p>
 </blockquote>
@@ -199,8 +196,7 @@ impl ViewSchema for BlogPostsByCategory {
     ) -&gt; ReduceResult&lt;Self::View&gt; {
         Ok(mappings.iter().map(|mapping| mapping.value).sum())
     }
-}
-</code></pre>
+}</code></pre>
 <p>The two traits being implemented are <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.View.html">View</a> and
 <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.ViewSchema.html">ViewSchema</a>. These traits are designed to allow keeping the
 <code>View</code> implementation in a shared code library that is used by both client-side
@@ -222,8 +218,7 @@ server executable only.</p>
             &quot;Retrieved post #{} \&quot;{}\&quot;&quot;,
             mapping.document.header.id, post.title
         );
-    }
-</code></pre>
+    }</code></pre>
 <p>The above snippet queries the <a href="./database.html">Database</a> for all documents in the <code>BlogPost</code> Collection that emitted a <a href="../../traits/key.html">Key</a> of <code>Some(&quot;Rust&quot;)</code>.</p>
 <p>If you're using a <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.SerializedCollection.html"><code>SerializedCollection</code></a>, you can use <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/connection/struct.View.html#method.query_with_collection_docs"><code>query_with_collection_docs()</code></a> to have the deserialization done automatically for you:</p>
 <pre><code class="language-rust noplayground no_run">    let rust_posts = db
@@ -235,8 +230,7 @@ server executable only.</p>
             &quot;Retrieved post #{} \&quot;{}\&quot;&quot;,
             mapping.document.header.id, mapping.document.contents.title
         );
-    }
-</code></pre>
+    }</code></pre>
 <h2 id="reduce"><a class="header" href="#reduce">Reduce</a></h2>
 <p>The second function to learn about is the <code>reduce()</code> function. It is responsible for turning an array of Key/Value pairs into a single Value. In some cases, BonsaiDb might need to call <code>reduce()</code> with values that have already been reduced one time. If this is the case, <code>rereduce</code> is set to true.</p>
 <p>In this example, we're using the built-in <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.sum"><code>Iterator::sum()</code></a> function to turn our Value of <code>1_u32</code> into a single <code>u32</code> representing the total number of documents.</p>
@@ -244,8 +238,7 @@ server executable only.</p>
         .view::&lt;BlogPostsByCategory&gt;()
         .with_key(&amp;Some(String::from(&quot;Rust&quot;)))
         .reduce()?;
-    assert_eq!(rust_post_count, 2);
-</code></pre>
+    assert_eq!(rust_post_count, 2);</code></pre>
 <h2 id="changing-an-exising-view"><a class="header" href="#changing-an-exising-view">Changing an exising view</a></h2>
 <p>If you have data stored in a view, but want to update the view to store data
 differently, implement <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/core/schema/trait.ViewSchema.html#method.version"><code>ViewSchema::version()</code></a> and return
@@ -271,8 +264,7 @@ are the view entries:</p>
 </div>
 <p>When a reduce query is issued for a single key, the value can be returned without further processing. But, if the reduce query matches multiple keys, the View's <code>reduce()</code> function will be called with the already reduced values with <code>rereduce</code> set to <code>true</code>. For example, retrieving the total count of blog posts:</p>
 <pre><code class="language-rust noplayground no_run">    let total_post_count = db.view::&lt;BlogPostsByCategory&gt;().reduce()?;
-    assert_eq!(total_post_count, 3);
-</code></pre>
+    assert_eq!(total_post_count, 3);</code></pre>
 <p>Once BonsaiDb has gathered each of the key's reduced values, it needs to further reduce that list into a single value. To accomplish this, the View's <code>reduce()</code> function to be invoked with <code>rereduce</code> set to <code>true</code>, and with mappings containing:</p>
 <div class="table-wrapper"><table><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>
 <tr><td>Some(&quot;Rust&quot;)</td><td>2</td></tr>
@@ -321,22 +313,22 @@ are the view entries:</p>
 
 
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
 
 
-        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
 
-        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript" src="../../mermaid.min.js"></script>
-        <script type="text/javascript" src="../../mermaid-init.js"></script>
+        <script src="../../mermaid.min.js"></script>
+        <script src="../../mermaid-init.js"></script>
 
 
     </body>
