@@ -497,8 +497,8 @@ are the view entries:</p>
 pub struct Ping;
 
 impl Api for Ping {
-    type Response = Pong;
     type Error = Infallible;
+    type Response = Pong;
 
     fn name() -&gt; ApiName {
         ApiName::private(&quot;ping&quot;)
@@ -514,8 +514,8 @@ pub struct IncrementCounter {
 }
 
 impl Api for IncrementCounter {
-    type Response = Counter;
     type Error = Infallible;
+    type Response = Counter;
 
     fn name() -&gt; ApiName {
         ApiName::private(&quot;increment&quot;)
@@ -526,8 +526,8 @@ impl Api for IncrementCounter {
 pub struct Counter(pub u64);</code></pre>
 <p>To implement the server, we must define a <a href="https://dev.bonsaidb.io/main/docs/bonsaidb/server/api/trait.Handler.html"><code>Handler</code></a>, which is invoked each time the <code>Api</code> type is received by the server.</p>
 <pre><code class="language-rust noplayground no_run">impl Backend for ExampleBackend {
-    type Error = Infallible;
     type ClientData = ();
+    type Error = Infallible;
 }
 
 /// Dispatches Requests and returns Responses.
@@ -862,6 +862,7 @@ where
     T: ToPrimitive + FromPrimitive + Clone + Eq + Ord + std::fmt::Debug + Send + Sync,
 {
     type Error = std::io::Error;
+
     const LENGTH: Option&lt;usize&gt; = None;
 
     fn as_ord_bytes(&amp;'a self) -&gt; Result&lt;Cow&lt;'a, [u8]&gt;, Self::Error&gt; {
