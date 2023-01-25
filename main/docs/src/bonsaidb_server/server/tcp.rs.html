@@ -521,7 +521,7 @@
             .unwrap_or_default()
         {
             <span class="kw">let </span>server_name = client_hello.server_name()<span class="question-mark">?</span>.to_owned();
-            <span class="kw">let </span>keys = <span class="self">self</span>.data.alpn_keys.lock().unwrap();
+            <span class="kw">let </span>keys = <span class="self">self</span>.data.alpn_keys.lock();
             <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = keys.get(AsRef::&lt;str&gt;::as_ref(<span class="kw-2">&amp;</span>server_name)) {
                 <span class="macro">log::info!</span>(<span class="string">&quot;returning acme challenge&quot;</span>);
                 <span class="kw">return </span><span class="prelude-val">Some</span>(key.clone());
